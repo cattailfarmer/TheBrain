@@ -2245,7 +2245,7 @@
 
 & [WorkSliceDetail S158_spec_audit_refresh_after_handoff_proof_runner] is a specification audit slice
   + [slice_id] is S158_spec_audit_refresh_after_handoff_proof_runner
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after handoff-aware proof runner helper CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names handoff-aware proof runner support and chooses next gap
@@ -2253,3 +2253,16 @@
   + [support_status] is prepared
   + [dependency_set] is S157_long_run_checkpoint_after_handoff_proof_runner
   + [known_risks] is overstating proof consumption as implementation execution
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:39:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats handoff-aware proof runner helper CLI as support and recommends gate-authorized run-local implementation execution design
+  + [completed_work_review] is support_delta verified proof consumption is current support and remains non-implementation; requirement_delta next step is design run-local implementation execution under execution_allowed gate evidence
+
+& [WorkSliceDetail S159_gate_authorized_run_local_execution_design] is a coordination runtime design slice
+  + [slice_id] is S159_gate_authorized_run_local_execution_design
+  + [slice_status] is open
+  + [scope] is design run-local implementation execution from execution_allowed gate evidence without target workspace mutation
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names execution_allowed inputs run-local output root proof requirements and no target workspace mutation boundary
+  + [completion_criteria] is design distinguishes run-local implementation execution from apply mutation and Manager frontier advancement
+  + [support_status] is prepared
+  + [dependency_set] is S158_spec_audit_refresh_after_handoff_proof_runner
+  + [known_risks] is accidentally reintroducing autonomous target workspace writes
