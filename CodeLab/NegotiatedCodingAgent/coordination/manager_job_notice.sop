@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 15
+  + [job_notice_revision] is 16
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -180,14 +180,16 @@
 
 & [WorkSliceDetail S10B_attach_shaliach_findings_to_layer_packages] is a planned child slice
   + [slice_id] is S10B_attach_shaliach_findings_to_layer_packages
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is attach Shaliach findings to layer packages before Manager gate using negotiated ledgers and protocol activations
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests for no_finding, advisory, warning, pause, and request_rework outputs
   + [completion_criteria] is Manager review can see Shaliach finding severity and required response before approving descent
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S10_shaliach_faculty_runtime
   + [known_risks] is making Shaliach final authority instead of protocol counsel and controller
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:55:00Z, proof_ref tests passed with 20 tests and dry-run wrote runs/20260529T114243Z/*.shaliach_finding.sop, result_summary orchestrator writes per-layer Shaliach finding artifacts and manager layer review log fields cite shaliach_finding_ref
+  + [completed_work_review] is support_delta verified Shaliach findings are first-class run artifacts before Manager descent; requirement_delta S10C remains for lifecycle-level conversation surface updates
 
 & [WorkSliceDetail S10C_conversation_surface_run_lifecycle_updates] is a planned child slice
   + [slice_id] is S10C_conversation_surface_run_lifecycle_updates

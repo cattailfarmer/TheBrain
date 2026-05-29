@@ -67,6 +67,11 @@ class NegotiatedCodingAgent:
                 protocol_activations=protocol_activations,
                 package_has_parent=bool(parent_package_ref),
             )
+            shaliach_finding_ref = f"{layer}.shaliach_finding.sop"
+            write_text(
+                run_root / shaliach_finding_ref,
+                shaliach_finding.to_sop(f"{layer}_layer_package"),
+            )
             pending_package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
@@ -97,6 +102,7 @@ class NegotiatedCodingAgent:
                     "reason": decision.reason,
                     "shaliach_finding": shaliach_finding.finding,
                     "shaliach_severity": shaliach_finding.severity,
+                    "shaliach_finding_ref": shaliach_finding_ref,
                     "protocol_activation_ref": "protocol_activation.sop",
                 },
             )

@@ -395,12 +395,16 @@ class NarrativeUpdateTests(unittest.TestCase):
             surface = (root / "coordination" / "conversations" / "test-uuid.sop").read_text(encoding="utf-8")
             package = (run_root / "application.package.sop").read_text(encoding="utf-8")
             protocol_activation = (run_root / "protocol_activation.sop").read_text(encoding="utf-8")
+            shaliach_finding = (run_root / "application.shaliach_finding.sop").read_text(encoding="utf-8")
+            log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
             self.assertIn("RunNarrativeUpdate", narrative)
             self.assertIn("Build a test app", narrative)
             self.assertIn("run narrative update written", surface)
             self.assertIn("negotiated SJS output", package)
             self.assertIn("ProtocolActivationSet", protocol_activation)
             self.assertIn("project_narrative_surface", protocol_activation)
+            self.assertIn("ShaliachFinding application_layer_package", shaliach_finding)
+            self.assertIn("application.shaliach_finding.sop", log)
 
 
 if __name__ == "__main__":
