@@ -279,6 +279,16 @@ Eligibility writes `run_local_merge_eligibility.sop`. It does not create `manual
 
 `coordination/run_local_to_merge_packet_bridge_design.sop` describes the next planned bridge from eligible run-local output to draft manual merge inputs. Draft inputs are not manual merge packets and cannot be applied.
 
+Write a non-mutating merge draft input from eligible run-local output:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\run-local-merge-draft.ps1 `
+  -RunLocalRoot runs/run-1/worker_execution/cycle-run `
+  -TargetWorkspaceRoot C:\Project\TheBrain
+```
+
+This writes `run_local_merge_draft_input.sop`. It does not create `manual_merge_packet.sop` and does not apply files to the target workspace.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

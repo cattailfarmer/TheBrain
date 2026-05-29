@@ -89,6 +89,7 @@ from negotiated_agent.run_local_review import (
 )
 from negotiated_agent.run_local_review_cli import main as run_local_review_cli_main
 from negotiated_agent.run_local_merge_draft import build_run_local_merge_draft_input
+from negotiated_agent.run_local_merge_draft_cli import main as run_local_merge_draft_cli_main
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -3239,6 +3240,109 @@ class MailboxCoordinationTests(unittest.TestCase):
                     target_workspace_root=target_root,
                     target_paths=("..\\outside.txt",),
                 )
+
+    def test_run_local_merge_draft_cli_writes_draft_without_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            (run_root / "implementation").mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "implementation" / "README.generated.txt").write_text("body\n", encoding="utf-8")
+            (run_root / "run_local_merge_eligibility.sop").write_text(
+                RunLocalMergeEligibilitySummary(
+                    eligibility_id="eligibility-1",
+                    eligibility_status="eligible_for_manual_merge_packet",
+                    manager_review_ref="manager.sop",
+                    shaliach_review_ref="shaliach.sop",
+                    generated_files=("implementation/README.generated.txt",),
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_merge_draft_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--target-workspace-root",
+                            target_root.relative_to(root).as_posix(),
+                            "--draft-id",
+                            "draft-1",
+                        ]
+                    ),
+                    0,
+                )
+            draft = (run_root / "run_local_merge_draft_input.sop").read_text(encoding="utf-8")
+            self.assertIn("draft_input_not_manual_merge_packet", draft)
+            self.assertIn("run_local_merge_draft_write_not_manual_merge_packet", out.getvalue())
+            self.assertFalse((run_root / "manual_merge_packet.sop").exists())
+
+    def test_run_local_merge_draft_cli_blocks_bad_eligibility_and_escapes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            run_root.mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "run_local_merge_eligibility.sop").write_text(
+                RunLocalMergeEligibilitySummary(
+                    eligibility_id="eligibility-1",
+                    eligibility_status="blocked_by_manager",
+                    manager_review_ref="manager.sop",
+                    shaliach_review_ref="shaliach.sop",
+                    generated_files=("implementation/README.generated.txt",),
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_merge_draft_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--target-workspace-root",
+                            target_root.relative_to(root).as_posix(),
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("not eligible", out.getvalue())
+            self.assertFalse((run_root / "run_local_merge_draft_input.sop").exists())
+            (run_root / "run_local_merge_eligibility.sop").write_text(
+                RunLocalMergeEligibilitySummary(
+                    eligibility_id="eligibility-2",
+                    eligibility_status="eligible_for_manual_merge_packet",
+                    manager_review_ref="manager.sop",
+                    shaliach_review_ref="shaliach.sop",
+                    generated_files=("implementation/README.generated.txt",),
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_merge_draft_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--target-workspace-root",
+                            target_root.relative_to(root).as_posix(),
+                            "--target-path",
+                            "../outside.txt",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("escapes workspace", out.getvalue())
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

@@ -1417,3 +1417,11 @@
   + [proof_result] is tests passed with 134 tests
   + [current_frontier] is S175_run_local_merge_draft_input_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S175_run_local_merge_draft_input_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S175_run_local_merge_draft_input_cli
+  + [implemented_capability] is run-local merge draft input CLI and wrapper write run_local_merge_draft_input.sop without creating manual_merge_packet.sop
+  + [proof_result] is tests passed with 136 tests
+  + [current_frontier] is S176_long_run_checkpoint_after_merge_draft_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

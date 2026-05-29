@@ -82,6 +82,26 @@ def build_run_local_merge_draft_input(
     )
 
 
+def write_run_local_merge_draft_input(run_local_root: Path, draft: RunLocalMergeDraftInput) -> Path:
+    path = run_local_root / "run_local_merge_draft_input.sop"
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(draft.to_sop(), encoding="utf-8")
+    return path
+
+
+def load_run_local_merge_eligibility_summary(path: Path) -> RunLocalMergeEligibilitySummary:
+    fields = _read_fields(path)
+    return RunLocalMergeEligibilitySummary(
+        eligibility_id=fields["eligibility_id"],
+        eligibility_status=fields["eligibility_status"],
+        manager_review_ref=fields["manager_review_ref"],
+        shaliach_review_ref=fields["shaliach_review_ref"],
+        generated_files=_split_set(fields.get("generated_file_set", "")),
+    )
+
+
 def ensure_source_ref_within_run_local_root(run_local_root: Path, source_ref: str) -> str:
     resolved_root = run_local_root.resolve()
     candidate = Path(source_ref)
@@ -93,3 +113,21 @@ def ensure_source_ref_within_run_local_root(run_local_root: Path, source_ref: st
 
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
+
+
+def _read_fields(path: Path) -> dict[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing")
+    fields = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            fields[key] = value
+    return fields
+
+
+def _split_set(value: str) -> tuple[str, ...]:
+    if not value or value == "none":
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())

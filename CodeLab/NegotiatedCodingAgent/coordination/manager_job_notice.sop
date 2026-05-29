@@ -2466,7 +2466,7 @@
 
 & [WorkSliceDetail S175_run_local_merge_draft_input_cli] is a coordination runtime implementation slice
   + [slice_id] is S175_run_local_merge_draft_input_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write run-local merge draft input evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover draft input write eligible path blocked eligibility escaped source escaped target and no manual merge packet creation
@@ -2474,3 +2474,16 @@
   + [support_status] is prepared
   + [dependency_set] is S174_run_local_merge_draft_input_records
   + [known_risks] is writer output being mistaken for accepted patch or apply authorization
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T01:04:00Z, proof_ref tests passed with 136 tests, result_summary added run-local merge draft input CLI and wrapper
+  + [completed_work_review] is support_delta verified writer creates run_local_merge_draft_input.sop only; requirement_delta next step is checkpoint and spec audit refresh after draft input writer
+
+& [WorkSliceDetail S176_long_run_checkpoint_after_merge_draft_cli] is a long-run reentry slice
+  + [slice_id] is S176_long_run_checkpoint_after_merge_draft_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after run-local merge draft input CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 136-test suite and route draft proof
+  + [completion_criteria] is checkpoint records run-local merge draft frontier
+  + [support_status] is prepared
+  + [dependency_set] is S175_run_local_merge_draft_input_cli
+  + [known_risks] is noisy generated dry-run artifacts
