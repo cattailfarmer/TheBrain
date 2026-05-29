@@ -1511,3 +1511,11 @@
   + [proof_result] is tests passed with 142 tests
   + [current_frontier] is S185_frontier_advancement_writer_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S185_frontier_advancement_writer_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S185_frontier_advancement_writer_cli
+  + [implemented_capability] is frontier advancement CLI and wrapper write frontier_advancement_record.sop evidence without mutating active conversation surfaces
+  + [proof_result] is tests passed with 144 tests
+  + [current_frontier] is S186_frontier_application_plan_design
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

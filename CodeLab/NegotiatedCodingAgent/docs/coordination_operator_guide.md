@@ -303,6 +303,22 @@ The packet proposal command writes `manual_merge_packet.sop` only after the acce
 
 `coordination/frontier_advancement_record_design.sop` describes the next Manager-control boundary. Do not treat a packet proposal or a passing proof as a frontier update; a future frontier advancement record must be written and then explicitly applied to the conversation surface.
 
+Write frontier advancement evidence:
+
+```powershell
+.\scripts\frontier-advancement.ps1 `
+  -AdvancementId <id> `
+  -PreviousFrontier <current-frontier> `
+  -NextFrontier <next-frontier> `
+  -ManagerDecisionRef <manager-ref> `
+  -ManagerDecisionStatus approved_for_frontier_advancement `
+  -ShaliachReviewRef <shaliach-ref> `
+  -ShaliachReviewStatus clear_for_frontier_advancement `
+  -ProofRef coordination/long_run_checkpoint.sop
+```
+
+This writes `frontier_advancement_record.sop` under `coordination/frontier_advancements/<id>/`. It does not mutate the active conversation surface.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

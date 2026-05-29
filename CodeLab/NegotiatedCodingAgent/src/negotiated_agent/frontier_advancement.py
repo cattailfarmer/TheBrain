@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -68,6 +69,15 @@ def build_frontier_advancement_record(
         packet_refs=packet_refs,
         residual_risk_summary=residual_risk_summary,
     )
+
+
+def write_frontier_advancement_record(output_dir: Path, record: FrontierAdvancementRecord) -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "frontier_advancement_record.sop"
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.write_text(record.to_sop(), encoding="utf-8")
+    return path
 
 
 def _join(values: tuple[str, ...]) -> str:

@@ -2596,7 +2596,7 @@
 
 & [WorkSliceDetail S185_frontier_advancement_writer_cli] is a coordination runtime implementation slice
   + [slice_id] is S185_frontier_advancement_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write frontier_advancement_record.sop evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover record write stale frontier blocked Manager blocked Shaliach proof refs packet refs and no current_frontier mutation
@@ -2604,3 +2604,16 @@
   + [support_status] is prepared
   + [dependency_set] is S184_frontier_advancement_records
   + [known_risks] is writer being mistaken for the future surface applier
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:18:00Z, proof_ref tests passed with 144 tests, result_summary added frontier advancement CLI and wrapper
+  + [completed_work_review] is support_delta verified writer records advancement evidence and does not mutate current_frontier; requirement_delta next step is design explicit frontier application plan before surface mutation
+
+& [WorkSliceDetail S186_frontier_application_plan_design] is a coordination runtime design slice
+  + [slice_id] is S186_frontier_application_plan_design
+  + [slice_status] is open
+  + [scope] is design explicit application plan for applying frontier advancement records to active conversation surfaces
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names exact previous frontier check narrative update refs completed slice refs and no target workspace mutation
+  + [completion_criteria] is design distinguishes surface application from Manager decision and code application
+  + [support_status] is prepared
+  + [dependency_set] is S185_frontier_advancement_writer_cli
+  + [known_risks] is applying stale advancement records after compaction

@@ -160,6 +160,8 @@ The wrapper `scripts/packet-proposal.ps1` writes Manager packet acceptance, Shal
 
 `coordination/frontier_advancement_record_design.sop` defines the next Manager-control boundary: frontier advancement should be a reviewed evidence record before any active conversation surface changes. `negotiated_agent.frontier_advancement` implements the pure record and validation helper. Packet proposals, proof refs, and Shaliach reviews can support that record, but they do not mutate `current_frontier` by themselves.
 
+The wrapper `scripts/frontier-advancement.ps1` writes `frontier_advancement_record.sop` under `coordination/frontier_advancements/<id>/`. It is still evidence only; it does not apply the frontier change to the active conversation surface.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

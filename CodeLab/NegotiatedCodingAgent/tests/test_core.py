@@ -23,6 +23,7 @@ from negotiated_agent.conversation import (
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.frontier_advancement import build_frontier_advancement_record
+from negotiated_agent.frontier_advancement_cli import main as frontier_advancement_cli_main
 from negotiated_agent.execution_gate import (
     ExecutionGateDecision,
     ManagerAuthorizationRecord,
@@ -3651,6 +3652,99 @@ class MailboxCoordinationTests(unittest.TestCase):
             build_frontier_advancement_record(**{**base, "shaliach_review_status": "pause_required"})
         with self.assertRaisesRegex(ValueError, "proof ref"):
             build_frontier_advancement_record(**{**base, "proof_refs": ()})
+
+    def test_frontier_advancement_cli_writes_record_without_surface_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            conversation_dir.mkdir(parents=True)
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is pointer\n"
+                "  + [active_conversation_uuid] is convo-1\n"
+                "  + [conversation_surface_file] is coordination/conversations/convo-1.sop\n",
+                encoding="utf-8",
+            )
+            surface = conversation_dir / "convo-1.sop"
+            original_surface = (
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S185_frontier_advancement_writer_cli\n"
+            )
+            surface.write_text(original_surface, encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_advancement_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--output-dir",
+                            "coordination/frontier_advancements/advance-1",
+                            "--advancement-id",
+                            "advance-1",
+                            "--previous-frontier",
+                            "S185_frontier_advancement_writer_cli",
+                            "--next-frontier",
+                            "S186_frontier_application_plan_design",
+                            "--manager-decision-ref",
+                            "manager_frontier_decision.sop",
+                            "--manager-decision-status",
+                            "approved_for_frontier_advancement",
+                            "--shaliach-review-ref",
+                            "shaliach_frontier_review.sop",
+                            "--shaliach-review-status",
+                            "clear_for_frontier_advancement",
+                            "--proof-ref",
+                            "coordination/long_run_checkpoint.sop",
+                            "--packet-ref",
+                            "runs/run-1/manual_merge_packet.sop",
+                        ]
+                    ),
+                    0,
+                )
+            record = (root / "coordination" / "frontier_advancements" / "advance-1" / "frontier_advancement_record.sop").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("frontier_advancement_record_not_surface_mutation", record)
+            self.assertIn("frontier_advancement_write_not_surface_mutation", out.getvalue())
+            self.assertEqual(surface.read_text(encoding="utf-8"), original_surface)
+
+    def test_frontier_advancement_cli_blocks_stale_frontier(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_advancement_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--output-dir",
+                            "coordination/frontier_advancements/advance-1",
+                            "--advancement-id",
+                            "advance-1",
+                            "--current-frontier",
+                            "S999_other",
+                            "--previous-frontier",
+                            "S185_frontier_advancement_writer_cli",
+                            "--next-frontier",
+                            "S186_frontier_application_plan_design",
+                            "--manager-decision-ref",
+                            "manager_frontier_decision.sop",
+                            "--manager-decision-status",
+                            "approved_for_frontier_advancement",
+                            "--shaliach-review-ref",
+                            "shaliach_frontier_review.sop",
+                            "--shaliach-review-status",
+                            "clear_for_frontier_advancement",
+                            "--proof-ref",
+                            "coordination/long_run_checkpoint.sop",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("current frontier", out.getvalue())
+            self.assertFalse((root / "coordination" / "frontier_advancements" / "advance-1").exists())
 
 
 def _merge_draft(

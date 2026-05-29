@@ -256,6 +256,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `coordination/frontier_advancement_record_design.sop` defines the next Manager-control boundary. Packet proposals and proof artifacts may support moving the active work frontier, but `FrontierAdvancementRecord` must capture previous frontier, next frontier, Manager evidence, Shaliach evidence, proof refs, packet refs, and residual risk before any conversation surface is mutated. `negotiated_agent.frontier_advancement` implements the pure record and validation helper; it does not write active conversation surfaces.
 
+`negotiated_agent.frontier_advancement_cli` and `scripts/frontier-advancement.ps1` write that advancement record under `coordination/frontier_advancements/<id>/`. This writer validates the current frontier and review statuses, then persists evidence only; an explicit later surface-application plan is still required before changing `current_frontier`.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
