@@ -6,7 +6,7 @@
 
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
-  + [job_notice_revision] is 1
+  + [job_notice_revision] is 7
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -30,77 +30,90 @@
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
   + [slice_id] is S01_commit_spec_rails
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is preserve current specification, source, README, and manager job board as a committed baseline
   + [target_files] is specifications/**, README.md, coordination/manager_job_notice.sop
   + [proof_route] is git status, tests pass, commit created
   + [completion_criteria] is spec changes committed without generated run artifacts or secrets
   + [support_status] is prepared
   + [known_risks] is committing stale generated cache files
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:00:00Z, proof_ref tests passed and commit ea8acb9, result_summary baseline specification rails and manager job board committed
+  + [completed_work_review] is no_delta_reviewed because completion changed repository support state but did not alter feature requirements beyond this job board revision
 
 & [WorkSliceDetail S02_hierarchical_config] is a ready slice
   + [slice_id] is S02_hierarchical_config
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add typed config for shaliach, manager, directors, programmers, providers, and artifact forms while preserving existing config compatibility or clear migration
   + [target_files] is src/negotiated_agent/config.py, agent.config.json, tests/**
   + [proof_route] is unit tests for config validation and existing dry-run viability
   + [completion_criteria] is full run requires one Shaliach, one Manager, two Directors, and one Programmer in hierarchical config
   + [support_status] is prepared
   + [known_risks] is breaking existing dry-run command
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:42:43Z, proof_ref tests passed with 5 tests and dry-run wrote runs/20260529T104243Z, result_summary hierarchical Shaliach Manager Directors Programmers config added with legacy compatibility aliases
+  + [completed_work_review] is support_delta verified config validation and dry-run compatibility, requirement_delta none
 
 & [WorkSliceDetail S03_provider_routing] is a ready slice
   + [slice_id] is S03_provider_routing
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is split LLM provider routing into dry_run, ollama, and openai_compatible provider paths suitable for future vLLM
   + [target_files] is src/negotiated_agent/llm.py, src/negotiated_agent/config.py, tests/**
   + [proof_route] is unit tests for provider selection and dry-run completion
   + [completion_criteria] is provider route can be selected per agent without hard-coding Ollama globally
   + [support_status] is prepared
   + [known_risks] is overbuilding provider API before vLLM is installed
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:43:50Z, proof_ref tests passed with 7 tests and dry-run wrote runs/20260529T104350Z, result_summary added RoutedClient, OpenAICompatibleClient, and per-agent provider override support
+  + [completed_work_review] is support_delta verified provider routing foundation, requirement_delta none
 
 & [WorkSliceDetail S04_layer_package_artifacts] is a ready slice
   + [slice_id] is S04_layer_package_artifacts
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is write layer package SOP artifacts containing flowchart, SJS ledger, DataDesign ledger, Shaliach notes, justification graph, and failure ledger
   + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/prompts.py, src/negotiated_agent/writer.py, tests/**
   + [proof_route] is dry-run creates application/subsystem/component/code package files and tests verify required sections
   + [completion_criteria] is every layer has package artifact with explicit Shaliach note or no-finding
   + [support_status] is prepared
   + [known_risks] is package text becoming too large or too ceremonial
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:44:48Z, proof_ref tests passed with 8 tests and dry-run wrote runs/20260529T104448Z, result_summary added LayerPackage writer producing flowchart, SJS ledger, DataDesign ledger, justification graph, failure ledger, and Shaliach notes
+  + [completed_work_review] is support_delta verified layer package artifact shape, requirement_delta deferred full model-negotiated ledger extraction remains future work
 
 & [WorkSliceDetail S05_manager_gates] is a ready slice
   + [slice_id] is S05_manager_gates
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add Manager approval/rejection gate for every layer before descent
   + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/prompts.py, tests/**
   + [proof_route] is tests show rejection blocks next layer and approval permits descent
   + [completion_criteria] is run log records Manager gate decision and support for each layer
   + [support_status] is prepared
   + [known_risks] is dry-run never exercising rejection path
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:46:08Z, proof_ref tests passed with 11 tests and dry-run wrote runs/20260529T104608Z, result_summary added Manager layer package review, rejection test, approval test, and per-layer manager_review.sop output
+  + [completed_work_review] is support_delta verified Manager gate blocks malformed packages in tests and approves complete packages in dry run, requirement_delta none
 
 & [WorkSliceDetail S06_programmer_slices] is a ready slice
   + [slice_id] is S06_programmer_slices
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is create code-level work slices and run at least one Programmer against a slice before Manager review
   + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/prompts.py, tests/**
   + [proof_route] is dry-run emits work slice, Programmer report, generated implementation, and Manager review
   + [completion_criteria] is Programmer cannot run before code layer approval
   + [support_status] is prepared
   + [known_risks] is conflating Programmer implementation with unrestricted coder output
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:46:08Z, proof_ref tests passed with 11 tests and dry-run wrote runs/20260529T104608Z, result_summary added initial work slice, Programmer report, and Manager review for generated implementation
+  + [completed_work_review] is support_delta verified Programmer slice artifacts and Manager acceptance record, requirement_delta deferred richer multi-Programmer assignment policy remains future work
 
 & [WorkSliceDetail S07_docs_and_acceptance_review] is a ready slice
   + [slice_id] is S07_docs_and_acceptance_review
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is update docs and run completed-work support review against acceptance criteria
   + [target_files] is README.md, docs/**, coordination/manager_job_notice.sop
   + [proof_route] is tests pass, dry-run output inspected, manager job notice records support_delta and requirement_delta or explicit no_delta_reviewed
   + [completion_criteria] is user-facing docs match new hierarchy and run commands
   + [support_status] is prepared
   + [known_risks] is documenting future vLLM behavior as implemented
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:46:08Z, proof_ref tests passed with 11 tests, result_summary README updated to describe Shaliach Manager Directors Programmers package and review artifacts
+  + [completed_work_review] is support_delta verified docs and acceptance checks, requirement_delta none
 
 & [CompletedWorkReviewPolicy] is active
   = must: after each completed slice, inspect proof_ref, changed files, result_summary, and remaining concerns
   = must: update support_delta or requirement_delta before assigning or claiming the next slice
   = must: record explicit no_delta_reviewed when the completed slice changes no support or requirements
   - never: treat completed work as only a completion stamp
-

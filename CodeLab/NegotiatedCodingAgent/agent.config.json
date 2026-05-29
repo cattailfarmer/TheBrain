@@ -4,31 +4,41 @@
     "base_url": "http://localhost:11434",
     "timeout_seconds": 180
   },
-  "agents": [
-    {
-      "name": "Architect",
-      "model": "qwen2.5-coder:7b",
-      "temperature": 0.2,
-      "role": "Produces structured implementation architecture and keeps the objective decomposable."
+  "roles": {
+    "shaliach": {
+      "name": "Shaliach",
+      "model": "llama3.1:8b",
+      "temperature": 0.0,
+      "role": "Protocol counsel and enforcement system for SOP, SJS, DataDrivenDesign, lineage, uncertainty, and artifact form."
     },
-    {
-      "name": "Critic",
+    "manager": {
+      "name": "Manager",
       "model": "llama3.1:8b",
       "temperature": 0.1,
-      "role": "Finds missing requirements, boundary mistakes, risk, and premature code-level detail."
-    }
-  ],
-  "arbiter": {
-    "name": "Arbiter",
-    "model": "llama3.1:8b",
-    "temperature": 0.1,
-    "role": "Merges proposals into a single flowchart that preserves useful disagreement as open questions."
-  },
-  "coder": {
-    "name": "Coder",
-    "model": "qwen2.5-coder:7b",
-    "temperature": 0.15,
-    "role": "Writes code only from the settled code-level flowchart."
+      "role": "Owns objective integrity, layer approval, work slicing, implementation review, and final acceptance."
+    },
+    "directors": [
+      {
+        "name": "SystemsDirector",
+        "model": "qwen2.5-coder:7b",
+        "temperature": 0.2,
+        "role": "Produces structured flow-control architecture and keeps the objective decomposable."
+      },
+      {
+        "name": "FailureDirector",
+        "model": "llama3.1:8b",
+        "temperature": 0.1,
+        "role": "Finds missing requirements, boundary mistakes, risk, failure modes, and premature code-level detail."
+      }
+    ],
+    "programmers": [
+      {
+        "name": "Programmer",
+        "model": "qwen2.5-coder:7b",
+        "temperature": 0.15,
+        "role": "Writes bounded implementation slices only from approved code-layer package authority."
+      }
+    ]
   },
   "negotiation": {
     "rounds_per_layer": 1,
@@ -38,6 +48,16 @@
       "component",
       "code"
     ]
+  },
+  "artifact_forms": {
+    "layer_package": "sop",
+    "sjs_ledger": "sop",
+    "data_design_ledger": "sop",
+    "run_log": "jsonl",
+    "work_slice": "sop",
+    "programmer_report": "sop",
+    "shaliach_note": "sop",
+    "manager_review": "sop",
+    "solution_record": "sop"
   }
 }
-

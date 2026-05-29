@@ -34,7 +34,7 @@ class OllamaClient(LlmClient):
         }
         body = json.dumps(payload).encode("utf-8")
         request = urllib.request.Request(
-            f"{self.config.base_url}/api/generate",
+            f"{_agent_base_url(agent, self.config)}/api/generate",
             data=body,
             headers={"Content-Type": "application/json"},
             method="POST",
@@ -48,6 +48,38 @@ class OllamaClient(LlmClient):
                 "Start Ollama or run with --dry-run."
             ) from exc
         return LlmResponse(text=str(data.get("response", "")).strip(), model=agent.model)
+
+
+class OpenAICompatibleClient(LlmClient):
+    def __init__(self, config: LlmConfig):
+        self.config = config
+
+    def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
+        payload = {
+            "model": agent.model,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": agent.temperature,
+        }
+        body = json.dumps(payload).encode("utf-8")
+        request = urllib.request.Request(
+            f"{_agent_base_url(agent, self.config)}/v1/chat/completions",
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(request, timeout=self.config.timeout_seconds) as response:
+                data = json.loads(response.read().decode("utf-8"))
+        except urllib.error.URLError as exc:
+            raise RuntimeError(
+                f"Could not reach OpenAI-compatible server at {_agent_base_url(agent, self.config)}. "
+                "Start the server or run with --dry-run."
+            ) from exc
+        choices = data.get("choices", [])
+        if not choices:
+            return LlmResponse(text="", model=agent.model)
+        message = choices[0].get("message", {})
+        return LlmResponse(text=str(message.get("content", "")).strip(), model=agent.model)
 
 
 class DryRunClient(LlmClient):
@@ -65,9 +97,34 @@ class DryRunClient(LlmClient):
 def make_client(config: LlmConfig, dry_run: bool) -> LlmClient:
     if dry_run:
         return DryRunClient()
-    if config.provider != "ollama":
-        raise ValueError(f"Unsupported provider: {config.provider}")
-    return OllamaClient(config)
+    if config.provider == "ollama":
+        return RoutedClient(config, {"ollama": OllamaClient(config)})
+    if config.provider in {"openai_compatible", "vllm", "lm_studio"}:
+        return RoutedClient(config, {config.provider: OpenAICompatibleClient(config)})
+    raise ValueError(f"Unsupported provider: {config.provider}")
+
+
+class RoutedClient(LlmClient):
+    def __init__(self, config: LlmConfig, clients: dict[str, LlmClient]):
+        self.config = config
+        self.clients = clients
+
+    def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
+        provider = agent.provider or self.config.provider
+        if provider in {"vllm", "lm_studio"}:
+            provider = "openai_compatible" if "openai_compatible" in self.clients else provider
+        if provider not in self.clients:
+            if provider == "ollama":
+                self.clients[provider] = OllamaClient(self.config)
+            elif provider in {"openai_compatible", "vllm", "lm_studio"}:
+                self.clients[provider] = OpenAICompatibleClient(self.config)
+            else:
+                raise ValueError(f"Unsupported agent provider: {provider}")
+        return self.clients[provider].complete(agent, prompt)
+
+
+def _agent_base_url(agent: AgentConfig, config: LlmConfig) -> str:
+    return (agent.base_url or config.base_url).rstrip("/")
 
 
 def _extract_after(text: str, marker: str) -> str:

@@ -1,7 +1,13 @@
 from pathlib import Path
+import json
 import tempfile
 import unittest
 
+from negotiated_agent.config import AgentConfig, LlmConfig, load_config
+from negotiated_agent.llm import LlmClient, LlmResponse, RoutedClient, make_client
+from negotiated_agent.manager import review_layer_package
+from negotiated_agent.package import LayerPackage
+from negotiated_agent.slices import create_initial_work_slice
 from negotiated_agent.writer import write_implementation
 
 
@@ -34,6 +40,139 @@ class WriterTests(unittest.TestCase):
                 )
 
 
+class ConfigTests(unittest.TestCase):
+    def test_loads_hierarchical_config(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "agent.config.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "llm": {
+                            "provider": "ollama",
+                            "base_url": "http://localhost:11434",
+                            "timeout_seconds": 180,
+                        },
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m", "role": "r"},
+                            "manager": {"name": "Manager", "model": "m", "role": "r"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m", "role": "r"},
+                                {"name": "DirectorB", "model": "m", "role": "r"},
+                            ],
+                            "programmers": [
+                                {"name": "Programmer", "model": "m", "role": "r"},
+                            ],
+                        },
+                        "negotiation": {
+                            "rounds_per_layer": 1,
+                            "layers": ["application"],
+                        },
+                        "artifact_forms": {"layer_package": "sop"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            config = load_config(path)
+            self.assertEqual(config.shaliach.name, "Shaliach")
+            self.assertEqual(config.manager.name, "Manager")
+            self.assertEqual([agent.name for agent in config.directors], ["DirectorA", "DirectorB"])
+            self.assertEqual(config.programmers[0].name, "Programmer")
+            self.assertEqual(config.artifact_forms["layer_package"], "sop")
+
+    def test_hierarchical_config_requires_two_directors(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "agent.config.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [{"name": "DirectorA", "model": "m"}],
+                            "programmers": [{"name": "Programmer", "model": "m"}],
+                        },
+                        "negotiation": {"layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "Director"):
+                load_config(path)
+
+
+class FakeClient(LlmClient):
+    def __init__(self, label: str):
+        self.label = label
+
+    def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
+        return LlmResponse(text=f"{self.label}:{agent.name}:{prompt}", model=agent.model)
+
+
+class ProviderRoutingTests(unittest.TestCase):
+    def test_routed_client_uses_agent_provider_override(self) -> None:
+        config = LlmConfig(provider="ollama", base_url="http://localhost:11434", timeout_seconds=1)
+        client = RoutedClient(
+            config,
+            {
+                "ollama": FakeClient("ollama"),
+                "openai_compatible": FakeClient("openai"),
+            },
+        )
+        agent = AgentConfig(
+            name="Director",
+            model="model",
+            temperature=0,
+            role="role",
+            provider="openai_compatible",
+        )
+        self.assertEqual(client.complete(agent, "hello").text, "openai:Director:hello")
+
+    def test_make_client_rejects_unknown_default_provider(self) -> None:
+        config = LlmConfig(provider="unknown", base_url="http://localhost", timeout_seconds=1)
+        with self.assertRaisesRegex(ValueError, "Unsupported provider"):
+            make_client(config, dry_run=False)
+
+
+class LayerPackageTests(unittest.TestCase):
+    def test_layer_package_contains_required_sections(self) -> None:
+        package = LayerPackage(
+            layer="application",
+            flowchart="# Application Flowchart\n\n## Nodes\n- N1",
+            parent_ref="objective",
+        ).to_sop()
+        for section in [
+            "LayerNegotiationPackage",
+            "Flowchart",
+            "SJSLedger",
+            "DataDesignLedger",
+            "LayerJustificationGraph",
+            "FailureModeLedger",
+            "ShaliachNoteSet",
+        ]:
+            self.assertIn(section, package)
+
+    def test_manager_rejects_malformed_layer_package(self) -> None:
+        decision = review_layer_package("application", "& [LayerNegotiationPackage]")
+        self.assertFalse(decision.approved)
+        self.assertEqual(decision.status, "rejected")
+
+    def test_manager_approves_complete_layer_package(self) -> None:
+        package = LayerPackage(
+            layer="application",
+            flowchart="# Application Flowchart",
+            parent_ref="objective",
+        ).to_sop()
+        decision = review_layer_package("application", package)
+        self.assertTrue(decision.approved)
+
+
+class WorkSliceTests(unittest.TestCase):
+    def test_initial_work_slice_references_code_package(self) -> None:
+        work_slice = create_initial_work_slice(Path("code.package.sop"), "build thing")
+        self.assertEqual(work_slice.slice_id, "WS001_initial_implementation")
+        self.assertIn("code.package.sop", work_slice.to_sop())
+
+
 if __name__ == "__main__":
     unittest.main()
-

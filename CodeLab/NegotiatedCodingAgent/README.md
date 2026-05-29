@@ -1,6 +1,6 @@
 # Negotiated Coding Agent
 
-A local-LLM coding-agent prototype that makes two or more models negotiate a layered flowchart before writing code.
+A local-LLM coding-agent prototype that makes multiple model roles negotiate layered flowcharts and structured SOP packages before writing code.
 
 The core idea is deliberately staged:
 
@@ -12,9 +12,16 @@ The core idea is deliberately staged:
 
 Each layer runs a negotiation pass across multiple LLM roles. The system then asks an arbiter model to merge the proposals into one settled flowchart for the next layer.
 
+The current architecture names are:
+
+- `Shaliach`: protocol counsel/enforcement for SOP, SJS, DataDrivenDesign, lineage, uncertainty, and artifact form.
+- `Manager`: objective integrity, layer approval, work slicing, implementation review, and final acceptance.
+- `Directors`: medium-weight flow-control negotiators.
+- `Programmers`: bounded implementation agents.
+
 ## Status
 
-This is a first runnable scaffold. It supports Ollama-compatible local models over HTTP and has a deterministic dry-run mode for testing the pipeline without an LLM server.
+This is a first runnable scaffold. It supports Ollama-compatible local models, OpenAI-compatible endpoints for future vLLM/LM Studio routing, and deterministic dry-run mode for testing the pipeline without an LLM server.
 
 ## Quick Start
 
@@ -42,9 +49,20 @@ Edit `agent.config.json` to use the models you actually have installed.
 Runs are written under `runs/<timestamp>/`:
 
 - `application.flowchart.md`
+- `application.package.sop`
+- `application.manager_review.sop`
 - `subsystem.flowchart.md`
+- `subsystem.package.sop`
+- `subsystem.manager_review.sop`
 - `component.flowchart.md`
+- `component.package.sop`
+- `component.manager_review.sop`
 - `code.flowchart.md`
+- `code.package.sop`
+- `code.manager_review.sop`
+- `WS001_initial_implementation.work_slice.sop`
+- `WS001_initial_implementation.programmer_report.sop`
+- `WS001_initial_implementation.manager_review.sop`
 - `implementation/`
 - `negotiation_log.jsonl`
 
