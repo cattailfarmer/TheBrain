@@ -66,6 +66,35 @@ def create_initial_work_slice(code_package_ref: Path, objective: str) -> WorkSli
     )
 
 
+def create_planned_work_slices(code_package_ref: Path, objective: str, *, include_support_slices: bool = True) -> list[WorkSlice]:
+    slices = [
+        WorkSlice(
+            slice_id="WS001_core_implementation",
+            title="Core implementation from approved code package",
+            code_package_ref=str(code_package_ref.name),
+            objective=objective,
+        )
+    ]
+    if include_support_slices:
+        slices.extend(
+            [
+                WorkSlice(
+                    slice_id="WS002_verification",
+                    title="Verification and test support from approved code package",
+                    code_package_ref=str(code_package_ref.name),
+                    objective=objective,
+                ),
+                WorkSlice(
+                    slice_id="WS003_documentation",
+                    title="Documentation and operator notes from approved code package",
+                    code_package_ref=str(code_package_ref.name),
+                    objective=objective,
+                ),
+            ]
+        )
+    return slices
+
+
 def create_programmer_assignment_plan(work_slices: list[WorkSlice], programmers: list[AgentConfig]) -> ProgrammerAssignmentPlan:
     if not programmers:
         return ProgrammerAssignmentPlan(assignments=(), active_programmer_count=0)

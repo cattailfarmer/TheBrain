@@ -37,7 +37,7 @@ from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
-from negotiated_agent.slices import create_initial_work_slice, create_programmer_assignment_plan
+from negotiated_agent.slices import create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.writer import write_implementation
 
@@ -283,6 +283,21 @@ class WorkSliceTests(unittest.TestCase):
         self.assertIn("ProgrammerAssignmentPlan", sop)
         self.assertIn("ProgrammerA", sop)
         self.assertIn("assignment_plan_not_parallel_execution_proof", sop)
+
+    def test_multi_slice_planning_can_assign_multiple_programmers_without_execution(self) -> None:
+        work_slices = create_planned_work_slices(Path("code.package.sop"), "build thing")
+        plan = create_programmer_assignment_plan(
+            work_slices,
+            [
+                AgentConfig(name="ProgrammerA", model="m", temperature=0, role="core"),
+                AgentConfig(name="ProgrammerB", model="m", temperature=0, role="tests"),
+            ],
+        )
+        sop = plan.to_sop()
+        self.assertEqual([item.slice_id for item in work_slices], ["WS001_core_implementation", "WS002_verification", "WS003_documentation"])
+        self.assertEqual(plan.active_programmer_count, 2)
+        self.assertIn("WS003_documentation", sop)
+        self.assertIn("ProgrammerB", sop)
 
 
 class FileChangeSurfaceTests(unittest.TestCase):

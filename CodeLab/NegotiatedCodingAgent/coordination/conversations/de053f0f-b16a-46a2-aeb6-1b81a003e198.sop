@@ -123,6 +123,7 @@
   + [last_proof] is tests passed with 44 tests after S50 Director disagreement docs
   + [last_proof] is tests passed with 45 tests and dry-run wrote programmer_assignment_plan.sop
   + [last_proof] is tests passed with 45 tests after S52 Programmer assignment docs
+  + [last_proof] is tests passed with 46 tests after S53 multi-slice planning scaffold
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -262,9 +263,10 @@
   + [completed_slice] is S50_director_disagreement_docs
   + [completed_slice] is S51_multi_programmer_slice_assignment_plan
   + [completed_slice] is S52_programmer_assignment_docs
+  + [completed_slice] is S53_multi_slice_planning_scaffold
 
-  + [current_frontier] is S53_multi_slice_planning_scaffold after Programmer assignment docs
-  + [next_recommended_slice] is S53_multi_slice_planning_scaffold
+  + [current_frontier] is S54_multi_slice_planning_docs after multi-slice planning scaffold
+  + [next_recommended_slice] is S54_multi_slice_planning_docs
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 57
+  + [job_notice_revision] is 58
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -75,7 +75,8 @@
     S50_director_disagreement_docs |
     S51_multi_programmer_slice_assignment_plan |
     S52_programmer_assignment_docs |
-    S53_multi_slice_planning_scaffold
+    S53_multi_slice_planning_scaffold |
+    S54_multi_slice_planning_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -796,7 +797,7 @@
 
 & [WorkSliceDetail S53_multi_slice_planning_scaffold] is a Programmer swarm slice
   + [slice_id] is S53_multi_slice_planning_scaffold
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a deterministic scaffold for deriving multiple implementation work slices from code package sections
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing slice planning can create multiple planned slices without executing them
@@ -804,3 +805,16 @@
   + [support_status] is prepared
   + [dependency_set] is S51_multi_programmer_slice_assignment_plan
   + [known_risks] is splitting work mechanically without enough code package semantics
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:10:00Z, proof_ref tests passed with 46 tests, result_summary added create_planned_work_slices for core verification and documentation planned slices plus assignment plan coverage
+  + [completed_work_review] is support_delta verified multiple planned slices can be represented and assigned before execution; requirement_delta orchestrator still executes one initial slice
+
+& [WorkSliceDetail S54_multi_slice_planning_docs] is a Programmer swarm slice
+  + [slice_id] is S54_multi_slice_planning_docs
+  + [slice_status] is open
+  + [scope] is document multi-slice planning scaffold and its current non-execution boundary
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is operators know planned slices exist as scaffold before orchestrator multi-execution
+  + [support_status] is prepared
+  + [dependency_set] is S53_multi_slice_planning_scaffold
+  + [known_risks] is implying multi-slice planner is semantically extracting work from real code package content
