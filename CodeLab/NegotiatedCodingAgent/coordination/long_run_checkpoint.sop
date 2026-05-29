@@ -1,24 +1,25 @@
 & [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
-  + [created_at] is 2026-05-29T16:06:31.604490+00:00
+  + [created_at] is 2026-05-29T16:09:48.607382+00:00
   + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
-  + [start_current_frontier] is S92_long_run_checkpoint_after_route_draft after route draft spec audit
-  + [end_current_frontier] is run 20260529T160621Z completed and narrative updated with artifact manifest
-  + [git_clean_before] is true
+  + [start_current_frontier] is S94_long_run_harness_route_draft_docs after harness route draft proof
+  + [end_current_frontier] is run 20260529T160930Z completed and narrative updated with artifact manifest
+  + [git_clean_before] is false
   + [status] is ready_for_continuation
   + [test_status] is passed
   + [dry_run_status] is passed
   + [model_inventory_status] is passed
   + [openai_health_status] is failed
+  + [route_draft_status] is passed
   + [authority_boundary] is harness_checkpoint_not_human_approval
 
   & [HarnessCommand test] is a command proof summary
     + [returncode] is 0
     + [stdout_tail] is Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src'... Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src\\negotiated_agent'...
-    + [stderr_tail] is ............................................................... ---------------------------------------------------------------------- Ran 63 tests in 0.313s OK
+    + [stderr_tail] is ............................................................... ---------------------------------------------------------------------- Ran 63 tests in 0.318s OK
 
   & [HarnessCommand dry_run] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T160621Z
+    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T160930Z
     + [stderr_tail] is none
 
   & [HarnessCommand model_inventory] is a command proof summary
@@ -28,6 +29,12 @@
 
   & [HarnessCommand openai_health] is an environment-state summary
     + [returncode] is 1
-    + [stdout_tail] is & [OpenAICompatibleHealth] is the endpoint healthcheck for a vLLM or OpenAI-compatible server + [base_url] is http://localhost:8000 + [models_url] is http://localhost:8000/v1/models + [status] is unavailable + [model_count] is 0 + [detail] 
+    + [stdout_tail] is & [OpenAICompatibleHealth] is the endpoint healthcheck for a vLLM or OpenAI-compatible server + [base_url] is http://localhost:8000 + [models_url] is http://localhost:8000/v1/models + [status] is unavailable + [model_count] is 0 + [detail]
     + [stderr_tail] is none
     + [gating_behavior] is non_gating_environment_state
+
+  & [HarnessCommand route_draft] is a non-mutating route draft summary
+    + [returncode] is 0
+    + [stdout_tail] is + [director_provider] is openai_compatible + [director_models] is qwen2.5-coder:7b, llama3.1:8b + [shaliach_provider] is openai_compatible + [shaliach_model] is llama3.1:8b + [programmer_provider] is openai_compatible + [programmer_models]
+    + [stderr_tail] is none
+    + [gating_behavior] is non_gating_configuration_draft

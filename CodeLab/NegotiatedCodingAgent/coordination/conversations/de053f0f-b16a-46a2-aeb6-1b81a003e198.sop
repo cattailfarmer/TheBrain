@@ -277,6 +277,22 @@
   + [last_proof] is run 20260529T160621Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T160621Z
   + [last_proof] is run 20260529T160621Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T160808Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T160808Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T160808Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T160808Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T160808Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T160808Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T160808Z
+  + [last_proof] is run 20260529T160808Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T160930Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T160930Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T160930Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T160930Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T160930Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T160930Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T160930Z
+  + [last_proof] is run 20260529T160930Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -376,9 +392,10 @@
   + [completed_slice] is S90_live_route_config_draft
   + [completed_slice] is S91_spec_audit_refresh_after_route_draft
   + [completed_slice] is S92_long_run_checkpoint_after_route_draft
+  + [completed_slice] is S93_long_run_harness_route_draft_check
 
-  + [current_frontier] is S93_long_run_harness_route_draft_check after route draft checkpoint
-  + [next_recommended_slice] is S93_long_run_harness_route_draft_check
+  + [current_frontier] is run 20260529T160930Z completed and narrative updated with artifact manifest
+  + [next_recommended_slice] is S94_long_run_harness_route_draft_docs
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

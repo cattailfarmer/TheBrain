@@ -31,6 +31,7 @@ class LongRunCheckpoint:
     model_inventory_result: CommandResult
     end_current_frontier: str = ""
     openai_health_result: CommandResult | None = None
+    route_draft_result: CommandResult | None = None
 
     @property
     def status(self) -> str:
@@ -50,6 +51,7 @@ class LongRunCheckpoint:
   + [dry_run_status] is {_status(self.dry_run_result)}
   + [model_inventory_status] is {_status(self.model_inventory_result)}
   + [openai_health_status] is {_status(self.openai_health_result) if self.openai_health_result else "not_run"}
+  + [route_draft_status] is {_status(self.route_draft_result) if self.route_draft_result else "not_run"}
   + [authority_boundary] is harness_checkpoint_not_human_approval
 
   & [HarnessCommand test] is a command proof summary
@@ -72,6 +74,12 @@ class LongRunCheckpoint:
     + [stdout_tail] is {_field_value(self.openai_health_result.stdout_tail if self.openai_health_result else "")}
     + [stderr_tail] is {_field_value(self.openai_health_result.stderr_tail if self.openai_health_result else "")}
     + [gating_behavior] is non_gating_environment_state
+
+  & [HarnessCommand route_draft] is a non-mutating route draft summary
+    + [returncode] is {self.route_draft_result.returncode if self.route_draft_result else "not_run"}
+    + [stdout_tail] is {_field_value(self.route_draft_result.stdout_tail if self.route_draft_result else "")}
+    + [stderr_tail] is {_field_value(self.route_draft_result.stderr_tail if self.route_draft_result else "")}
+    + [gating_behavior] is non_gating_configuration_draft
 """
 
 
@@ -118,6 +126,19 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         ],
         project_root,
     )
+    route_draft = _run(
+        "route_draft",
+        [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(project_root / "scripts" / "live-route-draft.ps1"),
+            "-Out",
+            str(project_root / "coordination" / "live_route_config_draft.sop"),
+        ],
+        project_root,
+    )
     end_surface = ConversationSurface.load_active(project_root)
     return LongRunCheckpoint(
         created_at=datetime.now(timezone.utc).isoformat(),
@@ -129,6 +150,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         dry_run_result=dry,
         model_inventory_result=inventory,
         openai_health_result=openai_health,
+        route_draft_result=route_draft,
     )
 
 
@@ -167,4 +189,4 @@ def _bool(value: bool) -> str:
 
 
 def _field_value(value: str) -> str:
-    return " ".join(value.replace("\x00", "").split())[:240] if value else "none"
+    return " ".join(value.replace("\x00", "").split())[:240].rstrip() if value else "none"

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 97
+  + [job_notice_revision] is 98
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -115,7 +115,8 @@
     S90_live_route_config_draft |
     S91_spec_audit_refresh_after_route_draft |
     S92_long_run_checkpoint_after_route_draft |
-    S93_long_run_harness_route_draft_check
+    S93_long_run_harness_route_draft_check |
+    S94_long_run_harness_route_draft_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1356,7 +1357,7 @@
 
 & [WorkSliceDetail S93_long_run_harness_route_draft_check] is a long-run harness implementation slice
   + [slice_id] is S93_long_run_harness_route_draft_check
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is include non-mutating live route draft generation in long-run harness checkpoints
   + [target_files] is src/negotiated_agent/long_run.py, src/negotiated_agent/long_run_cli.py, scripts/long-run-harness.ps1, tests/**, coordination/**
   + [proof_route] is tests cover route draft command status in checkpoint SOP and harness run writes route draft proof
@@ -1364,3 +1365,16 @@
   + [support_status] is prepared
   + [dependency_set] is S92_long_run_checkpoint_after_route_draft
   + [known_risks] is making route draft endpoint unavailability gating instead of informational
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:08:26Z, proof_ref tests passed with 63 tests and long_run_checkpoint.sop includes route_draft_status passed, result_summary long-run harness now runs live-route-draft and records non-gating configuration draft proof
+  + [completed_work_review] is support_delta verified route draft proof is first-class in checkpoint; requirement_delta operator docs should explain route_draft_status and its non-gating meaning
+
+& [WorkSliceDetail S94_long_run_harness_route_draft_docs] is a documentation slice
+  + [slice_id] is S94_long_run_harness_route_draft_docs
+  + [slice_status] is open
+  + [scope] is document route_draft_status in long-run harness/operator guidance
+  + [target_files] is docs/**, README.md, coordination/**
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is operators can interpret route_draft_status as non-mutating configuration guidance
+  + [support_status] is prepared
+  + [dependency_set] is S93_long_run_harness_route_draft_check
+  + [known_risks] is implying route draft status proves model quality or live serving

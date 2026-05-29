@@ -1046,6 +1046,7 @@ class LongRunHarnessTests(unittest.TestCase):
     def test_checkpoint_records_openai_health_without_gating_continuation(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
         unavailable = CommandResult("openai_health", 1, "status] is unavailable", "")
+        route_draft = CommandResult("route_draft", 0, "readiness] is blocked", "")
         checkpoint = LongRunCheckpoint(
             created_at="2026-05-29T12:00:00Z",
             conversation_uuid="test-uuid",
@@ -1056,6 +1057,7 @@ class LongRunHarnessTests(unittest.TestCase):
             model_inventory_result=ok,
             end_current_frontier="S40_end",
             openai_health_result=unavailable,
+            route_draft_result=route_draft,
         )
         sop = checkpoint.to_sop()
         self.assertEqual(checkpoint.status, "ready_for_continuation")
@@ -1063,6 +1065,8 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertIn("end_current_frontier] is S40_end", sop)
         self.assertIn("openai_health_status] is failed", sop)
         self.assertIn("non_gating_environment_state", sop)
+        self.assertIn("route_draft_status] is passed", sop)
+        self.assertIn("non_gating_configuration_draft", sop)
 
 
 class NarrativeCoverageTests(unittest.TestCase):
