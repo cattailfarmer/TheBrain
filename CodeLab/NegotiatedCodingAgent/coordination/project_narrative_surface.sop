@@ -93,6 +93,7 @@
   + [implemented_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [implemented_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [implemented_slice] is S12_project_narrative_surface_runtime_update
+  + [implemented_slice] is S14_file_change_surface
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -115,6 +116,7 @@
   + [proof_result] is dry-run wrote protocol_activation.sop in runs/20260529T113929Z
   + [proof_result] is dry-run wrote four layer Shaliach finding artifacts in runs/20260529T114243Z
   + [proof_result] is dry-run updated conversation surface lifecycle proofs for runs/20260529T114455Z
+  + [proof_result] is dry-run wrote file_change_surface.sop and file_change_index.sop in runs/20260529T114754Z
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -135,20 +137,20 @@
   + [ready_capability] is run emits protocol activation set artifact with authority boundary and activation reasons
   + [ready_capability] is run emits separate Shaliach finding artifacts and manager log references for each layer
   + [ready_capability] is orchestrator-integrated conversation-kernel updates record run start, layer approval, implementation write, and completion
+  + [ready_capability] is generated implementation files have file-to-solution lineage through FileChangeSurface and FileChangeIndex artifacts
   + [not_ready_capability] is blocked/failure lifecycle recovery records during normal runs
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
   + [not_ready_capability] is mailbox and notice coordination between multiple active conversations
-  + [not_ready_capability] is file-change surface solution_uuid indexing
+  + [not_ready_capability] is commit_ref attachment and richer multi-file diff semantics for file-change records
   + [not_ready_capability] is verified local vLLM or Ollama multi-model serving
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is S14_file_change_surface
-  + [next_reason] is durable implementation changes need file-to-solution traceability now that lifecycle state survives reentry
-  + [following_slice] is S13_mailbox_and_notice_coordination
+  + [next_recommended_slice] is S13_mailbox_and_notice_coordination
+  + [next_reason] is multiple active conversations need mailbox, notice, read cursor, and rendezvous surfaces now that single-run governance has traceability
   + [following_slice] is S15_model_inventory_and_serving_probe
   + [following_slice] is S16_long_run_harness
-  + [sleep_run_candidate] is S14_file_change_surface because traceability is the next bounded governance slice
+  + [sleep_run_candidate] is S13_mailbox_and_notice_coordination because coordination is the next bounded governance slice
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -256,6 +258,15 @@
 
 & [RunNarrativeUpdate 20260529T114455Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T114455Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T114754Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T114754Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\README.generated.txt

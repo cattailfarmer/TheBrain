@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .config import AppConfig
 from .conversation import update_active_conversation_surface
+from .file_change import build_file_change_records, records_to_index, records_to_surface
 from .flowchart import empty_flowchart
 from .ledgers import negotiate_ledgers
 from .llm import LlmClient
@@ -136,15 +137,30 @@ class NegotiatedCodingAgent:
             programmer_report(work_slice.slice_id, self.config.coder.name, coder_output),
         )
         written = write_implementation(run_root, coder_output)
+        work_slice_ref = f"{work_slice.slice_id}.work_slice.sop"
+        programmer_report_ref = f"{work_slice.slice_id}.programmer_report.sop"
+        manager_review_ref = f"{work_slice.slice_id}.manager_review.sop"
         write_text(
-            run_root / f"{work_slice.slice_id}.manager_review.sop",
+            run_root / manager_review_ref,
             manager_review(work_slice.slice_id, written),
         )
+        file_change_records = build_file_change_records(
+            run_root=run_root,
+            written_files=written,
+            work_slice_ref=work_slice_ref,
+            programmer_report_ref=programmer_report_ref,
+            manager_review_ref=manager_review_ref,
+            justification_ref="code.package.sop",
+        )
+        write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
+        write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
             run_root,
             {
                 "event": "implementation_written",
                 "files": [str(path.relative_to(run_root)) for path in written],
+                "file_change_surface_ref": "file_change_surface.sop",
+                "file_change_index_ref": "file_change_index.sop",
             },
         )
         self._update_conversation_surface(

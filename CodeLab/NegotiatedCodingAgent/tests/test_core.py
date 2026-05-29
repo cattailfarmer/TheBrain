@@ -9,6 +9,7 @@ from negotiated_agent.conversation import (
     ConversationSurface,
     update_active_conversation_surface,
 )
+from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.ledgers import negotiate_ledgers
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
@@ -206,6 +207,29 @@ class WorkSliceTests(unittest.TestCase):
         self.assertIn("code.package.sop", work_slice.to_sop())
 
 
+class FileChangeSurfaceTests(unittest.TestCase):
+    def test_file_change_surface_indexes_written_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp) / "20260529T000000Z"
+            written = run_root / "implementation" / "app.py"
+            written.parent.mkdir(parents=True)
+            written.write_text("print('ok')\n", encoding="utf-8")
+            records = build_file_change_records(
+                run_root=run_root,
+                written_files=[written],
+                work_slice_ref="WS001_initial_implementation.work_slice.sop",
+                programmer_report_ref="WS001_initial_implementation.programmer_report.sop",
+                manager_review_ref="WS001_initial_implementation.manager_review.sop",
+                justification_ref="code.package.sop",
+            )
+            surface = records_to_surface(records)
+            index = records_to_index(records)
+            self.assertIn("FileChangeSurface", surface)
+            self.assertIn("implementation/app.py", surface)
+            self.assertIn("code.package.sop", surface)
+            self.assertIn(records[0].solution_uuid, index)
+
+
 class ConversationKernelTests(unittest.TestCase):
     def _write_surface(self, root: Path) -> None:
         conversations = root / "coordination" / "conversations"
@@ -396,6 +420,8 @@ class NarrativeUpdateTests(unittest.TestCase):
             package = (run_root / "application.package.sop").read_text(encoding="utf-8")
             protocol_activation = (run_root / "protocol_activation.sop").read_text(encoding="utf-8")
             shaliach_finding = (run_root / "application.shaliach_finding.sop").read_text(encoding="utf-8")
+            file_change_surface = (run_root / "file_change_surface.sop").read_text(encoding="utf-8")
+            file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
             log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
             self.assertIn("RunNarrativeUpdate", narrative)
             self.assertIn("Build a test app", narrative)
@@ -408,7 +434,10 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("ProtocolActivationSet", protocol_activation)
             self.assertIn("project_narrative_surface", protocol_activation)
             self.assertIn("ShaliachFinding application_layer_package", shaliach_finding)
+            self.assertIn("FileChangeSurface", file_change_surface)
+            self.assertIn("implementation/README.generated.txt", file_change_index)
             self.assertIn("application.shaliach_finding.sop", log)
+            self.assertIn("file_change_surface.sop", log)
 
 
 if __name__ == "__main__":

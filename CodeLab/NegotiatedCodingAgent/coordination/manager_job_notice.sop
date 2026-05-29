@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 17
+  + [job_notice_revision] is 18
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -244,14 +244,16 @@
 
 & [WorkSliceDetail S14_file_change_surface] is a planned dependency slice
   + [slice_id] is S14_file_change_surface
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add solution_uuid records and file-to-solution index entries for implementation slices needing durable review lineage
   + [target_files] is coordination/**, src/negotiated_agent/**, tests/**
   + [proof_route] is tests or generated artifacts showing file_path to solution_uuid to justification_ref lookup
   + [completion_criteria] is manager review can answer why each durable implementation file changed by following a file-change surface
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S08_runtime_conversation_kernel
   + [known_risks] is over-indexing trivial changes before durable file-level review matters
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T12:05:00Z, proof_ref tests passed with 21 tests and dry-run wrote runs/20260529T114754Z/file_change_surface.sop, result_summary added FileChangeSurface and FileChangeIndex artifacts mapping implementation file paths to deterministic solution_uuid records and support refs
+  + [completed_work_review] is support_delta verified generated implementation files have file-to-solution lineage; requirement_delta multi-file diff semantics and commit_ref attachment remain future work
 
 & [WorkSliceDetail S15_model_inventory_and_serving_probe] is a planned dependency slice
   + [slice_id] is S15_model_inventory_and_serving_probe
