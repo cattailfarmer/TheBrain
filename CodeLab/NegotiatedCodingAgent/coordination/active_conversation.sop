@@ -1,5 +1,5 @@
 & [ActiveConversationPointer] is the project-local pointer to the active durable conversation surface
   + [active_conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
   + [conversation_surface_file] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [updated_at] is 2026-05-29T15:30:00Z
+  + [updated_at] is 2026-05-29T15:40:00Z
   = must: load conversation_surface_file before claiming continuity after compaction or reentry

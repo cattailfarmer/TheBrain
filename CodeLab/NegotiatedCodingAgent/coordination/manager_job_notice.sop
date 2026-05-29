@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 30
+  + [job_notice_revision] is 31
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -48,7 +48,8 @@
     S23_role_model_assignment_profile |
     S24_configurable_mailbox_recipients |
     S25_blocked_run_repair_plan_synthesis |
-    S26_run_artifact_manifest
+    S26_run_artifact_manifest |
+    S27_run_manifest_log_event
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -418,7 +419,7 @@
 
 & [WorkSliceDetail S26_run_artifact_manifest] is a post-S16 governance expansion slice
   + [slice_id] is S26_run_artifact_manifest
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is write a manifest for generated run artifacts so reentry and review can enumerate outputs without guessing filenames
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run or unit test showing run_manifest.sop lists key artifacts and lifecycle status
@@ -426,3 +427,16 @@
   + [support_status] is prepared
   + [dependency_set] is S10C_conversation_surface_run_lifecycle_updates, S17_blocked_run_lifecycle_records
   + [known_risks] is duplicating narrative coverage rather than creating a simple per-run index
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:40:00Z, proof_ref tests passed with 32 tests, result_summary completed and blocked runs now write run_manifest.sop with lifecycle status and artifact role refs
+  + [completed_work_review] is support_delta verified per-run artifact enumeration for reentry; requirement_delta manifest is an index and not artifact validation
+
+& [WorkSliceDetail S27_run_manifest_log_event] is a post-S16 governance expansion slice
+  + [slice_id] is S27_run_manifest_log_event
+  + [slice_status] is open
+  + [scope] is log manifest creation and include manifest proof in conversation lifecycle updates
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing negotiation log and conversation surface mention run_manifest.sop
+  + [completion_criteria] is reentry can find run_manifest.sop from lifecycle proofs and logs without scanning run_root
+  + [support_status] is prepared
+  + [dependency_set] is S26_run_artifact_manifest
+  + [known_risks] is adding noisy proof churn rather than useful reentry signals

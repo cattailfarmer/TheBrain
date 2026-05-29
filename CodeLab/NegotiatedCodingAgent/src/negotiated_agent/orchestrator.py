@@ -181,6 +181,7 @@ class NegotiatedCodingAgent:
             proofs=[f"run {run_root.name} wrote implementation files"],
         )
         self._write_run_narrative_update(run_root, objective, flowcharts, written)
+        self._write_run_manifest(run_root, "completed")
         return run_root
 
     def _negotiate_layer(
@@ -299,6 +300,7 @@ class NegotiatedCodingAgent:
             current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
             proofs=[f"run {run_root.name} wrote run_blocked.sop and {repair_plan_ref}"],
         )
+        self._write_run_manifest(run_root, "blocked")
 
     def _blocked_run_repair_plan(self, run_root: Path, layer: str, blocker: str, reason: str) -> str:
         layer_refs = [
@@ -395,6 +397,56 @@ class NegotiatedCodingAgent:
             proofs=[f"run narrative update written for {rel_run}"],
         )
 
+    def _write_run_manifest(self, run_root: Path, lifecycle_status: str) -> None:
+        artifact_lines = []
+        for path in sorted(run_root.iterdir(), key=lambda item: item.name):
+            if path.name == "run_manifest.sop" or not path.is_file():
+                continue
+            artifact_lines.append(f"  + [artifact_ref {_artifact_role(path.name)}] is {path.name}")
+        manifest = "\n".join(
+            [
+                f"& [RunArtifactManifest {run_root.name}] is the per-run artifact index for NegotiatedCodingAgent reentry",
+                f"  + [run_root] is {run_root.relative_to(self.project_root)}",
+                f"  + [lifecycle_status] is {lifecycle_status}",
+                "  + [authority_boundary] is manifest_index_not_artifact_validation",
+                *artifact_lines,
+                "",
+            ]
+        )
+        write_text(run_root / "run_manifest.sop", manifest)
+
 
 def _sop_field_value(value: str, *, limit: int) -> str:
     return " ".join(value.split())[:limit]
+
+
+def _artifact_role(name: str) -> str:
+    if name == "protocol_activation.sop":
+        return "protocol_activation"
+    if name == "negotiation_log.jsonl":
+        return "run_log"
+    if name == "run_blocked.sop":
+        return "blocked_record"
+    if name == "run_repair_plan.sop":
+        return "repair_plan"
+    if name == "file_change_surface.sop":
+        return "file_change_surface"
+    if name == "file_change_index.sop":
+        return "file_change_index"
+    if name.endswith(".flowchart.md"):
+        return "flowchart"
+    if name.endswith(".package.sop"):
+        return "layer_package"
+    if name.endswith(".manager_review.sop"):
+        return "manager_review"
+    if name.endswith(".shaliach_finding.sop"):
+        return "shaliach_finding"
+    if name.endswith(".shaliach_response.sop"):
+        return "shaliach_response"
+    if name.endswith(".work_slice.sop"):
+        return "work_slice"
+    if name.endswith(".programmer_report.sop"):
+        return "programmer_report"
+    if name == "coder.raw.md":
+        return "programmer_raw_output"
+    return "artifact"
