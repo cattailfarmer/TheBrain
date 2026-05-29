@@ -28,6 +28,7 @@
   + [last_proof] is tests passed with 11 tests after implementation scaffold
   + [last_proof] is tests passed with 11 tests after SOP framework attention load
   + [last_proof] is tests passed with 11 tests after project narrative surface creation
+  + [last_proof] is tests passed with 13 tests after S08 runtime conversation kernel
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -38,10 +39,11 @@
   + [completed_slice] is S05_manager_gates
   + [completed_slice] is S06_programmer_slices
   + [completed_slice] is S07_docs_and_acceptance_review
+  + [completed_slice] is S08_runtime_conversation_kernel
   + [completed_slice] is S12_project_narrative_surface_seed
 
-  + [current_frontier] is S08_runtime_conversation_kernel after project narrative surface seed
-  + [next_recommended_slice] is S08_runtime_conversation_kernel from coordination/framework_attention_load.sop
+  + [current_frontier] is S09_protocol_registry after runtime conversation kernel
+  + [next_recommended_slice] is S09_protocol_registry from coordination/framework_attention_load.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers are scaffold-generated, not yet model-negotiated by Directors and Shaliach
@@ -49,6 +51,7 @@
   + [unresolved_item] is ProjectNarrativeSurface has a seed surface, but not yet an executable CodeLab subsystem with citations, stale checks, or generated coverage updates
   + [unresolved_item] is vLLM WSL2 backend is not installed or verified
   + [unresolved_item] is workspace-write policy remains isolated to run implementation directories
+  + [unresolved_item] is runtime conversation kernel can load and update conversation surfaces, but orchestrator does not yet call it automatically during runs
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop

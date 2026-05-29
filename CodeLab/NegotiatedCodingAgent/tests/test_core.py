@@ -4,6 +4,11 @@ import tempfile
 import unittest
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
+from negotiated_agent.conversation import (
+    ActiveConversationPointer,
+    ConversationSurface,
+    update_active_conversation_surface,
+)
 from negotiated_agent.llm import LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.package import LayerPackage
@@ -172,6 +177,65 @@ class WorkSliceTests(unittest.TestCase):
         work_slice = create_initial_work_slice(Path("code.package.sop"), "build thing")
         self.assertEqual(work_slice.slice_id, "WS001_initial_implementation")
         self.assertIn("code.package.sop", work_slice.to_sop())
+
+
+class ConversationKernelTests(unittest.TestCase):
+    def _write_surface(self, root: Path) -> None:
+        conversations = root / "coordination" / "conversations"
+        conversations.mkdir(parents=True)
+        (root / "coordination" / "active_conversation.sop").write_text(
+            "\n".join(
+                [
+                    "& [ActiveConversationPointer] is active",
+                    "  + [active_conversation_uuid] is test-uuid",
+                    "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                    "  = must: load conversation_surface_file before claiming continuity",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
+        )
+        (conversations / "test-uuid.sop").write_text(
+            "\n".join(
+                [
+                    "& [ConversationSurfaceFile] is active",
+                    "  + [conversation_uuid] is test-uuid",
+                    "  + [current_frontier] is old frontier",
+                    "  + [next_recommended_slice] is old slice",
+                    "  + [last_proof] is existing proof",
+                    "  + [unresolved_item] is existing item",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
+        )
+
+    def test_loads_active_conversation_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self._write_surface(root)
+            pointer = ActiveConversationPointer.load(root)
+            surface = ConversationSurface.load_active(root)
+            self.assertEqual(pointer.conversation_uuid, "test-uuid")
+            self.assertEqual(surface.first("current_frontier"), "old frontier")
+
+    def test_updates_frontier_and_preserves_ledgers(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self._write_surface(root)
+            surface = update_active_conversation_surface(
+                root,
+                set_fields={
+                    "current_frontier": "new frontier",
+                    "next_recommended_slice": "S08",
+                },
+                unresolved_items=["new item", "existing item"],
+                proofs=["new proof"],
+            )
+            self.assertEqual(surface.first("current_frontier"), "new frontier")
+            self.assertEqual(surface.first("next_recommended_slice"), "S08")
+            self.assertEqual(surface.fields["unresolved_item"], ["existing item", "new item"])
+            self.assertEqual(surface.fields["last_proof"], ["existing proof", "new proof"])
 
 
 if __name__ == "__main__":

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 9
+  + [job_notice_revision] is 10
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -122,7 +122,7 @@
 
 & [WorkSliceDetail S08_runtime_conversation_kernel] is a ready slice
   + [slice_id] is S08_runtime_conversation_kernel
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement runtime support for active_conversation, conversation_surface, reentry_packet, unresolved_items, and bounded surface updates
   + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
   + [proof_route] is unit tests for loading active conversation pointer, resolving conversation surface, updating frontier fields, and preserving unresolved items
@@ -130,6 +130,8 @@
   + [support_status] is prepared
   + [dependency_set] is framework_attention_load accepted
   + [known_risks] is building a brittle string editor instead of a small structured surface operator
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:23:00Z, proof_ref tests passed with 13 tests, result_summary added negotiated_agent.conversation runtime kernel for active pointer loading, conversation surface resolution, bounded field updates, unique unresolved item append, and unique proof append
+  + [completed_work_review] is support_delta verified conversation surface operator can update current frontier and ledgers; requirement_delta orchestrator automatic surface-update integration remains future work
 
 & [WorkSliceDetail S09_protocol_registry] is a planned dependency slice
   + [slice_id] is S09_protocol_registry

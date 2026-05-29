@@ -85,9 +85,11 @@
   + [implemented_slice] is S07_docs_and_acceptance_review
   + [implemented_slice] is framework_attention_load_checkpoint
   + [implemented_slice] is project_narrative_surface_seed
+  + [implemented_slice] is S08_runtime_conversation_kernel
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
-  + [current_runtime_limit] is conversation and narrative surfaces are hand-maintained SOP artifacts rather than executable runtime operators
+  + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
+  + [current_runtime_limit] is narrative surfaces are hand-maintained SOP artifacts rather than executable runtime operators
   + [citation_ref] is README.md
   + [citation_ref] is coordination/manager_job_notice.sop
   + [citation_ref] is coordination/framework_attention_load.sop
@@ -96,6 +98,7 @@
   + [proof_result] is tests passed with 11 tests after implementation scaffold
   + [proof_result] is tests passed with 11 tests after SOP framework attention load
   + [proof_result] is tests passed with 11 tests after project narrative surface creation
+  + [proof_result] is tests passed with 13 tests after S08 runtime conversation kernel
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -108,7 +111,8 @@
   + [ready_capability] is manager job notice maintains completed slices, open frontier, and support-review policy
   + [ready_capability] is framework attention load maps the SOP framework into CodeLab roles and staged absorption
   + [ready_capability] is this narrative surface now provides a durable story-level reentry path for future conversations
-  + [not_ready_capability] is automated conversation-kernel read/write operators
+  + [ready_capability] is runtime conversation kernel can load active conversation pointer, resolve UUID surface, update frontier fields, and append proof or unresolved ledgers
+  + [not_ready_capability] is orchestrator-integrated conversation-kernel updates during normal runs
   + [not_ready_capability] is executable project narrative subsystem with generated nodes, citations, stale checks, and coverage updates
   + [not_ready_capability] is Shaliach faculty runtime with higher/lower internal negotiation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -117,17 +121,16 @@
   + [not_ready_capability] is verified local vLLM or Ollama multi-model serving
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is S08_runtime_conversation_kernel
-  + [next_reason] is durable conversation operators should automate the surface-load and surface-update behavior that currently keeps attention alive manually
-  + [following_slice] is S09_protocol_registry
+  + [next_recommended_slice] is S09_protocol_registry
+  + [next_reason] is runtime should record which SOP protocols were active and why without claiming full interpretation
   + [following_slice] is S10_shaliach_faculty_runtime
   + [following_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [following_slice] is S12_project_narrative_surface_runtime
   + [following_slice] is S13_mailbox_and_notice_coordination
   + [following_slice] is S14_file_change_surface
-  + [sleep_run_candidate] is S08_runtime_conversation_kernel because it is bounded, testable, and directly improves long-run unattended readiness
+  + [sleep_run_candidate] is S09_protocol_registry because it is bounded, testable, and directly prepares Shaliach faculty runtime
 
-  = must: prefer S08 before deeper Shaliach or Director negotiation work unless the user gives a newer objective
+  = must: prefer S09 before deeper Shaliach or Director negotiation work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
 
 & [NarrativeWeave] is the cross-subject relation set

@@ -101,15 +101,15 @@
   + [required_response] is update the conversation surface and use this map to choose the next implementation slice
 
 & [NextSliceFrontier] is the ordered staged absorption path
-  + [S08_runtime_conversation_kernel] is implement read/write support for active_conversation, conversation_surface, reentry_packet, unresolved_items, and surface updates
-  + [S09_protocol_registry] is represent loaded SOP protocol references, activation conditions, and runtime dispatch reasons inside CodeLab
+  + [S08_runtime_conversation_kernel] is completed with runtime read/write support for active_conversation, conversation_surface, current frontier fields, unresolved_items, and proof updates
+  + [S09_protocol_registry] is the next recommended slice to represent loaded SOP protocol references, activation conditions, and runtime dispatch reasons inside CodeLab
   + [S10_shaliach_faculty_runtime] is implement Shaliach higher/lower reasoning with selected faculty perspectives and recorded response coordination
   + [S11_negotiated_sjs_datadesign_ledgers] is make Directors and Shaliach negotiate SJS and DataDrivenDesign ledgers rather than filling scaffold sections
   + [S12_project_narrative_surface] is create a project narrative surface that binds source, specification, decisions, implementation, proof, faults, and frontier
   + [S13_mailbox_and_notice_coordination] is implement inbox, notice, read_cursor, coordination claims, and rendezvous packets for multi-conversation work
   + [S14_file_change_surface] is add solution_uuid records and file-to-solution index entries when implementation slices need durable review lineage
 
-  = must: keep S08 first unless the user gives a stronger immediate build objective
+  = must: keep S09 first unless the user gives a stronger immediate build objective
   = must: update manager_job_notice before claiming the next long-running manager slice is ready
   = must: rerun tests after runtime changes and update proof references
 
