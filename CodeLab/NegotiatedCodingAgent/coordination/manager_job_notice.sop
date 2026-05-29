@@ -2479,7 +2479,7 @@
 
 & [WorkSliceDetail S176_long_run_checkpoint_after_merge_draft_cli] is a long-run reentry slice
   + [slice_id] is S176_long_run_checkpoint_after_merge_draft_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after run-local merge draft input CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 136-test suite and route draft proof
@@ -2487,3 +2487,16 @@
   + [support_status] is prepared
   + [dependency_set] is S175_run_local_merge_draft_input_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:31:39Z, proof_ref long-run checkpoint passed 136 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after run-local merge draft input CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 136-test merge draft CLI frontier; requirement_delta next step is refresh spec audit after draft input support
+
+& [WorkSliceDetail S177_spec_audit_refresh_after_merge_draft_cli] is a specification audit slice
+  + [slice_id] is S177_spec_audit_refresh_after_merge_draft_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after run-local merge draft input CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names run-local merge draft input support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists draft merge input as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S176_long_run_checkpoint_after_merge_draft_cli
+  + [known_risks] is overstating draft input as manual merge packet generation
