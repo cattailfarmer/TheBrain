@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T20:30:00Z
+  @ [updated_at] 2026-05-29T21:10:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -58,9 +58,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Directors preserve distinct perspectives and negotiate disagreements
-  + [support] is multiple Director configs produce proposals, dry-run roles emit distinct stances, and layer packages include DirectorDisagreementLedger
-  + [gap] is no live model-family diversity proof or multi-round disagreement memory exists yet
-  + [next_candidate] is add multi-round disagreement carry-forward before Manager settlement
+  + [support] is multiple Director configs produce proposals, dry-run roles emit distinct stances, layer packages include DirectorDisagreementLedger, and multi-round runs carry prior Director disagreement into later proposal prompts
+  + [gap] is no live model-family diversity proof or full deliberative Director memory exists yet; carry-forward is bounded prompt context
+  + [next_candidate] is run live multi-model Director comparison after local model serving is available
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Programmers are a small swarm of lightweight implementers
@@ -86,6 +86,6 @@
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
-  + [candidate_2] is add multi-round Director disagreement carry-forward
-  + [candidate_3] is implement executable multi-Programmer runner under merge review gates
+  + [candidate_2] is implement executable multi-Programmer runner under merge review gates
+  + [candidate_3] is build a worker runner that consumes mailbox claims under Manager and Shaliach constraints
   + [candidate_4] is install and verify local live model serving when operator is ready
