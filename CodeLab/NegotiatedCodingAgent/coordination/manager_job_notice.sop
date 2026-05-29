@@ -2258,7 +2258,7 @@
 
 & [WorkSliceDetail S159_gate_authorized_run_local_execution_design] is a coordination runtime design slice
   + [slice_id] is S159_gate_authorized_run_local_execution_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design run-local implementation execution from execution_allowed gate evidence without target workspace mutation
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names execution_allowed inputs run-local output root proof requirements and no target workspace mutation boundary
@@ -2266,3 +2266,16 @@
   + [support_status] is prepared
   + [dependency_set] is S158_spec_audit_refresh_after_handoff_proof_runner
   + [known_risks] is accidentally reintroducing autonomous target workspace writes
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:47:00Z, proof_ref gate_authorized_run_local_execution_design.sop README architecture and operator guide updated, result_summary designed execution_allowed gate to run-local implementation execution boundary
+  + [completed_work_review] is support_delta verified design keeps generated implementation run-local and review-gated; requirement_delta next step is RunLocalExecutionPlan and Result records
+
+& [WorkSliceDetail S160_run_local_execution_records] is a coordination runtime implementation slice
+  + [slice_id] is S160_run_local_execution_records
+  + [slice_status] is open
+  + [scope] is add RunLocalExecutionPlan and RunLocalExecutionResult records with output containment helpers
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover execution_allowed plan creation proof_only rejection containment and boundary text
+  + [completion_criteria] is run-local implementation execution can be represented without writing generated files
+  + [support_status] is prepared
+  + [dependency_set] is S159_gate_authorized_run_local_execution_design
+  + [known_risks] is records implying target workspace application

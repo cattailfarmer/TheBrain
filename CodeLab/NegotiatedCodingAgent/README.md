@@ -140,6 +140,8 @@ The planned handoff-aware proof runner is specified in `coordination/handoff_awa
 
 That consumption path is available through `scripts/worker-runner-preview.ps1 -ConsumeProofHandoff`.
 
+The next designed boundary is run-local implementation execution from an `execution_allowed` gate. It is intentionally still not target workspace mutation; generated outputs must flow through later review, merge, apply, rollback, and acceptance records.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

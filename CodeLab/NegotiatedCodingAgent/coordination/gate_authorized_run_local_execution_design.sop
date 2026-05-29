@@ -1,0 +1,68 @@
+& [GateAuthorizedRunLocalExecutionDesign] is the design contract for executing implementation work only inside run-local evidence roots
+  @ [worker_execution_gate_design] coordination/worker_execution_gate_design.sop
+  @ [gate_to_cycle_design] coordination/gate_to_worker_cycle_bridge_design.sop
+  @ [proof_handoff_design] coordination/manager_reviewed_proof_handoff_design.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T22:47:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is run_local_execution_design_not_target_workspace_mutation
+  + [primary_goal] is allow a future worker to execute bounded implementation generation only when an execution_allowed gate decision exists
+  + [non_goal] is target workspace mutation
+  + [non_goal] is apply or rollback execution
+  + [non_goal] is Manager frontier advancement
+  + [non_goal] is mailbox read cursor advancement
+  + [non_goal] is live model autonomy without recorded Manager and Shaliach evidence
+
+& [RunLocalExecutionInputs] is what future execution must inspect
+  + [required_ref] is ExecutionGateDecision with gate_status execution_allowed
+  + [required_ref] is WorkerCycleRecord with cycle_status ready_for_run_local_execution
+  + [required_ref] is ManagerAuthorizationRecord with allowed_action execute_run_local_implementation
+  + [required_ref] is ShaliachExecutionClearance with clearance_status clear or warning
+  + [required_ref] is active conversation current_frontier matching gate evidence
+  + [required_ref] is target run-local output root under runs/<run_id>/worker_execution/<cycle_id>/
+  + [authority_boundary] is run_local_inputs_not_workspace_apply
+  = must: reject proof_only_allowed gates
+  = must: reject stale frontier, invalid lease, Manager denial, and Shaliach pause or rework gates
+  = must: reject output roots outside the selected run-local worker execution directory
+
+& [RunLocalExecutionOutput] is the only allowed mutation
+  + [artifact_root] is runs/<run_id>/worker_execution/<cycle_id>/
+  + [artifact_name] is worker_execution_result.sop
+  + [artifact_name] is generated files under implementation/
+  + [artifact_name] is file_change_surface.sop and file_change_index.sop when files are generated
+  + [artifact_name] is WorkerCycleRecord with cycle_status completed, failed_proof, or needs_manager_review
+  + [authority_boundary] is run_local_output_not_target_workspace_application
+  = must: record all generated file paths as run-local relative refs
+  = must: preserve manual merge, apply, rollback, and post-apply acceptance protocols as later separate steps
+  = must: write no files outside the run-local artifact root and worker cycle directory
+
+& [ExecutionBehavior] is the limited implementation runner behavior
+  + [allowed_action] is execute deterministic or model-produced implementation generation into run-local root
+  + [allowed_action] is run proof commands only through explicit proof handoff or existing proof-command runner evidence
+  + [blocked_action] is target workspace file write
+  + [blocked_action] is active conversation current_frontier mutation
+  + [blocked_action] is mailbox read cursor advancement
+  + [blocked_action] is implicit apply of generated files
+  + [authority_boundary] is generated_implementation_not_accepted_patch
+
+& [ReviewAfterRunLocalExecution] is the next review surface
+  + [required_ref] is WorkerCycleRecord from the run-local execution attempt
+  + [required_ref] is generated file-change evidence
+  + [required_ref] is proof result cycle when proof commands were run
+  + [next_review] is Manager review of generated run-local outputs
+  + [next_review] is Shaliach review when behavior, scope, or lineage changed
+  + [authority_boundary] is review_required_before_merge_or_apply
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is execution_allowed gate can produce a run-local execution plan without writing target workspace files
+  + [test_case] is proof_only_allowed gate is rejected for implementation execution
+  + [test_case] is output containment rejects paths outside runs/<run_id>/worker_execution/<cycle_id>/
+  + [test_case] is generated file refs remain run-local and require later merge/apply protocols
+  + [test_case] is WorkerCycleRecord from execution does not advance Manager frontier
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add RunLocalExecutionPlan and RunLocalExecutionResult records with containment helpers
+  + [slice_2] is add dry-run planner CLI for execution_allowed gate refs
+  + [slice_3] is add deterministic run-local file writer only after plan/result tests pass
+  + [slice_4] is add Manager/Shaliach review surfaces before any merge or apply integration

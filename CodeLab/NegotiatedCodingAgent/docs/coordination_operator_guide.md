@@ -245,6 +245,8 @@ Consume an approved proof handoff:
 
 Consume mode loads the approved handoff and referenced ready cycle, validates the frontier and worker, then runs only the exact command recorded in the handoff. The result is a new proof cycle; failed proofs still write `WorkerFailureRecord` evidence.
 
+The next planned implementation boundary is `coordination/gate_authorized_run_local_execution_design.sop`. It permits only run-local generated outputs from an `execution_allowed` gate; target workspace writes still belong to the explicit merge/apply/rollback protocols.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

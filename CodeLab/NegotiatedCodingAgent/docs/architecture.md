@@ -236,6 +236,8 @@ The existing execution gate CLI now has explicit write mode for that boundary. I
 
 The worker-runner CLI now supports handoff consumption. It loads a `ManagerProofHandoffRecord`, loads the referenced `ready_for_proof` cycle, validates the current frontier, and calls the existing proof-command runner with handoff, ready-cycle, and gate refs carried into the new proof result cycle.
 
+`coordination/gate_authorized_run_local_execution_design.sop` defines the first implementation-execution boundary after the gate and proof scaffolding. It allows only run-local generation under a worker execution root when an `execution_allowed` gate and matching `ready_for_run_local_execution` cycle exist. Generated files remain evidence for later Manager/Shaliach review, merge packet, apply, rollback, and post-apply acceptance protocols.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
