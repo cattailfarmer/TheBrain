@@ -1823,3 +1823,11 @@
   + [proof_ref] is coordination/reviewed_narrative_append_e2e_fixture_design.sop
   + [current_frontier] is S220_reviewed_narrative_append_e2e_test
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S220_reviewed_narrative_append_e2e_test] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S220_reviewed_narrative_append_e2e_test
+  + [implemented_capability] is test fixture proves reviewed narrative append guard discovery review writers plan and apply workflow in a temporary project root
+  + [proof_result] is tests passed with 199 tests
+  + [current_frontier] is S221_long_run_checkpoint_after_e2e_fixture
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -326,7 +326,8 @@
   + [completed_slice] is S217_long_run_checkpoint_after_review_writers
   + [completed_slice] is S218_spec_audit_refresh_after_review_writers
   + [completed_slice] is S219_reviewed_narrative_append_e2e_fixture_design
-  + [ready_slice] is S220_reviewed_narrative_append_e2e_test
+  + [completed_slice] is S220_reviewed_narrative_append_e2e_test
+  + [ready_slice] is S221_long_run_checkpoint_after_e2e_fixture
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

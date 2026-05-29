@@ -212,6 +212,8 @@ Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrativ
 
 `coordination/reviewed_narrative_append_e2e_fixture_design.sop` defines an isolated temporary-root proof for the full reviewed append workflow so it can be tested without touching the live narrative surface.
 
+The reviewed narrative append e2e fixture now runs in `tests/test_core.py`, exercising guard discovery, review writers, plan mode, and guarded apply inside a temporary project root.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

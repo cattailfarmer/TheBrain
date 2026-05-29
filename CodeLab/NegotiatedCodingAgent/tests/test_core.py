@@ -2,6 +2,7 @@ from pathlib import Path
 import contextlib
 import io
 import json
+import re
 import subprocess
 import tempfile
 import unittest
@@ -5407,6 +5408,98 @@ class NarrativeAppendReviewTests(unittest.TestCase):
                         str(out_path),
                     ]
                 )
+
+    def test_reviewed_narrative_append_e2e_fixture_uses_temp_root_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            update_record = NarrativeCoverageUpdateRecord(
+                update_id="fixture-update",
+                stale_check_ref="coordination/narrative_stale_check.sop",
+                narrative_surface_ref="coordination/project_narrative_surface.sop",
+                appended_updates=("append LongRunNarrativeUpdate for fixture",),
+                deferred_updates=(),
+                stale_claim_refs=("fixture stale claim",),
+            )
+            (coordination / "narrative_coverage_update_record.sop").write_text(
+                update_record.to_sop(),
+                encoding="utf-8",
+            )
+
+            guard_out = io.StringIO()
+            with contextlib.redirect_stdout(guard_out):
+                narrative_append_cli_main(["--project-root", str(root), "--guard-discovery"])
+            guard_match = re.search(r"\+ \[surface_guard\] is (?P<guard>.+)", guard_out.getvalue())
+            self.assertIsNotNone(guard_match)
+            guard = guard_match.group("guard")
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--manager-approval",
+                        "--approval-id",
+                        "fixture-manager",
+                        "--approved-update-count",
+                        "1",
+                        "--frontier-at-approval",
+                        "fixture-frontier",
+                    ]
+                )
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--shaliach-clearance",
+                        "--clearance-id",
+                        "fixture-shaliach",
+                        "--checked-protocol",
+                        "SOP",
+                        "--checked-protocol",
+                        "SJS",
+                    ]
+                )
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--result-id",
+                        "fixture-plan",
+                        "--expected-surface-guard",
+                        guard,
+                        "--out",
+                        str(coordination / "narrative_append_plan.sop"),
+                    ]
+                )
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+            plan_text = (coordination / "narrative_append_plan.sop").read_text(encoding="utf-8")
+            self.assertIn("append_status] is ready_for_append", plan_text)
+
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--apply",
+                        "--result-id",
+                        "fixture-apply",
+                        "--expected-surface-guard",
+                        guard,
+                        "--out",
+                        str(coordination / "narrative_append_result.sop"),
+                    ]
+                )
+            result_text = (coordination / "narrative_append_result.sop").read_text(encoding="utf-8")
+            final_narrative = narrative.read_text(encoding="utf-8")
+            self.assertIn("append_status] is applied", result_text)
+            self.assertTrue(final_narrative.startswith(original.rstrip()))
+            self.assertIn("NarrativeAppliedUpdate fixture-apply-1", final_narrative)
+            self.assertIn("append LongRunNarrativeUpdate for fixture", final_narrative)
 
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
