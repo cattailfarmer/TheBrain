@@ -2364,3 +2364,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S273_prelive_manager_shaliach_review_design
   + [narrative_role] is specification_audit and live_serving update
+
+
+& [LongRunNarrativeUpdate S273_prelive_manager_shaliach_review_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S273_prelive_manager_shaliach_review_design
+  + [implemented_capability] is prelive_manager_shaliach_review_design.sop defines deterministic Manager and Shaliach review-ready packets as future live prompt scaffolds
+  + [proof_ref] is coordination/prelive_manager_shaliach_review_design.sop
+  + [current_frontier] is S274_prelive_review_packet_records
+  + [narrative_role] is review_design and live_serving_bridge update

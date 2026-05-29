@@ -1,0 +1,53 @@
+& [PreliveManagerShaliachReviewDesign] is the design contract for deterministic review-ready packets before live model serving
+  @ [created_at] 2026-05-30T13:30:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/combined_artifact_validation_design.sop
+  @ [related_design] coordination/combined_validation_checkpoint_integration_design.sop
+  @ [future_live_dependency] coordination/live_route_config_draft.sop
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is prelive_review_packet_not_live_manager_or_shaliach_deliberation
+  + [primary_goal] is prepare structured Manager and Shaliach review packets over combined validation and post-apply evidence while endpoint serving remains unavailable
+  + [non_goal] is claiming model-negotiated approval
+  + [non_goal] is applying files or advancing frontiers
+  + [non_goal] is replacing future live Manager or Shaliach review prompts
+
+& [ReviewInputs] is the evidence packet input set
+  + [input] is CombinedArtifactValidation or combined_artifact_validation_status from long_run_checkpoint.sop
+  + [input] is run_manifest.sop
+  + [input] is coordination/long_run_checkpoint.sop
+  + [input] is post_apply_acceptance.sop when target-workspace apply or rollback evidence exists
+  + [input] is verification_result.sop when mutation evidence exists
+  + [authority_boundary] is evidence_packet_input_not_decision_by_itself
+
+& [ManagerReviewPacket] is the deterministic Manager-facing record shape
+  + [field] is packet_id
+  + [field] is objective_ref
+  + [field] is combined_validation_ref
+  + [field] is checkpoint_ref
+  + [field] is readiness_status
+  + [field] is acceptance_question_set
+  + [field] is future_live_prompt_surface
+  + [authority_boundary] is manager_review_packet_not_manager_approval
+
+& [ShaliachReviewPacket] is the deterministic Shaliach-facing record shape
+  + [field] is packet_id
+  + [field] is protocol_obligation_set
+  + [field] is boundary_risk_set
+  + [field] is evidence_gap_set
+  + [field] is recommended_response
+  + [field] is future_live_prompt_surface
+  + [authority_boundary] is shaliach_review_packet_not_shaliach_clearance
+
+& [FutureLiveReplacement] is the model-serving handoff boundary
+  + [rule] is deterministic packets should become prompt inputs once OpenAI-compatible serving is available
+  + [rule] is live Manager and Shaliach responses must write new review artifacts rather than mutating deterministic packets
+  + [rule] is deterministic packet status may support routing and prompt construction but not approval
+  + [authority_boundary] is prompt_scaffold_not_live_deliberation
+
+& [ProofExpectations] is the minimum implementation proof
+  + [test_case] is Manager review packet records combined validation and checkpoint refs without approval language
+  + [test_case] is Shaliach review packet records protocol obligations boundary risks and evidence gaps
+  + [test_case] is packet status blocks when combined validation failed
+  + [test_case] is packet status is review_ready when combined validation passed
+  + [test_case] is packets include future live prompt surfaces but remain deterministic

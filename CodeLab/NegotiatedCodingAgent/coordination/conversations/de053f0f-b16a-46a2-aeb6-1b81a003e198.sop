@@ -925,7 +925,9 @@
   + [last_proof] is live serving recheck found RTX 5090 available but WSL2 Docker Ollama and localhost OpenAI-compatible endpoint unavailable
   + [completed_slice] is S272_live_serving_recheck_audit_refresh
   + [last_proof] is spec audit refreshed after live-serving readiness recheck
-  + [next_recommended_slice] is S273_prelive_manager_shaliach_review_design
+  + [completed_slice] is S273_prelive_manager_shaliach_review_design
+  + [last_proof] is designed deterministic pre-live Manager and Shaliach review packet boundary
+  + [next_recommended_slice] is S274_prelive_review_packet_records
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
