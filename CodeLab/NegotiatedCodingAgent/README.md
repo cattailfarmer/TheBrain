@@ -54,6 +54,25 @@ Edit `agent.config.json` to use the models you actually have installed.
 
 Runs are written under `runs/<timestamp>/`:
 
+- `protocol_activation.sop`
+- `<layer>.flowchart.md`
+- `<layer>.package.sop`
+- `<layer>.shaliach_finding.sop`
+- `<layer>.shaliach_response.sop` when Shaliach requires a response
+- `<layer>.manager_review.sop`
+- `WS001_initial_implementation.work_slice.sop`
+- `WS001_initial_implementation.programmer_report.sop`
+- `WS001_initial_implementation.manager_review.sop`
+- `coder.raw.md`
+- `implementation/`
+- `file_change_surface.sop`
+- `file_change_index.sop`
+- `run_manifest.sop`
+- `run_blocked.sop` and `run_repair_plan.sop` for blocked runs
+- `negotiation_log.jsonl`
+
+The layer-specific files are emitted for each configured negotiation layer, currently:
+
 - `application.flowchart.md`
 - `application.package.sop`
 - `application.manager_review.sop`
@@ -69,8 +88,6 @@ Runs are written under `runs/<timestamp>/`:
 - `WS001_initial_implementation.work_slice.sop`
 - `WS001_initial_implementation.programmer_report.sop`
 - `WS001_initial_implementation.manager_review.sop`
-- `implementation/`
-- `negotiation_log.jsonl`
 
 The generated implementation is intentionally conservative: the coder writes files only inside the run folder unless you later add an explicit workspace writer.
 

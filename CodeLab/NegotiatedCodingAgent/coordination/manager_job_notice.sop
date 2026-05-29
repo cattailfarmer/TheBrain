@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 46
+  + [job_notice_revision] is 47
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -64,7 +64,8 @@
     S39_long_run_harness_healthcheck |
     S40_long_run_checkpoint_final_frontier |
     S41_long_run_checkpoint_docs |
-    S42_readme_output_inventory_refresh
+    S42_readme_output_inventory_refresh |
+    S43_architecture_doc_refresh
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -642,7 +643,7 @@
 
 & [WorkSliceDetail S42_readme_output_inventory_refresh] is a documentation and reentry slice
   + [slice_id] is S42_readme_output_inventory_refresh
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh README output inventory to include protocol activation, Shaliach artifacts, response coordination, manifests, file-change surfaces, and blocked-run artifacts
   + [target_files] is README.md
   + [proof_route] is README updated and tests remain passing
@@ -650,3 +651,16 @@
   + [support_status] is prepared
   + [dependency_set] is S26_run_artifact_manifest, S41_long_run_checkpoint_docs
   + [known_risks] is over-listing every generated artifact rather than describing useful categories
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:20:00Z, proof_ref tests passed with 42 tests, result_summary README output inventory now covers current governance and reentry artifacts
+  + [completed_work_review] is support_delta verified README output docs match current artifact families; requirement_delta architecture doc still needs refresh
+
+& [WorkSliceDetail S43_architecture_doc_refresh] is a documentation and reentry slice
+  + [slice_id] is S43_architecture_doc_refresh
+  + [slice_status] is open
+  + [scope] is refresh architecture doc to mention Shaliach findings, response coordination, mailbox helpers, run manifests, and model-serving preflight
+  + [target_files] is docs/architecture.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is architecture doc no longer describes only the initial scaffold
+  + [support_status] is prepared
+  + [dependency_set] is S42_readme_output_inventory_refresh
+  + [known_risks] is mixing implementation status with intended future architecture

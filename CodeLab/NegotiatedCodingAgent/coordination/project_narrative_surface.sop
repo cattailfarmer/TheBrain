@@ -122,6 +122,7 @@
   + [implemented_slice] is S39_long_run_harness_healthcheck
   + [implemented_slice] is S40_long_run_checkpoint_final_frontier
   + [implemented_slice] is S41_long_run_checkpoint_docs
+  + [implemented_slice] is S42_readme_output_inventory_refresh
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -173,6 +174,7 @@
   + [proof_result] is long-run checkpoint passed tests suppressed dry-run model inventory and non-gating OpenAI healthcheck
   + [proof_result] is long-run checkpoint records start_current_frontier and end_current_frontier
   + [proof_result] is tests passed with 42 tests after S41 long-run checkpoint docs
+  + [proof_result] is tests passed with 42 tests after S42 README output inventory refresh
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -222,6 +224,7 @@
   + [ready_capability] is long-run checkpoint records OpenAI-compatible endpoint health as non-gating environment state
   + [ready_capability] is long-run checkpoint records both planned starting frontier and post-harness ending frontier
   + [ready_capability] is long-run checkpoint semantics are documented for future operators
+  + [ready_capability] is README output inventory describes current governance and reentry artifact families
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -252,6 +255,7 @@
   + [next_recommended_slice] is S40_long_run_checkpoint_final_frontier
   + [next_recommended_slice] is S41_long_run_checkpoint_docs
   + [next_recommended_slice] is S42_readme_output_inventory_refresh
+  + [next_recommended_slice] is S43_architecture_doc_refresh
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 
