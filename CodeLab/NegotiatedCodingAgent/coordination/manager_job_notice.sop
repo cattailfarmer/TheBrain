@@ -3194,7 +3194,7 @@
 
 & [WorkSliceDetail S231_shaliach_self_negotiation_record_design] is a coordination runtime design slice
   + [slice_id] is S231_shaliach_self_negotiation_record_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design deterministic Shaliach self-negotiation records as pre-live scaffolding
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design names higher/lower perspectives intention refinement purpose optimization and response coordination boundaries
@@ -3202,3 +3202,16 @@
   + [support_status] is prepared
   + [dependency_set] is S230_spec_audit_refresh_after_append_recipe
   + [known_risks] is deterministic self-negotiation becoming theatrical rather than useful evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:22:00Z, proof_ref shaliach_self_negotiation_record_design.sop docs updated, result_summary designed deterministic Shaliach self-negotiation records with perspective and tension boundaries
+  + [completed_work_review] is support_delta verified design distinguishes deterministic scaffold from live internal deliberation and avoids Observer naming conflict; requirement_delta next step is add ShaliachSelfNegotiationRecord models
+
+& [WorkSliceDetail S232_shaliach_self_negotiation_records] is a coordination runtime implementation slice
+  + [slice_id] is S232_shaliach_self_negotiation_records
+  + [slice_status] is open
+  + [scope] is add ShaliachSelfNegotiationRecord and perspective/tension records
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover perspective serialization resolved advisory/rework statuses tensions and authority boundary
+  + [completion_criteria] is deterministic Shaliach self-negotiation can be represented as structured SOP evidence
+  + [support_status] is prepared
+  + [dependency_set] is S231_shaliach_self_negotiation_record_design
+  + [known_risks] is records being treated as real model self-negotiation rather than scaffold

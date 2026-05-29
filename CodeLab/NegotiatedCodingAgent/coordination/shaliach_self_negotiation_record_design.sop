@@ -1,0 +1,57 @@
+& [ShaliachSelfNegotiationRecordDesign] is the design contract for deterministic Shaliach self-negotiation scaffolding
+  @ [created_at] 2026-05-30T09:22:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [shaliach_module] src/negotiated_agent/shaliach.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is deterministic_scaffold_not_live_internal_deliberation
+  + [primary_goal] is represent Shaliach higher/lower reasoning refinement before live local model serving is available
+  + [non_goal] is claiming live multi-model Shaliach self-negotiation
+  + [non_goal] is replacing Shaliach findings or response coordination
+  + [non_goal] is making every protocol event expensive
+  + [non_goal] is hiding uncertainty behind ceremonial agreement
+
+& [SelfNegotiationInputs] is the minimum evidence required
+  + [field] is negotiation_id
+  + [field] is subject_ref
+  + [field] is intention_statement
+  + [field] is purpose_statement
+  + [field] is context_boundary
+  + [field] is perspective_set
+  + [field] is proposed_response_set
+  + [field] is resolved_intention
+  + [field] is unresolved_tension_set
+  + [authority_boundary] is scoped_intention_refinement_not_global_truth
+  = must: preserve multiple perspectives even when they agree
+  = must: record unresolved tensions rather than deleting them
+  = must: state what the negotiation is allowed to influence
+
+& [PerspectiveSet] is the deterministic pre-live perspective roster
+  + [perspective] is legal_counsel
+  + [perspective] is protocol_officer
+  + [perspective] is failure_advocate
+  + [perspective] is purpose_guardian
+  + [authority_boundary] is deterministic_roles_not_separate_models
+  = must: keep perspective labels distinct from the seven-faculty Observer naming
+  = must: allow later live model routes to replace or enrich deterministic role text
+
+& [ResolutionPolicy] is how the record should settle a response
+  + [status] is resolved_when_no_blocking_tensions
+  + [status] is rework_required_when_protocol_or_failure_tension_blocks
+  + [status] is advisory_when_tension_is_nonblocking
+  + [authority_boundary] is resolution_policy_not_manager_approval
+  = must: produce a resolved_intention string
+  = must: preserve blocking and advisory tensions separately
+  = must: not advance frontiers or apply files
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is record serializes perspectives proposed responses resolved intention and tensions
+  + [test_case] is status is rework_required when blocking tensions exist
+  + [test_case] is status is advisory when only advisory tensions exist
+  + [test_case] is authority boundary states deterministic scaffold not live internal deliberation
+  + [test_case] is record can be referenced by existing Shaliach finding or response coordination later
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add ShaliachSelfNegotiationRecord and perspective/tension records
+  + [slice_2] is add deterministic builder from subject intention purpose and optional tensions
+  + [slice_3] is connect record refs into Shaliach findings only after record semantics are tested

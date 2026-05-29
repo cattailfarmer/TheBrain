@@ -316,6 +316,8 @@ The pure synthesis builders are implemented in `negotiated_agent.narrative_appen
 
 `--synthesize-review-drafts` / `-SynthesizeReviewDrafts` exposes the synthesis path through the narrative append CLI and wrapper. It writes both review artifacts with collision checks and does not plan or apply narrative updates.
 
+`coordination/shaliach_self_negotiation_record_design.sop` defines deterministic Shaliach self-negotiation records for pre-live scaffolding. The record preserves multiple advisory perspectives, resolved intention, and unresolved tensions without claiming live internal deliberation.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
