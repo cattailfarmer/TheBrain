@@ -11,6 +11,7 @@ from negotiated_agent.conversation import (
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.ledgers import negotiate_ledgers
+from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
@@ -300,6 +301,39 @@ class ModelInventoryTests(unittest.TestCase):
         )
         self.assertEqual(inventory.recommended_route, "install_wsl2_then_vllm")
         self.assertEqual(role_route_profile(inventory)["programmer"], "dry_run_until_serving_installed")
+
+
+class LongRunHarnessTests(unittest.TestCase):
+    def test_checkpoint_reports_ready_when_commands_pass(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S16",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+        )
+        sop = checkpoint.to_sop()
+        self.assertEqual(checkpoint.status, "ready_for_continuation")
+        self.assertIn("LongRunCheckpoint", sop)
+        self.assertIn("test-uuid", sop)
+
+    def test_checkpoint_marks_failed_command(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        failed = CommandResult("command", 1, "", "bad")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S16",
+            git_clean_before=False,
+            test_result=ok,
+            dry_run_result=failed,
+            model_inventory_result=ok,
+        )
+        self.assertEqual(checkpoint.status, "needs_attention")
+        self.assertIn("dry_run_status] is failed", checkpoint.to_sop())
 
 
 class ConversationKernelTests(unittest.TestCase):

@@ -58,6 +58,14 @@
   + [last_proof] is dry-run wrote file_change_surface.sop and file_change_index.sop in runs\20260529T114754Z
   + [last_proof] is tests passed with 23 tests after S13 mailbox coordination substrate
   + [last_proof] is tests passed with 25 tests and model inventory wrote coordination/model_serving_inventory.sop
+  + [last_proof] is run 20260529T135356Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T135356Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T135356Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T135356Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T135356Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T135356Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T135356Z
+  + [last_proof] is long-run harness passed tests dry-run and model inventory in coordination/long_run_checkpoint.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -80,9 +88,10 @@
   + [completed_slice] is S13_mailbox_and_notice_coordination
   + [completed_slice] is S14_file_change_surface
   + [completed_slice] is S15_model_inventory_and_serving_probe
+  + [completed_slice] is S16_long_run_harness
 
-  + [current_frontier] is S16_long_run_harness after model inventory and serving probe
-  + [next_recommended_slice] is S16_long_run_harness from coordination/refined_project_plan.sop
+  + [current_frontier] is post_S16_unsliced_governance_expansion after long-run harness proof
+  + [next_recommended_slice] is refine next manager slices from remaining unresolved SOP integration gaps
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers

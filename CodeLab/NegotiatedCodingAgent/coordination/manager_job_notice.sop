@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 20
+  + [job_notice_revision] is 21
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -272,14 +272,16 @@
 
 & [WorkSliceDetail S16_long_run_harness] is a planned dependency slice
   + [slice_id] is S16_long_run_harness
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is run a bounded long-turn job with periodic surface updates, proof checkpoints, and reentry validation
   + [target_files] is scripts/**, coordination/**, src/negotiated_agent/**, tests/**
   + [proof_route] is interrupted or simulated-reentry run resumes from conversation_uuid and narrative frontier without losing proof or worktree attribution
   + [completion_criteria] is system can take a ready slice, implement, test, update rails, commit, push, and resume after interruption
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S10C_conversation_surface_run_lifecycle_updates, S14_file_change_surface
   + [known_risks] is claiming unattended autonomy without enough reentry and fault evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T14:00:00Z, proof_ref coordination/long_run_checkpoint.sop with 27 tests dry-run and model inventory passed, result_summary added long-run harness script and checkpoint surface that validates reentry state, test pass, dry-run execution, and model inventory probe
+  + [completed_work_review] is support_delta verified repeatable harness checkpoint for continuation; requirement_delta unbounded Codex continuation remains an operator behavior beyond the bounded script
 
 & [CompletedWorkReviewPolicy] is active
   = must: after each completed slice, inspect proof_ref, changed files, result_summary, and remaining concerns
