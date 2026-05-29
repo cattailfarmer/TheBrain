@@ -3311,7 +3311,7 @@
 
 & [WorkSliceDetail S240_shaliach_self_negotiation_parser] is a coordination runtime implementation slice
   + [slice_id] is S240_shaliach_self_negotiation_parser
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add parser/loader for Shaliach self-negotiation SOP artifacts
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover loading status resolved intention tensions and rejecting wrong headers
@@ -3319,3 +3319,16 @@
   + [support_status] is prepared
   + [dependency_set] is S239_shaliach_self_negotiation_operator_docs
   + [known_risks] is parser accepting malformed evidence too loosely
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:43:00Z, proof_ref tests passed with 221 tests, result_summary added parser and loader for Shaliach self-negotiation SOP artifacts
+  + [completed_work_review] is support_delta verified parser loads status resolved intention perspectives and tensions and rejects wrong header; requirement_delta next step is add operator inspection CLI
+
+& [WorkSliceDetail S241_shaliach_self_negotiation_inspect_cli] is a coordination runtime CLI slice
+  + [slice_id] is S241_shaliach_self_negotiation_inspect_cli
+  + [slice_status] is open
+  + [scope] is add CLI/wrapper to inspect Shaliach self-negotiation artifacts
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests cover CLI summary output for resolved advisory and wrong-header failure
+  + [completion_criteria] is operator can inspect a self-negotiation artifact through a stable command
+  + [support_status] is prepared
+  + [dependency_set] is S240_shaliach_self_negotiation_parser
+  + [known_risks] is CLI output becoming a second artifact format instead of a concise inspection view

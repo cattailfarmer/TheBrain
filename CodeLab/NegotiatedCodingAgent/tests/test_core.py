@@ -138,6 +138,8 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationTension,
     build_shaliach_self_negotiation_record,
     build_shaliach_self_negotiation_from_finding,
+    load_shaliach_self_negotiation,
+    parse_shaliach_self_negotiation_sop,
     review_layer_negotiation,
 )
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -6021,6 +6023,48 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertEqual(record.status, "rework_required")
         self.assertEqual(record.unresolved_tension_set[0].severity, "blocking")
         self.assertIn("pause_descent", record.proposed_response_set)
+
+    def test_parse_self_negotiation_sop_round_trips_record_fields(self) -> None:
+        original = build_shaliach_self_negotiation_record(
+            negotiation_id="parse-test",
+            subject_ref="application_layer_package",
+            intention_statement="resolve test finding",
+            purpose_statement="preserve test boundary",
+            context_boundary="application review",
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="thin evidence",
+                    severity="advisory",
+                    reason="director support is weak",
+                ),
+            ),
+        )
+        loaded = parse_shaliach_self_negotiation_sop(original.to_sop())
+        self.assertEqual(loaded.negotiation_id, "parse-test")
+        self.assertEqual(loaded.subject_ref, "application_layer_package")
+        self.assertEqual(loaded.status, "advisory")
+        self.assertEqual(loaded.resolved_intention, original.resolved_intention)
+        self.assertEqual(loaded.perspective_records[0].perspective, "legal_counsel")
+        self.assertEqual(loaded.unresolved_tension_set[0].reason, "director support is weak")
+
+    def test_load_self_negotiation_sop_from_path(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "application.shaliach_self_negotiation.sop"
+            record = build_shaliach_self_negotiation_record(
+                negotiation_id="load-test",
+                subject_ref="application_layer_package",
+                intention_statement="resolve test finding",
+                purpose_statement="preserve test boundary",
+                context_boundary="application review",
+            )
+            path.write_text(record.to_sop(), encoding="utf-8")
+            loaded = load_shaliach_self_negotiation(path)
+        self.assertEqual(loaded.negotiation_id, "load-test")
+        self.assertEqual(loaded.status, "resolved")
+
+    def test_parse_self_negotiation_rejects_wrong_header(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_shaliach_self_negotiation_sop("& [ShaliachFinding application] is not the record")
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

@@ -2046,3 +2046,11 @@
   + [proof_ref] is docs/coordination_operator_guide.md
   + [current_frontier] is S240_shaliach_self_negotiation_parser
   + [narrative_role] is documentation_arc and shaliach_arc update
+
+
+& [LongRunNarrativeUpdate S240_shaliach_self_negotiation_parser] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S240_shaliach_self_negotiation_parser
+  + [implemented_capability] is parse_shaliach_self_negotiation_sop and load_shaliach_self_negotiation load structured status perspective and tension evidence from SOP artifacts
+  + [proof_result] is tests passed with 221 tests
+  + [current_frontier] is S241_shaliach_self_negotiation_inspect_cli
+  + [narrative_role] is shaliach_arc and toolability update

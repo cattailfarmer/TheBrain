@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+import re
 
 from .ledgers import NegotiatedLedgers
 from .protocols import ProtocolActivation
@@ -146,6 +148,29 @@ def build_shaliach_self_negotiation_record(
         perspective_records=perspective_records,
         unresolved_tension_set=unresolved_tension_set,
     )
+
+
+def parse_shaliach_self_negotiation_sop(text: str) -> ShaliachSelfNegotiationRecord:
+    record_match = re.search(r"& \[ShaliachSelfNegotiationRecord (?P<id>[^\]]+)\]", text)
+    if not record_match:
+        raise ValueError("ShaliachSelfNegotiationRecord header not found")
+    return ShaliachSelfNegotiationRecord(
+        negotiation_id=record_match.group("id"),
+        subject_ref=_first_sop_field(text, "subject_ref"),
+        intention_statement=_first_sop_field(text, "intention_statement"),
+        purpose_statement=_first_sop_field(text, "purpose_statement"),
+        context_boundary=_first_sop_field(text, "context_boundary"),
+        perspective_set=_split_csv_field(_first_sop_field(text, "perspective_set")),
+        proposed_response_set=_split_csv_field(_first_sop_field(text, "proposed_response_set")),
+        resolved_intention=_first_sop_field(text, "resolved_intention"),
+        perspective_records=_parse_self_negotiation_perspectives(text),
+        unresolved_tension_set=_parse_self_negotiation_tensions(text),
+        authority_boundary=_first_sop_field(text, "authority_boundary"),
+    )
+
+
+def load_shaliach_self_negotiation(path: Path) -> ShaliachSelfNegotiationRecord:
+    return parse_shaliach_self_negotiation_sop(path.read_text(encoding="utf-8"))
 
 
 @dataclass(frozen=True)
@@ -398,6 +423,54 @@ def _self_negotiation_ref_line(self_negotiation_ref: str, *, indent: str) -> str
     if not self_negotiation_ref:
         return f"{indent}+ [self_negotiation_ref] is none"
     return f"{indent}+ [self_negotiation_ref] is {self_negotiation_ref}"
+
+
+def _first_sop_field(text: str, field: str) -> str:
+    match = re.search(rf"^\s*\+ \[{re.escape(field)}\] is (?P<value>.*)$", text, flags=re.MULTILINE)
+    if not match:
+        raise ValueError(f"{field} field not found")
+    return match.group("value")
+
+
+def _split_csv_field(value: str) -> tuple[str, ...]:
+    if not value or value == "none":
+        return ()
+    return tuple(part.strip() for part in value.split(",") if part.strip())
+
+
+def _parse_self_negotiation_perspectives(text: str) -> tuple[ShaliachSelfNegotiationPerspective, ...]:
+    records: list[ShaliachSelfNegotiationPerspective] = []
+    pattern = re.compile(
+        r"^\s*\+ \[perspective (?P<perspective>[^\]]+)\] is active\s*$"
+        r"\n^\s*\+ \[intention\] is (?P<intention>.*)$"
+        r"\n^\s*\+ \[purpose\] is (?P<purpose>.*)$"
+        r"\n^\s*\+ \[proposed_response\] is (?P<proposed_response>.*)$",
+        flags=re.MULTILINE,
+    )
+    for match in pattern.finditer(text):
+        records.append(
+            ShaliachSelfNegotiationPerspective(
+                perspective=match.group("perspective"),
+                intention=match.group("intention"),
+                purpose=match.group("purpose"),
+                proposed_response=match.group("proposed_response"),
+            )
+        )
+    return tuple(records)
+
+
+def _parse_self_negotiation_tensions(text: str) -> tuple[ShaliachSelfNegotiationTension, ...]:
+    records: list[ShaliachSelfNegotiationTension] = []
+    pattern = re.compile(r"^\s*\+ \[unresolved_tension (?P<severity>[^\]]+)\] is (?P<tension>.*?): (?P<reason>.*)$", flags=re.MULTILINE)
+    for match in pattern.finditer(text):
+        records.append(
+            ShaliachSelfNegotiationTension(
+                tension=match.group("tension"),
+                severity=match.group("severity"),
+                reason=match.group("reason"),
+            )
+        )
+    return tuple(records)
 
 
 def _perspective_records(finding: ShaliachFinding) -> tuple[ShaliachPerspectiveRecord, ...]:
