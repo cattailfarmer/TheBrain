@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 101
+  + [job_notice_revision] is 102
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -119,7 +119,8 @@
     S94_long_run_harness_route_draft_docs |
     S95_long_run_checkpoint_after_route_draft_harness |
     S96_operator_approved_apply_mutation_design |
-    S97_apply_mutation_preflight_validator
+    S97_apply_mutation_preflight_validator |
+    S98_spec_audit_refresh_after_apply_preflight
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1412,7 +1413,7 @@
 
 & [WorkSliceDetail S97_apply_mutation_preflight_validator] is an apply pipeline implementation slice
   + [slice_id] is S97_apply_mutation_preflight_validator
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement a preflight-only validator for future mutation mode without writing target workspace files
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover merge decision, conflict ledger, Manager/Shaliach refs, path containment, and no target writes
@@ -1420,3 +1421,16 @@
   + [support_status] is prepared
   + [dependency_set] is S96_operator_approved_apply_mutation_design
   + [known_risks] is implementing writes before preflight evidence is mature
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:20:00Z, proof_ref tests passed with 66 tests, result_summary apply mutation acknowledgement now runs preflight-only validation, writes apply_mutation_preflight.sop, and still performs no target workspace mutation
+  + [completed_work_review] is support_delta verified mutation preflight exists without writes; requirement_delta spec audit should distinguish preflight support from mutation writer absence
+
+& [WorkSliceDetail S98_spec_audit_refresh_after_apply_preflight] is a documentation and planning slice
+  + [slice_id] is S98_spec_audit_refresh_after_apply_preflight
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after apply mutation preflight support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit recognizes preflight-only mutation support while target workspace writing and rollback remain absent
+  + [support_status] is prepared
+  + [dependency_set] is S97_apply_mutation_preflight_validator
+  + [known_risks] is overstating preflight evidence as applied code

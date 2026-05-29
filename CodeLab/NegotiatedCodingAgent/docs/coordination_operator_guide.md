@@ -46,6 +46,8 @@ This writes or refreshes `apply_plan.sop`, `apply_result.sop`, and `apply_comman
 
 The dry-run CLI rejects mutation acknowledgement flags by design. Treat `apply_result.sop` with `apply_status` set to `dry_run` as validation evidence only, not as proof that code was applied.
 
+When the mutation acknowledgement flag is supplied, the current command still does not mutate the target workspace. It runs the preflight-only gate and writes `apply_mutation_preflight.sop` plus `apply_command_log.sop`, then exits with rejection status because the mutation writer is not implemented yet.
+
 Expected dry-run artifacts:
 
 - `apply_plan.sop`: target paths, snapshot plan, rollback reference, and verification command that would be used by a future apply command.

@@ -8,6 +8,7 @@ from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
 from negotiated_agent.apply_cli import main as apply_cli_main
+from negotiated_agent.apply_preflight import build_apply_mutation_preflight
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -628,7 +629,123 @@ class ApplyPlanTests(unittest.TestCase):
                 ),
                 2,
             )
-            self.assertIn("mutation flag is not supported", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+            self.assertIn("Manual merge packet not found", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+
+    def test_mutation_preflight_rejects_conflicted_merge(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            source = run_root / "implementation" / "app.py"
+            source.parent.mkdir(parents=True)
+            target_root.mkdir()
+            source.write_text("print('ok')\n", encoding="utf-8")
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="test",
+            )
+            (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
+            (run_root / "merge_review_decision.sop").write_text(
+                "& [MergeReviewDecision] is test\n  + [decision] is blocked_by_conflict\n",
+                encoding="utf-8",
+            )
+            (run_root / "merge_conflict_ledger.sop").write_text(
+                "& [MergeConflictLedger] is test\n  + [conflict_count] is 1\n",
+                encoding="utf-8",
+            )
+            preflight = build_apply_mutation_preflight(run_root, target_root, packet)
+            self.assertEqual(preflight.status, "rejected")
+            self.assertIn("blocked_by_conflict", preflight.reason)
+            self.assertFalse((target_root / "app.py").exists())
+
+    def test_mutation_preflight_ready_does_not_write_target(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            source = run_root / "implementation" / "app.py"
+            source.parent.mkdir(parents=True)
+            target_root.mkdir()
+            source.write_text("print('ok')\n", encoding="utf-8")
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="test",
+            )
+            (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
+            (run_root / "merge_review_decision.sop").write_text(
+                "& [MergeReviewDecision] is test\n  + [decision] is ready_for_manual_merge_review\n",
+                encoding="utf-8",
+            )
+            (run_root / "merge_conflict_ledger.sop").write_text(
+                "& [MergeConflictLedger] is test\n  + [conflict_count] is 0\n",
+                encoding="utf-8",
+            )
+            preflight = build_apply_mutation_preflight(run_root, target_root, packet)
+            self.assertEqual(preflight.status, "ready_for_mutation_implementation")
+            self.assertIn("mutation_allowed] is false", preflight.to_sop())
+            self.assertFalse((target_root / "app.py").exists())
+
+    def test_apply_cli_mutation_flag_writes_preflight_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            source = run_root / "implementation" / "app.py"
+            source.parent.mkdir(parents=True)
+            target_root.mkdir()
+            source.write_text("print('ok')\n", encoding="utf-8")
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="test",
+            )
+            (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
+            (run_root / "merge_review_decision.sop").write_text(
+                "& [MergeReviewDecision] is test\n  + [decision] is ready_for_manual_merge_review\n",
+                encoding="utf-8",
+            )
+            (run_root / "merge_conflict_ledger.sop").write_text(
+                "& [MergeConflictLedger] is test\n  + [conflict_count] is 0\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                apply_cli_main(
+                    [
+                        "--run-root",
+                        str(run_root),
+                        "--target-workspace-root",
+                        str(target_root),
+                        "--i-understand-this-mutates-workspace",
+                    ]
+                ),
+                2,
+            )
+            self.assertIn("ApplyMutationPreflight", (run_root / "apply_mutation_preflight.sop").read_text(encoding="utf-8"))
+            self.assertIn("mutation_performed] is false", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+            self.assertFalse((target_root / "app.py").exists())
 
 
 class MailboxCoordinationTests(unittest.TestCase):
