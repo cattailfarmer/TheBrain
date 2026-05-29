@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 29
+  + [job_notice_revision] is 30
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -47,7 +47,8 @@
     S22_mailbox_claim_conflict_resolution |
     S23_role_model_assignment_profile |
     S24_configurable_mailbox_recipients |
-    S25_blocked_run_repair_plan_synthesis
+    S25_blocked_run_repair_plan_synthesis |
+    S26_run_artifact_manifest
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -404,7 +405,7 @@
 
 & [WorkSliceDetail S25_blocked_run_repair_plan_synthesis] is a post-S16 governance expansion slice
   + [slice_id] is S25_blocked_run_repair_plan_synthesis
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is attach actionable repair plan surfaces to blocked Manager or Shaliach run lifecycle records
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests for blocked run writing repair plan references and specific inspection actions
@@ -412,3 +413,16 @@
   + [support_status] is prepared
   + [dependency_set] is S17_blocked_run_lifecycle_records
   + [known_risks] is synthesizing vague repair plans that do not identify artifacts to inspect
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:30:00Z, proof_ref tests passed with 32 tests, result_summary blocked run lifecycle records now write run_repair_plan.sop with inspection refs and repair actions
+  + [completed_work_review] is support_delta verified blocked reentry includes actionable repair guidance; requirement_delta automatic repair execution remains future work
+
+& [WorkSliceDetail S26_run_artifact_manifest] is a post-S16 governance expansion slice
+  + [slice_id] is S26_run_artifact_manifest
+  + [slice_status] is open
+  + [scope] is write a manifest for generated run artifacts so reentry and review can enumerate outputs without guessing filenames
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run or unit test showing run_manifest.sop lists key artifacts and lifecycle status
+  + [completion_criteria] is every completed or blocked run has a manifest with artifact roles and relative paths
+  + [support_status] is prepared
+  + [dependency_set] is S10C_conversation_surface_run_lifecycle_updates, S17_blocked_run_lifecycle_records
+  + [known_risks] is duplicating narrative coverage rather than creating a simple per-run index

@@ -730,11 +730,18 @@ class NarrativeUpdateTests(unittest.TestCase):
                     NegotiatedCodingAgent(load_config(config_path), DryRunClient(), root).run("Build a test app")
             run_root = next((root / "runs").iterdir())
             blocked = (run_root / "run_blocked.sop").read_text(encoding="utf-8")
+            repair_plan = (run_root / "run_repair_plan.sop").read_text(encoding="utf-8")
             surface = (root / "coordination" / "conversations" / "test-uuid.sop").read_text(encoding="utf-8")
+            log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
             self.assertIn("manager_rejection", blocked)
             self.assertIn("forced test rejection", blocked)
+            self.assertIn("repair_plan_ref", blocked)
+            self.assertIn("BlockedRunRepairPlan", repair_plan)
+            self.assertIn("application.manager_review.sop", repair_plan)
+            self.assertIn("rerun the same objective", repair_plan)
             self.assertIn("blocked at application by manager_rejection", surface)
-            self.assertIn("wrote run_blocked.sop", surface)
+            self.assertIn("wrote run_blocked.sop and run_repair_plan.sop", surface)
+            self.assertIn("run_repair_plan.sop", log)
 
 
 if __name__ == "__main__":

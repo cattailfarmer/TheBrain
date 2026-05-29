@@ -105,6 +105,7 @@
   + [implemented_slice] is S22_mailbox_claim_conflict_resolution
   + [implemented_slice] is S23_role_model_assignment_profile
   + [implemented_slice] is S24_configurable_mailbox_recipients
+  + [implemented_slice] is S25_blocked_run_repair_plan_synthesis
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -139,6 +140,7 @@
   + [proof_result] is tests passed with 31 tests after S22 mailbox claim conflict resolution
   + [proof_result] is tests passed with 32 tests and role model profile wrote coordination/role_model_profile.sop
   + [proof_result] is tests passed with 32 tests after S24 configurable mailbox recipients
+  + [proof_result] is tests passed with 32 tests after S25 blocked run repair plan synthesis
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -171,6 +173,7 @@
   + [ready_capability] is mailbox messages can be claimed by worker UUIDs and duplicate claims publish conflict signals without deleting history
   + [ready_capability] is role-to-model serving profile explicitly maps Shaliach Manager Directors and Programmers to configured models and current fallback routes
   + [ready_capability] is Shaliach response coordination mailbox recipients can be configured without editing orchestrator code
+  + [ready_capability] is blocked run exits write a repair plan surface with inspection refs and rerun completion signal
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -184,6 +187,7 @@
   + [next_recommended_slice] is S23_role_model_assignment_profile
   + [next_recommended_slice] is S24_configurable_mailbox_recipients
   + [next_recommended_slice] is S25_blocked_run_repair_plan_synthesis
+  + [next_recommended_slice] is S26_run_artifact_manifest
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 

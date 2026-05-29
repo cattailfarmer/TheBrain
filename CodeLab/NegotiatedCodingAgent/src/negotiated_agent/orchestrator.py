@@ -267,6 +267,11 @@ class NegotiatedCodingAgent:
             )
 
     def _record_run_blocked(self, run_root: Path, layer: str, blocker: str, reason: str) -> None:
+        repair_plan_ref = "run_repair_plan.sop"
+        write_text(
+            run_root / repair_plan_ref,
+            self._blocked_run_repair_plan(run_root, layer, blocker, reason),
+        )
         write_text(
             run_root / "run_blocked.sop",
             f"""& [RunBlocked {run_root.name}] is the lifecycle record for a blocked NegotiatedCodingAgent run
@@ -274,7 +279,8 @@ class NegotiatedCodingAgent:
   + [blocked_layer] is {layer}
   + [blocker] is {blocker}
   + [reason] is {_sop_field_value(reason, limit=240)}
-  + [reentry_action] is inspect run_blocked.sop, layer package, manager review, and shaliach finding before resuming
+  + [repair_plan_ref] is {repair_plan_ref}
+  + [reentry_action] is inspect run_blocked.sop and {repair_plan_ref} before resuming
 """,
         )
         self._log(
@@ -285,13 +291,37 @@ class NegotiatedCodingAgent:
                 "blocker": blocker,
                 "reason": reason,
                 "run_blocked_ref": "run_blocked.sop",
+                "repair_plan_ref": repair_plan_ref,
             },
         )
         self._update_conversation_surface(
             run_root,
             current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
-            proofs=[f"run {run_root.name} wrote run_blocked.sop"],
+            proofs=[f"run {run_root.name} wrote run_blocked.sop and {repair_plan_ref}"],
         )
+
+    def _blocked_run_repair_plan(self, run_root: Path, layer: str, blocker: str, reason: str) -> str:
+        layer_refs = [
+            f"{layer}.flowchart.md",
+            f"{layer}.package.sop",
+            f"{layer}.manager_review.sop",
+            f"{layer}.shaliach_finding.sop",
+        ]
+        if (run_root / f"{layer}.shaliach_response.sop").exists():
+            layer_refs.append(f"{layer}.shaliach_response.sop")
+        inspection_refs = "\n".join(f"  + [inspection_ref] is {ref}" for ref in layer_refs)
+        return f"""& [BlockedRunRepairPlan {run_root.name}] is the reentry repair plan for a blocked NegotiatedCodingAgent run
+  + [run_root] is {run_root.relative_to(self.project_root)}
+  + [blocked_layer] is {layer}
+  + [blocker] is {blocker}
+  + [blocking_reason] is {_sop_field_value(reason, limit=240)}
+{inspection_refs}
+  + [repair_action] is identify whether the blocker is missing artifact form, thin support evidence, failed Manager criteria, or Shaliach pause condition
+  + [repair_action] is revise the smallest upstream artifact or prompt path that can satisfy the blocker
+  + [repair_action] is rerun the same objective after repair and compare new {layer} package, Manager review, and Shaliach finding
+  + [completion_signal] is rerun passes beyond {layer} without the same blocker
+  + [authority_boundary] is repair_plan_guidance_not_automatic_mutation
+"""
 
     def _publish_response_coordination_mailbox(
         self,
