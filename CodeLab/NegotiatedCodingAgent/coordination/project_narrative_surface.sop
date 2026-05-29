@@ -2560,3 +2560,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S293_narrative_coverage_after_upsert_anchor_checkpoint
   + [narrative_role] is specification_audit and narrative_memory update
+
+
+& [LongRunNarrativeUpdate S293_narrative_coverage_after_upsert_anchor_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [proof_result] is narrative coverage report covered stale-check current and update record deferred after anchored lifecycle checkpoint proof
+  + [proof_ref] is coordination/narrative_coverage_report.sop, coordination/narrative_stale_check.sop, coordination/narrative_coverage_update_record.sop
+  + [current_frontier] is S294_live_shaliach_self_negotiation_boundary_design
+  + [narrative_role] is narrative_memory and live_model_gap_transition update

@@ -1,9 +1,9 @@
-& [NarrativeStaleCheckRecord S289-lifecycle-frontier-stale-check] is recomputed narrative coverage and stale-risk evidence
-  + [check_id] is S289-lifecycle-frontier-stale-check
+& [NarrativeStaleCheckRecord S293-upsert-anchor-stale-check] is recomputed narrative coverage and stale-risk evidence
+  + [check_id] is S293-upsert-anchor-stale-check
   + [status] is current
   + [narrative_surface_ref] is coordination/project_narrative_surface.sop
-  + [latest_run_ref] is runs/20260529T214357Z
-  + [current_frontier_ref] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
+  + [latest_run_ref] is runs/20260529T214903Z
+  + [current_frontier_ref] is S293_narrative_coverage_after_upsert_anchor_checkpoint
   + [covered_arc_count] is 7
   + [missing_arc_count] is 0
   + [stale_claim_count] is 0

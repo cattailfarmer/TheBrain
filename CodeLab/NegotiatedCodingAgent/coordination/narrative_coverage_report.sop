@@ -3,7 +3,7 @@
   + [covered_count] is 18
   + [missing_count] is 0
   + [stale_risk_count] is 0
-  + [latest_run] is 20260529T214357Z
+  + [latest_run] is 20260529T214903Z
   + [authority_boundary] is file_presence_and_reference_check_not_semantic_coverage_proof
 
   + [covered_artifact] is README.md

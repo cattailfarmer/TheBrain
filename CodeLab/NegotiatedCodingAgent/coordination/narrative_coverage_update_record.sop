@@ -1,5 +1,5 @@
-& [NarrativeCoverageUpdateRecord S289-lifecycle-frontier-update] is append-only narrative coverage update evidence
-  + [update_id] is S289-lifecycle-frontier-update
+& [NarrativeCoverageUpdateRecord S293-upsert-anchor-update] is append-only narrative coverage update evidence
+  + [update_id] is S293-upsert-anchor-update
   + [status] is updates_deferred
   + [stale_check_ref] is coordination/narrative_stale_check.sop
   + [narrative_surface_ref] is coordination/project_narrative_surface.sop

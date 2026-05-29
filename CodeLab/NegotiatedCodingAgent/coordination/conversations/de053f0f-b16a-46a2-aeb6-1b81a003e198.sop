@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [current_frontier] is S294_live_shaliach_self_negotiation_boundary_design
   + [run_lifecycle_frontier] is run 20260529T214903Z completed and narrative updated with artifact manifest
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
@@ -998,7 +998,9 @@
   + [last_proof] is long-run checkpoint passed 279 tests and active conversation kept run_lifecycle_frontier anchored after current_frontier
   + [completed_slice] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
   + [last_proof] is spec audit refreshed after anchored lifecycle field checkpoint proof
-  + [next_recommended_slice] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [completed_slice] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [last_proof] is narrative coverage report covered and stale-check current after anchored lifecycle checkpoint proof
+  + [next_recommended_slice] is S294_live_shaliach_self_negotiation_boundary_design
   + [next_recommended_slice] is S291_long_run_checkpoint_after_upsert_anchor_fields
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
