@@ -14,6 +14,7 @@ from negotiated_agent.ledgers import negotiate_ledgers
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
+from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
@@ -271,6 +272,34 @@ class MailboxCoordinationTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             self.assertIn("RendezvousPacket", text)
             self.assertIn("conversation-a owns S13", text)
+
+
+class ModelInventoryTests(unittest.TestCase):
+    def test_recommends_wsl_vllm_for_large_gpu_when_wsl_available(self) -> None:
+        inventory = ModelInventory(
+            gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+            ollama=ToolProbe("ollama", False, "not found"),
+            wsl=ToolProbe("wsl", True, "default distro ready"),
+            docker=ToolProbe("docker", False, "not found"),
+            openai_compatible=ToolProbe("openai_compatible", False, "unavailable"),
+            ollama_models=(),
+        )
+        self.assertEqual(inventory.recommended_route, "vllm_wsl2_openai_compatible")
+        self.assertIn("recommended_route", inventory.to_sop())
+        self.assertIn("RoleRouteProfile", inventory.to_sop())
+        self.assertIn("large_reasoning_model", role_route_profile(inventory)["manager"])
+
+    def test_recommends_install_wsl_when_gpu_exists_without_serving(self) -> None:
+        inventory = ModelInventory(
+            gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+            ollama=ToolProbe("ollama", False, "not found"),
+            wsl=ToolProbe("wsl", False, "not installed"),
+            docker=ToolProbe("docker", False, "not found"),
+            openai_compatible=ToolProbe("openai_compatible", False, "unavailable"),
+            ollama_models=(),
+        )
+        self.assertEqual(inventory.recommended_route, "install_wsl2_then_vllm")
+        self.assertEqual(role_route_profile(inventory)["programmer"], "dry_run_until_serving_installed")
 
 
 class ConversationKernelTests(unittest.TestCase):

@@ -57,6 +57,7 @@
   + [last_proof] is run narrative update written for runs\20260529T114754Z
   + [last_proof] is dry-run wrote file_change_surface.sop and file_change_index.sop in runs\20260529T114754Z
   + [last_proof] is tests passed with 23 tests after S13 mailbox coordination substrate
+  + [last_proof] is tests passed with 25 tests and model inventory wrote coordination/model_serving_inventory.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -78,15 +79,16 @@
   + [completed_slice] is S12_project_narrative_surface_seed
   + [completed_slice] is S13_mailbox_and_notice_coordination
   + [completed_slice] is S14_file_change_surface
+  + [completed_slice] is S15_model_inventory_and_serving_probe
 
-  + [current_frontier] is S15_model_inventory_and_serving_probe after mailbox coordination substrate
-  + [next_recommended_slice] is S15_model_inventory_and_serving_probe from coordination/refined_project_plan.sop
+  + [current_frontier] is S16_long_run_harness after model inventory and serving probe
+  + [next_recommended_slice] is S16_long_run_harness from coordination/refined_project_plan.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers
   + [unresolved_item] is SOP framework attention load is now mapped, but runtime protocol registry and conversation surface operators are not implemented
   + [unresolved_item] is ProjectNarrativeSurface has a seed surface, but not yet an executable CodeLab subsystem with citations, stale checks, or generated coverage updates
-  + [unresolved_item] is vLLM WSL2 backend is not installed or verified
+  + [unresolved_item] is vLLM WSL2 backend is recommended for RTX 5090 but WSL2 is not installed yet
   + [unresolved_item] is workspace-write policy remains isolated to run implementation directories
   + [unresolved_item] is runtime conversation kernel can load and update conversation surfaces, and orchestrator now calls it during normal run lifecycle
   + [unresolved_item] is protocol registry records SOP activation references and authority boundary, and run artifacts now include protocol activation sets

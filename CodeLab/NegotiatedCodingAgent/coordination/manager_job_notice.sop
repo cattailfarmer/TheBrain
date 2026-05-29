@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 19
+  + [job_notice_revision] is 20
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -259,14 +259,16 @@
 
 & [WorkSliceDetail S15_model_inventory_and_serving_probe] is a planned dependency slice
   + [slice_id] is S15_model_inventory_and_serving_probe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is verify local model inventory and decide Ollama versus vLLM route from actual machine constraints
   + [target_files] is docs/**, scripts/**, agent.config.json, tests/**
   + [proof_route] is model health check, concurrent request test, role-to-model routing test, and dry-run/live-run comparison
   + [completion_criteria] is Manager, Director, Programmer, and Shaliach roles have verified local serving routes or explicit fallbacks
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S10_shaliach_faculty_runtime unless user prioritizes infrastructure first
   + [known_risks] is spending setup effort before orchestration governance can use model diversity well
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T12:20:00Z, proof_ref tests passed with 25 tests and coordination/model_serving_inventory.sop written, result_summary added repeatable model inventory probe, local serving docs, role route profile, and machine snapshot showing RTX 5090 available while Ollama WSL Docker and OpenAI-compatible serving are absent
+  + [completed_work_review] is support_delta verified hardware readiness and explicit dry-run fallback role routes; requirement_delta live vLLM or Ollama serving remains installation work outside this completed probe
 
 & [WorkSliceDetail S16_long_run_harness] is a planned dependency slice
   + [slice_id] is S16_long_run_harness

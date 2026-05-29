@@ -1,0 +1,23 @@
+& [ModelServingInventory] is the local model-serving readiness probe
+  + [gpu_available] is true
+  + [gpu_name] is NVIDIA GeForce RTX 5090
+  + [gpu_vram_mib] is 32607
+  + [nvidia_driver] is 596.49
+  + [cuda_version] is 13.2
+  + [ollama_available] is false
+  + [ollama_detail] is ollama not found on PATH
+  + [ollama_model_set] is none_detected
+  + [wsl_available] is false
+  + [wsl_detail] is The Windows Subsystem for Linux is not installed. You can install by running 'wsl.exe --install'. For more information please visit https://aka.ms/wslinstall
+  + [docker_available] is false
+  + [docker_detail] is docker not found on PATH
+  + [openai_compatible_available] is false
+  + [openai_compatible_detail] is http://localhost:8000/v1/models unavailable: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+  + [recommended_route] is install_wsl2_then_vllm
+  + [authority_boundary] is machine_probe_snapshot_not_installation_proof
+
+& [RoleRouteProfile] is the model-serving route assignment for NegotiatedCodingAgent roles
+  + [manager_route] is dry_run_until_serving_installed
+  + [director_route] is dry_run_until_serving_installed
+  + [programmer_route] is dry_run_until_serving_installed
+  + [shaliach_route] is dry_run_until_serving_installed
