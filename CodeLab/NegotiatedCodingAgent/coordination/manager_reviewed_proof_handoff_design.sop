@@ -1,0 +1,74 @@
+& [ManagerReviewedProofHandoffDesign] is the design contract for moving from ready_for_proof cycle evidence to explicit proof command execution
+  @ [source_gate_cycle_design] coordination/gate_to_worker_cycle_bridge_design.sop
+  @ [worker_runner_design] coordination/worker_runner_design.sop
+  @ [record_models] src/negotiated_agent/worker_lifecycle.py and src/negotiated_agent/worker_runner.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T21:29:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is proof_handoff_design_not_command_execution
+  + [primary_goal] is require Manager-reviewed evidence before the existing proof-command runner consumes a ready_for_proof WorkerCycleRecord
+  + [non_goal] is running proof commands inside the design artifact
+  + [non_goal] is executing implementation work
+  + [non_goal] is advancing mailbox read cursors
+  + [non_goal] is moving Manager frontier
+  + [non_goal] is running arbitrary operator-supplied commands without proof route constraints
+
+& [ProofHandoffInput] is what a future handoff must inspect
+  + [required_ref] is WorkerCycleRecord with cycle_status ready_for_proof
+  + [required_ref] is ExecutionGateDecision proof_ref inside the ready_for_proof cycle
+  + [required_ref] is Manager authorization referenced by the gate decision
+  + [required_ref] is proof_route from the gate decision or Manager authorization
+  + [required_ref] is active conversation current_frontier
+  + [optional_ref] is prior WorkerFailureRecord when retrying a proof
+  + [authority_boundary] is proof_handoff_input_not_execution_permission
+  = must: reject cycle statuses other than ready_for_proof
+  = must: reject missing execution gate proof ref
+  = must: reject proof route mismatches unless a later Manager override artifact exists
+
+& [ManagerProofHandoffRecord] is the required review artifact before proof command execution
+  + [artifact_name] is coordination/workers/<worker_uuid>/proof_handoffs/<handoff_id>.sop
+  + [handoff_status] is approved, denied, needs_review, or superseded
+  + [worker_uuid] is required
+  + [ready_cycle_ref] is required
+  + [execution_gate_ref] is required
+  + [proof_command] is required
+  + [proof_route] is required
+  + [frontier_at_handoff] is required
+  + [expires_at] is required
+  + [authority_boundary] is proof_handoff_not_frontier_approval
+  = must: approve only proof commands matching the proof_route evidence
+  = must: deny target workspace mutation commands
+  = must: expire before a later frontier can silently reuse the handoff
+
+& [ProofCommandConsumption] is how an existing runner may consume an approved handoff
+  + [allowed_input] is ManagerProofHandoffRecord with handoff_status approved
+  + [allowed_input] is ready_for_proof WorkerCycleRecord referenced by the handoff
+  + [allowed_command] is proof_command exactly as recorded in the handoff
+  + [output_artifact] is WorkerCycleRecord from existing proof-command runner
+  + [authority_boundary] is proof_result_cycle_not_manager_approval
+  = must: write proof result as a new cycle, not overwrite the ready_for_proof cycle
+  = must: preserve ready_cycle_ref and handoff_ref in proof_refs
+  = must: return nonzero on failed proof and write WorkerFailureRecord as the current proof-command runner does
+  = must: not update active conversation current_frontier
+  = must: not advance mailbox read cursors
+
+& [CommandSafetyRules] is the command boundary for proof handoff
+  + [allowed_command_kind] is configured proof route command
+  + [denied_command_kind] is target workspace mutation
+  + [denied_command_kind] is shell command not present in Manager proof handoff
+  + [denied_command_kind] is command containing apply or rollback acknowledgement flags unless explicit apply/rollback protocols own the action
+  + [authority_boundary] is proof_command_not_implementation_execution
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is approved handoff can be represented without running a command
+  + [test_case] is non-ready cycle is rejected by handoff validation
+  + [test_case] is command mismatch is rejected
+  + [test_case] is approved handoff can be consumed by proof runner into a new WorkerCycleRecord with handoff proof refs
+  + [test_case] is failed proof still writes WorkerFailureRecord and does not move frontier
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add ManagerProofHandoffRecord model and validation helper
+  + [slice_2] is add explicit proof handoff preview or writer command
+  + [slice_3] is add handoff-aware proof-command runner path
+  + [slice_4] is refresh audit and checkpoint before considering any run-local implementation execution

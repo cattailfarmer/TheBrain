@@ -225,6 +225,8 @@ Record a worker cycle from a persisted gate decision:
 
 Gate-cycle bridge mode writes one `WorkerCycleRecord` from the existing gate ref. It does not run proof commands, execute implementation work, or advance the read cursor.
 
+The next planned proof handoff is `coordination/manager_reviewed_proof_handoff_design.sop`. A `ready_for_proof` cycle is review evidence only; a later Manager proof handoff must approve the exact proof command before the proof-command runner consumes it.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

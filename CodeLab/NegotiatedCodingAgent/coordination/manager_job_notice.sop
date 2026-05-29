@@ -2128,7 +2128,7 @@
 
 & [WorkSliceDetail S149_manager_reviewed_proof_handoff_design] is a coordination runtime design slice
   + [slice_id] is S149_manager_reviewed_proof_handoff_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design Manager-reviewed handoff from ready_for_proof WorkerCycleRecord evidence into explicit proof-command runner
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names ready_for_proof inputs Manager review requirement proof command constraints and no implementation execution boundary
@@ -2136,3 +2136,16 @@
   + [support_status] is prepared
   + [dependency_set] is S148_spec_audit_refresh_after_gate_cycle_bridge
   + [known_risks] is treating ready_for_proof as automatic permission to run arbitrary commands
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:29:00Z, proof_ref manager_reviewed_proof_handoff_design.sop README architecture and operator guide updated, result_summary designed Manager proof handoff boundary before ready_for_proof cycle evidence can drive proof command execution
+  + [completed_work_review] is support_delta verified design keeps proof command execution explicit and non-frontier-mutating; requirement_delta next step is ManagerProofHandoffRecord model and validation helper
+
+& [WorkSliceDetail S150_manager_proof_handoff_records] is a coordination runtime implementation slice
+  + [slice_id] is S150_manager_proof_handoff_records
+  + [slice_status] is open
+  + [scope] is add ManagerProofHandoffRecord model and validation helper for ready_for_proof cycle evidence
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover approved record serialization non-ready cycle rejection command mismatch and boundary text
+  + [completion_criteria] is proof handoff can be represented and validated without executing commands
+  + [support_status] is prepared
+  + [dependency_set] is S149_manager_reviewed_proof_handoff_design
+  + [known_risks] is validation becoming a command runner

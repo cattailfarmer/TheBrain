@@ -1174,3 +1174,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes gate-to-worker-cycle bridge helper CLI and 108-test checkpoint as scaffold support
   + [current_frontier] is S149_manager_reviewed_proof_handoff_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S149_manager_reviewed_proof_handoff_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S149_manager_reviewed_proof_handoff_design
+  + [implemented_capability] is manager_reviewed_proof_handoff_design.sop requires explicit Manager handoff before ready_for_proof cycle evidence can drive proof command execution
+  + [current_frontier] is S150_manager_proof_handoff_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

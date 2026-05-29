@@ -228,6 +228,8 @@ The existing execution gate CLI now has explicit write mode for that boundary. I
 
 `negotiated_agent.worker_runner_cli` and `scripts/worker-runner-preview.ps1` now support explicit gate-cycle bridge mode. It loads a persisted `ExecutionGateDecision`, maps the gate status to a non-executing `WorkerCycleRecord`, writes one cycle artifact, and rejects worker mismatches or existing cycle collisions.
 
+`coordination/manager_reviewed_proof_handoff_design.sop` defines the next proof boundary. A `ready_for_proof` cycle is not enough by itself to run a command; a future `ManagerProofHandoffRecord` must approve the exact proof command and preserve the boundary that proof result cycles do not advance frontiers or authorize implementation execution.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
