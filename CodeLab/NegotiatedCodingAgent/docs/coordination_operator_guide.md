@@ -139,10 +139,19 @@ Key fields:
 - `test_status`, `dry_run_status`, and `model_inventory_status`: gating checks for continuation.
 - `openai_health_status`: non-gating environment state for the local OpenAI-compatible server.
 - `route_draft_status`: non-gating configuration guidance from `scripts\live-route-draft.ps1`.
+- `shaliach_cross_artifact_status`: deterministic consistency proof over Shaliach self-negotiation, finding, and optional response artifacts.
 
 An unavailable OpenAI-compatible server should not block continuation when the current work is governance, documentation, or dry-run proof. It only means live local serving is not ready yet.
 
 `route_draft_status` passing means the harness wrote or refreshed `coordination/live_route_config_draft.sop`. It does not mean `agent.config.json` was changed, live serving is available, or model quality has been benchmarked. Use it as a bridge between machine readiness and a later operator-reviewed config edit.
+
+Validate recorded Shaliach checkpoint probe evidence without rerunning the harness:
+
+```powershell
+.\scripts\validate-checkpoint-probe.ps1 -Checkpoint .\coordination\long_run_checkpoint.sop
+```
+
+The validator returns exit code `0` for passed evidence, `2` for incomplete evidence, and `1` for failed probe evidence. It keeps `openai_health_status` non-gating and does not approve Shaliach findings semantically.
 
 ## Mailbox Messages
 

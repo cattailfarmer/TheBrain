@@ -2225,3 +2225,11 @@
   + [proof_result] is tests passed with 251 tests
   + [current_frontier] is S259_checkpoint_probe_validation_cli
   + [narrative_role] is manifest_validation and proof_validation update
+
+
+& [LongRunNarrativeUpdate S259_checkpoint_probe_validation_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S259_checkpoint_probe_validation_cli
+  + [implemented_capability] is validate-checkpoint-probe wrapper validates long-run checkpoint Shaliach probe evidence with passed incomplete and failed exit codes
+  + [proof_result] is tests passed with 255 tests
+  + [current_frontier] is S260_long_run_checkpoint_after_checkpoint_probe_cli
+  + [narrative_role] is manifest_validation and operator_tooling update

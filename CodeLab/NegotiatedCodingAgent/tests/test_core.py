@@ -21,6 +21,7 @@ from negotiated_agent.checkpoint_probe import (
     parse_checkpoint_probe_evidence_sop,
     validate_checkpoint_probe_evidence,
 )
+from negotiated_agent.checkpoint_probe_cli import main as checkpoint_probe_cli_main
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -4819,6 +4820,55 @@ class CheckpointProbeEvidenceTests(unittest.TestCase):
         self.assertEqual(validation.status, "passed")
         self.assertEqual(validation.openai_health_status, "failed")
         self.assertIn("openai_health_gating] is non_gating_environment_state", validation.to_sop())
+
+    def test_checkpoint_probe_cli_prints_passed_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "long_run_checkpoint.sop"
+            path.write_text(self._checkpoint_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = checkpoint_probe_cli_main([str(path)])
+        self.assertEqual(exit_code, 0)
+        self.assertIn("CheckpointProbeValidation", out.getvalue())
+        self.assertIn("status] is passed", out.getvalue())
+
+    def test_checkpoint_probe_cli_returns_two_for_incomplete_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "long_run_checkpoint.sop"
+            path.write_text(self._checkpoint_sop(include_probe_command=False), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = checkpoint_probe_cli_main([str(path)])
+        self.assertEqual(exit_code, 2)
+        self.assertIn("status] is incomplete", out.getvalue())
+
+    def test_checkpoint_probe_cli_returns_one_for_failed_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "long_run_checkpoint.sop"
+            path.write_text(
+                self._checkpoint_sop(
+                    checkpoint_status="needs_attention",
+                    probe_status="failed",
+                    probe_returncode="1",
+                    probe_stdout="application:inconsistent",
+                ),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = checkpoint_probe_cli_main([str(path)])
+        self.assertEqual(exit_code, 1)
+        self.assertIn("status] is failed", out.getvalue())
+
+    def test_checkpoint_probe_cli_writes_output_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            path = root / "long_run_checkpoint.sop"
+            out_path = root / "checkpoint_probe_validation.sop"
+            path.write_text(self._checkpoint_sop(), encoding="utf-8")
+            exit_code = checkpoint_probe_cli_main([str(path), "--out", str(out_path)])
+            self.assertEqual(exit_code, 0)
+            self.assertIn("status] is passed", out_path.read_text(encoding="utf-8"))
 
 
 class NarrativeCoverageTests(unittest.TestCase):
