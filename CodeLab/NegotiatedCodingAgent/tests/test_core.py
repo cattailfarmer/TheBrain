@@ -147,6 +147,27 @@ class FakeClient(LlmClient):
 
 
 class ProviderRoutingTests(unittest.TestCase):
+    def test_dry_run_preserves_director_stance_diversity(self) -> None:
+        client = DryRunClient()
+        systems = AgentConfig(
+            name="SystemsDirector",
+            model="m",
+            temperature=0,
+            role="Produces structured flow-control architecture.",
+        )
+        failure = AgentConfig(
+            name="FailureDirector",
+            model="m",
+            temperature=0,
+            role="Finds risks and failure modes.",
+        )
+        prompt = "Layer: application\nPropose a flowchart"
+        systems_text = client.complete(systems, prompt).text
+        failure_text = client.complete(failure, prompt).text
+        self.assertNotEqual(systems_text, failure_text)
+        self.assertIn("system structure", systems_text)
+        self.assertIn("failure modes", failure_text)
+
     def test_routed_client_uses_agent_provider_override(self) -> None:
         config = LlmConfig(provider="ollama", base_url="http://localhost:11434", timeout_seconds=1)
         client = RoutedClient(

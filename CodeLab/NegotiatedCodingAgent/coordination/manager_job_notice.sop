@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 53
+  + [job_notice_revision] is 54
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -71,7 +71,8 @@
     S46_shaliach_response_perspective_trace |
     S47_shaliach_internal_perspective_docs |
     S48_director_disagreement_ledger |
-    S49_dry_run_director_stance_diversity
+    S49_dry_run_director_stance_diversity |
+    S50_director_disagreement_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -740,7 +741,7 @@
 
 & [WorkSliceDetail S49_dry_run_director_stance_diversity] is a Director negotiation depth slice
   + [slice_id] is S49_dry_run_director_stance_diversity
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is make deterministic dry-run Director outputs reflect configured role stances so disagreement ledger can be exercised in normal dry-run
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run package shows director_position records for SystemsDirector and FailureDirector
@@ -748,3 +749,16 @@
   + [support_status] is prepared
   + [dependency_set] is S48_director_disagreement_ledger
   + [known_risks] is hard-coding fake disagreement instead of useful deterministic stance variation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:30:00Z, proof_ref tests passed with 44 tests and dry-run package showed SystemsDirector and FailureDirector positions, result_summary DryRunClient now emits role-sensitive Director stances so disagreement ledger is exercised
+  + [completed_work_review] is support_delta verified deterministic proof route now demonstrates Director perspective diversity; requirement_delta docs do not yet explain DirectorDisagreementLedger
+
+& [WorkSliceDetail S50_director_disagreement_docs] is a Director negotiation depth slice
+  + [slice_id] is S50_director_disagreement_docs
+  + [slice_status] is open
+  + [scope] is document DirectorDisagreementLedger and dry-run stance diversity
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is operators understand disagreement ledger as perspective preservation before Manager settlement
+  + [support_status] is prepared
+  + [dependency_set] is S48_director_disagreement_ledger, S49_dry_run_director_stance_diversity
+  + [known_risks] is treating deterministic dry-run stances as proof of live model diversity

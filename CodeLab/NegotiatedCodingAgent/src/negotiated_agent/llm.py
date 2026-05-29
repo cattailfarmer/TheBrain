@@ -90,7 +90,7 @@ class DryRunClient(LlmClient):
         elif "merge these proposals" in prompt.lower():
             text = _dry_flowchart(layer or "settled")
         else:
-            text = _dry_flowchart(layer or "proposal")
+            text = _dry_flowchart(layer or "proposal", agent)
         return LlmResponse(text=text, model=f"dry-run:{agent.name}")
 
 
@@ -134,12 +134,16 @@ def _extract_after(text: str, marker: str) -> str:
     return ""
 
 
-def _dry_flowchart(layer: str) -> str:
+def _dry_flowchart(layer: str, agent: AgentConfig | None = None) -> str:
     title = layer.capitalize()
+    stance = _dry_stance(agent)
     return f"""# {title} Flowchart
 
 ## Scope
 Create the smallest useful implementation slice for the requested objective at the {layer} layer.
+
+## Director Stance
+{stance}
 
 ## Nodes
 - N1: Receive objective and current parent flowchart.
@@ -164,6 +168,21 @@ Create the smallest useful implementation slice for the requested objective at t
 ## Open Questions
 - Which local model mix gives the best planning/coding tradeoff?
 """
+
+
+def _dry_stance(agent: AgentConfig | None) -> str:
+    if agent is None:
+        return "Manager settlement balances system structure and failure concerns."
+    name_role = f"{agent.name} {agent.role}".lower()
+    if "failure" in name_role or "risk" in name_role:
+        return "Emphasize failure modes, boundary mistakes, recovery paths, and unresolved risks."
+    if "system" in name_role or "architecture" in name_role or "flow" in name_role:
+        return "Emphasize system structure, interfaces, decomposable responsibilities, and flow control."
+    if "programmer" in name_role or "coder" in name_role:
+        return "Emphasize bounded implementation steps, tests, and file-level work."
+    if "shaliach" in name_role:
+        return "Emphasize protocol observance, evidence, lineage, and artifact form."
+    return "Emphasize the configured role perspective without expanding scope."
 
 
 def _dry_code() -> str:
