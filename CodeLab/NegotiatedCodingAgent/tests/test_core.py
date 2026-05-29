@@ -78,6 +78,7 @@ from negotiated_agent.run_local_execution import (
     build_run_local_execution_plan,
     ensure_run_local_path,
 )
+from negotiated_agent.run_local_execution_cli import main as run_local_execution_cli_main
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -2658,6 +2659,124 @@ class MailboxCoordinationTests(unittest.TestCase):
         sop = result.to_sop()
         self.assertIn("generated_file_set] is runs/run-1/worker_execution/cycle-run/implementation/app.py", sop)
         self.assertIn("run_local_execution_result_not_target_workspace_application", sop)
+
+    def test_run_local_execution_plan_cli_writes_plan_without_generated_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            gate = ExecutionGateDecision(
+                gate_id="gate-run",
+                worker_uuid="worker-a",
+                gate_status="execution_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="execute_run_local_implementation",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-run",
+                cycle_status="ready_for_run_local_execution",
+                claim_refs=("lease.sop#claim",),
+                slice_ref="manager_job_notice.sop#S161",
+                proof_refs=("gate.sop",),
+                changed_files=(),
+            )
+            gate_path = write_execution_gate_decision(project_root=root, decision=gate)
+            cycle_path = write_worker_cycle_record(root, cycle)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_execution_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--execution-gate-ref",
+                            gate_path.relative_to(root).as_posix(),
+                            "--ready-cycle-ref",
+                            cycle_path.relative_to(root).as_posix(),
+                            "--run-id",
+                            "run-1",
+                            "--cycle-id",
+                            "cycle-run",
+                            "--plan-id",
+                            "plan-1",
+                        ]
+                    ),
+                    0,
+                )
+            plan_path = root / "runs" / "run-1" / "worker_execution" / "cycle-run" / "run_local_execution_plan.sop"
+            self.assertTrue(plan_path.exists())
+            self.assertIn("RunLocalExecutionPlanWriteResult", out.getvalue())
+            self.assertFalse((plan_path.parent / "implementation").exists())
+
+    def test_run_local_execution_plan_cli_rejects_proof_only_gate_and_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            gate = ExecutionGateDecision(
+                gate_id="gate-proof",
+                worker_uuid="worker-a",
+                gate_status="proof_only_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="run_proof_only",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-run",
+                cycle_status="ready_for_run_local_execution",
+                claim_refs=("lease.sop#claim",),
+                slice_ref="manager_job_notice.sop#S161",
+                proof_refs=("gate.sop",),
+                changed_files=(),
+            )
+            gate_path = write_execution_gate_decision(project_root=root, decision=gate)
+            cycle_path = write_worker_cycle_record(root, cycle)
+            args = [
+                "--project-root",
+                str(root),
+                "--worker",
+                "worker-a",
+                "--execution-gate-ref",
+                gate_path.relative_to(root).as_posix(),
+                "--ready-cycle-ref",
+                cycle_path.relative_to(root).as_posix(),
+                "--run-id",
+                "run-1",
+                "--cycle-id",
+                "cycle-run",
+                "--plan-id",
+                "plan-1",
+            ]
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(run_local_execution_cli_main(args), 1)
+            self.assertIn("gate_status_proof_only_allowed", out.getvalue())
+            allowed = ExecutionGateDecision(
+                gate_id="gate-run",
+                worker_uuid="worker-a",
+                gate_status="execution_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="execute_run_local_implementation",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            allowed_path = write_execution_gate_decision(project_root=root, decision=allowed)
+            args[args.index(gate_path.relative_to(root).as_posix())] = allowed_path.relative_to(root).as_posix()
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(run_local_execution_cli_main(args), 0)
+            collision = io.StringIO()
+            with contextlib.redirect_stdout(collision):
+                self.assertEqual(run_local_execution_cli_main(args), 1)
+            self.assertIn("already exists", collision.getvalue())
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

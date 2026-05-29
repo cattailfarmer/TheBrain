@@ -2284,7 +2284,7 @@
 
 & [WorkSliceDetail S161_run_local_execution_plan_cli] is a coordination runtime implementation slice
   + [slice_id] is S161_run_local_execution_plan_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add dry-run planner CLI for execution_allowed gate refs and ready_for_run_local_execution cycle refs
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover plan write no generated files proof-only rejection and output containment rejection
@@ -2292,3 +2292,16 @@
   + [support_status] is prepared
   + [dependency_set] is S160_run_local_execution_records
   + [known_risks] is planner CLI becoming implementation writer
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:08:00Z, proof_ref tests passed with 123 tests, result_summary added run-local execution plan CLI and wrapper
+  + [completed_work_review] is support_delta verified planner writes only plan evidence and rejects proof-only gates; requirement_delta next checkpoint should capture 123-test run-local execution planner frontier
+
+& [WorkSliceDetail S162_long_run_checkpoint_after_run_local_plan_cli] is a long-run reentry slice
+  + [slice_id] is S162_long_run_checkpoint_after_run_local_plan_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after run-local execution plan CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 123-test suite and route draft proof
+  + [completion_criteria] is checkpoint records run-local execution planner frontier
+  + [support_status] is prepared
+  + [dependency_set] is S161_run_local_execution_plan_cli
+  + [known_risks] is noisy generated dry-run artifacts

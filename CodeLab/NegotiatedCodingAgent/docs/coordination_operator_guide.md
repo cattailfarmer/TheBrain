@@ -247,6 +247,14 @@ Consume mode loads the approved handoff and referenced ready cycle, validates th
 
 The next planned implementation boundary is `coordination/gate_authorized_run_local_execution_design.sop`. It permits only run-local generated outputs from an `execution_allowed` gate; target workspace writes still belong to the explicit merge/apply/rollback protocols.
 
+Write a dry-run run-local execution plan:
+
+```powershell
+.\scripts\run-local-execution-plan.ps1 -Worker <worker-uuid> -ExecutionGateRef <gate-ref> -ReadyCycleRef <cycle-ref> -RunId <run-id> -CycleId <cycle-id> -PlanId <plan-id>
+```
+
+The planner writes `run_local_execution_plan.sop` under `runs/<run-id>/worker_execution/<cycle-id>/`. It does not generate implementation files.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

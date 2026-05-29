@@ -1283,3 +1283,11 @@
   + [proof_result] is tests passed with 121 tests
   + [current_frontier] is S161_run_local_execution_plan_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S161_run_local_execution_plan_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S161_run_local_execution_plan_cli
+  + [implemented_capability] is run-local execution planner CLI writes plan evidence under runs/<run-id>/worker_execution/<cycle-id> without generating files
+  + [proof_result] is tests passed with 123 tests
+  + [current_frontier] is S162_long_run_checkpoint_after_run_local_plan_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
