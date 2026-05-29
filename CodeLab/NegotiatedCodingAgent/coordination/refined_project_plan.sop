@@ -285,7 +285,8 @@
   + [completed_slice] is S176_long_run_checkpoint_after_merge_draft_cli
   + [completed_slice] is S177_spec_audit_refresh_after_merge_draft_cli
   + [completed_slice] is S178_merge_draft_to_packet_proposal_design
-  + [ready_slice] is S179_packet_proposal_records
+  + [completed_slice] is S179_packet_proposal_records
+  + [ready_slice] is S180_packet_proposal_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

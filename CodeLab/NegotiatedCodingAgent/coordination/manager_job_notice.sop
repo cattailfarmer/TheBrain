@@ -2518,7 +2518,7 @@
 
 & [WorkSliceDetail S179_packet_proposal_records] is a coordination runtime implementation slice
   + [slice_id] is S179_packet_proposal_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add Manager packet proposal acceptance Shaliach packet proposal review and packet proposal builder helper
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover accepted proposal blocked Manager blocked Shaliach source containment target containment and no apply artifact creation
@@ -2526,3 +2526,16 @@
   + [support_status] is prepared
   + [dependency_set] is S178_merge_draft_to_packet_proposal_design
   + [known_risks] is proposal builder being mistaken for apply authorization
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T01:31:00Z, proof_ref tests passed with 138 tests, result_summary added packet proposal acceptance review records and pure ManualMergePacket proposal builder
+  + [completed_work_review] is support_delta verified builder writes no apply artifacts and requires Manager/Shaliach evidence; requirement_delta next step is explicit CLI writer for packet proposal evidence
+
+& [WorkSliceDetail S180_packet_proposal_cli] is a coordination runtime implementation slice
+  + [slice_id] is S180_packet_proposal_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to write Manager/Shaliach packet proposal evidence and manual_merge_packet.sop proposal
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover acceptance write review write packet proposal write blocked evidence source target containment and no apply artifact creation
+  + [completion_criteria] is operators can create manual_merge_packet.sop proposal from reviewed draft input without applying files
+  + [support_status] is prepared
+  + [dependency_set] is S179_packet_proposal_records
+  + [known_risks] is CLI name implying workspace mutation

@@ -69,6 +69,11 @@ from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
+from negotiated_agent.packet_proposal import (
+    ManagerPacketProposalAcceptance,
+    ShaliachPacketProposalReview,
+    build_manual_merge_packet_proposal,
+)
 from negotiated_agent.post_apply import build_post_apply_acceptance_record
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
@@ -88,7 +93,7 @@ from negotiated_agent.run_local_review import (
     decide_run_local_merge_eligibility,
 )
 from negotiated_agent.run_local_review_cli import main as run_local_review_cli_main
-from negotiated_agent.run_local_merge_draft import build_run_local_merge_draft_input
+from negotiated_agent.run_local_merge_draft import RunLocalMergeDraftEntry, RunLocalMergeDraftInput, build_run_local_merge_draft_input
 from negotiated_agent.run_local_merge_draft_cli import main as run_local_merge_draft_cli_main
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
@@ -3343,6 +3348,168 @@ class MailboxCoordinationTests(unittest.TestCase):
                     1,
                 )
             self.assertIn("escapes workspace", out.getvalue())
+
+    def test_packet_proposal_builder_requires_manager_and_shaliach_acceptance(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            (run_root / "implementation").mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "implementation" / "README.generated.txt").write_text("body\n", encoding="utf-8")
+            draft = _merge_draft(run_root, target_root)
+            manager = ManagerPacketProposalAcceptance(
+                acceptance_id="acceptance-1",
+                acceptance_status="accepted_for_packet_proposal",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                accepted_entry_count=1,
+                frontier_at_acceptance="S179_packet_proposal_records",
+                risk_summary="low",
+            )
+            shaliach = ShaliachPacketProposalReview(
+                review_id="shaliach-packet-1",
+                review_status="clear_for_packet_proposal",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                checked_protocols=("SOP", "SJS"),
+                finding_summary="clear",
+                required_response="proceed_to_packet_proposal",
+            )
+            packet = build_manual_merge_packet_proposal(
+                packet_id="packet-1",
+                draft=draft,
+                manager_acceptance=manager,
+                manager_acceptance_ref="manager_packet_acceptance.sop",
+                shaliach_review=shaliach,
+                shaliach_review_ref="shaliach_packet_review.sop",
+                verification_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            )
+            sop = packet.to_sop()
+            self.assertEqual(packet.accepted_files[0].source_ref, "implementation/README.generated.txt")
+            self.assertEqual(packet.accepted_files[0].target_path, "implementation/README.generated.txt")
+            self.assertIn("manager_packet_acceptance_not_workspace_apply", manager.to_sop())
+            self.assertIn("shaliach_packet_review_not_manager_acceptance", shaliach.to_sop())
+            self.assertIn("manual_merge_packet_not_workspace_application", sop)
+            self.assertFalse((target_root / "implementation" / "README.generated.txt").exists())
+
+    def test_packet_proposal_builder_blocks_manager_shaliach_and_containment_failures(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            run_root.mkdir(parents=True)
+            target_root.mkdir()
+            draft = _merge_draft(run_root, target_root)
+            manager = ManagerPacketProposalAcceptance(
+                acceptance_id="acceptance-1",
+                acceptance_status="needs_revision",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                accepted_entry_count=1,
+                frontier_at_acceptance="S179_packet_proposal_records",
+                risk_summary="revise",
+            )
+            shaliach = ShaliachPacketProposalReview(
+                review_id="shaliach-packet-1",
+                review_status="clear_for_packet_proposal",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                checked_protocols=("SOP",),
+                finding_summary="clear",
+                required_response="proceed_to_packet_proposal",
+            )
+            with self.assertRaisesRegex(ValueError, "Manager acceptance"):
+                build_manual_merge_packet_proposal(
+                    packet_id="packet-1",
+                    draft=draft,
+                    manager_acceptance=manager,
+                    manager_acceptance_ref="manager_packet_acceptance.sop",
+                    shaliach_review=shaliach,
+                    shaliach_review_ref="shaliach_packet_review.sop",
+                    verification_command="test",
+                )
+            manager = ManagerPacketProposalAcceptance(
+                acceptance_id="acceptance-2",
+                acceptance_status="accepted_for_packet_proposal",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                accepted_entry_count=1,
+                frontier_at_acceptance="S179_packet_proposal_records",
+                risk_summary="low",
+            )
+            shaliach = ShaliachPacketProposalReview(
+                review_id="shaliach-packet-2",
+                review_status="pause_required",
+                draft_input_ref="run_local_merge_draft_input.sop",
+                checked_protocols=("SOP",),
+                finding_summary="pause",
+                required_response="pause_for_manager",
+            )
+            with self.assertRaisesRegex(ValueError, "Shaliach"):
+                build_manual_merge_packet_proposal(
+                    packet_id="packet-2",
+                    draft=draft,
+                    manager_acceptance=manager,
+                    manager_acceptance_ref="manager_packet_acceptance.sop",
+                    shaliach_review=shaliach,
+                    shaliach_review_ref="shaliach_packet_review.sop",
+                    verification_command="test",
+                )
+            escaped_source = _merge_draft(run_root, target_root, source_ref="../escape.txt")
+            with self.assertRaisesRegex(ValueError, "escapes run-local root"):
+                build_manual_merge_packet_proposal(
+                    packet_id="packet-3",
+                    draft=escaped_source,
+                    manager_acceptance=manager,
+                    manager_acceptance_ref="manager_packet_acceptance.sop",
+                    shaliach_review=ShaliachPacketProposalReview(
+                        review_id="shaliach-packet-3",
+                        review_status="clear_for_packet_proposal",
+                        draft_input_ref="run_local_merge_draft_input.sop",
+                        checked_protocols=("SOP",),
+                        finding_summary="clear",
+                        required_response="proceed_to_packet_proposal",
+                    ),
+                    shaliach_review_ref="shaliach_packet_review.sop",
+                    verification_command="test",
+                )
+            escaped_target = _merge_draft(run_root, target_root, target_path="../outside.txt")
+            with self.assertRaisesRegex(ValueError, "escapes workspace"):
+                build_manual_merge_packet_proposal(
+                    packet_id="packet-4",
+                    draft=escaped_target,
+                    manager_acceptance=manager,
+                    manager_acceptance_ref="manager_packet_acceptance.sop",
+                    shaliach_review=ShaliachPacketProposalReview(
+                        review_id="shaliach-packet-4",
+                        review_status="clear_for_packet_proposal",
+                        draft_input_ref="run_local_merge_draft_input.sop",
+                        checked_protocols=("SOP",),
+                        finding_summary="clear",
+                        required_response="proceed_to_packet_proposal",
+                    ),
+                    shaliach_review_ref="shaliach_packet_review.sop",
+                    verification_command="test",
+                )
+
+
+def _merge_draft(
+    run_root: Path,
+    target_root: Path,
+    source_ref: str = "implementation/README.generated.txt",
+    target_path: str = "implementation/README.generated.txt",
+) -> RunLocalMergeDraftInput:
+    return RunLocalMergeDraftInput(
+        draft_id="draft-1",
+        eligibility_ref="run_local_merge_eligibility.sop",
+        source_result_ref="run_local_execution_result.sop",
+        source_run_root=str(run_root),
+        target_workspace_root=str(target_root),
+        entries=(
+            RunLocalMergeDraftEntry(
+                source_ref=source_ref,
+                target_path=target_path,
+                justification_refs=("run_local_merge_eligibility.sop", "manager.sop", "shaliach.sop"),
+            ),
+        ),
+    )
+
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
