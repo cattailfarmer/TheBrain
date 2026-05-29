@@ -2219,7 +2219,7 @@
 
 & [WorkSliceDetail S156_handoff_aware_proof_runner_cli] is a coordination runtime implementation slice
   + [slice_id] is S156_handoff_aware_proof_runner_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI mode and wrapper support to consume an approved ManagerProofHandoffRecord into proof result cycle evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover successful handoff proof failed handoff proof frontier mismatch and no cursor or frontier mutation
@@ -2227,3 +2227,16 @@
   + [support_status] is prepared
   + [dependency_set] is S155_handoff_aware_proof_runner_helper
   + [known_risks] is CLI becoming a hidden autonomous worker loop
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:30:00Z, proof_ref tests passed with 118 tests, result_summary worker runner CLI and wrapper consume approved proof handoffs into proof result cycles
+  + [completed_work_review] is support_delta verified consume mode validates frontier and worker and carries handoff refs into proof results; requirement_delta next checkpoint should capture 118-test handoff-aware proof runner frontier
+
+& [WorkSliceDetail S157_long_run_checkpoint_after_handoff_proof_runner] is a long-run reentry slice
+  + [slice_id] is S157_long_run_checkpoint_after_handoff_proof_runner
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after handoff-aware proof runner CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 118-test suite and route draft proof
+  + [completion_criteria] is checkpoint records handoff-aware proof runner frontier
+  + [support_status] is prepared
+  + [dependency_set] is S156_handoff_aware_proof_runner_cli
+  + [known_risks] is noisy generated dry-run artifacts

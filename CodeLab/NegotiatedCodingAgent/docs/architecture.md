@@ -234,6 +234,8 @@ The existing execution gate CLI now has explicit write mode for that boundary. I
 
 `coordination/handoff_aware_proof_runner_design.sop` defines how a later runner may consume an approved handoff. Consumption must validate the ready cycle, handoff, exact command, worker, and frontier before invoking the existing proof-command runner, and the result is a new proof cycle rather than Manager completion approval.
 
+The worker-runner CLI now supports handoff consumption. It loads a `ManagerProofHandoffRecord`, loads the referenced `ready_for_proof` cycle, validates the current frontier, and calls the existing proof-command runner with handoff, ready-cycle, and gate refs carried into the new proof result cycle.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

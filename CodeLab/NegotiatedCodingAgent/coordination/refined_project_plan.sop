@@ -262,7 +262,8 @@
   + [completed_slice] is S153_spec_audit_refresh_after_proof_handoff_writer
   + [completed_slice] is S154_handoff_aware_proof_runner_design
   + [completed_slice] is S155_handoff_aware_proof_runner_helper
-  + [ready_slice] is S156_handoff_aware_proof_runner_cli
+  + [completed_slice] is S156_handoff_aware_proof_runner_cli
+  + [ready_slice] is S157_long_run_checkpoint_after_handoff_proof_runner
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

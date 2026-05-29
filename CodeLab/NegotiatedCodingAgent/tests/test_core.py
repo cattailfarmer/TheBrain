@@ -2440,6 +2440,130 @@ class MailboxCoordinationTests(unittest.TestCase):
                     cycle_id="cycle-blocked",
                 )
 
+    def test_worker_runner_cli_consumes_approved_proof_handoff(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S156",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            ready_path = write_worker_cycle_record(root, ready_cycle)
+            handoff = ManagerProofHandoffRecord(
+                handoff_id="handoff-1",
+                handoff_status="approved",
+                worker_uuid="worker-a",
+                ready_cycle_ref=ready_path.relative_to(root).as_posix(),
+                execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                proof_command="cmd /c exit 0",
+                proof_route="cmd /c exit 0",
+                frontier_at_handoff="S156_handoff_aware_proof_runner_cli",
+                expires_at="2026-05-29T22:30:00Z",
+            )
+            handoff_path = root / "coordination" / "workers" / "worker-a" / "proof_handoffs" / "handoff-1.sop"
+            handoff_path.parent.mkdir(parents=True)
+            handoff_path.write_text(handoff.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--consume-proof-handoff",
+                            "--handoff-ref",
+                            handoff_path.relative_to(root).as_posix(),
+                            "--current-frontier",
+                            "S156_handoff_aware_proof_runner_cli",
+                            "--cycle-id",
+                            "cycle-proof-result",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("cycle_status] is completed", out.getvalue())
+            self.assertTrue((root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-proof-result.sop").exists())
+
+    def test_worker_runner_cli_consume_proof_handoff_failed_and_frontier_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S156",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            ready_path = write_worker_cycle_record(root, ready_cycle)
+            handoff = ManagerProofHandoffRecord(
+                handoff_id="handoff-1",
+                handoff_status="approved",
+                worker_uuid="worker-a",
+                ready_cycle_ref=ready_path.relative_to(root).as_posix(),
+                execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                proof_command="cmd /c exit 3",
+                proof_route="cmd /c exit 3",
+                frontier_at_handoff="S156_handoff_aware_proof_runner_cli",
+                expires_at="2026-05-29T22:30:00Z",
+            )
+            handoff_path = root / "coordination" / "workers" / "worker-a" / "proof_handoffs" / "handoff-1.sop"
+            handoff_path.parent.mkdir(parents=True)
+            handoff_path.write_text(handoff.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--consume-proof-handoff",
+                            "--handoff-ref",
+                            handoff_path.relative_to(root).as_posix(),
+                            "--current-frontier",
+                            "S156_handoff_aware_proof_runner_cli",
+                            "--cycle-id",
+                            "cycle-proof-result",
+                        ]
+                    ),
+                    2,
+                )
+            self.assertIn("cycle_status] is failed_proof", out.getvalue())
+            blocked = io.StringIO()
+            with contextlib.redirect_stdout(blocked):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--consume-proof-handoff",
+                            "--handoff-ref",
+                            handoff_path.relative_to(root).as_posix(),
+                            "--current-frontier",
+                            "S999_other",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("frontier_changed", blocked.getvalue())
+
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
         authorization_id="auth-1",

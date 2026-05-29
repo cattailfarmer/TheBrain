@@ -237,6 +237,14 @@ The handoff writer validates that the source cycle is `ready_for_proof` and that
 
 `coordination/handoff_aware_proof_runner_design.sop` describes the next planned consumption step. An approved handoff may later feed the existing proof-command runner, but only after validation and only into a new proof result cycle; it must not advance cursors or frontiers.
 
+Consume an approved proof handoff:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -ConsumeProofHandoff -HandoffRef <handoff-ref> -CurrentFrontier <frontier> -CycleId <cycle-id>
+```
+
+Consume mode loads the approved handoff and referenced ready cycle, validates the frontier and worker, then runs only the exact command recorded in the handoff. The result is a new proof cycle; failed proofs still write `WorkerFailureRecord` evidence.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

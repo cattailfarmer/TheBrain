@@ -9,7 +9,9 @@ param(
   [switch]$RecordCycle,
   [switch]$RecordGateCycle,
   [switch]$WriteProofHandoff,
+  [switch]$ConsumeProofHandoff,
   [string]$ExecutionGateRef = "",
+  [string]$HandoffRef = "",
   [string]$ReadyCycleRef = "",
   [string]$HandoffId = "",
   [string]$ProofCommand = "",
@@ -106,6 +108,18 @@ if ($WriteProofHandoff) {
   }
   if ($ExpiresAt -ne "") {
     $argsList += @("--expires-at", $ExpiresAt)
+  }
+}
+if ($ConsumeProofHandoff) {
+  $argsList += "--consume-proof-handoff"
+  if ($HandoffRef -ne "") {
+    $argsList += @("--handoff-ref", $HandoffRef)
+  }
+  if ($CurrentFrontier -ne "") {
+    $argsList += @("--current-frontier", $CurrentFrontier)
+  }
+  if ($CycleId -ne "") {
+    $argsList += @("--cycle-id", $CycleId)
   }
 }
 if ($RunProofCommand -ne "") {

@@ -1236,3 +1236,11 @@
   + [proof_result] is tests passed with 116 tests
   + [current_frontier] is S156_handoff_aware_proof_runner_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S156_handoff_aware_proof_runner_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S156_handoff_aware_proof_runner_cli
+  + [implemented_capability] is worker runner CLI and wrapper consume approved proof handoff refs into proof result cycles using the exact handoff command
+  + [proof_result] is tests passed with 118 tests
+  + [current_frontier] is S157_long_run_checkpoint_after_handoff_proof_runner
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
