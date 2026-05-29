@@ -1,0 +1,193 @@
+& [ProjectNarrativeSurface: NegotiatedCodingAgent] is the durable subject-oriented narrative surface for CodeLab NegotiatedCodingAgent
+  @ [project_root] C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [active_conversation] coordination/active_conversation.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [framework_attention_load] coordination/framework_attention_load.sop
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [source_document] specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  @ [project_narrative_protocol] C:\Project\ReasoningFramework\platform\refinement\Project_Narrative_Surface.sop
+  @ [shared_cognition_protocol] C:\Project\ReasoningFramework\platform\refinement\Shared_Cognition_Space.sop
+  @ [created_at] 2026-05-29T06:12:25-05:00
+
+  + [narrative_surface_uuid] is 39cc19b9-6243-4561-9397-4c575ce9cf03
+  + [root_subject] is NegotiatedCodingAgent
+  + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [story_state] is active
+  + [readiness_state] is runnable_scaffold_with_sop_framework_absorption_frontier
+  + [authority_boundary] is narrative_surface_not_signed_specification
+  + [resolution] is [NarrativeLedger], [ReadinessStory], [FrontierArc], [NarrativeGapReport], or [Uncertainty]
+
+  = must: organize project memory by subject identity before chronology
+  = must: bind narrative claims to existing specification, source, proof, manager notice, and conversation-surface artifacts where available
+  = must: distinguish proven capability from intended capability
+  = must: preserve unresolved items and stale or partial projections visibly
+  = must: support reentry by pointing future conversations to the surfaces that carry active authority
+  - never: let this narrative override specifications, proof results, direct file inspection, or user instructions
+  - never: reduce the project story to a chronological changelog
+
+& [SubjectTree] is the narrative decomposition of NegotiatedCodingAgent
+  + [root_subject] is NegotiatedCodingAgent
+  + [child_subject] is UserObjective
+  + [child_subject] is HierarchicalAgentSwarmSpecification
+  + [child_subject] is RuntimeScaffold
+  + [child_subject] is SOPFrameworkAbsorption
+  + [child_subject] is LocalModelHosting
+  + [child_subject] is LongRunCoordination
+  + [child_subject] is FutureExecutableNarrativeSubsystem
+
+  = must: keep UserObjective as the reason the project exists
+  = must: keep HierarchicalAgentSwarmSpecification as the current architectural authority
+  = must: keep RuntimeScaffold separate from intended full SOP runtime
+  = must: keep SOPFrameworkAbsorption separate from generic agent orchestration
+  = must: keep LocalModelHosting open until vLLM, Ollama, or another serving route is installed and verified
+  = must: keep LongRunCoordination rooted in conversation_uuid, manager_job_notice, and proof updates
+
+& [OriginArc] is why this project began
+  + [origin_pressure] is the user wants a local-LLM coding-agent system that uses multiple models with distinct roles rather than one model prompted repeatedly
+  + [origin_pressure] is the user wants four negotiated flowchart levels before code: application, subsystem, component, and code
+  + [origin_pressure] is the user wants a strong Manager, medium Directors, lightweight Programmers, and a persistent Shaliach as protocol counsel and enforcement
+  + [origin_pressure] is the user wants Specification-Justification-Solution and Data-Driven Design protocols to govern objectives, conditions, failures, forms, data subjects, transforms, and solution state
+  + [origin_pressure] is the user wants the SOP framework incorporated in stages rather than discarded or paraphrased away
+  + [origin_pressure] is the user has observed long Codex runs surviving through durable SOP attention and wants CodeLab to absorb that machinery
+  + [citation_ref] is specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  + [citation_ref] is coordination/framework_attention_load.sop
+
+& [SpecificationArc] is how origin became architectural authority
+  + [source_document] is specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  + [canonical_working_specification] is specifications/Hierarchical_Agent_Swarm.sop
+  + [signature_state] is working_specification_unsigned
+  + [authority_scope] is architecture, orchestration, model tiering, flowchart negotiation, implementation slicing, programmer review, and local model hosting
+  + [primary_obligation] is preserve Shaliach, Manager, Director, and Programmer role distinctions
+  + [primary_obligation] is negotiate all four flowchart layers before implementation unless explicitly waived by Manager
+  + [primary_obligation] is use SJS and DataDrivenDesign ledgers when layer authority affects implementation
+  + [narrative_gap] is governing specification is useful as active rail but remains unsigned under the SJS satisfaction-signature protocol
+
+& [DecisionArc] is the major design choice sequence
+  + [decision] is use Shaliach rather than Observer to avoid conflating CodeLab protocol counsel with the seven-faculty Observer
+  + [decision] is use Manager for objective integrity, arbitration, layer approval, work slicing, and final review
+  + [decision] is use Directors for medium-weight flowchart negotiation and perspective diversity
+  + [decision] is use Programmers for bounded implementation slices after code-layer settlement
+  + [decision] is support model diversity as a first-class goal instead of relying only on role prompts over one model
+  + [decision] is prefer vLLM for NVIDIA/Linux throughput when environment is ready, while preserving Ollama and OpenAI-compatible routing
+  + [decision] is preserve dry-run mode as a verification path independent of local LLM availability
+  + [decision] is treat SOP as runtime substrate rather than background documentation
+  + [citation_ref] is specifications/Hierarchical_Agent_Swarm.sop
+  + [citation_ref] is coordination/framework_attention_load.sop
+
+& [ImplementationArc] is what has actually been built
+  + [implemented_slice] is S01_commit_spec_rails
+  + [implemented_slice] is S02_hierarchical_config
+  + [implemented_slice] is S03_provider_routing
+  + [implemented_slice] is S04_layer_package_artifacts
+  + [implemented_slice] is S05_manager_gates
+  + [implemented_slice] is S06_programmer_slices
+  + [implemented_slice] is S07_docs_and_acceptance_review
+  + [implemented_slice] is framework_attention_load_checkpoint
+  + [implemented_slice] is project_narrative_surface_seed
+  + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
+  + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
+  + [current_runtime_limit] is conversation and narrative surfaces are hand-maintained SOP artifacts rather than executable runtime operators
+  + [citation_ref] is README.md
+  + [citation_ref] is coordination/manager_job_notice.sop
+  + [citation_ref] is coordination/framework_attention_load.sop
+
+& [ProofArc] is the evidence that supports readiness claims
+  + [proof_result] is tests passed with 11 tests after implementation scaffold
+  + [proof_result] is tests passed with 11 tests after SOP framework attention load
+  + [proof_result] is tests passed with 11 tests after project narrative surface creation
+  + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
+  + [last_known_commit] is 5add1d9 Add SOP framework attention load
+  + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
+  + [proof_limit] is no vLLM, WSL2, Ollama model inventory, or concurrent model serving proof has been run in this narrative slice
+
+& [ReadinessArc] is the current truthful capability story
+  + [ready_capability] is repo is initialized and pushed to https://github.com/cattailfarmer/TheBrain
+  + [ready_capability] is CodeLab scaffold can run deterministic dry-run negotiation artifacts and pass unit tests
+  + [ready_capability] is conversation UUID surface preserves compaction/reentry attention for this workstream
+  + [ready_capability] is manager job notice maintains completed slices, open frontier, and support-review policy
+  + [ready_capability] is framework attention load maps the SOP framework into CodeLab roles and staged absorption
+  + [ready_capability] is this narrative surface now provides a durable story-level reentry path for future conversations
+  + [not_ready_capability] is automated conversation-kernel read/write operators
+  + [not_ready_capability] is executable project narrative subsystem with generated nodes, citations, stale checks, and coverage updates
+  + [not_ready_capability] is Shaliach faculty runtime with higher/lower internal negotiation
+  + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
+  + [not_ready_capability] is mailbox and notice coordination between multiple active conversations
+  + [not_ready_capability] is file-change surface solution_uuid indexing
+  + [not_ready_capability] is verified local vLLM or Ollama multi-model serving
+
+& [FrontierArc] is the next useful work sequence
+  + [next_recommended_slice] is S08_runtime_conversation_kernel
+  + [next_reason] is durable conversation operators should automate the surface-load and surface-update behavior that currently keeps attention alive manually
+  + [following_slice] is S09_protocol_registry
+  + [following_slice] is S10_shaliach_faculty_runtime
+  + [following_slice] is S11_negotiated_sjs_datadesign_ledgers
+  + [following_slice] is S12_project_narrative_surface_runtime
+  + [following_slice] is S13_mailbox_and_notice_coordination
+  + [following_slice] is S14_file_change_surface
+  + [sleep_run_candidate] is S08_runtime_conversation_kernel because it is bounded, testable, and directly improves long-run unattended readiness
+
+  = must: prefer S08 before deeper Shaliach or Director negotiation work unless the user gives a newer objective
+  = must: keep proof updates and narrative updates synchronized when long-running work advances
+
+& [NarrativeWeave] is the cross-subject relation set
+  + [woven_edge] is UserObjective depends_on HierarchicalAgentSwarmSpecification
+  + [woven_edge] is HierarchicalAgentSwarmSpecification implements OriginArc
+  + [woven_edge] is RuntimeScaffold partially_implements HierarchicalAgentSwarmSpecification
+  + [woven_edge] is SOPFrameworkAbsorption reframes RuntimeScaffold from generic orchestrator into protocol-aware agent substrate
+  + [woven_edge] is LongRunCoordination depends_on ConversationSurfaceFile
+  + [woven_edge] is LongRunCoordination depends_on ManagerJobNotice
+  + [woven_edge] is FutureExecutableNarrativeSubsystem depends_on S08_runtime_conversation_kernel
+  + [woven_edge] is FutureExecutableNarrativeSubsystem depends_on FileChangeSurface for durable file-level review
+  + [edge_support] is coordination/framework_attention_load.sop
+  + [edge_support] is coordination/manager_job_notice.sop
+
+& [NarrativeGapReport] is the visible gap ledger
+  + [narrative_gap] is no append-only conversation log exists yet, so citation references point to project artifacts and conversation surfaces rather than message-level log entries
+  + [narrative_gap] is no executable narrative updater exists yet, so this surface must be manually updated until S08 and later narrative runtime work exist
+  + [narrative_gap] is FileChangeSurface solution_uuid records are not yet available for earlier implementation commits
+  + [narrative_gap] is current governing spec is unsigned and should not be misrepresented as SJS-satisfied canonical authority
+  + [narrative_gap] is vLLM and local multi-model serving remain architecture choices, not verified runtime infrastructure
+  + [narrative_gap] is long-run unattended work is plausible under SOP rails but still needs periodic proof and surface updates to avoid overclaim
+
+& [CoverageMap] is the current artifact coverage inventory
+  + [covered_artifact] is README.md
+  + [covered_artifact] is agent.config.json
+  + [covered_artifact] is specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  + [covered_artifact] is specifications/Hierarchical_Agent_Swarm.sop
+  + [covered_artifact] is coordination/active_conversation.sop
+  + [covered_artifact] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  + [covered_artifact] is coordination/framework_attention_load.sop
+  + [covered_artifact] is coordination/manager_job_notice.sop
+  + [covered_artifact] is src/negotiated_agent/config.py
+  + [covered_artifact] is src/negotiated_agent/llm.py
+  + [covered_artifact] is src/negotiated_agent/orchestrator.py
+  + [covered_artifact] is src/negotiated_agent/package.py
+  + [covered_artifact] is src/negotiated_agent/manager.py
+  + [covered_artifact] is src/negotiated_agent/slices.py
+  + [covered_artifact] is tests/test_core.py
+  + [coverage_reason] is this inventory covers active specification, runtime scaffold, tests, and coordination rails needed for reentry
+  + [uncovered_artifact] is generated runs under CodeLab/NegotiatedCodingAgent/runs
+  + [uncovered_artifact] is Python cache files
+  + [uncovered_artifact] is future file-change surface records
+  + [uncovered_artifact] is future mailbox/notice records
+  + [coverage_limit] is source-level coverage is sufficient for reentry but not exhaustive for every generated proof artifact
+
+& [ReentryPacket] is the compact session-start recovery path for this project narrative
+  + [load_first] is coordination/active_conversation.sop
+  + [then_load] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  + [then_load] is coordination/project_narrative_surface.sop
+  + [then_load] is coordination/framework_attention_load.sop
+  + [then_load] is coordination/manager_job_notice.sop
+  + [then_load] is specifications/Hierarchical_Agent_Swarm.sop
+  + [then_check] is git status at C:\Project\TheBrain
+  + [then_run] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
+  + [resume_action] is continue S08_runtime_conversation_kernel unless user gives a newer objective
+  + [trust_boundary_note] is narrative surface is continuity and readiness context, not stronger authority than direct specification, tests, user instruction, or file inspection
+
+& [OperationalFaultWatch] is the process-risk record for sleeping long-run work
+  + [risk] is completion overclaim while the user is away
+  + [risk] is losing frontier after compaction if surfaces are not updated
+  + [risk] is implementing broad runtime machinery without tests
+  + [guard] is keep slices bounded, test after coherent edits, update conversation surface and narrative after meaningful progress, and preserve unresolved items
+  + [guard] is do not claim full SOP integration when only a seed narrative or scaffold operator exists

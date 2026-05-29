@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 8
+  + [job_notice_revision] is 9
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -17,7 +17,7 @@
   + [unsliced_specification_remaining] is true
   + [fully_sliced_specification] is false
 
-  + [job_goal] is absorb the user's SOP framework into NegotiatedCodingAgent in stages, starting with durable conversation-kernel operators before deeper protocol registry, Shaliach faculty runtime, negotiated SJS/DataDesign ledgers, narrative, mailbox, and file-change surfaces
+  + [job_goal] is absorb the user's SOP framework into NegotiatedCodingAgent in stages, starting with durable narrative and conversation-kernel rails before deeper protocol registry, Shaliach faculty runtime, negotiated SJS/DataDesign ledgers, mailbox, and file-change surfaces
 
   + [slice_summary] is (
     S01_commit_spec_rails |
@@ -166,14 +166,16 @@
 
 & [WorkSliceDetail S12_project_narrative_surface] is a planned dependency slice
   + [slice_id] is S12_project_narrative_surface
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is create a project narrative surface binding source, specification, decisions, implementation, proof, faults, readiness, and frontier
   + [target_files] is coordination/**, specifications/**, src/negotiated_agent/**, tests/**
   + [proof_route] is tests or dry-run proof that narrative nodes cite governing specs, proof outputs, unresolved items, and conversation surface refs
   + [completion_criteria] is future conversations can reenter the project story through a narrative surface without collapsing it into a changelog
-  + [support_status] is pending_dependency
-  + [dependency_set] is S08_runtime_conversation_kernel, S14_file_change_surface
+  + [support_status] is prepared
+  + [dependency_set] is direct_user_instruction_overrode_prior_order_for_seed_surface
   + [known_risks] is writing prose summaries that do not preserve citation or authority boundaries
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:12:25Z, proof_ref tests passed with 11 tests, result_summary seed project narrative surface created at coordination/project_narrative_surface.sop with origin, specification, decision, implementation, proof, readiness, frontier, weave, coverage, gap, and reentry arcs
+  + [completed_work_review] is support_delta created durable narrative reentry surface; requirement_delta executable narrative updater remains future work under S08/S09 and narrative runtime follow-up
 
 & [WorkSliceDetail S13_mailbox_and_notice_coordination] is a planned dependency slice
   + [slice_id] is S13_mailbox_and_notice_coordination
