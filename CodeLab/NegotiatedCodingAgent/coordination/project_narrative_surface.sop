@@ -1331,3 +1331,20 @@
   + [proof_result] is tests passed with 126 tests
   + [current_frontier] is S166_long_run_checkpoint_after_run_local_writer_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T181506Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T181506Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S166_long_run_checkpoint_after_run_local_writer_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S166_long_run_checkpoint_after_run_local_writer_cli
+  + [proof_result] is long-run harness passed 126 tests, dry-run, model inventory, non-gating OpenAI healthcheck, and route draft
+  + [run_root] is runs\20260529T181506Z
+  + [current_frontier] is S167_spec_audit_refresh_after_run_local_writer
+  + [narrative_role] is long_run_coordination and proof_arc update

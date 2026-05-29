@@ -2349,7 +2349,7 @@
 
 & [WorkSliceDetail S166_long_run_checkpoint_after_run_local_writer_cli] is a long-run reentry slice
   + [slice_id] is S166_long_run_checkpoint_after_run_local_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after run-local execution writer CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 126-test suite and route draft proof
@@ -2357,3 +2357,16 @@
   + [support_status] is prepared
   + [dependency_set] is S165_run_local_execution_writer_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:15:24Z, proof_ref long-run checkpoint passed 126 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after run-local execution writer CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 126-test run-local writer frontier; requirement_delta next step is refresh spec audit after run-local writer support
+
+& [WorkSliceDetail S167_spec_audit_refresh_after_run_local_writer] is a specification audit slice
+  + [slice_id] is S167_spec_audit_refresh_after_run_local_writer
+  + [slice_status] is open
+  + [scope] is refresh implementation status after run-local execution writer helper CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names run-local writer support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists deterministic run-local writer as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S166_long_run_checkpoint_after_run_local_writer_cli
+  + [known_risks] is overstating run-local generated evidence as target workspace application
