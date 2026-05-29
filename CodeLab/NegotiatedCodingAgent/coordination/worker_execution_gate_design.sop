@@ -1,0 +1,75 @@
+& [WorkerExecutionGateDesign] is the authority contract before any autonomous worker implementation runner executes claimed work
+  @ [source_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [worker_runner_design] coordination/worker_runner_design.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T19:12:00Z
+
+  + [design_status] is ready_for_record_model_slice
+  + [authority_boundary] is execution_gate_design_not_execution_permission
+  + [primary_goal] is require explicit Manager authorization and Shaliach clearance before a worker runner can execute implementation work from a mailbox claim
+  + [non_goal] is automatic code execution
+  + [non_goal] is target workspace mutation
+  + [non_goal] is frontier advancement without Manager review
+
+& [ExecutionGateInput] is the evidence a future gate evaluator must inspect
+  + [required_ref] is WorkerLeaseRecord
+  + [required_ref] is mailbox message subject and body
+  + [required_ref] is manager_job_notice.sop#WorkSliceDetail
+  + [required_ref] is active conversation current_frontier
+  + [required_ref] is dirty worktree summary
+  + [required_ref] is latest Shaliach finding or explicit Shaliach no-finding for the slice
+  + [optional_ref] is WorkerCycleRecord from prior failed or paused attempt
+  + [optional_ref] is WorkerFailureRecord from prior failed proof
+  + [authority_boundary] is gate_input_not_authorization
+
+& [ManagerAuthorizationRecord] is the required Manager-side permission artifact
+  + [artifact_name] is coordination/workers/<worker_uuid>/authorizations/<authorization_id>.sop
+  + [authorization_status] is authorized, denied, needs_review, or superseded
+  + [worker_uuid] is required
+  + [claim_ref] is required
+  + [slice_ref] is required
+  + [frontier_at_authorization] is required
+  + [allowed_action] is preview_only, run_proof_only, execute_run_local_implementation, or request_human_review
+  + [proof_route] is required
+  + [expires_at] is required
+  + [authority_boundary] is manager_authorization_not_final_acceptance
+  = must: deny execution if the active frontier does not match frontier_at_authorization
+  = must: deny execution if worker lease is conflict, expired, or missing
+  = must: deny target workspace mutation unless a separate operator-approved apply artifact exists
+
+& [ShaliachExecutionClearance] is the required protocol counsel artifact
+  + [artifact_name] is coordination/workers/<worker_uuid>/shaliach_clearance/<clearance_id>.sop
+  + [clearance_status] is clear, warning, rework_required, pause_required, or no_finding
+  + [worker_uuid] is required
+  + [claim_ref] is required
+  + [slice_ref] is required
+  + [checked_protocol_set] is SOP, SJS, DataDrivenDesign, lineage, uncertainty, artifact_form, and workspace_boundary
+  + [finding_ref] is optional
+  + [required_response] is proceed, proceed_with_warning, rework_before_execution, pause_for_manager, or human_review
+  + [authority_boundary] is shaliach_clearance_not_manager_authorization
+  = must: pause when target workspace mutation is requested inside worker execution
+  = must: request rework when SJS or DataDesign support is thin for a slice that changes code behavior
+  = must: warn when proof route is missing or not executable from the worker context
+
+& [ExecutionGateDecision] is the combined gate result a future runner may consume
+  + [artifact_name] is coordination/workers/<worker_uuid>/execution_gates/<gate_id>.sop
+  + [gate_status] is execution_allowed, proof_only_allowed, blocked_by_manager, blocked_by_shaliach, stale_frontier, dirty_worktree_review_required, or lease_invalid
+  + [manager_authorization_ref] is required
+  + [shaliach_clearance_ref] is required
+  + [lease_ref] is required
+  + [allowed_action] is required
+  + [proof_route] is required
+  + [expires_at] is required
+  + [authority_boundary] is execution_gate_decision_not_completion_approval
+  = must: allow implementation execution only when Manager authorization is authorized and Shaliach clearance is clear or warning
+  = must: allow proof-only execution when Manager allowed_action is run_proof_only and Shaliach does not pause
+  = must: produce WorkerCycleRecord with blocked status when the gate is not allowed
+  - never: mutate active conversation current_frontier directly
+  - never: apply generated files to the target workspace directly
+
+& [NextImplementationSlices] is the safe implementation order for the gate
+  + [slice_1] is add ManagerAuthorizationRecord, ShaliachExecutionClearance, and ExecutionGateDecision data models
+  + [slice_2] is add deterministic gate evaluator over existing worker lease and current frontier evidence
+  + [slice_3] is add gate preview CLI that writes no authorization or clearance files
+  + [slice_4] is add explicit write-authorizations command only after record tests pass
+  + [slice_5] is consider run-local implementation execution only after gate decision artifacts exist

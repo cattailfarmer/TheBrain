@@ -210,6 +210,8 @@ Worker cycle-record mode writes `WorkerCycleRecord` artifacts under `coordinatio
 
 The worker proof-command scaffold can run an explicit proof command and write success or failed-proof cycle evidence. Failed proofs also write `WorkerFailureRecord` artifacts with return code, output tails, dirty-worktree summary when git status is available, and safe-resume guidance; the command does not approve work or move the frontier.
 
+`coordination/worker_execution_gate_design.sop` defines the authority boundary before any future autonomous worker can execute claimed implementation work. It requires Manager authorization, Shaliach execution clearance, lease validity, frontier matching, proof route evidence, and explicit blocking states before a runner may move beyond preview, claim, cycle, or proof evidence.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
