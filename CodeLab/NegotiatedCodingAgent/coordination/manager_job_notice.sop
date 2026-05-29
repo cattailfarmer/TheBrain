@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 151
+  + [job_notice_revision] is 152
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3636,7 +3636,7 @@
 
 & [WorkSliceDetail S265_long_run_checkpoint_after_combined_validation_cli] is a long-run reentry slice
   + [slice_id] is S265_long_run_checkpoint_after_combined_validation_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after combined artifact validation CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 264-test suite and validate-artifacts confirms latest run manifest plus checkpoint
@@ -3644,3 +3644,16 @@
   + [support_status] is prepared
   + [dependency_set] is S264_combined_artifact_validation_cli
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:08:00Z, proof_ref long-run checkpoint passed 264 tests and validate-artifacts reported passed, result_summary refreshed checkpoint after combined artifact validation CLI
+  + [completed_work_review] is support_delta verified checkpoint start frontier S265 git_clean_before true Shaliach probe passed and combined validation passed; requirement_delta next step is refresh spec audit after combined validation tooling
+
+& [WorkSliceDetail S266_spec_audit_refresh_after_combined_validation_cli] is a specification audit slice
+  + [slice_id] is S266_spec_audit_refresh_after_combined_validation_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after combined artifact validation CLI and checkpoint proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names combined validation result CLI wrapper and latest long-run proof
+  + [completion_criteria] is audit reflects combined validation tooling and remaining live-serving gap accurately
+  + [support_status] is prepared
+  + [dependency_set] is S265_long_run_checkpoint_after_combined_validation_cli
+  + [known_risks] is audit overstating combined artifact validation as final acceptance
