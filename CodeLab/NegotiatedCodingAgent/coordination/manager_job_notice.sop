@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 59
+  + [job_notice_revision] is 60
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -77,7 +77,8 @@
     S52_programmer_assignment_docs |
     S53_multi_slice_planning_scaffold |
     S54_multi_slice_planning_docs |
-    S55_programmer_merge_review_protocol_surface
+    S55_programmer_merge_review_protocol_surface |
+    S56_spec_audit_refresh_after_programmer_swarm_groundwork
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -824,7 +825,7 @@
 
 & [WorkSliceDetail S55_programmer_merge_review_protocol_surface] is a Programmer swarm slice
   + [slice_id] is S55_programmer_merge_review_protocol_surface
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is create a merge review protocol surface for future multi-Programmer outputs
   + [target_files] is coordination/**, docs/**
   + [proof_route] is protocol surface written and tests remain passing
@@ -832,3 +833,16 @@
   + [support_status] is prepared
   + [dependency_set] is S53_multi_slice_planning_scaffold
   + [known_risks] is adding process surface without executable enforcement
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:30:00Z, proof_ref tests passed with 46 tests and coordination/programmer_merge_review_protocol.sop written, result_summary added planned merge review protocol surface with conflict ledger and acceptance gates
+  + [completed_work_review] is support_delta verified future multi-Programmer execution has explicit merge-review gates before implementation; requirement_delta protocol is not executable yet
+
+& [WorkSliceDetail S56_spec_audit_refresh_after_programmer_swarm_groundwork] is a documentation and planning slice
+  + [slice_id] is S56_spec_audit_refresh_after_programmer_swarm_groundwork
+  + [slice_status] is open
+  + [scope] is refresh specification implementation status audit after Shaliach, Director, and Programmer swarm groundwork
+  + [target_files] is coordination/spec_implementation_status.sop
+  + [proof_route] is audit surface updated and tests remain passing
+  + [completion_criteria] is audit reflects new perspective trace, disagreement ledger, assignment plan, multi-slice scaffold, and merge protocol surface
+  + [support_status] is prepared
+  + [dependency_set] is S55_programmer_merge_review_protocol_surface
+  + [known_risks] is recasting planned surfaces as executable support

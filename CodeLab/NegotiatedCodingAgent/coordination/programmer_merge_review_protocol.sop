@@ -1,0 +1,40 @@
+& [ProgrammerMergeReviewProtocol] is the planned gate surface for future multi-Programmer outputs
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [created_at] 2026-05-29T20:20:00Z
+
+  + [protocol_status] is planned_not_executable
+  + [authority_boundary] is merge_review_protocol_surface_not_parallel_execution
+  + [use_when] is two_or_more Programmer outputs are produced for one approved code-layer package
+
+  = must: preserve each Programmer output as a separate reviewed artifact before merge
+  = must: require Manager review of every ProgrammerReport before accepting merged output
+  = must: require Shaliach review when merge changes scope, authority, lineage, data shape, or artifact form
+  = must: map merged files back to source work slices and Programmer reports
+  = must: keep conflict, overlap, and rejected output visible
+  = must: run tests or explicit verification after merge
+
+  - never: silently overwrite one Programmer output with another
+  - never: treat assignment claim as merge approval
+  - never: apply multi-Programmer patches to the target workspace before merge review and rollback policy exist
+
+& [MergeReviewInputSet] is the required evidence before merge review
+  + [input] is ProgrammerAssignmentPlan
+  + [input] is WorkSlice for each Programmer
+  + [input] is ProgrammerReport for each Programmer
+  + [input] is changed file list for each Programmer output
+  + [input] is code package authority and Manager approval
+  + [input] is ShaliachFinding or no_finding for scope-sensitive outputs
+
+& [MergeConflictLedger] is the conflict surface for future merge review
+  + [conflict_type] is same_file_overlap, incompatible_data_shape, duplicated_feature, missing_test, scope_expansion, or unresolved_requirement
+  + [required_record] is conflict_type, affected_files, source_programmers, manager_decision, shaliach_finding_ref, and repair_action
+  + [resolution] is accept_one, combine_with_rework, request_programmer_rework, defer, or reject
+
+& [MergeAcceptanceGate] is the minimum acceptance condition
+  + [required] is all accepted outputs trace to approved work slices
+  + [required] is rejected outputs remain visible with reasons
+  + [required] is merged result has ManagerReview accepted or request_rework
+  + [required] is FileChangeSurface maps merged files to source solution records
+  + [required] is verification command result is attached
+  + [not_yet_implemented] is executable merge runner
+  + [not_yet_implemented] is target-workspace patch application and rollback policy

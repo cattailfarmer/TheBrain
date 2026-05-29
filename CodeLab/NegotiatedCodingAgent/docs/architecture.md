@@ -97,6 +97,8 @@ The runtime can also represent a small deterministic set of planned implementati
 
 This scaffold is used to prove assignment planning across multiple configured Programmers. It is not yet semantic extraction from an arbitrary code package, and the orchestrator still executes one initial implementation slice.
 
+Before any future parallel execution, `coordination/programmer_merge_review_protocol.sop` defines the planned merge-review gates: separate Programmer reports, conflict visibility, Manager review, Shaliach review when scope or lineage changes, file-change lineage, and verification after merge.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:
