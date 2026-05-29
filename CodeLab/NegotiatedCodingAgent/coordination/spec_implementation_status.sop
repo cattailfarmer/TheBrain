@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T23:59:55Z
+  @ [updated_at] 2026-05-29T23:59:59Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -64,7 +64,7 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Programmers are a small swarm of lightweight implementers
-  + [support] is config supports programmer list, planned multi-slice representation exists, ProgrammerAssignmentPlan is emitted, orchestrator executes planned assignments sequentially into isolated run-local roots, file-change lineage is per assignment, merge conflict plus merge decision surfaces are emitted, conflict-free runs can emit a non-applying manual merge packet, dry-run apply plan/result evidence can be emitted, and a dry-run apply CLI validates packets without mutation
+  + [support] is config supports programmer list, planned multi-slice representation exists, ProgrammerAssignmentPlan is emitted, orchestrator executes planned assignments sequentially into isolated run-local roots, file-change lineage is per assignment, merge conflict plus merge decision surfaces are emitted, conflict-free runs can emit a non-applying manual merge packet, dry-run apply plan/result evidence can be emitted, a dry-run apply CLI validates packets without mutation, and operator docs explain the validation artifacts
   + [gap] is execution is sequential and run-local; dry-run apply CLI validation is not target workspace patch application and no automatic conflict resolution exists
   + [next_candidate] is add explicit operator-approved target workspace apply command with rollback, verification, Manager acceptance, and Shaliach gates
 

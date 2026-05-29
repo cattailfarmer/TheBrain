@@ -155,6 +155,7 @@
   + [last_proof] is tests passed with 61 tests after S82 apply CLI operator docs
   + [last_proof] is final long-run state audit written with clean git status and 61 passing tests
   + [last_proof] is tests passed with 61 tests after S84 dry-run apply examples
+  + [last_proof] is tests passed with 61 tests after S85 spec audit refresh
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -342,9 +343,10 @@
   + [completed_slice] is S82_apply_cli_operator_docs
   + [completed_slice] is S83_final_long_run_state_audit
   + [completed_slice] is S84_apply_cli_validation_docs_and_examples
+  + [completed_slice] is S85_spec_audit_refresh_after_apply_docs
 
-  + [current_frontier] is S85_spec_audit_refresh_after_apply_docs after dry-run apply examples
-  + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
+  + [current_frontier] is S86_long_run_checkpoint_after_apply_docs after spec audit refresh
+  + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
