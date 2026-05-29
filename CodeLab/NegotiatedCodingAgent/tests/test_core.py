@@ -5550,6 +5550,97 @@ class NarrativeAppendReviewTests(unittest.TestCase):
         self.assertEqual(clearance.required_rework, ("duplicate_update_already_represented: append two",))
         self.assertFalse(clearance.allows_append)
 
+    def test_narrative_append_cli_synthesizes_review_drafts_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            (coordination / "narrative_coverage_update_record.sop").write_text(
+                self._update_record(("append one",)).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_append_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--synthesize-review-drafts",
+                            "--approval-id",
+                            "manager-synth",
+                            "--clearance-id",
+                            "shaliach-synth",
+                            "--frontier-at-approval",
+                            "S225",
+                            "--residual-risk",
+                            "operator review needed",
+                            "--checked-protocol",
+                            "SOP",
+                            "--checked-protocol",
+                            "SJS",
+                            "--finding",
+                            "draft only",
+                        ]
+                    ),
+                    0,
+                )
+            manager = parse_manager_narrative_append_approval_sop(
+                (coordination / "manager_narrative_append_approval.sop").read_text(encoding="utf-8")
+            )
+            shaliach = parse_shaliach_narrative_append_clearance_sop(
+                (coordination / "shaliach_narrative_append_clearance.sop").read_text(encoding="utf-8")
+            )
+            self.assertEqual(manager.approved_update_count, 1)
+            self.assertIn("deterministic_draft_requires_manager_review", manager.residual_risks)
+            self.assertEqual(shaliach.checked_protocols, ("SOP", "SJS"))
+            self.assertIn("deterministic_draft_requires_shaliach_review", shaliach.findings)
+            self.assertIn("draft only", shaliach.findings)
+            self.assertIn("manager_approval_not_surface_mutation", out.getvalue())
+            self.assertIn("shaliach_clearance_not_surface_mutation", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_synthesized_shaliach_rework_from_deferred_updates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            record = NarrativeCoverageUpdateRecord(
+                update_id="update-deferred",
+                stale_check_ref="coordination/narrative_stale_check.sop",
+                narrative_surface_ref="coordination/project_narrative_surface.sop",
+                appended_updates=("append one",),
+                deferred_updates=("deferred duplicate",),
+                stale_claim_refs=(),
+            )
+            (coordination / "narrative_coverage_update_record.sop").write_text(record.to_sop(), encoding="utf-8")
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(["--project-root", str(root), "--synthesize-review-drafts"])
+            shaliach = parse_shaliach_narrative_append_clearance_sop(
+                (coordination / "shaliach_narrative_append_clearance.sop").read_text(encoding="utf-8")
+            )
+            self.assertEqual(shaliach.clearance_status, "rework_required_for_narrative_append")
+            self.assertEqual(shaliach.required_rework, ("deferred duplicate",))
+
+    def test_narrative_append_cli_synthesis_rejects_output_collision_before_writing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            (coordination / "narrative_coverage_update_record.sop").write_text(
+                self._update_record(("append one",)).to_sop(),
+                encoding="utf-8",
+            )
+            manager_out = coordination / "manager_narrative_append_approval.sop"
+            shaliach_out = coordination / "shaliach_narrative_append_clearance.sop"
+            manager_out.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_append_cli_main(["--project-root", str(root), "--synthesize-review-drafts"])
+            self.assertFalse(shaliach_out.exists())
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",

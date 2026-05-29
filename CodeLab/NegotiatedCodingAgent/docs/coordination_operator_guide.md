@@ -429,6 +429,18 @@ Write Shaliach narrative append clearance evidence:
 
 This writes `coordination/shaliach_narrative_append_clearance.sop` and does not plan or apply append.
 
+Draft both reviewed append artifacts from an update record:
+
+```powershell
+.\scripts\narrative-append.ps1 `
+  -SynthesizeReviewDrafts `
+  -FrontierAtApproval <frontier> `
+  -CheckedProtocol SOP `
+  -CheckedProtocol SJS
+```
+
+This writes Manager and Shaliach draft review artifacts. The drafts include deterministic-review caution fields and are not a replacement for live deliberation.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

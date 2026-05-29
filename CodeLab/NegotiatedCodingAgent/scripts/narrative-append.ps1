@@ -8,6 +8,7 @@ param(
   [switch]$GuardDiscovery,
   [switch]$ManagerApproval,
   [switch]$ShaliachClearance,
+  [switch]$SynthesizeReviewDrafts,
   [string]$ApprovalId = "manager-narrative-append-approval-1",
   [string]$ApprovalStatus = "approved_for_narrative_append",
   [int]$ApprovedUpdateCount = 1,
@@ -18,6 +19,8 @@ param(
   [string[]]$CheckedProtocol = @("SOP"),
   [string[]]$Finding = @(),
   [string[]]$RequiredRework = @(),
+  [string]$ManagerOut = "coordination/manager_narrative_append_approval.sop",
+  [string]$ShaliachOut = "coordination/shaliach_narrative_append_clearance.sop",
   [switch]$Apply,
   [string]$Out = ""
 )
@@ -28,7 +31,7 @@ $Python = "C:\Users\enjer\AppData\Local\Programs\Python\Python312\python.exe"
 if (-not (Test-Path $Python)) {
   $Python = "python"
 }
-if (-not $GuardDiscovery -and -not $ManagerApproval -and -not $ShaliachClearance -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
+if (-not $GuardDiscovery -and -not $ManagerApproval -and -not $ShaliachClearance -and -not $SynthesizeReviewDrafts -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
   throw "ExpectedSurfaceGuard is required for plan mode"
 }
 $env:PYTHONPATH = Join-Path $ProjectRoot "src"
@@ -76,6 +79,24 @@ if ($GuardDiscovery) {
   }
   foreach ($item in $RequiredRework) {
     $argsList += @("--required-rework", $item)
+  }
+} elseif ($SynthesizeReviewDrafts) {
+  $argsList += @(
+    "--synthesize-review-drafts",
+    "--approval-id", $ApprovalId,
+    "--clearance-id", $ClearanceId,
+    "--frontier-at-approval", $FrontierAtApproval,
+    "--manager-out", $ManagerOut,
+    "--shaliach-out", $ShaliachOut
+  )
+  foreach ($risk in $ResidualRisk) {
+    $argsList += @("--residual-risk", $risk)
+  }
+  foreach ($protocol in $CheckedProtocol) {
+    $argsList += @("--checked-protocol", $protocol)
+  }
+  foreach ($item in $Finding) {
+    $argsList += @("--finding", $item)
   }
 } else {
   $argsList += @("--expected-surface-guard", $ExpectedSurfaceGuard)

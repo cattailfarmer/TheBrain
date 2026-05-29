@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S225_review_artifact_synthesis_cli after review artifact synthesis builders
+  + [current_frontier] is S226_long_run_checkpoint_after_review_synthesis after review artifact synthesis CLI
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -738,7 +738,8 @@
   + [completed_slice] is S222_spec_audit_refresh_after_e2e_fixture
   + [completed_slice] is S223_review_artifact_synthesis_design
   + [completed_slice] is S224_review_artifact_synthesis_builders
-  + [next_recommended_slice] is S225_review_artifact_synthesis_cli
+  + [completed_slice] is S225_review_artifact_synthesis_cli
+  + [next_recommended_slice] is S226_long_run_checkpoint_after_review_synthesis
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

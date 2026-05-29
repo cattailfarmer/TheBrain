@@ -1872,3 +1872,11 @@
   + [proof_result] is tests passed with 203 tests
   + [current_frontier] is S225_review_artifact_synthesis_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S225_review_artifact_synthesis_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S225_review_artifact_synthesis_cli
+  + [implemented_capability] is scripts/narrative-append.ps1 -SynthesizeReviewDrafts writes Manager and Shaliach deterministic draft review artifacts from update records
+  + [proof_result] is tests passed with 206 tests
+  + [current_frontier] is S226_long_run_checkpoint_after_review_synthesis
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

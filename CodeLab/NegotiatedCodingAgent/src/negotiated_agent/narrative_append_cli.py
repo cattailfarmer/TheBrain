@@ -11,6 +11,8 @@ from .narrative_append import (
     narrative_surface_guard,
     parse_manager_narrative_append_approval_sop,
     parse_shaliach_narrative_append_clearance_sop,
+    synthesize_manager_narrative_append_approval,
+    synthesize_shaliach_narrative_append_clearance,
 )
 from .narrative_coverage import parse_narrative_coverage_update_sop
 
@@ -31,6 +33,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--guard-discovery", action="store_true")
     parser.add_argument("--manager-approval", action="store_true")
     parser.add_argument("--shaliach-clearance", action="store_true")
+    parser.add_argument("--synthesize-review-drafts", action="store_true")
     parser.add_argument("--approval-id", default="manager-narrative-append-approval-1")
     parser.add_argument("--approval-status", default="approved_for_narrative_append")
     parser.add_argument("--approved-update-count", type=int, default=1)
@@ -41,6 +44,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--checked-protocol", action="append", default=[])
     parser.add_argument("--finding", action="append", default=[])
     parser.add_argument("--required-rework", action="append", default=[])
+    parser.add_argument("--manager-out", type=Path, default=Path("coordination/manager_narrative_append_approval.sop"))
+    parser.add_argument("--shaliach-out", type=Path, default=Path("coordination/shaliach_narrative_append_clearance.sop"))
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--out", type=Path, default=Path("coordination/narrative_append_result.sop"))
     args = parser.parse_args(argv)
@@ -86,6 +91,37 @@ def main(argv: list[str] | None = None) -> int:
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(record.to_sop(), encoding="utf-8")
         print(record.to_sop())
+        return 0
+    if args.synthesize_review_drafts:
+        manager_out = _resolve(project_root, args.manager_out)
+        shaliach_out = _resolve(project_root, args.shaliach_out)
+        if manager_out.exists():
+            raise FileExistsError(f"{manager_out} already exists")
+        if shaliach_out.exists():
+            raise FileExistsError(f"{shaliach_out} already exists")
+        update_record = parse_narrative_coverage_update_sop(
+            _resolve(project_root, args.update_record_ref).read_text(encoding="utf-8")
+        )
+        manager_record = synthesize_manager_narrative_append_approval(
+            update_record,
+            approval_id=args.approval_id,
+            update_record_ref=_ref_text(args.update_record_ref),
+            frontier_at_approval=args.frontier_at_approval or "unknown",
+            residual_risks=tuple(args.residual_risk),
+        )
+        shaliach_record = synthesize_shaliach_narrative_append_clearance(
+            update_record,
+            clearance_id=args.clearance_id,
+            update_record_ref=_ref_text(args.update_record_ref),
+            checked_protocols=tuple(args.checked_protocol or ["SOP"]),
+            findings=tuple(args.finding),
+        )
+        manager_out.parent.mkdir(parents=True, exist_ok=True)
+        shaliach_out.parent.mkdir(parents=True, exist_ok=True)
+        manager_out.write_text(manager_record.to_sop(), encoding="utf-8")
+        shaliach_out.write_text(shaliach_record.to_sop(), encoding="utf-8")
+        print(manager_record.to_sop())
+        print(shaliach_record.to_sop())
         return 0
     if not args.expected_surface_guard:
         raise ValueError("--expected-surface-guard is required unless --guard-discovery is used")

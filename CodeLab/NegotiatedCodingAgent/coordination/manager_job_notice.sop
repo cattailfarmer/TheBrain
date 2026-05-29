@@ -3116,7 +3116,7 @@
 
 & [WorkSliceDetail S225_review_artifact_synthesis_cli] is a coordination runtime implementation slice
   + [slice_id] is S225_review_artifact_synthesis_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add narrative append CLI synthesis mode that writes Manager and Shaliach draft review artifacts from update record evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover synthesized artifact writes collision rejection caution fields and no narrative mutation
@@ -3124,3 +3124,16 @@
   + [support_status] is prepared
   + [dependency_set] is S224_review_artifact_synthesis_builders
   + [known_risks] is synthesized drafts being treated as final live review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:31:00Z, proof_ref tests passed with 206 tests, result_summary added narrative append review draft synthesis CLI mode
+  + [completed_work_review] is support_delta verified synthesis mode writes both draft artifacts with caution fields collision checks and no narrative mutation; requirement_delta next step is refresh long-run checkpoint after synthesis support
+
+& [WorkSliceDetail S226_long_run_checkpoint_after_review_synthesis] is a long-run reentry slice
+  + [slice_id] is S226_long_run_checkpoint_after_review_synthesis
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after review artifact synthesis CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records 206-test suite and review synthesis frontier
+  + [completion_criteria] is checkpoint captures review synthesis support and ready continuation
+  + [support_status] is prepared
+  + [dependency_set] is S225_review_artifact_synthesis_cli
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
