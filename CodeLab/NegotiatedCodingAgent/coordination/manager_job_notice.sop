@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 52
+  + [job_notice_revision] is 53
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -70,7 +70,8 @@
     S45_shaliach_internal_perspective_passes |
     S46_shaliach_response_perspective_trace |
     S47_shaliach_internal_perspective_docs |
-    S48_director_disagreement_ledger
+    S48_director_disagreement_ledger |
+    S49_dry_run_director_stance_diversity
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -726,7 +727,7 @@
 
 & [WorkSliceDetail S48_director_disagreement_ledger] is a Director negotiation depth slice
   + [slice_id] is S48_director_disagreement_ledger
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a disagreement ledger to layer packages that captures distinct Director concerns before Manager settlement
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing layer package includes Director disagreement or no_disagreement records
@@ -734,3 +735,16 @@
   + [support_status] is prepared
   + [dependency_set] is S44_specification_implementation_status_audit
   + [known_risks] is fabricating disagreement from weak dry-run proposals
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:20:00Z, proof_ref tests passed with 43 tests and dry-run package emitted DirectorDisagreementLedger, result_summary layer packages now include DirectorDisagreementLedger with disagreement or no-disagreement status
+  + [completed_work_review] is support_delta verified Manager package can see preserved Director diversity surface; requirement_delta dry-run Director proposals currently normalize to same content
+
+& [WorkSliceDetail S49_dry_run_director_stance_diversity] is a Director negotiation depth slice
+  + [slice_id] is S49_dry_run_director_stance_diversity
+  + [slice_status] is open
+  + [scope] is make deterministic dry-run Director outputs reflect configured role stances so disagreement ledger can be exercised in normal dry-run
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run package shows director_position records for SystemsDirector and FailureDirector
+  + [completion_criteria] is dry-run demonstrates perspective diversity without relying on live models
+  + [support_status] is prepared
+  + [dependency_set] is S48_director_disagreement_ledger
+  + [known_risks] is hard-coding fake disagreement instead of useful deterministic stance variation

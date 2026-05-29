@@ -46,6 +46,8 @@ class LayerPackage:
 
 {ledgers.to_data_design_sop()}
 
+{_director_disagreement_sop(self.proposals or [])}
+
   & [LayerJustificationGraph] is the support graph for this layer
     + [claim] is {self.layer} layer package exists
     + [support] is settled flowchart and negotiated Director proposal ledgers
@@ -69,3 +71,31 @@ class LayerPackage:
 def _indent_block(text: str, spaces: int) -> str:
     prefix = " " * spaces
     return "\n".join(f"{prefix}{line}" if line else prefix for line in text.splitlines())
+
+
+def _director_disagreement_sop(proposals: list[tuple[str, str]]) -> str:
+    lines = ["  & [DirectorDisagreementLedger] is the preserved disagreement and diversity surface before Manager settlement"]
+    if len(proposals) < 2:
+        lines.append("    + [status] is no_disagreement_detected")
+        lines.append("    + [reason] is fewer than two Director proposals were available")
+        return "\n".join(lines)
+
+    normalized = {_normalize_proposal(text) for _, text in proposals}
+    if len(normalized) == 1:
+        lines.append("    + [status] is no_disagreement_detected")
+        lines.append("    + [reason] is Director proposals normalized to the same content")
+        return "\n".join(lines)
+
+    lines.append("    + [status] is disagreement_or_perspective_diversity_present")
+    lines.append("    + [manager_obligation] is preserve or explicitly settle distinct Director concerns before descent")
+    for name, text in proposals:
+        lines.append(f"    + [director_position {name}] is {_summary_line(text)}")
+    return "\n".join(lines)
+
+
+def _normalize_proposal(text: str) -> str:
+    return " ".join(text.lower().split())
+
+
+def _summary_line(text: str) -> str:
+    return " ".join(text.split())[:180] if text else "empty_proposal"

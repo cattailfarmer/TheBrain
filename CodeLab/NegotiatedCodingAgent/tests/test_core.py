@@ -226,6 +226,21 @@ class LayerPackageTests(unittest.TestCase):
         self.assertNotIn("scaffold requirement extraction pending", package)
         self.assertIn("ShaliachFinding", package)
 
+    def test_layer_package_preserves_director_disagreement_ledger(self) -> None:
+        package = LayerPackage(
+            layer="application",
+            flowchart="# Application Flowchart",
+            parent_ref="objective",
+            proposals=[
+                ("SystemsDirector", "Prefer evented coordination with explicit mailbox handoff."),
+                ("FailureDirector", "Risk: evented coordination can hide claim conflicts."),
+            ],
+        ).to_sop()
+        self.assertIn("DirectorDisagreementLedger", package)
+        self.assertIn("disagreement_or_perspective_diversity_present", package)
+        self.assertIn("director_position SystemsDirector", package)
+        self.assertIn("director_position FailureDirector", package)
+
 
 class WorkSliceTests(unittest.TestCase):
     def test_initial_work_slice_references_code_package(self) -> None:
