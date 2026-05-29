@@ -198,6 +198,8 @@ The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packe
 
 Operator commands for these helpers are documented in `docs/coordination_operator_guide.md`.
 
+`coordination/worker_runner_design.sop` defines the next coordination runtime boundary. A future worker runner must write lease, cycle, pause, and failure records around mailbox claims, preserve Manager frontier authority, honor Shaliach pause conditions, and treat claims as evidence rather than trusted distributed locks.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

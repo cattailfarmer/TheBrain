@@ -1,0 +1,92 @@
+& [WorkerRunnerDesign] is the design contract for a future mailbox-governed autonomous worker runner
+  @ [source_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [created_at] 2026-05-29T17:05:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is worker_runner_design_not_scheduler_execution
+  + [primary_goal] is let a worker conversation consume mailbox work without losing Manager frontier control, Shaliach pause authority, or append-only evidence
+  + [non_goal] is preemptive process scheduling
+  + [non_goal] is trusted distributed locking
+  + [non_goal] is automatic target-workspace mutation
+
+& [WorkerRunnerInputContract] is what a future runner must receive
+  + [project_root] is C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent
+  + [worker_uuid] is the conversation UUID or stable worker identity claiming work
+  + [mailbox_uuid] is the mailbox to inspect, usually director_pool or a Manager-selected worker mailbox
+  + [max_claims_per_cycle] is bounded by operator or Manager configuration
+  + [checkpoint_cadence] is after claim, after execution attempt, after tests, after artifact publication, and before exit
+  + [authority_boundary] is input_contract_not_work_authorization
+
+& [WorkerRunnerLifecycle] is the expected one-cycle flow
+  + [step_1] is load active conversation surface, manager job notice, project narrative surface, and specification implementation status
+  + [step_2] is list unread mailbox messages for mailbox_uuid
+  + [step_3] is claim at most max_claims_per_cycle messages using worker_uuid
+  + [step_4] is write WorkerLeaseRecord for each claimed message before executing work
+  + [step_5] is skip or pause on claim conflict, Shaliach pause signal, stale frontier, or dirty foreign work
+  + [step_6] is execute the bounded work slice named by the claimed message or Manager frontier
+  + [step_7] is run proof commands selected by the slice proof_route
+  + [step_8] is write WorkerCycleRecord with outcome, proof refs, changed files, commit refs when present, and next requested frontier
+  + [step_9] is advance read cursor only after WorkerCycleRecord is written
+  + [step_10] is publish rendezvous packet or completion message back to Manager mailbox when the cycle completes
+
+& [WorkerLeaseRecord] is the non-lock ownership evidence for a claimed mailbox message
+  + [artifact_name] is coordination/workers/<worker_uuid>/leases/<claim_id>.sop
+  + [lease_status] is active, released, completed, expired, or conflict
+  + [claim_ref] is coordination/mailbox/<mailbox_uuid>/claims.sop#<claim_id>
+  + [message_ref] is coordination/mailbox/<mailbox_uuid>/inbox.sop#<message_id>
+  + [started_at] is required
+  + [expires_at] is required
+  + [frontier_at_claim] is required
+  + [authority_boundary] is worker_lease_record_not_scheduler_lock
+  = must: preserve existing mailbox claim semantics as append-only evidence
+  = must: treat expired or conflicting leases as Manager/Shaliach review inputs, not as automatic overwrite permission
+
+& [WorkerCycleRecord] is the durable outcome evidence for one runner cycle
+  + [artifact_name] is coordination/workers/<worker_uuid>/cycles/<timestamp>.sop
+  + [cycle_status] is completed, blocked, paused_by_shaliach, conflict, failed_proof, or needs_manager_review
+  + [claim_ref_set] is required
+  + [slice_ref] is manager_job_notice.sop#WorkSliceDetail or mailbox message subject
+  + [proof_ref_set] is tests, dry-run, manifest validation, route draft, or slice-specific proof artifacts
+  + [changed_file_set] is required even when none
+  + [commit_ref] is optional
+  + [manager_frontier_request] is optional
+  + [shaliach_finding_ref] is optional
+  + [authority_boundary] is worker_cycle_record_not_manager_approval
+
+& [ShaliachControlGate] is how the future runner must honor protocol counsel
+  + [pause_condition] is Shaliach finding status pause_required
+  + [pause_condition] is Shaliach response action pause
+  + [pause_condition] is thin ledger evidence on claimed work whose slice requires SJS or DataDesign support
+  + [pause_condition] is target workspace mutation requested without explicit operator acknowledgement artifacts
+  + [required_artifact] is WorkerCycleRecord with cycle_status paused_by_shaliach
+  + [required_followup] is publish rework_notice or manager_review_requested message
+  - never: continue implementation after a Shaliach pause without a later Manager override artifact
+
+& [ManagerControlGate] is how the future runner must preserve frontier authority
+  + [must_check] is active conversation current_frontier before claim execution
+  + [must_check] is manager_job_notice slice_status and dependency_set
+  + [must_check] is dirty worktree attribution
+  + [must_check] is proof_route for the selected slice
+  + [required_artifact] is WorkerCycleRecord with manager_frontier_request when the worker proposes a next slice
+  - never: mark a slice completed only because a mailbox claim was completed
+  - never: advance current_frontier without updating conversation surface and manager job notice
+
+& [FailureRecoveryContract] is how failed or interrupted workers become recoverable
+  + [failure_artifact] is coordination/workers/<worker_uuid>/failures/<timestamp>.sop
+  + [recorded_field] is failure_status
+  + [recorded_field] is command_returncode
+  + [recorded_field] is stdout_tail
+  + [recorded_field] is stderr_tail
+  + [recorded_field] is dirty_worktree_summary
+  + [recorded_field] is safe_resume_action
+  + [recorded_field] is escalation_recipient
+  + [authority_boundary] is failure_record_not_automatic_repair
+  = must: leave enough evidence for another conversation to resume without guessing
+
+& [ImplementationSliceRecommendation] is the next safe implementation split
+  + [slice_1] is add WorkerLeaseRecord and WorkerCycleRecord dataclasses plus SOP serialization tests
+  + [slice_2] is add non-mutating worker-runner preview CLI that lists unread messages and drafts proposed leases without claiming
+  + [slice_3] is add explicit claim-and-record CLI with bounded max_claims_per_cycle
+  + [slice_4] is add proof command runner only after lease/cycle artifacts are tested

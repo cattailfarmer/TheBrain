@@ -849,6 +849,14 @@
   + [narrative_role] is long_run_coordination and proof_arc update
 
 
+& [LongRunNarrativeUpdate S117_worker_runner_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S117_worker_runner_design
+  + [implemented_capability] is coordination/worker_runner_design.sop defines future worker leases, cycle records, Shaliach pause gates, Manager frontier checks, and failure recovery evidence
+  + [proof_result] is design artifact plus architecture and operator guide updates
+  + [current_frontier] is S118_worker_lifecycle_records
+  + [narrative_role] is long_run_coordination and coordination_runtime_arc update
+
+
 & [RunNarrativeUpdate 20260529T165246Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T165246Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat

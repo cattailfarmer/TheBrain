@@ -143,6 +143,18 @@ List claim state:
 
 Claims are append-only coordination evidence. Conflicts are visible in claim output and conflict-signal messages, but claims are not scheduler locks.
 
+## Worker Runner Boundary
+
+The future worker runner is designed in `coordination/worker_runner_design.sop`. Until its record types and CLI exist, use mailbox claims manually and keep Manager/frontier updates explicit.
+
+A real worker cycle must leave more evidence than a claim:
+
+- `WorkerLeaseRecord`: temporary ownership evidence for a claim, with expiration and frontier-at-claim.
+- `WorkerCycleRecord`: outcome, proof refs, changed files, and requested next frontier.
+- failure record: command failure, dirty worktree summary, and safe resume action.
+
+The runner must pause on Shaliach pause conditions, claim conflicts, stale frontiers, and unknown dirty work. A claim alone never authorizes code edits, target workspace mutation, or frontier advancement.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

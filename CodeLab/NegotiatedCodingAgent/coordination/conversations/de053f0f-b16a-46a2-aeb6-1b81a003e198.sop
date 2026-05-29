@@ -464,9 +464,10 @@
   + [completed_slice] is S114_post_apply_acceptance_records
   + [completed_slice] is S115_post_apply_acceptance_cli_integration
   + [completed_slice] is S116_long_run_checkpoint_after_post_apply_acceptance
+  + [completed_slice] is S117_worker_runner_design
 
-  + [current_frontier] is S117_worker_runner_design after post-apply acceptance checkpoint
-  + [next_recommended_slice] is S117_worker_runner_design
+  + [current_frontier] is S118_worker_lifecycle_records after worker runner design
+  + [next_recommended_slice] is S118_worker_lifecycle_records
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
