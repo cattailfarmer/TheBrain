@@ -40,6 +40,14 @@
   + [last_proof] is dry-run wrote protocol_activation.sop in runs\20260529T113929Z
   + [last_proof] is run narrative update written for runs\20260529T114243Z
   + [last_proof] is dry-run wrote four layer Shaliach finding artifacts in runs\20260529T114243Z
+  + [last_proof] is run 20260529T114455Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T114455Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T114455Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T114455Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T114455Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T114455Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T114455Z
+  + [last_proof] is dry-run updated conversation surface lifecycle proofs for runs\20260529T114455Z
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -55,12 +63,13 @@
   + [completed_slice] is S10_shaliach_faculty_runtime
   + [completed_slice] is S10A_orchestrator_protocol_activation_artifacts
   + [completed_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [completed_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [completed_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [completed_slice] is S12_project_narrative_surface_runtime_update
   + [completed_slice] is S12_project_narrative_surface_seed
 
-  + [current_frontier] is S10C_conversation_surface_run_lifecycle_updates after separate Shaliach finding artifacts
-  + [next_recommended_slice] is S10C_conversation_surface_run_lifecycle_updates from coordination/refined_project_plan.sop
+  + [current_frontier] is S14_file_change_surface after conversation lifecycle surface updates
+  + [next_recommended_slice] is S14_file_change_surface from coordination/refined_project_plan.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers
@@ -68,11 +77,11 @@
   + [unresolved_item] is ProjectNarrativeSurface has a seed surface, but not yet an executable CodeLab subsystem with citations, stale checks, or generated coverage updates
   + [unresolved_item] is vLLM WSL2 backend is not installed or verified
   + [unresolved_item] is workspace-write policy remains isolated to run implementation directories
-  + [unresolved_item] is runtime conversation kernel can load and update conversation surfaces, but orchestrator does not yet call it automatically during runs
+  + [unresolved_item] is runtime conversation kernel can load and update conversation surfaces, and orchestrator now calls it during normal run lifecycle
   + [unresolved_item] is protocol registry records SOP activation references and authority boundary, and run artifacts now include protocol activation sets
   + [unresolved_item] is automatic narrative updates append completed run summaries, but narrative coverage and stale-check recomputation remain future work
   + [unresolved_item] is Shaliach faculty runtime is active in scaffold form, but deeper model-negotiated internal perspectives remain future work
-  + [unresolved_item] is Shaliach findings are now written as separate layer artifacts, but active conversation lifecycle updates remain too coarse
+  + [unresolved_item] is conversation lifecycle updates now cover start, layer approval, implementation, and completion, but blocked/failure lifecycle recovery remains future work
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 16
+  + [job_notice_revision] is 17
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -193,14 +193,16 @@
 
 & [WorkSliceDetail S10C_conversation_surface_run_lifecycle_updates] is a planned child slice
   + [slice_id] is S10C_conversation_surface_run_lifecycle_updates
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is update the active conversation surface at run start, layer approval, implementation write, and run completion
   + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
   + [proof_route] is tests and dry-run show current_frontier, proof ledger, and unresolved items update during lifecycle events
   + [completion_criteria] is long-run reentry can tell whether the run was starting, negotiating, implementing, reviewing, completed, or blocked
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S08_runtime_conversation_kernel, S10_shaliach_faculty_runtime
   + [known_risks] is noisy surface churn that hides the useful frontier
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T12:00:00Z, proof_ref tests passed with 20 tests and dry-run wrote lifecycle proofs for runs/20260529T114455Z, result_summary orchestrator updates active conversation surface at run start, layer approval, implementation write, and run completion
+  + [completed_work_review] is support_delta verified reentry surface can identify completed run lifecycle progress; requirement_delta blocked and failure recovery lifecycle details remain future work
 
 & [WorkSliceDetail S11_negotiated_sjs_datadesign_ledgers] is a planned dependency slice
   + [slice_id] is S11_negotiated_sjs_datadesign_ledgers

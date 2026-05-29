@@ -48,6 +48,11 @@ class NegotiatedCodingAgent:
                 framework_root=framework_root,
             ),
         )
+        self._update_conversation_surface(
+            run_root,
+            current_frontier=f"run {run_root.name} started with protocol activation",
+            proofs=[f"run {run_root.name} started and wrote protocol_activation.sop"],
+        )
 
         for layer in self.config.negotiation.layers:
             settled, proposals = self._negotiate_layer(layer, objective, parent_flowchart, run_root)
@@ -110,6 +115,11 @@ class NegotiatedCodingAgent:
                 raise RuntimeError(f"Shaliach paused {layer} layer: {shaliach_finding.reason}")
             if not decision.approved:
                 raise RuntimeError(f"Manager rejected {layer} layer: {decision.reason}")
+            self._update_conversation_surface(
+                run_root,
+                current_frontier=f"run {run_root.name} approved {layer} layer",
+                proofs=[f"run {run_root.name} approved {layer} layer with {shaliach_finding_ref}"],
+            )
             parent_flowchart = settled
             parent_package_ref = f"{layer}.package.sop"
 
@@ -136,6 +146,11 @@ class NegotiatedCodingAgent:
                 "event": "implementation_written",
                 "files": [str(path.relative_to(run_root)) for path in written],
             },
+        )
+        self._update_conversation_surface(
+            run_root,
+            current_frontier=f"run {run_root.name} wrote implementation",
+            proofs=[f"run {run_root.name} wrote implementation files"],
         )
         self._write_run_narrative_update(run_root, objective, flowcharts, written)
         return run_root
@@ -200,6 +215,29 @@ class NegotiatedCodingAgent:
         with (run_root / "negotiation_log.jsonl").open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event, ensure_ascii=True) + "\n")
 
+    def _update_conversation_surface(
+        self,
+        run_root: Path,
+        *,
+        current_frontier: str,
+        proofs: list[str],
+    ) -> None:
+        try:
+            update_active_conversation_surface(
+                self.project_root,
+                set_fields={"current_frontier": current_frontier},
+                proofs=proofs,
+            )
+        except (FileNotFoundError, KeyError, ValueError):
+            self._log(
+                run_root,
+                {
+                    "event": "conversation_surface_update_skipped",
+                    "frontier": current_frontier,
+                    "reason": "active conversation surface unavailable or malformed",
+                },
+            )
+
     def _write_run_narrative_update(
         self,
         run_root: Path,
@@ -225,20 +263,11 @@ class NegotiatedCodingAgent:
 """
         with narrative_path.open("a", encoding="utf-8") as handle:
             handle.write(update)
-        try:
-            update_active_conversation_surface(
-                self.project_root,
-                set_fields={"current_frontier": "run narrative updated after NegotiatedCodingAgent execution"},
-                proofs=[f"run narrative update written for {rel_run}"],
-            )
-        except (FileNotFoundError, KeyError, ValueError):
-            self._log(
-                run_root,
-                {
-                    "event": "conversation_surface_update_skipped",
-                    "reason": "active conversation surface unavailable or malformed",
-                },
-            )
+        self._update_conversation_surface(
+            run_root,
+            current_frontier=f"run {run_root.name} completed and narrative updated",
+            proofs=[f"run narrative update written for {rel_run}"],
+        )
 
 
 def _sop_field_value(value: str, *, limit: int) -> str:
