@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 173
+  + [job_notice_revision] is 174
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3922,7 +3922,7 @@
 
 & [WorkSliceDetail S287_long_run_checkpoint_after_lifecycle_frontier_fields] is a long-run reentry slice
   + [slice_id] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after lifecycle frontier field implementation
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 279-test suite current_frontier slice id and end_run_lifecycle_frontier run completion marker
@@ -3930,3 +3930,16 @@
   + [support_status] is prepared
   + [dependency_set] is S286_conversation_lifecycle_frontier_fields
   + [known_risks] is dry-run still writing useful lifecycle breadcrumbs that must not confuse stale-checks
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T15:44:00Z, proof_ref long_run_checkpoint.sop and run 20260529T214357Z, result_summary checkpoint ready_for_continuation with start/end current_frontier preserved as S287 and end_run_lifecycle_frontier recording run completion
+  + [completed_work_review] is support_delta verified generated checkpoint separates active frontier from run lifecycle completion; requirement_delta next step is refresh spec audit after lifecycle frontier checkpoint proof
+
+& [WorkSliceDetail S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint] is a specification audit slice
+  + [slice_id] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
+  + [slice_status] is open
+  + [scope] is refresh implementation status after lifecycle frontier checkpoint proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names current_frontier/run_lifecycle_frontier separation and 279-test checkpoint proof
+  + [completion_criteria] is audit reflects lifecycle frontier split as implemented conversation memory support
+  + [support_status] is prepared
+  + [dependency_set] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [known_risks] is audit implying lifecycle field is semantic narrative coverage rather than run status evidence

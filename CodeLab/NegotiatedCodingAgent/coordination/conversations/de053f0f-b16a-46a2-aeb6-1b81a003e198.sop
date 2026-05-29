@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [current_frontier] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -969,7 +969,17 @@
   + [last_proof] is conversation_frontier_lifecycle_boundary_design.sop separates active current_frontier from run_lifecycle_frontier
   + [completed_slice] is S286_conversation_lifecycle_frontier_fields
   + [last_proof] is tests passed with 279 tests after orchestrator lifecycle updates moved to run_lifecycle_frontier and checkpoint gained end_run_lifecycle_frontier
-  + [next_recommended_slice] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [last_proof] is run 20260529T214357Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T214357Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T214357Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T214357Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T214357Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T214357Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T214357Z
+  + [last_proof] is run 20260529T214357Z wrote run_manifest.sop
+  + [completed_slice] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [last_proof] is long-run checkpoint passed 279 tests with current_frontier preserved as slice id and end_run_lifecycle_frontier recording run completion
+  + [next_recommended_slice] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
@@ -1005,3 +1015,4 @@
     = must: inspect git status before editing
     = must: avoid reverting foreign or unknown work
     = must: update this conversation surface after meaningful frontier, proof, commit, or blocker changes
+  + [run_lifecycle_frontier] is run 20260529T214357Z completed and narrative updated with artifact manifest
