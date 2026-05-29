@@ -293,6 +293,14 @@
   + [last_proof] is run 20260529T160930Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T160930Z
   + [last_proof] is run 20260529T160930Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T161134Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T161134Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T161134Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T161134Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T161134Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T161134Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T161134Z
+  + [last_proof] is run 20260529T161134Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -394,9 +402,10 @@
   + [completed_slice] is S92_long_run_checkpoint_after_route_draft
   + [completed_slice] is S93_long_run_harness_route_draft_check
   + [completed_slice] is S94_long_run_harness_route_draft_docs
+  + [completed_slice] is S95_long_run_checkpoint_after_route_draft_harness
 
-  + [current_frontier] is S95_long_run_checkpoint_after_route_draft_harness after route draft harness docs
-  + [next_recommended_slice] is S95_long_run_checkpoint_after_route_draft_harness
+  + [current_frontier] is S96_operator_approved_apply_mutation_design after route draft harness checkpoint
+  + [next_recommended_slice] is S96_operator_approved_apply_mutation_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

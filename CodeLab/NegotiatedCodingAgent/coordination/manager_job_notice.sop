@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 99
+  + [job_notice_revision] is 100
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -117,7 +117,8 @@
     S92_long_run_checkpoint_after_route_draft |
     S93_long_run_harness_route_draft_check |
     S94_long_run_harness_route_draft_docs |
-    S95_long_run_checkpoint_after_route_draft_harness
+    S95_long_run_checkpoint_after_route_draft_harness |
+    S96_operator_approved_apply_mutation_design
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1384,7 +1385,7 @@
 
 & [WorkSliceDetail S95_long_run_checkpoint_after_route_draft_harness] is a long-run reentry slice
   + [slice_id] is S95_long_run_checkpoint_after_route_draft_harness
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after route_draft_status harness documentation
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint with route_draft_status after docs
@@ -1392,3 +1393,16 @@
   + [support_status] is prepared
   + [dependency_set] is S94_long_run_harness_route_draft_docs
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:11:52Z, proof_ref long-run checkpoint passed tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after route_draft_status docs with clean git state before run
+  + [completed_work_review] is support_delta verified long-run harness route draft proof is stable; requirement_delta next core gap is explicit operator-approved target workspace apply mutation design
+
+& [WorkSliceDetail S96_operator_approved_apply_mutation_design] is an apply pipeline design slice
+  + [slice_id] is S96_operator_approved_apply_mutation_design
+  + [slice_status] is open
+  + [scope] is design the future mutation-capable apply command with rollback, verification, Manager acceptance, and Shaliach gates
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP created and tests remain passing
+  + [completion_criteria] is mutation design names required acknowledgements, preflight gates, write plan, rollback evidence, verification, and post-apply reviews without implementing mutation yet
+  + [support_status] is prepared
+  + [dependency_set] is S95_long_run_checkpoint_after_route_draft_harness
+  + [known_risks] is accidentally enabling workspace mutation before design gates are explicit
