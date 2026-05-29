@@ -391,7 +391,8 @@
   + [completed_slice] is S282_long_run_checkpoint_after_prelive_recipe_reference
   + [completed_slice] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
   + [completed_slice] is S284_narrative_coverage_after_prelive_recipe_reference
-  + [ready_slice] is S285_conversation_frontier_lifecycle_boundary
+  + [completed_slice] is S285_conversation_frontier_lifecycle_boundary
+  + [ready_slice] is S286_conversation_lifecycle_frontier_fields
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

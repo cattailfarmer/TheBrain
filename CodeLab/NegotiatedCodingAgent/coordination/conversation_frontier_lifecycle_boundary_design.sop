@@ -1,0 +1,36 @@
+& [ConversationFrontierLifecycleBoundaryDesign] is the design boundary for active work frontier versus run lifecycle status
+  @ [created_at] 2026-05-30T15:02:00Z
+  @ [triggering_slice] S284_narrative_coverage_after_prelive_recipe_reference
+  @ [related_file] src/negotiated_agent/orchestrator.py
+  @ [related_file] src/negotiated_agent/conversation.py
+  @ [related_evidence] coordination/narrative_stale_check.sop
+
+  + [problem] is orchestrator run lifecycle updates currently write transient run status phrases into current_frontier
+  + [problem] is narrative stale-check treats current_frontier as the active work-slice frontier and can therefore request narrative updates for run completion phrases
+  + [decision] is current_frontier must remain the active work-slice frontier or explicit frontier advancement target
+  + [decision] is run lifecycle state should be recorded in run_lifecycle_frontier and last_proof fields instead
+  + [decision] is long-run checkpoint may read end_run_lifecycle_frontier separately from current_frontier when it wants to summarize a just-completed dry run
+  + [authority_boundary] is lifecycle_status_not_work_frontier
+
+& [FieldSemantics] is the target conversation surface vocabulary
+  + [field] is current_frontier
+  + [meaning] is the current slice/frontier that future Codex work should resume from
+  + [writer] is Manager notice updates, frontier application helpers, or explicit operator/agent frontier advancement
+  + [non_writer] is ordinary dry-run lifecycle events
+
+  + [field] is run_lifecycle_frontier
+  + [meaning] is the latest transient NegotiatedCodingAgent run milestone such as run started approved layer wrote implementation or completed
+  + [writer] is orchestrator run lifecycle updates
+  + [reader] is checkpoint and narrative proof tools that need run status context
+
+& [ImplementationDirection] is the next safe code slice
+  + [slice] is replace orchestrator conversation updates so run lifecycle calls write run_lifecycle_frontier while preserving last_proof
+  + [slice] is update long-run checkpoint end frontier naming so it can report end_run_lifecycle_frontier without overwriting active current_frontier semantics
+  + [slice] is update tests that currently expect completed run text in current_frontier
+  + [slice] is keep blocked run repair breadcrumbs as run_lifecycle_frontier unless a separate explicit frontier advancement is written
+
+& [AcceptanceCriteria] is how to prove the boundary
+  + [criterion] is dry-run lifecycle update leaves current_frontier unchanged when it starts from a slice id
+  + [criterion] is dry-run lifecycle update writes run_lifecycle_frontier with the run status phrase
+  + [criterion] is narrative stale-check reads current_frontier as a slice id and does not request updates for run lifecycle phrases
+  + [criterion] is checkpoint records run lifecycle status separately from active work frontier

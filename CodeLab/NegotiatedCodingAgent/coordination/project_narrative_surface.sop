@@ -2478,3 +2478,11 @@
   + [proof_ref] is coordination/narrative_coverage_report.sop, coordination/narrative_stale_check.sop, coordination/narrative_coverage_update_record.sop
   + [current_frontier] is S285_conversation_frontier_lifecycle_boundary
   + [narrative_role] is narrative_memory and conversation_frontier update
+
+
+& [LongRunNarrativeUpdate S285_conversation_frontier_lifecycle_boundary] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S285_conversation_frontier_lifecycle_boundary
+  + [implemented_capability] is conversation_frontier_lifecycle_boundary_design.sop defines current_frontier as resumable work frontier and run_lifecycle_frontier as transient run status
+  + [proof_ref] is coordination/conversation_frontier_lifecycle_boundary_design.sop
+  + [current_frontier] is S286_conversation_lifecycle_frontier_fields
+  + [narrative_role] is conversation_memory and lifecycle_boundary update

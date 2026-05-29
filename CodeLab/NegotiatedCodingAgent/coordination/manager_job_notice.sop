@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 171
+  + [job_notice_revision] is 172
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3896,7 +3896,7 @@
 
 & [WorkSliceDetail S285_conversation_frontier_lifecycle_boundary] is a conversation memory design slice
   + [slice_id] is S285_conversation_frontier_lifecycle_boundary
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is define how run lifecycle frontier markers differ from active work-slice current_frontier
   + [target_files] is coordination/**, src/negotiated_agent/**
   + [proof_route] is design names lifecycle marker fields and prevents stale-check confusion between run completion text and work frontier
@@ -3904,3 +3904,16 @@
   + [support_status] is prepared
   + [dependency_set] is S284_narrative_coverage_after_prelive_recipe_reference
   + [known_risks] is losing useful run lifecycle breadcrumbs while cleaning current_frontier semantics
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T15:02:00Z, proof_ref conversation_frontier_lifecycle_boundary_design.sop and tests passed with 278 tests, result_summary designed current_frontier versus run_lifecycle_frontier separation
+  + [completed_work_review] is support_delta verified design preserves lifecycle breadcrumbs while keeping current_frontier as the resumable slice frontier; requirement_delta next step is implement lifecycle frontier fields in conversation updates and checkpoint summary
+
+& [WorkSliceDetail S286_conversation_lifecycle_frontier_fields] is a conversation memory implementation slice
+  + [slice_id] is S286_conversation_lifecycle_frontier_fields
+  + [slice_status] is open
+  + [scope] is implement run_lifecycle_frontier fields for orchestrator updates and checkpoint summaries
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests prove dry-run lifecycle updates preserve current_frontier and write run_lifecycle_frontier
+  + [completion_criteria] is run lifecycle milestones no longer overwrite active work-slice current_frontier
+  + [support_status] is prepared
+  + [dependency_set] is S285_conversation_frontier_lifecycle_boundary
+  + [known_risks] is tests and checkpoint readers relying on completed run text in current_frontier
