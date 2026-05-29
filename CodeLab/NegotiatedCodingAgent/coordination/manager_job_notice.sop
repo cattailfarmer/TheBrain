@@ -2206,7 +2206,7 @@
 
 & [WorkSliceDetail S155_handoff_aware_proof_runner_helper] is a coordination runtime implementation slice
   + [slice_id] is S155_handoff_aware_proof_runner_helper
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ManagerProofHandoffRecord loader and handoff-aware proof runner helper
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover approved handoff command success failed proof command mismatch non-ready cycle and proof refs
@@ -2214,3 +2214,16 @@
   + [support_status] is prepared
   + [dependency_set] is S154_handoff_aware_proof_runner_design
   + [known_risks] is helper becoming an autonomous command selector
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:18:00Z, proof_ref tests passed with 116 tests, result_summary added ManagerProofHandoffRecord loader and handoff-aware proof runner helper
+  + [completed_work_review] is support_delta verified helper carries ready-cycle handoff and gate refs into proof result cycle and failed proofs write failure records; requirement_delta next step is explicit CLI mode to consume approved handoff refs
+
+& [WorkSliceDetail S156_handoff_aware_proof_runner_cli] is a coordination runtime implementation slice
+  + [slice_id] is S156_handoff_aware_proof_runner_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI mode and wrapper support to consume an approved ManagerProofHandoffRecord into proof result cycle evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover successful handoff proof failed handoff proof frontier mismatch and no cursor or frontier mutation
+  + [completion_criteria] is operators can consume approved proof handoff refs without selecting arbitrary commands
+  + [support_status] is prepared
+  + [dependency_set] is S155_handoff_aware_proof_runner_helper
+  + [known_risks] is CLI becoming a hidden autonomous worker loop

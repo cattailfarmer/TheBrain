@@ -9,7 +9,13 @@ from uuid import NAMESPACE_URL, uuid5
 from .conversation import ConversationSurface
 from .execution_gate import ExecutionGateDecision
 from .mailbox import MailboxClaim, MailboxMessage, claim_message, list_unread
-from .worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
+from .worker_lifecycle import (
+    ManagerProofHandoffRecord,
+    WorkerCycleRecord,
+    WorkerFailureRecord,
+    WorkerLeaseRecord,
+    validate_manager_proof_handoff,
+)
 
 
 @dataclass(frozen=True)
@@ -157,6 +163,7 @@ def run_worker_proof_command(
     claim_refs: tuple[str, ...] = (),
     slice_ref: str = "none",
     changed_files: tuple[str, ...] = (),
+    extra_proof_refs: tuple[str, ...] = (),
     timeout_seconds: int = 180,
 ) -> WorkerCycleRecord:
     run_cwd = cwd or project_root
@@ -184,12 +191,48 @@ def run_worker_proof_command(
         cycle_status=status,
         claim_refs=claim_refs,
         slice_ref=slice_ref,
-        proof_refs=(proof_ref,),
+        proof_refs=extra_proof_refs + (proof_ref,),
         changed_files=changed_files,
         failure_ref=failure_ref,
     )
     write_worker_cycle_record(project_root, record)
     return record
+
+
+def run_proof_handoff_command(
+    project_root: Path,
+    *,
+    worker_uuid: str,
+    handoff: ManagerProofHandoffRecord,
+    ready_cycle: WorkerCycleRecord,
+    handoff_ref: str,
+    current_frontier: str,
+    cycle_id: str | None = None,
+    cwd: Path | None = None,
+    timeout_seconds: int = 180,
+) -> WorkerCycleRecord:
+    ok, reason = validate_manager_proof_handoff(
+        handoff=handoff,
+        ready_cycle=ready_cycle,
+        requested_command=handoff.proof_command,
+        current_frontier=current_frontier,
+    )
+    if not ok:
+        raise ValueError(reason)
+    if handoff.worker_uuid != worker_uuid:
+        raise ValueError("worker_mismatch")
+    return run_worker_proof_command(
+        project_root,
+        worker_uuid=worker_uuid,
+        command=handoff.proof_command,
+        cwd=cwd,
+        cycle_id=cycle_id,
+        claim_refs=ready_cycle.claim_refs,
+        slice_ref=ready_cycle.slice_ref,
+        changed_files=(),
+        extra_proof_refs=(handoff.ready_cycle_ref, handoff_ref, handoff.execution_gate_ref),
+        timeout_seconds=timeout_seconds,
+    )
 
 
 def _lease_for_message(

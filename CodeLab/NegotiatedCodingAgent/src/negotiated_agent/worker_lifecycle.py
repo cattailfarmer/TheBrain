@@ -164,6 +164,21 @@ def load_worker_cycle_record(path: Path) -> WorkerCycleRecord:
     )
 
 
+def load_manager_proof_handoff(path: Path) -> ManagerProofHandoffRecord:
+    fields = _read_fields(path)
+    return ManagerProofHandoffRecord(
+        handoff_id=fields["handoff_id"],
+        handoff_status=fields["handoff_status"],
+        worker_uuid=fields["worker_uuid"],
+        ready_cycle_ref=fields["ready_cycle_ref"],
+        execution_gate_ref=fields["execution_gate_ref"],
+        proof_command=fields["proof_command"],
+        proof_route=fields["proof_route"],
+        frontier_at_handoff=fields["frontier_at_handoff"],
+        expires_at=fields["expires_at"],
+    )
+
+
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
 

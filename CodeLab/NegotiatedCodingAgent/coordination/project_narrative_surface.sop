@@ -1228,3 +1228,11 @@
   + [implemented_capability] is handoff_aware_proof_runner_design.sop defines approved handoff consumption into proof result cycles without frontier or cursor mutation
   + [current_frontier] is S155_handoff_aware_proof_runner_helper
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S155_handoff_aware_proof_runner_helper] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S155_handoff_aware_proof_runner_helper
+  + [implemented_capability] is run_proof_handoff_command consumes approved ManagerProofHandoffRecord evidence into proof result cycles through the existing proof-command runner
+  + [proof_result] is tests passed with 116 tests
+  + [current_frontier] is S156_handoff_aware_proof_runner_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

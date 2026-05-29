@@ -84,12 +84,14 @@ from negotiated_agent.worker_lifecycle import (
     WorkerCycleRecord,
     WorkerFailureRecord,
     WorkerLeaseRecord,
+    load_manager_proof_handoff,
     validate_manager_proof_handoff,
 )
 from negotiated_agent.worker_runner import (
     build_worker_cycle_from_gate_decision,
     build_worker_runner_preview,
     claim_and_record_worker_leases,
+    run_proof_handoff_command,
     run_worker_proof_command,
     write_worker_cycle_record,
 )
@@ -2338,6 +2340,105 @@ class MailboxCoordinationTests(unittest.TestCase):
             with contextlib.redirect_stdout(collision):
                 self.assertEqual(worker_runner_cli_main(args), 1)
             self.assertIn("already exists", collision.getvalue())
+
+    def test_load_manager_proof_handoff_parses_persisted_record(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            handoff = ManagerProofHandoffRecord(
+                handoff_id="handoff-1",
+                handoff_status="approved",
+                worker_uuid="worker-a",
+                ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+                execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                proof_command="cmd /c exit 0",
+                proof_route="cmd /c exit 0",
+                frontier_at_handoff="S155_handoff_aware_proof_runner_helper",
+                expires_at="2026-05-29T22:20:00Z",
+            )
+            path = root / "handoff.sop"
+            path.write_text(handoff.to_sop(), encoding="utf-8")
+            self.assertEqual(load_manager_proof_handoff(path), handoff)
+
+    def test_run_proof_handoff_command_writes_completed_cycle_with_handoff_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S155",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            handoff = ManagerProofHandoffRecord(
+                handoff_id="handoff-1",
+                handoff_status="approved",
+                worker_uuid="worker-a",
+                ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+                execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                proof_command="cmd /c exit 0",
+                proof_route="cmd /c exit 0",
+                frontier_at_handoff="S155_handoff_aware_proof_runner_helper",
+                expires_at="2026-05-29T22:20:00Z",
+            )
+            record = run_proof_handoff_command(
+                root,
+                worker_uuid="worker-a",
+                handoff=handoff,
+                ready_cycle=ready_cycle,
+                handoff_ref="coordination/workers/worker-a/proof_handoffs/handoff-1.sop",
+                current_frontier="S155_handoff_aware_proof_runner_helper",
+                cycle_id="cycle-proof-result",
+            )
+            self.assertEqual(record.cycle_status, "completed")
+            self.assertIn("handoff-1.sop", record.proof_refs[1])
+            self.assertTrue((root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-proof-result.sop").exists())
+
+    def test_run_proof_handoff_command_failed_proof_writes_failure_and_validation_blocks(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S155",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            handoff = ManagerProofHandoffRecord(
+                handoff_id="handoff-1",
+                handoff_status="approved",
+                worker_uuid="worker-a",
+                ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+                execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                proof_command="cmd /c exit 3",
+                proof_route="cmd /c exit 3",
+                frontier_at_handoff="S155_handoff_aware_proof_runner_helper",
+                expires_at="2026-05-29T22:20:00Z",
+            )
+            record = run_proof_handoff_command(
+                root,
+                worker_uuid="worker-a",
+                handoff=handoff,
+                ready_cycle=ready_cycle,
+                handoff_ref="coordination/workers/worker-a/proof_handoffs/handoff-1.sop",
+                current_frontier="S155_handoff_aware_proof_runner_helper",
+                cycle_id="cycle-proof-result",
+            )
+            self.assertEqual(record.cycle_status, "failed_proof")
+            self.assertTrue((root / "coordination" / "workers" / "worker-a" / "failures" / "cycle-proof-result.failure.sop").exists())
+            with self.assertRaisesRegex(ValueError, "frontier_changed"):
+                run_proof_handoff_command(
+                    root,
+                    worker_uuid="worker-a",
+                    handoff=handoff,
+                    ready_cycle=ready_cycle,
+                    handoff_ref="coordination/workers/worker-a/proof_handoffs/handoff-1.sop",
+                    current_frontier="S999_other",
+                    cycle_id="cycle-blocked",
+                )
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
