@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 50
+  + [job_notice_revision] is 51
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -68,7 +68,8 @@
     S43_architecture_doc_refresh |
     S44_specification_implementation_status_audit |
     S45_shaliach_internal_perspective_passes |
-    S46_shaliach_response_perspective_trace
+    S46_shaliach_response_perspective_trace |
+    S47_shaliach_internal_perspective_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -698,7 +699,7 @@
 
 & [WorkSliceDetail S46_shaliach_response_perspective_trace] is a Shaliach depth slice
   + [slice_id] is S46_shaliach_response_perspective_trace
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is include Shaliach internal perspective trace in response coordination artifacts
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests and dry-run showing shaliach_response.sop includes internal perspective records
@@ -706,3 +707,16 @@
   + [support_status] is prepared
   + [dependency_set] is S45_shaliach_internal_perspective_passes
   + [known_risks] is duplicating too much finding text into response artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:00:00Z, proof_ref tests passed with 42 tests and suppressed dry-run showed perspective_trace in shaliach_response.sop, result_summary Shaliach response coordination artifacts include selected internal perspective traces
+  + [completed_work_review] is support_delta verified repair assignees can see why Shaliach selected required responses; requirement_delta docs have not yet explained the perspective trace
+
+& [WorkSliceDetail S47_shaliach_internal_perspective_docs] is a Shaliach depth slice
+  + [slice_id] is S47_shaliach_internal_perspective_docs
+  + [slice_status] is open
+  + [scope] is document Shaliach internal perspective traces in architecture and coordination guide
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is future operators know perspective traces are deterministic scaffold records, not live model self-debate yet
+  + [support_status] is prepared
+  + [dependency_set] is S45_shaliach_internal_perspective_passes, S46_shaliach_response_perspective_trace
+  + [known_risks] is overclaiming deterministic perspective records as full Shaliach internal negotiation

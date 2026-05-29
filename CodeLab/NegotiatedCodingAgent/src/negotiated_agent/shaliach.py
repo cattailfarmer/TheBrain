@@ -64,6 +64,8 @@ class ShaliachFinding:
     + [required_response] is {self.required_response}"""
 
     def to_response_coordination_sop(self, subject: str) -> str:
+        perspective_records = self.perspective_records or _perspective_records(self)
+        record_lines = "\n".join(f"  + [perspective_trace {record.perspective}] is {record.finding}" for record in perspective_records)
         return f"""& [ShaliachResponseCoordination {subject}] is the required response plan for a Shaliach finding
   + [finding] is {self.finding}
   + [severity] is {self.severity}
@@ -71,6 +73,7 @@ class ShaliachFinding:
   + [target_artifact] is {self.target_artifact}
   + [action] is {self.action}
   + [required_response] is {self.required_response}
+{record_lines}
   + [repair_step] is inspect {self.target_artifact} for the cited reason
   + [repair_step] is assign {self.target_role} to address the required response before treating this warning as resolved
   + [completion_signal] is follow-up ShaliachFinding no_protocol_gap_detected or explicitly accepted residual risk

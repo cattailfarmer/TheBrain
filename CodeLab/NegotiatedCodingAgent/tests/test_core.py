@@ -830,7 +830,10 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertEqual(finding.finding, "thin_ledger_evidence")
         self.assertEqual(finding.action, "request_rework")
         self.assertIn("least intrusive sufficient response", finding.to_sop("application_layer_package"))
-        self.assertIn("ShaliachResponseCoordination", finding.to_response_coordination_sop("application_layer_package"))
+        response = finding.to_response_coordination_sop("application_layer_package")
+        self.assertIn("ShaliachResponseCoordination", response)
+        self.assertIn("perspective_trace ResponseCoordinator", response)
+        self.assertIn("request_rework chosen at warning severity", response)
 
 
 class NarrativeUpdateTests(unittest.TestCase):
