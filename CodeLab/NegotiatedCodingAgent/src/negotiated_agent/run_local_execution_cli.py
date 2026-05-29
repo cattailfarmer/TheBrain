@@ -5,7 +5,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .execution_gate import load_execution_gate_decision
-from .run_local_execution import build_run_local_execution_plan
+from .run_local_execution import build_run_local_execution_plan, execute_run_local_plan, load_run_local_execution_plan
 from .worker_lifecycle import load_worker_cycle_record
 
 
@@ -13,13 +13,40 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Write a run-local execution plan without generating implementation files.")
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
     parser.add_argument("--worker", required=True)
-    parser.add_argument("--execution-gate-ref", required=True)
-    parser.add_argument("--ready-cycle-ref", required=True)
-    parser.add_argument("--run-id", required=True)
-    parser.add_argument("--cycle-id", required=True)
+    parser.add_argument("--execution-gate-ref", default=None)
+    parser.add_argument("--ready-cycle-ref", default=None)
+    parser.add_argument("--run-id", default=None)
+    parser.add_argument("--cycle-id", default=None)
     parser.add_argument("--plan-id", default=None)
+    parser.add_argument("--execute-plan", action="store_true")
+    parser.add_argument("--plan-ref", default=None)
+    parser.add_argument("--result-id", default=None)
+    parser.add_argument("--generated-text", default="Generated run-local implementation evidence.\n")
+    parser.add_argument("--worker-cycle-ref", default=None)
     args = parser.parse_args(argv)
     try:
+        if args.execute_plan:
+            if not args.plan_ref or not args.result_id or not args.worker_cycle_ref:
+                raise ValueError("--plan-ref, --result-id, and --worker-cycle-ref are required with --execute-plan")
+            plan = load_run_local_execution_plan(_resolve(args.project_root, args.plan_ref))
+            result = execute_run_local_plan(
+                project_root=args.project_root,
+                plan=plan,
+                plan_ref=args.plan_ref,
+                result_id=args.result_id,
+                worker_cycle_ref=args.worker_cycle_ref,
+                generated_text=args.generated_text,
+            )
+            print(
+                "& [RunLocalExecutionWriteResult] is run-local generated evidence persistence\n"
+                f"  + [result_id] is {result.result_id}\n"
+                f"  + [generated_file_set] is {', '.join(result.generated_files)}\n"
+                "  + [authority_boundary] is run_local_execution_write_not_target_workspace_application\n",
+                end="",
+            )
+            return 0
+        if not args.execution_gate_ref or not args.ready_cycle_ref or not args.run_id or not args.cycle_id:
+            raise ValueError("--execution-gate-ref, --ready-cycle-ref, --run-id, and --cycle-id are required when planning")
         gate = load_execution_gate_decision(_resolve(args.project_root, args.execution_gate_ref))
         cycle = load_worker_cycle_record(_resolve(args.project_root, args.ready_cycle_ref))
         run_local_root = args.project_root / "runs" / args.run_id / "worker_execution" / args.cycle_id

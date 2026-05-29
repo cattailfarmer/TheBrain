@@ -2336,7 +2336,7 @@
 
 & [WorkSliceDetail S165_run_local_execution_writer_cli] is a coordination runtime implementation slice
   + [slice_id] is S165_run_local_execution_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to execute RunLocalExecutionPlan into run-local generated evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover writer CLI creates generated evidence result record collision handling and no target workspace writes
@@ -2344,3 +2344,16 @@
   + [support_status] is prepared
   + [dependency_set] is S164_run_local_execution_writer
   + [known_risks] is CLI being mistaken for apply mutation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:39:00Z, proof_ref tests passed with 126 tests, result_summary run-local execution CLI and wrapper can execute existing plans into run-local generated evidence
+  + [completed_work_review] is support_delta verified execute-plan mode writes only under plan root and target workspace apply remains separate; requirement_delta next checkpoint should capture 126-test run-local writer frontier
+
+& [WorkSliceDetail S166_long_run_checkpoint_after_run_local_writer_cli] is a long-run reentry slice
+  + [slice_id] is S166_long_run_checkpoint_after_run_local_writer_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after run-local execution writer CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 126-test suite and route draft proof
+  + [completion_criteria] is checkpoint records run-local writer frontier
+  + [support_status] is prepared
+  + [dependency_set] is S165_run_local_execution_writer_cli
+  + [known_risks] is noisy generated dry-run artifacts

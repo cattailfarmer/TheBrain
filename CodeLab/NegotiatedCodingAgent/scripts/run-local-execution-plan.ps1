@@ -1,15 +1,16 @@
 param(
   [Parameter(Mandatory = $true)]
   [string]$Worker,
-  [Parameter(Mandatory = $true)]
   [string]$ExecutionGateRef,
-  [Parameter(Mandatory = $true)]
   [string]$ReadyCycleRef,
-  [Parameter(Mandatory = $true)]
   [string]$RunId,
-  [Parameter(Mandatory = $true)]
   [string]$CycleId,
-  [string]$PlanId = ""
+  [string]$PlanId = "",
+  [switch]$ExecutePlan,
+  [string]$PlanRef = "",
+  [string]$ResultId = "",
+  [string]$GeneratedText = "Generated run-local implementation evidence.`n",
+  [string]$WorkerCycleRef = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -20,14 +21,37 @@ $Python = "C:\Users\enjer\AppData\Local\Programs\Python\Python312\python.exe"
 $argsList = @(
   "-m", "negotiated_agent.run_local_execution_cli",
   "--project-root", $ProjectRoot,
-  "--worker", $Worker,
-  "--execution-gate-ref", $ExecutionGateRef,
-  "--ready-cycle-ref", $ReadyCycleRef,
-  "--run-id", $RunId,
-  "--cycle-id", $CycleId
+  "--worker", $Worker
 )
+if ($ExecutionGateRef -ne "") {
+  $argsList += @("--execution-gate-ref", $ExecutionGateRef)
+}
+if ($ReadyCycleRef -ne "") {
+  $argsList += @("--ready-cycle-ref", $ReadyCycleRef)
+}
+if ($RunId -ne "") {
+  $argsList += @("--run-id", $RunId)
+}
+if ($CycleId -ne "") {
+  $argsList += @("--cycle-id", $CycleId)
+}
 if ($PlanId -ne "") {
   $argsList += @("--plan-id", $PlanId)
+}
+if ($ExecutePlan) {
+  $argsList += "--execute-plan"
+  if ($PlanRef -ne "") {
+    $argsList += @("--plan-ref", $PlanRef)
+  }
+  if ($ResultId -ne "") {
+    $argsList += @("--result-id", $ResultId)
+  }
+  if ($GeneratedText -ne "") {
+    $argsList += @("--generated-text", $GeneratedText)
+  }
+  if ($WorkerCycleRef -ne "") {
+    $argsList += @("--worker-cycle-ref", $WorkerCycleRef)
+  }
 }
 
 & $Python @argsList

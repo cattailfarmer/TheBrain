@@ -1323,3 +1323,11 @@
   + [proof_result] is tests passed with 125 tests
   + [current_frontier] is S165_run_local_execution_writer_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S165_run_local_execution_writer_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S165_run_local_execution_writer_cli
+  + [implemented_capability] is run-local execution CLI and wrapper execute existing plans into generated evidence and result records under the plan root
+  + [proof_result] is tests passed with 126 tests
+  + [current_frontier] is S166_long_run_checkpoint_after_run_local_writer_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -257,6 +257,14 @@ The planner writes `run_local_execution_plan.sop` under `runs/<run-id>/worker_ex
 
 The current writer helper can execute a plan into the same run-local root and write `run_local_execution_result.sop`; an operator CLI for that writer is the next boundary.
 
+Execute an existing run-local plan into generated evidence:
+
+```powershell
+.\scripts\run-local-execution-plan.ps1 -Worker <worker-uuid> -ExecutePlan -PlanRef <plan-ref> -ResultId <result-id> -WorkerCycleRef <cycle-ref> -GeneratedText "<text>"
+```
+
+Execute-plan mode writes generated evidence under the plan root and writes `run_local_execution_result.sop`. It still does not apply files to the target workspace.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

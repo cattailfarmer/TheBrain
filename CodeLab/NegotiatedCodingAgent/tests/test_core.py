@@ -2853,6 +2853,54 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertEqual(loaded.plan_id, "plan-1")
             self.assertEqual(loaded.run_local_root, "runs/run-1/worker_execution/cycle-run")
 
+    def test_run_local_execution_cli_executes_plan_into_run_local_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            plan_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            plan_root.mkdir(parents=True)
+            plan_path = plan_root / "run_local_execution_plan.sop"
+            plan_path.write_text(
+                "\n".join(
+                    [
+                        "& [RunLocalExecutionPlan plan-1] is plan",
+                        "  + [plan_id] is plan-1",
+                        "  + [worker_uuid] is worker-a",
+                        "  + [execution_gate_ref] is gate.sop",
+                        "  + [ready_cycle_ref] is cycle.sop",
+                        "  + [run_local_root] is runs/run-1/worker_execution/cycle-run",
+                        "  + [planned_action] is execute_run_local_implementation",
+                        "  + [proof_route] is scripts/test.ps1",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_execution_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--execute-plan",
+                            "--plan-ref",
+                            plan_path.relative_to(root).as_posix(),
+                            "--result-id",
+                            "result-1",
+                            "--worker-cycle-ref",
+                            "coordination/workers/worker-a/cycles/cycle-run.sop",
+                            "--generated-text",
+                            "generated body\n",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertTrue((plan_root / "implementation" / "README.generated.txt").exists())
+            self.assertTrue((plan_root / "run_local_execution_result.sop").exists())
+            self.assertIn("run_local_execution_write_not_target_workspace_application", out.getvalue())
+
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
         authorization_id="auth-1",

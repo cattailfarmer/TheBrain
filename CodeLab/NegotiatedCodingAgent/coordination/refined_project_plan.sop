@@ -271,7 +271,8 @@
   + [completed_slice] is S162_long_run_checkpoint_after_run_local_plan_cli
   + [completed_slice] is S163_spec_audit_refresh_after_run_local_plan_cli
   + [completed_slice] is S164_run_local_execution_writer
-  + [ready_slice] is S165_run_local_execution_writer_cli
+  + [completed_slice] is S165_run_local_execution_writer_cli
+  + [ready_slice] is S166_long_run_checkpoint_after_run_local_writer_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

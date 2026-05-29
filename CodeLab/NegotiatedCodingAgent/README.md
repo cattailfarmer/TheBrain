@@ -146,6 +146,8 @@ The dry-run planner for that boundary is `scripts/run-local-execution-plan.ps1`;
 
 The run-local execution writer helper now writes deterministic generated evidence under the plan root, still not into the target workspace.
 
+The same wrapper supports `-ExecutePlan` to produce run-local generated evidence from a plan.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
