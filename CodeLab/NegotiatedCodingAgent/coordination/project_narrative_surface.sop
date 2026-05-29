@@ -161,6 +161,7 @@
   + [implemented_slice] is S78_apply_command_dry_run_cli_design
   + [implemented_slice] is S79_apply_command_dry_run_cli_implementation
   + [implemented_slice] is S80_spec_audit_refresh_after_apply_cli
+  + [implemented_slice] is S81_long_run_checkpoint_after_apply_cli
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -251,6 +252,7 @@
   + [proof_result] is tests passed with 59 tests after S78 apply command dry-run CLI design
   + [proof_result] is tests passed with 61 tests after S79 dry-run apply CLI implementation
   + [proof_result] is tests passed with 61 tests after S80 spec audit refresh
+  + [proof_result] is long-run checkpoint refreshed after S81 with 61 tests dry-run model inventory and non-gating OpenAI healthcheck
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -339,6 +341,7 @@
   + [ready_capability] is apply_command_dry_run_cli_design.sop defines a dry-run-only apply command contract that rejects mutation behavior
   + [ready_capability] is dry-run apply CLI writes apply_plan apply_result and apply_command_log while rejecting mutation acknowledgement flag
   + [ready_capability] is specification implementation status audit reflects dry-run apply CLI validation while preserving no-mutation boundary
+  + [ready_capability] is long_run_checkpoint.sop records post-S81 61-test suite, dry-run, model inventory, and non-gating endpoint state
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -408,8 +411,9 @@
   + [next_recommended_slice] is S79_apply_command_dry_run_cli_implementation
   + [next_recommended_slice] is S80_spec_audit_refresh_after_apply_cli
   + [next_recommended_slice] is S81_long_run_checkpoint_after_apply_cli
-  + [next_reason] is long-run checkpoint should capture latest apply CLI and audit state
-  + [sleep_run_candidate] is continue S81 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S82_apply_cli_operator_docs
+  + [next_reason] is operator docs should make dry-run apply usage discoverable without implying mutation
+  + [sleep_run_candidate] is continue S82 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -668,6 +672,15 @@
 
 & [RunNarrativeUpdate 20260529T153630Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T153630Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T154417Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T154417Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
