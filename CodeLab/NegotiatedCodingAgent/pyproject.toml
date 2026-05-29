@@ -1,0 +1,17 @@
+[project]
+name = "negotiated-coding-agent"
+version = "0.1.0"
+description = "Local multi-LLM coding agent with layered flowchart negotiation."
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+negotiated-agent = "negotiated_agent.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

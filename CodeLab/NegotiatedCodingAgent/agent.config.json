@@ -1,0 +1,43 @@
+{
+  "llm": {
+    "provider": "ollama",
+    "base_url": "http://localhost:11434",
+    "timeout_seconds": 180
+  },
+  "agents": [
+    {
+      "name": "Architect",
+      "model": "qwen2.5-coder:7b",
+      "temperature": 0.2,
+      "role": "Produces structured implementation architecture and keeps the objective decomposable."
+    },
+    {
+      "name": "Critic",
+      "model": "llama3.1:8b",
+      "temperature": 0.1,
+      "role": "Finds missing requirements, boundary mistakes, risk, and premature code-level detail."
+    }
+  ],
+  "arbiter": {
+    "name": "Arbiter",
+    "model": "llama3.1:8b",
+    "temperature": 0.1,
+    "role": "Merges proposals into a single flowchart that preserves useful disagreement as open questions."
+  },
+  "coder": {
+    "name": "Coder",
+    "model": "qwen2.5-coder:7b",
+    "temperature": 0.15,
+    "role": "Writes code only from the settled code-level flowchart."
+  },
+  "negotiation": {
+    "rounds_per_layer": 1,
+    "layers": [
+      "application",
+      "subsystem",
+      "component",
+      "code"
+    ]
+  }
+}
+
