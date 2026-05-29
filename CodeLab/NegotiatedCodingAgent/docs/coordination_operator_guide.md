@@ -174,6 +174,19 @@ These packets are future live-review prompt scaffolds. They are not Manager appr
 
 The reproducible sequence is captured in `coordination/prelive_review_packet_operator_recipe.sop`: first write `combined_artifact_validation.sop` with `validate-artifacts.ps1 -Out`, then pass that file to `prelive-review-packets.ps1`. A passed packet means the evidence is ready for future live review, not that the review has happened.
 
+Preview live Shaliach self-negotiation evidence while local serving is unavailable:
+
+```powershell
+.\scripts\live-shaliach-preview.ps1 `
+  -Baseline .\runs\<timestamp>\application.shaliach_self_negotiation.sop `
+  -PacketOut .\live_shaliach_prompt_packet.sop `
+  -AttemptOut .\live_shaliach_attempt.sop `
+  -ProtocolRef protocol_activation.sop `
+  -ProofRef coordination/long_run_checkpoint.sop
+```
+
+Exit code `2` means the command wrote bounded prompt evidence plus an unavailable live-attempt record. That is expected until local serving is online.
+
 ## Mailbox Messages
 
 List mailbox messages:

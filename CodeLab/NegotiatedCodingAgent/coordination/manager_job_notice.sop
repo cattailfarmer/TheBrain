@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 183
+  + [job_notice_revision] is 184
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -4052,7 +4052,7 @@
 
 & [WorkSliceDetail S297_live_shaliach_attempt_preview_cli] is a live-model integration implementation slice
   + [slice_id] is S297_live_shaliach_attempt_preview_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add CLI preview for live Shaliach prompt packet plus unavailable attempt output
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests cover CLI packet output attempt output unavailable status and output files
@@ -4060,3 +4060,16 @@
   + [support_status] is prepared
   + [dependency_set] is S296_live_shaliach_prompt_packet_builder
   + [known_risks] is preview CLI being mistaken for actual live model deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T17:36:00Z, proof_ref tests passed with 283 tests and live-shaliach-preview wrapper proof, result_summary CLI writes live Shaliach prompt packet and unavailable attempt evidence with non-approval boundary
+  + [completed_work_review] is support_delta verified wrapper exits 2 for unavailable live status and records live_shaliach_review_not_manager_approval; requirement_delta next step is refresh spec audit after live Shaliach preview tooling
+
+& [WorkSliceDetail S298_spec_audit_refresh_after_live_shaliach_preview] is a specification audit slice
+  + [slice_id] is S298_spec_audit_refresh_after_live_shaliach_preview
+  + [slice_status] is open
+  + [scope] is refresh implementation status after live Shaliach prompt packet and preview CLI tooling
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names live attempt records prompt packets preview CLI unavailable fallback and live serving gap
+  + [completion_criteria] is audit reflects live Shaliach overlay as live-ready but not live deliberation
+  + [support_status] is prepared
+  + [dependency_set] is S297_live_shaliach_attempt_preview_cli
+  + [known_risks] is audit overstating preview artifacts as model-negotiated Shaliach counsel

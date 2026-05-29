@@ -60,6 +60,7 @@ from negotiated_agent.execution_gate import (
 )
 from negotiated_agent.execution_gate_cli import main as execution_gate_cli_main
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
+from negotiated_agent.live_shaliach_cli import main as live_shaliach_cli_main
 from negotiated_agent.long_run import (
     CommandResult,
     LongRunCheckpoint,
@@ -6836,6 +6837,42 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertIn("prompt_packet_not_private_reasoning_dump", sop)
         self.assertIn("hidden_chain_of_thought", sop)
         self.assertNotIn("chain of thought:", sop.lower())
+
+    def test_live_shaliach_cli_writes_prompt_packet_and_unavailable_attempt(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            baseline_path = root / "baseline.sop"
+            packet_path = root / "packet.sop"
+            attempt_path = root / "attempt.sop"
+            baseline = build_shaliach_self_negotiation_record(
+                negotiation_id="cli-baseline",
+                subject_ref="application_layer_package",
+                intention_statement="prepare live review",
+                purpose_statement="bounded prompt packet",
+                context_boundary="application review",
+            )
+            baseline_path.write_text(baseline.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = live_shaliach_cli_main(
+                    [
+                        "--baseline",
+                        str(baseline_path),
+                        "--protocol-ref",
+                        "protocol_activation.sop",
+                        "--proof-ref",
+                        "coordination/long_run_checkpoint.sop",
+                        "--packet-out",
+                        str(packet_path),
+                        "--attempt-out",
+                        str(attempt_path),
+                    ]
+                )
+            self.assertEqual(exit_code, 2)
+            self.assertIn("LiveShaliachPromptPacket", packet_path.read_text(encoding="utf-8"))
+            self.assertIn("proof_ref] is coordination/long_run_checkpoint.sop", packet_path.read_text(encoding="utf-8"))
+            self.assertIn("live_status] is unavailable", attempt_path.read_text(encoding="utf-8"))
+            self.assertIn("live_shaliach_review_not_manager_approval", out.getvalue())
 
     def test_load_self_negotiation_sop_from_path(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
