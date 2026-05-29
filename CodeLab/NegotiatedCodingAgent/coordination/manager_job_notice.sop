@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 130
+  + [job_notice_revision] is 131
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -148,7 +148,8 @@
     S123_long_run_checkpoint_after_worker_runner_scaffold |
     S124_worker_proof_dirty_worktree_evidence |
     S125_long_run_checkpoint_after_worker_proof_hardening |
-    S126_worker_runner_readme_inventory
+    S126_worker_runner_readme_inventory |
+    S127_long_run_checkpoint_after_worker_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1818,7 +1819,7 @@
 
 & [WorkSliceDetail S126_worker_runner_readme_inventory] is a documentation slice
   + [slice_id] is S126_worker_runner_readme_inventory
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is update README output inventory with worker runner preview claim lease cycle and proof/failure artifacts
   + [target_files] is README.md, docs/**, coordination/**
   + [proof_route] is tests remain passing and README names current worker runner commands/artifacts without overclaiming autonomy
@@ -1826,3 +1827,16 @@
   + [support_status] is prepared
   + [dependency_set] is S125_long_run_checkpoint_after_worker_proof_hardening
   + [known_risks] is documenting worker runner scaffold as full autonomous execution
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:58:00Z, proof_ref README updated and tests pending final verification, result_summary README inventories worker runner commands and apply rollback acceptance artifacts without claiming full autonomy
+  + [completed_work_review] is support_delta verified README exposes current operator commands; requirement_delta next checkpoint should capture docs state
+
+& [WorkSliceDetail S127_long_run_checkpoint_after_worker_docs] is a long-run reentry slice
+  + [slice_id] is S127_long_run_checkpoint_after_worker_docs
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after README worker runner inventory
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after current test suite and route draft proof
+  + [completion_criteria] is checkpoint records README worker runner docs frontier
+  + [support_status] is prepared
+  + [dependency_set] is S126_worker_runner_readme_inventory
+  + [known_risks] is noisy generated dry-run artifacts

@@ -921,6 +921,13 @@
   + [narrative_role] is long_run_coordination and proof_arc update
 
 
+& [LongRunNarrativeUpdate S126_worker_runner_readme_inventory] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S126_worker_runner_readme_inventory
+  + [implemented_capability] is README inventories apply rollback acceptance artifacts and worker runner preview claim cycle proof command modes without claiming full autonomy
+  + [current_frontier] is S127_long_run_checkpoint_after_worker_docs
+  + [narrative_role] is documentation and coordination_runtime_arc update
+
+
 & [RunNarrativeUpdate 20260529T165246Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T165246Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat

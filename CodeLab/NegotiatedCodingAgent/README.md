@@ -69,6 +69,7 @@ Runs are written under `runs/<timestamp>/`:
 - `merge_review_decision.sop`
 - `manual_merge_packet.sop` when merge review is ready and no conflicts block packet creation
 - `apply_plan.sop` and `apply_result.sop` as dry-run evidence when a manual merge packet is generated
+- explicit apply/rollback command artifacts such as `apply_mutation_preflight.sop`, `snapshot_materialization.sop`, `verification_result.sop`, `rollback_preview.sop`, `rollback_result.sop`, and `post_apply_acceptance.sop` when those operator commands are run
 - `WS001_core_implementation.<Programmer>.work_slice.sop`
 - `WS001_core_implementation.<Programmer>.raw.md`
 - `WS001_core_implementation.<Programmer>.programmer_report.sop`
@@ -109,6 +110,17 @@ powershell -ExecutionPolicy Bypass -File scripts\apply-merge-dry-run.ps1 -RunRoo
 ```
 
 This command writes dry-run validation artifacts under the run root. It does not apply generated code to `TargetWorkspaceRoot`.
+
+Worker-runner coordination support is also staged. The current commands can preview unread mailbox work, explicitly claim bounded work and write lease evidence, record cycle outcomes from explicit refs, and run explicit proof commands with cycle/failure evidence:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -MaxClaims 1
+powershell -ExecutionPolicy Bypass -File scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -MaxClaims 1 -ClaimRecord
+powershell -ExecutionPolicy Bypass -File scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -RecordCycle -CycleId <cycle-id> -CycleStatus completed -SliceRef <slice-ref>
+powershell -ExecutionPolicy Bypass -File scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -RunProofCommand "powershell -ExecutionPolicy Bypass -File scripts\test.ps1" -CycleId <cycle-id>
+```
+
+These commands write worker evidence under `coordination/workers/<worker-uuid>/` when run in claim, cycle, or proof mode. They do not make the system a full autonomous scheduler, do not approve Manager frontier changes, and do not mutate target workspace code.
 
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
