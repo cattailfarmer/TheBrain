@@ -231,7 +231,8 @@
   + [completed_slice] is S122_worker_proof_command_runner_scaffold
   + [completed_slice] is S123_long_run_checkpoint_after_worker_runner_scaffold
   + [completed_slice] is S124_worker_proof_dirty_worktree_evidence
-  + [ready_slice] is S125_long_run_checkpoint_after_worker_proof_hardening
+  + [completed_slice] is S125_long_run_checkpoint_after_worker_proof_hardening
+  + [ready_slice] is S126_worker_runner_readme_inventory
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
