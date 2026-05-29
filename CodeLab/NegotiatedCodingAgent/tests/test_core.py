@@ -31,6 +31,7 @@ from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
+from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import create_initial_work_slice
 from negotiated_agent.writer import write_implementation
@@ -422,6 +423,29 @@ class NarrativeCoverageTests(unittest.TestCase):
             self.assertIn("coordination/manager_job_notice.sop", report.missing)
             self.assertIn("NarrativeCoverageReport", report.to_sop())
             self.assertTrue(any("coordination/active_conversation.sop" in risk for risk in report.stale_risk))
+
+
+class RunManifestTests(unittest.TestCase):
+    def test_run_manifest_validation_detects_missing_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "present.sop").write_text("& [Present] is here\n", encoding="utf-8")
+            manifest = root / "run_manifest.sop"
+            manifest.write_text(
+                "\n".join(
+                    [
+                        "& [RunArtifactManifest test] is manifest",
+                        "  + [artifact_ref present] is present.sop",
+                        "  + [artifact_ref missing] is missing.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            result = validate_run_manifest(manifest)
+            self.assertFalse(result.ok)
+            self.assertEqual(result.missing_refs, ("missing.sop",))
+            self.assertIn("missing_artifacts", result.to_sop())
 
 
 class ConversationKernelTests(unittest.TestCase):

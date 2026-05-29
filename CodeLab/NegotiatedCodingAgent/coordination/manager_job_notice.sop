@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 32
+  + [job_notice_revision] is 33
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -50,7 +50,8 @@
     S25_blocked_run_repair_plan_synthesis |
     S26_run_artifact_manifest |
     S27_run_manifest_log_event |
-    S28_run_manifest_validation_cli
+    S28_run_manifest_validation_cli |
+    S29_proof_run_side_effect_controls
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -446,7 +447,7 @@
 
 & [WorkSliceDetail S28_run_manifest_validation_cli] is a post-S16 governance expansion slice
   + [slice_id] is S28_run_manifest_validation_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a lightweight validator for run_manifest.sop to check referenced files exist
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests and script execution against a generated or fixture manifest
@@ -454,3 +455,16 @@
   + [support_status] is prepared
   + [dependency_set] is S26_run_artifact_manifest
   + [known_risks] is mistaking file-existence validation for semantic artifact validation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:00:00Z, proof_ref tests passed with 33 tests and validate-run-manifest reported valid for runs\20260529T141744Z\run_manifest.sop, result_summary added run manifest validator module, CLI, and PowerShell script
+  + [completed_work_review] is support_delta verified run manifest refs can be file-existence checked before reentry; requirement_delta semantic artifact validation remains future work
+
+& [WorkSliceDetail S29_proof_run_side_effect_controls] is a post-S16 governance expansion slice
+  + [slice_id] is S29_proof_run_side_effect_controls
+  + [slice_status] is open
+  + [scope] is add controls for proof dry-runs so validation runs can avoid publishing live mailbox rework notices when desired
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests showing dry-run can suppress coordination mailbox publication while still writing run-local response artifacts
+  + [completion_criteria] is proof runs can be made less noisy without disabling normal coordination behavior
+  + [support_status] is prepared
+  + [dependency_set] is S21_mailbox_orchestrator_assignment
+  + [known_risks] is hiding real coordination events if suppression is enabled by default

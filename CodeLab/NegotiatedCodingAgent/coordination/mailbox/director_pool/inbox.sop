@@ -39,3 +39,43 @@
   + [body] is 20260529T140405Z/code.shaliach_response.sop: add or regenerate Director proposal evidence for thin ledger fields
   + [created_at] is 2026-05-29T14:04:05.974074+00:00
   + [authority_boundary] is coordination_carrier_not_instruction_authority
+
+& [MailboxMessage b668eccd-93e3-5286-9da9-84d99802fd36] is a durable coordination carrier
+  + [message_id] is b668eccd-93e3-5286-9da9-84d99802fd36
+  + [sender_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [recipient_uuid] is director_pool
+  + [kind] is rework_notice
+  + [subject] is application layer Shaliach response coordination
+  + [body] is 20260529T141744Z/application.shaliach_response.sop: add or regenerate Director proposal evidence for thin ledger fields
+  + [created_at] is 2026-05-29T14:17:44.742187+00:00
+  + [authority_boundary] is coordination_carrier_not_instruction_authority
+
+& [MailboxMessage ff481e34-cdfc-50c2-a052-b5f3afcdb9f4] is a durable coordination carrier
+  + [message_id] is ff481e34-cdfc-50c2-a052-b5f3afcdb9f4
+  + [sender_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [recipient_uuid] is director_pool
+  + [kind] is rework_notice
+  + [subject] is subsystem layer Shaliach response coordination
+  + [body] is 20260529T141744Z/subsystem.shaliach_response.sop: add or regenerate Director proposal evidence for thin ledger fields
+  + [created_at] is 2026-05-29T14:17:44.749184+00:00
+  + [authority_boundary] is coordination_carrier_not_instruction_authority
+
+& [MailboxMessage 94f98bd1-a48a-5e7a-8135-f563e9534a83] is a durable coordination carrier
+  + [message_id] is 94f98bd1-a48a-5e7a-8135-f563e9534a83
+  + [sender_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [recipient_uuid] is director_pool
+  + [kind] is rework_notice
+  + [subject] is component layer Shaliach response coordination
+  + [body] is 20260529T141744Z/component.shaliach_response.sop: add or regenerate Director proposal evidence for thin ledger fields
+  + [created_at] is 2026-05-29T14:17:44.757185+00:00
+  + [authority_boundary] is coordination_carrier_not_instruction_authority
+
+& [MailboxMessage 66f8bbaf-d966-5c0e-85f5-c93bd0e16d38] is a durable coordination carrier
+  + [message_id] is 66f8bbaf-d966-5c0e-85f5-c93bd0e16d38
+  + [sender_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [recipient_uuid] is director_pool
+  + [kind] is rework_notice
+  + [subject] is code layer Shaliach response coordination
+  + [body] is 20260529T141744Z/code.shaliach_response.sop: add or regenerate Director proposal evidence for thin ledger fields
+  + [created_at] is 2026-05-29T14:17:44.768327+00:00
+  + [authority_boundary] is coordination_carrier_not_instruction_authority
