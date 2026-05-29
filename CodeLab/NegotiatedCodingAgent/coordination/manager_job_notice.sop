@@ -3168,7 +3168,7 @@
 
 & [WorkSliceDetail S229_long_run_checkpoint_after_append_recipe] is a long-run reentry slice
   + [slice_id] is S229_long_run_checkpoint_after_append_recipe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after reviewed narrative append operator recipe
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 206-test suite and recipe frontier
@@ -3176,3 +3176,16 @@
   + [support_status] is prepared
   + [dependency_set] is S228_reviewed_narrative_append_operator_recipe
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:04:00Z, proof_ref long-run checkpoint passed 206 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after reviewed narrative append operator recipe
+  + [completed_work_review] is support_delta verified checkpoint records operator recipe frontier and ready continuation; requirement_delta next step is refresh spec audit after operator recipe
+
+& [WorkSliceDetail S230_spec_audit_refresh_after_append_recipe] is a specification audit slice
+  + [slice_id] is S230_spec_audit_refresh_after_append_recipe
+  + [slice_status] is open
+  + [scope] is refresh implementation status after reviewed narrative append operator recipe
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names complete operator recipe and next system gap
+  + [completion_criteria] is audit reflects narrative append workflow is operator documented
+  + [support_status] is prepared
+  + [dependency_set] is S229_long_run_checkpoint_after_append_recipe
+  + [known_risks] is audit overemphasizing narrative workflow over core live model swarm gap
