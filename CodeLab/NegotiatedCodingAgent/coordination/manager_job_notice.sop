@@ -3454,7 +3454,7 @@
 
 & [WorkSliceDetail S251_cross_artifact_checkpoint_probe] is a long-run proof implementation slice
   + [slice_id] is S251_cross_artifact_checkpoint_probe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add Shaliach cross-artifact consistency probe to long-run checkpoint harness
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover passed failed and not_run probe states and checkpoint status behavior
@@ -3462,3 +3462,16 @@
   + [support_status] is prepared
   + [dependency_set] is S250_cross_artifact_checkpoint_probe_design
   + [known_risks] is making harness too brittle before live serving is available
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:05:00Z, proof_ref tests passed with 238 tests, result_summary long-run checkpoint harness now records Shaliach cross-artifact consistency probe
+  + [completed_work_review] is support_delta verified checkpoint status requires failed probes to need attention while not_run dry-root parse remains non-blocking; requirement_delta next step is refresh checkpoint with live probe output
+
+& [WorkSliceDetail S252_long_run_checkpoint_after_cross_artifact_probe] is a long-run reentry slice
+  + [slice_id] is S252_long_run_checkpoint_after_cross_artifact_probe
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after adding Shaliach cross-artifact probe
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 238-test suite and shaliach_cross_artifact_probe passed
+  + [completion_criteria] is checkpoint captures new probe result on fresh dry-run output
+  + [support_status] is prepared
+  + [dependency_set] is S251_cross_artifact_checkpoint_probe
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

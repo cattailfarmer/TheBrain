@@ -47,7 +47,13 @@ from negotiated_agent.execution_gate import (
 )
 from negotiated_agent.execution_gate_cli import main as execution_gate_cli_main
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
-from negotiated_agent.long_run import CommandResult, LongRunCheckpoint, checkpoint_start_frontier
+from negotiated_agent.long_run import (
+    CommandResult,
+    LongRunCheckpoint,
+    checkpoint_start_frontier,
+    _dry_run_root_from_stdout,
+    _run_shaliach_cross_artifact_probe,
+)
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.manager import ManagerDecision
@@ -4558,6 +4564,93 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertIn("non_gating_environment_state", sop)
         self.assertIn("route_draft_status] is passed", sop)
         self.assertIn("non_gating_configuration_draft", sop)
+
+    def test_checkpoint_records_shaliach_cross_artifact_probe(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        probe = CommandResult("shaliach_cross_artifact_probe", 0, "application:consistent", "")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S251",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            shaliach_cross_artifact_result=probe,
+        )
+        sop = checkpoint.to_sop()
+        self.assertEqual(checkpoint.status, "ready_for_continuation")
+        self.assertIn("shaliach_cross_artifact_status] is passed", sop)
+        self.assertIn("application:consistent", sop)
+
+    def test_checkpoint_fails_when_shaliach_cross_artifact_probe_fails(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        probe = CommandResult("shaliach_cross_artifact_probe", 1, "application:inconsistent", "")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S251",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            shaliach_cross_artifact_result=probe,
+        )
+        self.assertEqual(checkpoint.status, "needs_attention")
+        self.assertIn("shaliach_cross_artifact_status] is failed", checkpoint.to_sop())
+
+    def test_checkpoint_treats_missing_dry_run_root_probe_as_not_run(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        probe = CommandResult("shaliach_cross_artifact_probe", 2, "dry_run_root_not_found", "")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S251",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            shaliach_cross_artifact_result=probe,
+        )
+        self.assertEqual(checkpoint.status, "ready_for_continuation")
+        self.assertIn("shaliach_cross_artifact_status] is not_run", checkpoint.to_sop())
+
+    def test_dry_run_root_parser_reads_run_written_line(self) -> None:
+        self.assertEqual(
+            _dry_run_root_from_stdout("Run written to: C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\runs\\abc"),
+            Path("C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\runs\\abc"),
+        )
+
+    def test_shaliach_cross_artifact_probe_reads_run_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp)
+            finding = ShaliachFinding(
+                finding="thin_ledger_evidence",
+                severity="warning",
+                target_role="Director",
+                target_artifact="sjs_ledger",
+                action="request_rework",
+                confidence="moderate",
+                reason="ledger evidence is thin",
+                self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+            )
+            self_negotiation = build_shaliach_self_negotiation_from_finding(
+                finding,
+                subject_ref="application_layer_package",
+                negotiation_id="application.shaliach_self_negotiation",
+            )
+            (run_root / "application.shaliach_self_negotiation.sop").write_text(self_negotiation.to_sop(), encoding="utf-8")
+            (run_root / "application.shaliach_finding.sop").write_text(
+                finding.to_sop("application_layer_package"),
+                encoding="utf-8",
+            )
+            (run_root / "application.shaliach_response.sop").write_text(
+                finding.to_response_coordination_sop("application_layer_package"),
+                encoding="utf-8",
+            )
+            result = _run_shaliach_cross_artifact_probe(f"Run written to: {run_root}")
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("application:consistent", result.stdout_tail)
 
     def test_checkpoint_start_frontier_prefers_next_slice_after_run_lifecycle_marker(self) -> None:
         surface = ConversationSurface(

@@ -849,7 +849,9 @@
   + [last_proof] is spec audit refreshed after Shaliach cross-artifact inspection CLI and checkpoint
   + [completed_slice] is S250_cross_artifact_checkpoint_probe_design
   + [last_proof] is designed checkpoint probe for Shaliach cross-artifact consistency inspection
-  + [next_recommended_slice] is S251_cross_artifact_checkpoint_probe
+  + [completed_slice] is S251_cross_artifact_checkpoint_probe
+  + [last_proof] is tests passed with 238 tests after Shaliach cross-artifact checkpoint probe
+  + [next_recommended_slice] is S252_long_run_checkpoint_after_cross_artifact_probe
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

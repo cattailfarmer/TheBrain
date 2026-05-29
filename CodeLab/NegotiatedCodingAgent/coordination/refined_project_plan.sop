@@ -357,7 +357,8 @@
   + [completed_slice] is S248_long_run_checkpoint_after_cross_artifact_cli
   + [completed_slice] is S249_spec_audit_refresh_after_cross_artifact_cli
   + [completed_slice] is S250_cross_artifact_checkpoint_probe_design
-  + [ready_slice] is S251_cross_artifact_checkpoint_probe
+  + [completed_slice] is S251_cross_artifact_checkpoint_probe
+  + [ready_slice] is S252_long_run_checkpoint_after_cross_artifact_probe
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

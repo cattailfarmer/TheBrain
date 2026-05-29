@@ -2152,3 +2152,11 @@
   + [proof_ref] is coordination/cross_artifact_checkpoint_probe_design.sop
   + [current_frontier] is S251_cross_artifact_checkpoint_probe
   + [narrative_role] is long_run_coordination and design_arc update
+
+
+& [LongRunNarrativeUpdate S251_cross_artifact_checkpoint_probe] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S251_cross_artifact_checkpoint_probe
+  + [implemented_capability] is long-run harness records shaliach_cross_artifact_probe status from same-run dry-run artifacts and treats failed probes as needs_attention
+  + [proof_result] is tests passed with 238 tests
+  + [current_frontier] is S252_long_run_checkpoint_after_cross_artifact_probe
+  + [narrative_role] is long_run_coordination and shaliach_arc update

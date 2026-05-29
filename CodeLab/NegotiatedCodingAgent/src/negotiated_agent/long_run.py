@@ -3,9 +3,15 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 import subprocess
 
 from .conversation import ConversationSurface
+from .shaliach import (
+    inspect_shaliach_cross_artifact_consistency,
+    load_shaliach_finding_fields,
+    load_shaliach_self_negotiation,
+)
 
 
 @dataclass(frozen=True)
@@ -32,10 +38,16 @@ class LongRunCheckpoint:
     end_current_frontier: str = ""
     openai_health_result: CommandResult | None = None
     route_draft_result: CommandResult | None = None
+    shaliach_cross_artifact_result: CommandResult | None = None
 
     @property
     def status(self) -> str:
-        if self.test_result.ok and self.dry_run_result.ok and self.model_inventory_result.ok:
+        if (
+            self.test_result.ok
+            and self.dry_run_result.ok
+            and self.model_inventory_result.ok
+            and _probe_ok(self.shaliach_cross_artifact_result)
+        ):
             return "ready_for_continuation"
         return "needs_attention"
 
@@ -50,6 +62,7 @@ class LongRunCheckpoint:
   + [test_status] is {_status(self.test_result)}
   + [dry_run_status] is {_status(self.dry_run_result)}
   + [model_inventory_status] is {_status(self.model_inventory_result)}
+  + [shaliach_cross_artifact_status] is {_probe_status(self.shaliach_cross_artifact_result)}
   + [openai_health_status] is {_status(self.openai_health_result) if self.openai_health_result else "not_run"}
   + [route_draft_status] is {_status(self.route_draft_result) if self.route_draft_result else "not_run"}
   + [authority_boundary] is harness_checkpoint_not_human_approval
@@ -68,6 +81,12 @@ class LongRunCheckpoint:
     + [returncode] is {self.model_inventory_result.returncode}
     + [stdout_tail] is {_field_value(self.model_inventory_result.stdout_tail)}
     + [stderr_tail] is {_field_value(self.model_inventory_result.stderr_tail)}
+
+  & [HarnessCommand shaliach_cross_artifact_probe] is a deterministic consistency proof summary
+    + [returncode] is {self.shaliach_cross_artifact_result.returncode if self.shaliach_cross_artifact_result else "not_run"}
+    + [stdout_tail] is {_field_value(self.shaliach_cross_artifact_result.stdout_tail if self.shaliach_cross_artifact_result else "")}
+    + [stderr_tail] is {_field_value(self.shaliach_cross_artifact_result.stderr_tail if self.shaliach_cross_artifact_result else "")}
+    + [authority_boundary] is consistency_probe_not_manager_approval
 
   & [HarnessCommand openai_health] is an environment-state summary
     + [returncode] is {self.openai_health_result.returncode if self.openai_health_result else "not_run"}
@@ -100,6 +119,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         ],
         project_root,
     )
+    shaliach_probe = _run_shaliach_cross_artifact_probe(dry.stdout_tail)
     inventory = _run(
         "model_inventory",
         [
@@ -151,6 +171,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         model_inventory_result=inventory,
         openai_health_result=openai_health,
         route_draft_result=route_draft,
+        shaliach_cross_artifact_result=shaliach_probe,
     )
 
 
@@ -172,6 +193,52 @@ def _run(name: str, command: list[str], cwd: Path) -> CommandResult:
     )
 
 
+def _run_shaliach_cross_artifact_probe(dry_run_stdout: str) -> CommandResult:
+    run_root = _dry_run_root_from_stdout(dry_run_stdout)
+    if not run_root:
+        return CommandResult("shaliach_cross_artifact_probe", 2, "dry_run_root_not_found", "")
+    if not run_root.exists():
+        return CommandResult("shaliach_cross_artifact_probe", 1, "", f"dry_run_root_missing: {run_root}")
+    outputs = []
+    for self_path in sorted(run_root.glob("*.shaliach_self_negotiation.sop")):
+        layer = self_path.name.removesuffix(".shaliach_self_negotiation.sop")
+        finding_path = run_root / f"{layer}.shaliach_finding.sop"
+        response_path = run_root / f"{layer}.shaliach_response.sop"
+        if not finding_path.exists():
+            outputs.append(f"{layer}:missing_finding")
+            continue
+        try:
+            self_negotiation = load_shaliach_self_negotiation(self_path)
+            finding = load_shaliach_finding_fields(finding_path)
+            response_text = response_path.read_text(encoding="utf-8") if response_path.exists() else ""
+            result = inspect_shaliach_cross_artifact_consistency(
+                inspection_id=f"{layer}.checkpoint_cross_artifact_probe",
+                self_negotiation=self_negotiation,
+                finding_fields=finding,
+                self_negotiation_ref=str(self_path.relative_to(run_root)),
+                shaliach_finding_ref=str(finding_path.relative_to(run_root)),
+                shaliach_response_ref=str(response_path.relative_to(run_root)) if response_path.exists() else "",
+                shaliach_response_text=response_text,
+                expected_subject_ref=self_negotiation.subject_ref,
+                expected_self_negotiation_ref=f"ShaliachSelfNegotiationRecord {self_negotiation.negotiation_id}",
+            )
+        except ValueError as exc:
+            outputs.append(f"{layer}:parse_error:{exc}")
+            continue
+        outputs.append(f"{layer}:{result.inspection_status}")
+    if not outputs:
+        return CommandResult("shaliach_cross_artifact_probe", 1, "", "no_shaliach_self_negotiation_artifacts_found")
+    returncode = 0 if all(output.endswith(":consistent") for output in outputs) else 1
+    return CommandResult("shaliach_cross_artifact_probe", returncode, "; ".join(outputs), "")
+
+
+def _dry_run_root_from_stdout(stdout: str) -> Path | None:
+    match = re.search(r"Run written to:\s*(?P<path>.+)", stdout)
+    if not match:
+        return None
+    return Path(match.group("path").strip())
+
+
 def _git_clean(repo_root: Path) -> bool:
     result = subprocess.run(
         ["C:\\Program Files\\Git\\cmd\\git.exe", "status", "--short"],
@@ -190,6 +257,16 @@ def _tail(text: str, limit: int = 500) -> str:
 
 def _status(result: CommandResult) -> str:
     return "passed" if result.ok else "failed"
+
+
+def _probe_status(result: CommandResult | None) -> str:
+    if result is None or result.returncode == 2:
+        return "not_run"
+    return _status(result)
+
+
+def _probe_ok(result: CommandResult | None) -> bool:
+    return result is None or result.returncode in {0, 2}
 
 
 def _bool(value: bool) -> str:
