@@ -192,6 +192,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/cross_artifact_checkpoint_probe_design.sop` defines how that inspection should become checkpoint proof: the long-run harness should inspect the artifacts from its own dry-run output and record the result as a proof probe, still separate from live model serving and approval.
 
+`coordination/manifest_shaliach_probe_validation_design.sop` defines the next validation boundary: manifest checks may become aware of Shaliach self-negotiation artifacts and checkpoint probe status, but only as artifact/proof presence checks.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

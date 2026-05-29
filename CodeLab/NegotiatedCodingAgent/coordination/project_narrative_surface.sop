@@ -2185,3 +2185,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S254_manifest_shaliach_probe_validation_design
   + [narrative_role] is specification_audit and proof_arc update
+
+
+& [LongRunNarrativeUpdate S254_manifest_shaliach_probe_validation_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S254_manifest_shaliach_probe_validation_design
+  + [implemented_capability] is manifest_shaliach_probe_validation_design.sop defines artifact/proof presence validation for Shaliach self-negotiation and checkpoint probe evidence
+  + [proof_ref] is coordination/manifest_shaliach_probe_validation_design.sop
+  + [current_frontier] is S255_manifest_shaliach_self_negotiation_role_validation
+  + [narrative_role] is manifest_validation and design_arc update

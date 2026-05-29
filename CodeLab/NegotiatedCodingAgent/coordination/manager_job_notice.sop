@@ -3493,7 +3493,7 @@
 
 & [WorkSliceDetail S254_manifest_shaliach_probe_validation_design] is a manifest validation design slice
   + [slice_id] is S254_manifest_shaliach_probe_validation_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design run-manifest validation awareness for Shaliach self-negotiation and cross-artifact probe evidence
   + [target_files] is coordination/**, docs/**
   + [proof_route] is design names manifest refs expected artifacts and non-approval validation boundary
@@ -3501,3 +3501,16 @@
   + [support_status] is prepared
   + [dependency_set] is S253_spec_audit_refresh_after_cross_artifact_probe
   + [known_risks] is expanding manifest validation into semantic review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:24:00Z, proof_ref manifest_shaliach_probe_validation_design.sop docs/architecture.md and tests passed with 238 tests, result_summary designed run-manifest validation awareness for Shaliach self-negotiation and checkpoint probe evidence
+  + [completed_work_review] is support_delta verified design confines validation to artifact/proof presence not semantic review; requirement_delta next step is extend manifest validation for shaliach_self_negotiation refs
+
+& [WorkSliceDetail S255_manifest_shaliach_self_negotiation_role_validation] is a manifest validation implementation slice
+  + [slice_id] is S255_manifest_shaliach_self_negotiation_role_validation
+  + [slice_status] is open
+  + [scope] is extend manifest validation around shaliach_self_negotiation artifact refs
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover manifest artifact role and missing ref behavior for self-negotiation artifacts
+  + [completion_criteria] is run manifest validation understands shaliach_self_negotiation artifacts as required evidence refs when present
+  + [support_status] is prepared
+  + [dependency_set] is S254_manifest_shaliach_probe_validation_design
+  + [known_risks] is treating artifact presence as semantic acceptance

@@ -863,7 +863,9 @@
   + [last_proof] is long-run checkpoint passed 238 tests and Shaliach cross-artifact probe reported all four layers consistent
   + [completed_slice] is S253_spec_audit_refresh_after_cross_artifact_probe
   + [last_proof] is spec audit refreshed after checkpoint-level Shaliach cross-artifact probe proof
-  + [next_recommended_slice] is S254_manifest_shaliach_probe_validation_design
+  + [completed_slice] is S254_manifest_shaliach_probe_validation_design
+  + [last_proof] is designed manifest validation awareness for Shaliach self-negotiation and checkpoint probe evidence
+  + [next_recommended_slice] is S255_manifest_shaliach_self_negotiation_role_validation
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

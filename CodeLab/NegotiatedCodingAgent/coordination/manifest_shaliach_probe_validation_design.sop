@@ -1,0 +1,41 @@
+& [ManifestShaliachProbeValidationDesign] is the design contract for manifest awareness of Shaliach consistency proof
+  @ [created_at] 2026-05-30T12:24:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/cross_artifact_checkpoint_probe_design.sop
+  @ [manifest_module] src/negotiated_agent/run_manifest.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is manifest_validation_not_semantic_review
+  + [primary_goal] is make run-manifest validation aware of Shaliach self-negotiation and cross-artifact proof refs
+  + [non_goal] is re-running Shaliach review
+  + [non_goal] is judging truth of the finding or resolved intention
+  + [non_goal] is approving a layer or applying files
+
+& [ExpectedManifestRefs] is the Shaliach evidence set expected in completed dry-runs
+  + [artifact_role] is shaliach_self_negotiation for each layer
+  + [artifact_role] is shaliach_finding for each layer
+  + [artifact_role] is shaliach_response when finding action is request_rework or pause or severity warning
+  + [artifact_role] is run_manifest
+  + [checkpoint_field] is shaliach_cross_artifact_status when validating checkpoint evidence
+  + [authority_boundary] is expected_ref_presence_not_approval
+
+& [ValidationRules] is the deterministic rule set
+  + [rule] is manifest should include each shaliach_self_negotiation artifact present in the run root
+  + [rule] is manifest should include each shaliach_finding artifact present in the run root
+  + [rule] is manifest should include shaliach_response artifacts when present
+  + [rule] is validator may optionally require a checkpoint proof file with shaliach_cross_artifact_status passed
+  + [rule] is validator must report missing refs as validation errors, not semantic failures
+  + [authority_boundary] is artifact_index_validation_not_shaliach_decision
+
+& [ImplementationShape] is the intended safe split
+  + [slice_1] is extend manifest validation to recognize shaliach_self_negotiation artifact role
+  + [slice_2] is add optional checkpoint proof validation for shaliach_cross_artifact_status
+  + [slice_3] is document operator command sequence after proof validates
+  + [authority_boundary] is validation_helper_not_runtime_mutation
+
+& [ProofExpectations] is the minimum implementation proof
+  + [test_case] is manifest validation accepts shaliach_self_negotiation refs
+  + [test_case] is manifest validation reports missing self-negotiation artifact refs
+  + [test_case] is optional checkpoint proof validates shaliach_cross_artifact_status passed
+  + [test_case] is optional checkpoint proof rejects failed probe status
+  + [test_case] is validation never mutates run artifacts
