@@ -125,6 +125,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `negotiated_agent.apply_preflight` implements the first pieces of that contract: mutation preflight validation, rollback snapshot materialization helpers, and target file copying behind explicit operator acknowledgement. Snapshot materialization writes rollback evidence under the run root for existing target files and records create-new operations before generated source files are applied to the explicit target workspace.
 
+`coordination/rollback_command_design.sop` defines the matching rollback contract. It requires explicit acknowledgement, same-run apply evidence, snapshot restoration for replaced files, removal only for files created by the apply result, verification evidence, and a durable `rollback_result.sop`.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

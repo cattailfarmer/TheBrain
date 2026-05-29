@@ -1,0 +1,39 @@
+& [RollbackCommandDesign] is the design contract for undoing an acknowledged apply
+  @ [apply_mutation_design] coordination/operator_approved_apply_mutation_design.sop
+  @ [created_at] 2026-05-29T16:43:00Z
+
+  + [design_status] is ready_for_later_implementation
+  + [authority_boundary] is rollback_design_not_rollback_command
+  + [purpose] is define how rollback restores snapshot-backed files and removes create-new files after an acknowledged apply
+
+  = must: require --apply-result
+  = must: require --target-workspace-root
+  = must: require --i-understand-this-mutates-workspace
+  = must: load snapshot_materialization.sop from the same run root as apply_result.sop
+  = must: restore replace_existing entries from their snapshot refs
+  = must: remove create_new files only when apply_result marks them as applied by that apply operation
+  = must: reject rollback when any target path escapes target_workspace_root
+  = must: write rollback_result.sop for success, partial success, or rejection
+  = must: run a verification command after rollback when one is available
+  = must: keep original snapshots after rollback unless a separate cleanup command is implemented
+
+  - never: remove a file that was not created by the apply result being rolled back
+  - never: delete snapshot evidence during rollback
+  - never: infer target workspace root from the shell
+  - never: treat rollback verification failure as silent success
+
+& [RollbackResult] is the future rollback evidence artifact
+  + [field] is rollback_status
+  + [field] is restored_file_set
+  + [field] is removed_file_set
+  + [field] is skipped_file_set
+  + [field] is verification_result_ref
+  + [field] is error_summary
+  + [field] is authority_boundary
+
+& [ImplementationOrder] is the safe rollback implementation path
+  + [slice_1] is add rollback data records and dry-run rollback preview
+  + [slice_2] is implement restore/remove helpers in temporary workspace tests
+  + [slice_3] is add explicit rollback CLI acknowledgement path
+  + [slice_4] is document apply plus rollback operator workflow together
+  + [slice_5] is refresh spec audit and long-run checkpoint after rollback proof

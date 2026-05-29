@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 109
+  + [job_notice_revision] is 110
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -127,7 +127,8 @@
     S102_spec_audit_refresh_after_snapshot_preflight |
     S103_long_run_checkpoint_after_snapshot_preflight |
     S104_operator_acknowledged_apply_writer |
-    S105_rollback_command_design
+    S105_rollback_command_design |
+    S106_rollback_records_and_preview
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1524,7 +1525,7 @@
 
 & [WorkSliceDetail S105_rollback_command_design] is an apply pipeline design slice
   + [slice_id] is S105_rollback_command_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design rollback command behavior now that explicit apply writer exists
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP updated and tests remain passing
@@ -1532,3 +1533,16 @@
   + [support_status] is prepared
   + [dependency_set] is S104_operator_acknowledged_apply_writer
   + [known_risks] is applying writes without a clear rollback implementation path
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:43:00Z, proof_ref rollback_command_design.sop and architecture docs updated, result_summary rollback command design now defines explicit acknowledgement same-run evidence snapshot restore create-new removal verification and rollback_result.sop
+  + [completed_work_review] is support_delta verified rollback design now pairs with explicit apply writer; requirement_delta next step is rollback records and dry-run preview
+
+& [WorkSliceDetail S106_rollback_records_and_preview] is an apply pipeline implementation slice
+  + [slice_id] is S106_rollback_records_and_preview
+  + [slice_status] is open
+  + [scope] is add rollback result records and dry-run rollback preview without mutating target files
+  + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
+  + [proof_route] is tests cover restore/remove preview records from apply_result and snapshot materialization
+  + [completion_criteria] is rollback preview can report restored removed skipped files while preserving no mutation boundary
+  + [support_status] is prepared
+  + [dependency_set] is S105_rollback_command_design
+  + [known_risks] is implementing rollback mutation before preview records are stable
