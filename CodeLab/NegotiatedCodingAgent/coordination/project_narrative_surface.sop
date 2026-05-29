@@ -1652,3 +1652,11 @@
   + [proof_ref] is coordination/reviewed_narrative_append_design.sop
   + [current_frontier] is S202_narrative_append_review_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S202_narrative_append_review_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S202_narrative_append_review_records
+  + [implemented_capability] is ManagerNarrativeAppendApproval and ShaliachNarrativeAppendClearance records model reviewed narrative append gates without file mutation
+  + [proof_result] is tests passed with 170 tests
+  + [current_frontier] is S203_narrative_append_result_plan
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

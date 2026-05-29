@@ -2817,7 +2817,7 @@
 
 & [WorkSliceDetail S202_narrative_append_review_records] is a coordination runtime implementation slice
   + [slice_id] is S202_narrative_append_review_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ManagerNarrativeAppendApproval and ShaliachNarrativeAppendClearance records
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover approval clearance allowed blocked finding rework statuses and SOP boundaries
@@ -2825,3 +2825,16 @@
   + [support_status] is prepared
   + [dependency_set] is S201_reviewed_narrative_append_design
   + [known_risks] is review records becoming ceremonial without status checks in later append helper
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T05:06:00Z, proof_ref tests passed with 170 tests, result_summary added Manager and Shaliach narrative append review records
+  + [completed_work_review] is support_delta verified approval and clearance records expose explicit append gates but do not mutate surfaces; requirement_delta next step is add NarrativeAppendResult and pure append plan helper
+
+& [WorkSliceDetail S203_narrative_append_result_plan] is a coordination runtime implementation slice
+  + [slice_id] is S203_narrative_append_result_plan
+  + [slice_status] is open
+  + [scope] is add NarrativeAppendResult and pure append-plan helper with stale surface guard
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover applied and blocked result records missing review blocked update count and stale guard cases
+  + [completion_criteria] is reviewed narrative append can be planned and blocked without mutating the narrative surface
+  + [support_status] is prepared
+  + [dependency_set] is S202_narrative_append_review_records
+  + [known_risks] is implementing actual file append before result planning is proven

@@ -83,6 +83,7 @@ from negotiated_agent.narrative_coverage import (
     compute_narrative_stale_check,
 )
 from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_cli_main
+from negotiated_agent.narrative_append import ManagerNarrativeAppendApproval, ShaliachNarrativeAppendClearance
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
@@ -4764,6 +4765,81 @@ class NarrativeCoverageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaises(ValueError):
                 narrative_coverage_cli_main(["--project-root", temp, "--stale-check", "--update-record"])
+
+
+class NarrativeAppendReviewTests(unittest.TestCase):
+    def test_manager_approval_allows_append_only_with_approved_status_and_count(self) -> None:
+        approval = ManagerNarrativeAppendApproval(
+            approval_id="manager-append-1",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            approval_status="approved_for_narrative_append",
+            approved_update_count=2,
+            frontier_at_approval="S202",
+            residual_risks=("append text still requires surface guard",),
+        )
+        self.assertTrue(approval.allows_append)
+        sop = approval.to_sop()
+        self.assertIn("ManagerNarrativeAppendApproval manager-append-1", sop)
+        self.assertIn("allows_append] is true", sop)
+        self.assertIn("manager_approval_not_surface_mutation", sop)
+        self.assertIn("residual_risk] is append text still requires surface guard", sop)
+
+    def test_manager_approval_blocks_non_approved_status(self) -> None:
+        approval = ManagerNarrativeAppendApproval(
+            approval_id="manager-append-blocked",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            approval_status="blocked_pending_review",
+            approved_update_count=2,
+            frontier_at_approval="S202",
+        )
+        self.assertFalse(approval.allows_append)
+        self.assertIn("allows_append] is false", approval.to_sop())
+
+    def test_manager_approval_blocks_empty_update_count(self) -> None:
+        approval = ManagerNarrativeAppendApproval(
+            approval_id="manager-append-empty",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            approval_status="approved_for_narrative_append",
+            approved_update_count=0,
+            frontier_at_approval="S202",
+        )
+        self.assertFalse(approval.allows_append)
+
+    def test_shaliach_clearance_allows_append_only_when_clear_without_rework(self) -> None:
+        clearance = ShaliachNarrativeAppendClearance(
+            clearance_id="shaliach-append-1",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            clearance_status="clear_for_narrative_append",
+            checked_protocols=("SOP", "SJS"),
+            findings=("append remains evidence-scoped",),
+        )
+        self.assertTrue(clearance.allows_append)
+        sop = clearance.to_sop()
+        self.assertIn("ShaliachNarrativeAppendClearance shaliach-append-1", sop)
+        self.assertIn("allows_append] is true", sop)
+        self.assertIn("checked_protocol] is SOP", sop)
+        self.assertIn("shaliach_clearance_not_surface_mutation", sop)
+
+    def test_shaliach_clearance_blocks_required_rework(self) -> None:
+        clearance = ShaliachNarrativeAppendClearance(
+            clearance_id="shaliach-append-rework",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            clearance_status="clear_for_narrative_append",
+            checked_protocols=("SOP",),
+            required_rework=("add stale surface guard",),
+        )
+        self.assertFalse(clearance.allows_append)
+        self.assertIn("required_rework] is add stale surface guard", clearance.to_sop())
+
+    def test_shaliach_clearance_blocks_non_clear_status(self) -> None:
+        clearance = ShaliachNarrativeAppendClearance(
+            clearance_id="shaliach-append-blocked",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            clearance_status="blocked_pending_protocol_review",
+            checked_protocols=("SOP",),
+        )
+        self.assertFalse(clearance.allows_append)
+        self.assertIn("allows_append] is false", clearance.to_sop())
 
 
 class RunManifestTests(unittest.TestCase):

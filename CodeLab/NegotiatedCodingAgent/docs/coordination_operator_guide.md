@@ -368,6 +368,8 @@ This writes `coordination/narrative_coverage_update_record.sop` and does not mut
 
 Do not append update-record text to the narrative surface manually during automated runs. The reviewed append boundary is specified in `coordination/reviewed_narrative_append_design.sop`; implementation is intentionally split into later record, result, and CLI slices.
 
+The Manager and Shaliach review record types now exist in `negotiated_agent.narrative_append`, but no operator wrapper writes them yet.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
