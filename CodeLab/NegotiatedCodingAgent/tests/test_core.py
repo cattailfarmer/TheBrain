@@ -81,6 +81,11 @@ from negotiated_agent.run_local_execution import (
     load_run_local_execution_plan,
 )
 from negotiated_agent.run_local_execution_cli import main as run_local_execution_cli_main
+from negotiated_agent.run_local_review import (
+    ManagerRunLocalOutputReview,
+    ShaliachRunLocalOutputReview,
+    decide_run_local_merge_eligibility,
+)
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -2900,6 +2905,109 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertTrue((plan_root / "implementation" / "README.generated.txt").exists())
             self.assertTrue((plan_root / "run_local_execution_result.sop").exists())
             self.assertIn("run_local_execution_write_not_target_workspace_application", out.getvalue())
+
+    def test_run_local_output_reviews_preserve_boundaries(self) -> None:
+        manager = ManagerRunLocalOutputReview(
+            review_id="manager-review-1",
+            review_status="accepted_for_merge_review",
+            plan_ref="plan.sop",
+            result_ref="result.sop",
+            generated_files=("implementation/README.generated.txt",),
+            frontier_at_review="S169_run_local_output_review_records",
+            risk_summary="low risk deterministic output",
+        )
+        shaliach = ShaliachRunLocalOutputReview(
+            review_id="shaliach-review-1",
+            review_status="clear",
+            plan_ref="plan.sop",
+            result_ref="result.sop",
+            checked_protocols=("SOP", "SJS", "DataDrivenDesign"),
+            finding_summary="no boundary issue",
+            required_response="proceed_to_merge_review",
+        )
+        self.assertIn("manager_run_local_review_not_apply_acceptance", manager.to_sop())
+        self.assertIn("shaliach_run_local_review_not_manager_acceptance", shaliach.to_sop())
+
+    def test_run_local_merge_eligibility_allows_clear_reviews(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manager = ManagerRunLocalOutputReview(
+                review_id="manager-review-1",
+                review_status="accepted_for_merge_review",
+                plan_ref="plan.sop",
+                result_ref="result.sop",
+                generated_files=("implementation/README.generated.txt",),
+                frontier_at_review="S169_run_local_output_review_records",
+                risk_summary="low risk deterministic output",
+            )
+            shaliach = ShaliachRunLocalOutputReview(
+                review_id="shaliach-review-1",
+                review_status="warning",
+                plan_ref="plan.sop",
+                result_ref="result.sop",
+                checked_protocols=("SOP", "SJS", "DataDrivenDesign"),
+                finding_summary="minor warning",
+                required_response="proceed_to_merge_review",
+            )
+            summary = decide_run_local_merge_eligibility(
+                eligibility_id="eligibility-1",
+                manager_review=manager,
+                manager_review_ref="manager.sop",
+                shaliach_review=shaliach,
+                shaliach_review_ref="shaliach.sop",
+                run_local_root=root,
+            )
+            self.assertEqual(summary.eligibility_status, "eligible_for_manual_merge_packet")
+            self.assertIn("merge_eligibility_not_manual_merge_packet", summary.to_sop())
+
+    def test_run_local_merge_eligibility_blocks_manager_shaliach_and_escaped_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manager = ManagerRunLocalOutputReview(
+                review_id="manager-review-1",
+                review_status="rejected",
+                plan_ref="plan.sop",
+                result_ref="result.sop",
+                generated_files=("implementation/README.generated.txt",),
+                frontier_at_review="S169_run_local_output_review_records",
+                risk_summary="incorrect behavior",
+            )
+            shaliach = ShaliachRunLocalOutputReview(
+                review_id="shaliach-review-1",
+                review_status="pause_required",
+                plan_ref="plan.sop",
+                result_ref="result.sop",
+                checked_protocols=("SOP", "SJS", "DataDrivenDesign"),
+                finding_summary="boundary issue",
+                required_response="pause_for_manager",
+            )
+            manager_block = decide_run_local_merge_eligibility(
+                eligibility_id="eligibility-1",
+                manager_review=manager,
+                manager_review_ref="manager.sop",
+                shaliach_review=shaliach,
+                shaliach_review_ref="shaliach.sop",
+                run_local_root=root,
+            )
+            self.assertEqual(manager_block.eligibility_status, "blocked_by_manager")
+            manager = ManagerRunLocalOutputReview(
+                review_id="manager-review-2",
+                review_status="accepted_for_merge_review",
+                plan_ref="plan.sop",
+                result_ref="result.sop",
+                generated_files=("..\\escape.txt",),
+                frontier_at_review="S169_run_local_output_review_records",
+                risk_summary="bad ref",
+            )
+            with self.assertRaisesRegex(ValueError, "escapes"):
+                decide_run_local_merge_eligibility(
+                    eligibility_id="eligibility-2",
+                    manager_review=manager,
+                    manager_review_ref="manager.sop",
+                    shaliach_review=shaliach,
+                    shaliach_review_ref="shaliach.sop",
+                    run_local_root=root,
+                )
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

@@ -2388,7 +2388,7 @@
 
 & [WorkSliceDetail S169_run_local_output_review_records] is a coordination runtime implementation slice
   + [slice_id] is S169_run_local_output_review_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ManagerRunLocalOutputReview ShaliachRunLocalOutputReview and MergeEligibilitySummary records
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover boundary serialization accepted clear eligibility manager block shaliach block and escaped generated ref rejection
@@ -2396,3 +2396,16 @@
   + [support_status] is prepared
   + [dependency_set] is S168_run_local_output_review_design
   + [known_risks] is review records being treated as manual merge packet
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T00:06:00Z, proof_ref tests passed with 129 tests, result_summary added run-local Manager Shaliach and merge eligibility review records
+  + [completed_work_review] is support_delta verified eligibility remains non-mutating and not a merge packet; requirement_delta next step is explicit review and eligibility writer CLI
+
+& [WorkSliceDetail S170_run_local_output_review_cli] is a coordination runtime implementation slice
+  + [slice_id] is S170_run_local_output_review_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to write run-local output reviews and merge eligibility evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover manager review write shaliach review write eligibility write blocked eligibility and no merge packet creation
+  + [completion_criteria] is operators can write review and eligibility evidence without creating merge packets or applying files
+  + [support_status] is prepared
+  + [dependency_set] is S169_run_local_output_review_records
+  + [known_risks] is eligibility CLI being mistaken for merge packet generation

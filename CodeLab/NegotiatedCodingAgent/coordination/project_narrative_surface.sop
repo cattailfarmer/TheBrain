@@ -1362,3 +1362,11 @@
   + [implemented_capability] is run_local_output_review_design.sop defines Manager Shaliach and merge eligibility review records before generated outputs can become merge candidates
   + [current_frontier] is S169_run_local_output_review_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S169_run_local_output_review_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S169_run_local_output_review_records
+  + [implemented_capability] is ManagerRunLocalOutputReview ShaliachRunLocalOutputReview and RunLocalMergeEligibilitySummary represent generated-output review without merge packet or apply mutation
+  + [proof_result] is tests passed with 129 tests
+  + [current_frontier] is S170_run_local_output_review_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
