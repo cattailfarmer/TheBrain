@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 67
+  + [job_notice_revision] is 68
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -85,7 +85,8 @@
     S60_executable_multi_programmer_runner_design |
     S61_multi_programmer_runner_records |
     S62_orchestrator_multi_programmer_plan_artifacts |
-    S63_multi_programmer_runner_execution_scaffold
+    S63_multi_programmer_runner_execution_scaffold |
+    S64_orchestrator_assignment_executor_path
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -936,7 +937,7 @@
 
 & [WorkSliceDetail S63_multi_programmer_runner_execution_scaffold] is a Programmer swarm implementation slice
   + [slice_id] is S63_multi_programmer_runner_execution_scaffold
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a non-parallel execution scaffold that can execute one assignment record at a time into its own run-local output root
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is unit tests showing assignment output writes to isolated roots and records lifecycle state without target workspace mutation
@@ -944,3 +945,16 @@
   + [support_status] is prepared
   + [dependency_set] is S62_orchestrator_multi_programmer_plan_artifacts
   + [known_risks] is drifting toward parallel execution before merge conflict records are enforceable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:50:00Z, proof_ref tests passed with 50 tests, result_summary added isolated assignment output executor and run-local result record
+  + [completed_work_review] is support_delta verified assignment output can be written to per-Programmer roots; requirement_delta orchestrator still uses legacy single implementation write path
+
+& [WorkSliceDetail S64_orchestrator_assignment_executor_path] is a Programmer swarm implementation slice
+  + [slice_id] is S64_orchestrator_assignment_executor_path
+  + [slice_status] is open
+  + [scope] is route the orchestrator's executed Programmer output through the assignment execution scaffold
+  + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run test shows implementation output lives under the executed assignment output_root and file-change records cite that path
+  + [completion_criteria] is the current single executed Programmer path uses the same executor contract as future multi-Programmer execution
+  + [support_status] is prepared
+  + [dependency_set] is S63_multi_programmer_runner_execution_scaffold
+  + [known_risks] is breaking existing output inventory or file-change lineage assumptions

@@ -29,7 +29,11 @@ from negotiated_agent.mailbox import (
 )
 from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
-from negotiated_agent.multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan
+from negotiated_agent.multi_programmer import (
+    build_merge_review_input,
+    build_multi_programmer_execution_plan,
+    execute_assignment_output,
+)
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -342,6 +346,30 @@ class WorkSliceTests(unittest.TestCase):
         self.assertIn("MultiProgrammerMergeReviewInput", sop)
         self.assertIn("merge_input_not_merge_approval", sop)
         self.assertIn("WS002_verification.ProgrammerB.programmer_report.sop", sop)
+
+    def test_assignment_execution_writes_to_isolated_run_local_root(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp)
+            work_slices = create_planned_work_slices(Path("code.package.sop"), "build thing", include_support_slices=False)
+            plan = create_programmer_assignment_plan(
+                work_slices,
+                [AgentConfig(name="ProgrammerA", model="m", temperature=0, role="core")],
+            )
+            execution_plan = build_multi_programmer_execution_plan(plan)
+            result = execute_assignment_output(
+                run_root,
+                execution_plan.records[0],
+                "```text path=app.py\nprint('ok')\n```",
+            )
+            self.assertEqual(result.record.lifecycle_state, "output_written")
+            self.assertEqual(
+                result.written_files[0],
+                run_root / "implementation" / "WS001_core_implementation.ProgrammerA" / "app.py",
+            )
+            self.assertEqual(result.written_files[0].read_text(encoding="utf-8"), "print('ok')\n")
+            sop = result.to_sop(run_root)
+            self.assertIn("run_local_output_not_workspace_patch", sop)
+            self.assertIn("implementation/WS001_core_implementation.ProgrammerA/app.py", sop)
 
 
 class FileChangeSurfaceTests(unittest.TestCase):

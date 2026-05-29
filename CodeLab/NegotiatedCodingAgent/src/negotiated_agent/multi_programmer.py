@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from .slices import ProgrammerAssignment, ProgrammerAssignmentPlan
+from .writer import write_implementation_to_root
 
 
 def _artifact_stem(slice_id: str, programmer_name: str) -> str:
@@ -51,6 +53,37 @@ class AssignmentExecutionRecord:
   + [file_change_surface_ref] is {self.file_change_surface_ref}
   + [output_root] is {self.output_root}
   + [reason] is {self.reason}
+"""
+
+    def with_state(self, lifecycle_state: str) -> "AssignmentExecutionRecord":
+        return AssignmentExecutionRecord(
+            slice_id=self.slice_id,
+            programmer_name=self.programmer_name,
+            lifecycle_state=lifecycle_state,
+            work_slice_ref=self.work_slice_ref,
+            raw_output_ref=self.raw_output_ref,
+            programmer_report_ref=self.programmer_report_ref,
+            manager_review_ref=self.manager_review_ref,
+            file_change_surface_ref=self.file_change_surface_ref,
+            output_root=self.output_root,
+            reason=self.reason,
+        )
+
+
+@dataclass(frozen=True)
+class AssignmentExecutionResult:
+    record: AssignmentExecutionRecord
+    written_files: tuple[Path, ...]
+
+    def to_sop(self, run_root: Path) -> str:
+        files = ", ".join(str(path.relative_to(run_root)).replace("\\", "/") for path in self.written_files) or "none"
+        return f"""& [AssignmentExecutionResult {self.record.slice_id}:{self.record.programmer_name}] is one completed assignment output
+  + [slice_id] is {self.record.slice_id}
+  + [programmer_name] is {self.record.programmer_name}
+  + [lifecycle_state] is {self.record.lifecycle_state}
+  + [output_root] is {self.record.output_root}
+  + [written_files] is {files}
+  + [authority_boundary] is run_local_output_not_workspace_patch
 """
 
 
@@ -132,3 +165,16 @@ def build_merge_review_input(execution_plan: MultiProgrammerExecutionPlan) -> Mu
     return MultiProgrammerMergeReviewInput(
         inputs=tuple(MergeReviewInputRecord.from_execution_record(record) for record in execution_plan.records)
     )
+
+
+def execute_assignment_output(
+    run_root: Path,
+    record: AssignmentExecutionRecord,
+    coder_output: str,
+) -> AssignmentExecutionResult:
+    output_root = (run_root / record.output_root).resolve()
+    run_root_resolved = run_root.resolve()
+    if not str(output_root).startswith(str(run_root_resolved)):
+        raise ValueError(f"Refusing to write outside run root: {record.output_root}")
+    written = write_implementation_to_root(output_root, coder_output)
+    return AssignmentExecutionResult(record=record.with_state("output_written"), written_files=tuple(written))

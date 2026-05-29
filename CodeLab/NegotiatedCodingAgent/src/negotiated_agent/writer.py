@@ -15,8 +15,7 @@ def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def write_implementation(root: Path, coder_output: str) -> list[Path]:
-    implementation_root = root / "implementation"
+def write_implementation_to_root(implementation_root: Path, coder_output: str) -> list[Path]:
     implementation_root.mkdir(parents=True, exist_ok=True)
     written: list[Path] = []
     for match in FILE_BLOCK.finditer(coder_output):
@@ -34,3 +33,7 @@ def write_implementation(root: Path, coder_output: str) -> list[Path]:
         write_text(fallback, coder_output)
         written.append(fallback)
     return written
+
+
+def write_implementation(root: Path, coder_output: str) -> list[Path]:
+    return write_implementation_to_root(root / "implementation", coder_output)
