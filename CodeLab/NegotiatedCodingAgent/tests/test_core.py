@@ -37,6 +37,7 @@ from negotiated_agent.role_profile import assignments_to_sop, build_role_model_a
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import create_initial_work_slice
+from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.writer import write_implementation
 
 
@@ -532,6 +533,22 @@ class ModelInventoryTests(unittest.TestCase):
             self.assertIn("RoleModelProfile", sop)
             self.assertIn("director_2", sop)
             self.assertIn("dry_run_until_serving_installed", sop)
+
+    def test_vllm_preflight_reports_wsl_blocker_without_installing(self) -> None:
+        inventory = ModelInventory(
+            gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+            ollama=ToolProbe("ollama", False, "not found"),
+            wsl=ToolProbe("wsl", False, "not installed"),
+            docker=ToolProbe("docker", False, "not found"),
+            openai_compatible=ToolProbe("openai_compatible", False, "unavailable"),
+            ollama_models=(),
+        )
+        report = build_vllm_wsl_preflight(inventory)
+        sop = report.to_sop()
+        self.assertEqual(report.status, "blocked_before_install")
+        self.assertIn("VllmWsl2SetupPreflight", sop)
+        self.assertIn("WSL is not installed", sop)
+        self.assertIn("setup_preflight_not_system_installation", sop)
 
 
 class LongRunHarnessTests(unittest.TestCase):

@@ -115,6 +115,7 @@
   + [implemented_slice] is S32_mailbox_claim_listing_cli
   + [implemented_slice] is S33_rendezvous_packet_cli
   + [implemented_slice] is S34_coordination_operator_guide
+  + [implemented_slice] is S35_vllm_wsl2_setup_preflight
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -159,6 +160,7 @@
   + [proof_result] is tests passed with 37 tests after S32 mailbox claim listing CLI
   + [proof_result] is tests passed with 38 tests after S33 rendezvous packet CLI
   + [proof_result] is tests passed with 38 tests after S34 coordination operator guide
+  + [proof_result] is tests passed with 39 tests and coordination/vllm_wsl2_preflight.sop reports WSL blocker for RTX 5090 vLLM route
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -201,6 +203,7 @@
   + [ready_capability] is worker operators can list mailbox claim and conflict state through CLI
   + [ready_capability] is worker operators can write rendezvous handoff packets through CLI and PowerShell helper
   + [ready_capability] is future conversations have a coordination operator guide for proof runs, manifests, mailbox, claims, cursors, and rendezvous packets
+  + [ready_capability] is vLLM WSL2 route has a non-destructive preflight report showing RTX 5090 readiness and WSL absence
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -224,6 +227,7 @@
   + [next_recommended_slice] is S33_rendezvous_packet_cli
   + [next_recommended_slice] is S34_coordination_operator_guide
   + [next_recommended_slice] is S35_vllm_wsl2_setup_preflight
+  + [next_recommended_slice] is S36_vllm_install_operator_guide
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 

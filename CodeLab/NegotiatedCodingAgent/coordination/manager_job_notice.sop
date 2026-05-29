@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 39
+  + [job_notice_revision] is 40
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -57,7 +57,8 @@
     S32_mailbox_claim_listing_cli |
     S33_rendezvous_packet_cli |
     S34_coordination_operator_guide |
-    S35_vllm_wsl2_setup_preflight
+    S35_vllm_wsl2_setup_preflight |
+    S36_vllm_install_operator_guide
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -544,7 +545,7 @@
 
 & [WorkSliceDetail S35_vllm_wsl2_setup_preflight] is a local model serving slice
   + [slice_id] is S35_vllm_wsl2_setup_preflight
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a non-destructive preflight script/report for WSL2 vLLM setup readiness on this RTX 5090 machine
   + [target_files] is src/negotiated_agent/**, scripts/**, docs/**, coordination/**
   + [proof_route] is script writes setup preflight SOP without installing WSL or vLLM
@@ -552,3 +553,16 @@
   + [support_status] is prepared
   + [dependency_set] is S15_model_inventory_and_serving_probe
   + [known_risks] is drifting into destructive system installation rather than reporting readiness
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:10:00Z, proof_ref tests passed with 39 tests and coordination/vllm_wsl2_preflight.sop written, result_summary added non-destructive WSL2 vLLM preflight report showing RTX 5090 ready but WSL absent
+  + [completed_work_review] is support_delta verified exact local serving blocker and next actions without installing system components; requirement_delta actual WSL2 and vLLM installation remains manual future work
+
+& [WorkSliceDetail S36_vllm_install_operator_guide] is a local model serving slice
+  + [slice_id] is S36_vllm_install_operator_guide
+  + [slice_status] is open
+  + [scope] is document the manual WSL2 and vLLM installation sequence with source references and project verification commands
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is operator can install WSL2/vLLM later without confusing preflight with installation
+  + [support_status] is prepared
+  + [dependency_set] is S35_vllm_wsl2_setup_preflight
+  + [known_risks] is relying on stale external installation details without source links

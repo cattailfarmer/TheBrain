@@ -1,0 +1,20 @@
+& [VllmWsl2SetupPreflight] is the non-destructive readiness report for vLLM on WSL2
+  + [status] is blocked_before_install
+  + [gpu_name] is NVIDIA GeForce RTX 5090
+  + [gpu_vram_mib] is 32607
+  + [nvidia_driver] is 596.49
+  + [cuda_version] is 13.2
+  + [wsl_available] is false
+  + [wsl_detail] is The Windows Subsystem for Linux is not installed. You can install by running 'wsl.exe --install'. For more information please visit https://aka.ms/wslinstall
+  + [docker_available] is false
+  + [openai_compatible_available] is false
+  + [recommended_route] is install_wsl2_then_vllm
+  + [reference] is https://docs.vllm.ai/en/latest/getting_started/quickstart.html
+  + [reference] is https://learn.microsoft.com/windows/ai/directml/gpu-cuda-in-wsl
+  + [reference] is https://docs.nvidia.com/cuda/wsl-user-guide/
+  + [authority_boundary] is setup_preflight_not_system_installation
+  + [blocker] is WSL is not installed or not available from this shell.
+  + [next_action] is Install WSL2 with an Ubuntu distribution, then verify `wsl --status` and `nvidia-smi` inside WSL.
+  + [next_action] is After vLLM install, start an OpenAI-compatible server and verify `/v1/models` on localhost:8000.
+  + [next_action] is Do not install a Linux NVIDIA kernel driver inside WSL; use the Windows host driver exposed to WSL.
+  + [next_action] is Prefer vLLM OpenAI-compatible serving for concurrent Manager, Director, Shaliach, and Programmer routes.
