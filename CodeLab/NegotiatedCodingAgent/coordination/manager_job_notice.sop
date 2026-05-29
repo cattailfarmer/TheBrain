@@ -2700,7 +2700,7 @@
 
 & [WorkSliceDetail S193_long_run_checkpoint_after_frontier_apply_cli] is a long-run reentry slice
   + [slice_id] is S193_long_run_checkpoint_after_frontier_apply_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after frontier application apply CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 154-test suite and route draft proof
@@ -2708,3 +2708,16 @@
   + [support_status] is prepared
   + [dependency_set] is S192_frontier_application_apply_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:05:29Z, proof_ref long-run checkpoint passed 154 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after frontier application apply CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 154-test frontier application apply frontier; requirement_delta next step is refresh spec audit after frontier application support
+
+& [WorkSliceDetail S194_spec_audit_refresh_after_frontier_application] is a specification audit slice
+  + [slice_id] is S194_spec_audit_refresh_after_frontier_application
+  + [slice_status] is open
+  + [scope] is refresh implementation status after frontier application records CLI helper and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names frontier advancement and application support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists Manager-reviewed frontier advancement as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S193_long_run_checkpoint_after_frontier_apply_cli
+  + [known_risks] is overstating deterministic frontier application as live Manager delegation
