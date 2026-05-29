@@ -657,6 +657,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("approved application layer with application.shaliach_finding.sop", surface)
             self.assertIn("wrote implementation files", surface)
             self.assertIn("completed and narrative updated", surface)
+            self.assertIn("wrote run_manifest.sop", surface)
             self.assertIn("run narrative update written", surface)
             self.assertIn("negotiated SJS output", package)
             self.assertIn("ProtocolActivationSet", protocol_activation)
@@ -675,6 +676,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("mailbox_rework_notice_published", log)
             self.assertIn("custom-director-pool", log)
             self.assertIn("file_change_surface.sop", log)
+            self.assertIn("run_manifest_written", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -748,7 +750,9 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("artifact_ref repair_plan] is run_repair_plan.sop", run_manifest)
             self.assertIn("blocked at application by manager_rejection", surface)
             self.assertIn("wrote run_blocked.sop and run_repair_plan.sop", surface)
+            self.assertIn("wrote run_manifest.sop", surface)
             self.assertIn("run_repair_plan.sop", log)
+            self.assertIn("run_manifest_written", log)
 
 
 if __name__ == "__main__":

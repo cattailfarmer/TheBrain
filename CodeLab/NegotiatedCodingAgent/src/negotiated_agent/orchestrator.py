@@ -181,7 +181,11 @@ class NegotiatedCodingAgent:
             proofs=[f"run {run_root.name} wrote implementation files"],
         )
         self._write_run_narrative_update(run_root, objective, flowcharts, written)
-        self._write_run_manifest(run_root, "completed")
+        self._write_run_manifest(
+            run_root,
+            "completed",
+            frontier=f"run {run_root.name} completed and narrative updated with artifact manifest",
+        )
         return run_root
 
     def _negotiate_layer(
@@ -300,7 +304,11 @@ class NegotiatedCodingAgent:
             current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
             proofs=[f"run {run_root.name} wrote run_blocked.sop and {repair_plan_ref}"],
         )
-        self._write_run_manifest(run_root, "blocked")
+        self._write_run_manifest(
+            run_root,
+            "blocked",
+            frontier=f"run {run_root.name} blocked at {layer} by {blocker} with artifact manifest",
+        )
 
     def _blocked_run_repair_plan(self, run_root: Path, layer: str, blocker: str, reason: str) -> str:
         layer_refs = [
@@ -397,7 +405,7 @@ class NegotiatedCodingAgent:
             proofs=[f"run narrative update written for {rel_run}"],
         )
 
-    def _write_run_manifest(self, run_root: Path, lifecycle_status: str) -> None:
+    def _write_run_manifest(self, run_root: Path, lifecycle_status: str, *, frontier: str) -> None:
         artifact_lines = []
         for path in sorted(run_root.iterdir(), key=lambda item: item.name):
             if path.name == "run_manifest.sop" or not path.is_file():
@@ -414,6 +422,19 @@ class NegotiatedCodingAgent:
             ]
         )
         write_text(run_root / "run_manifest.sop", manifest)
+        self._log(
+            run_root,
+            {
+                "event": "run_manifest_written",
+                "lifecycle_status": lifecycle_status,
+                "run_manifest_ref": "run_manifest.sop",
+            },
+        )
+        self._update_conversation_surface(
+            run_root,
+            current_frontier=frontier,
+            proofs=[f"run {run_root.name} wrote run_manifest.sop"],
+        )
 
 
 def _sop_field_value(value: str, *, limit: int) -> str:

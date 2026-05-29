@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 31
+  + [job_notice_revision] is 32
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -49,7 +49,8 @@
     S24_configurable_mailbox_recipients |
     S25_blocked_run_repair_plan_synthesis |
     S26_run_artifact_manifest |
-    S27_run_manifest_log_event
+    S27_run_manifest_log_event |
+    S28_run_manifest_validation_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -432,7 +433,7 @@
 
 & [WorkSliceDetail S27_run_manifest_log_event] is a post-S16 governance expansion slice
   + [slice_id] is S27_run_manifest_log_event
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is log manifest creation and include manifest proof in conversation lifecycle updates
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing negotiation log and conversation surface mention run_manifest.sop
@@ -440,3 +441,16 @@
   + [support_status] is prepared
   + [dependency_set] is S26_run_artifact_manifest
   + [known_risks] is adding noisy proof churn rather than useful reentry signals
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:50:00Z, proof_ref tests passed with 32 tests, result_summary run_manifest.sop creation is now logged and appended to conversation surface proofs while preserving lifecycle frontier meaning
+  + [completed_work_review] is support_delta verified manifest discovery from lifecycle proof and run log; requirement_delta manifest validation remains future work
+
+& [WorkSliceDetail S28_run_manifest_validation_cli] is a post-S16 governance expansion slice
+  + [slice_id] is S28_run_manifest_validation_cli
+  + [slice_status] is open
+  + [scope] is add a lightweight validator for run_manifest.sop to check referenced files exist
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests and script execution against a generated or fixture manifest
+  + [completion_criteria] is operator can verify a run manifest before relying on it during reentry
+  + [support_status] is prepared
+  + [dependency_set] is S26_run_artifact_manifest
+  + [known_risks] is mistaking file-existence validation for semantic artifact validation
