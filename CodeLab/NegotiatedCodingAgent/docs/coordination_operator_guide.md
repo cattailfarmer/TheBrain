@@ -18,6 +18,12 @@ Use mailbox suppression when the run is only a proof pass and should not publish
 
 The run still writes local Shaliach response artifacts and `run_manifest.sop`.
 
+## Shaliach Response Traces
+
+When a run writes `<layer>.shaliach_response.sop`, inspect `perspective_trace` fields before assigning repair work. They explain why the response was selected, usually from protocol, evidence, form, and response-coordination perspectives.
+
+These traces are useful repair evidence, but they are deterministic scaffold records. Treat them as Shaliach support context, not as a substitute for Manager review or future live Shaliach internal negotiation.
+
 ## Run Manifests
 
 Each completed or blocked run writes `run_manifest.sop`. Validate that listed artifact refs exist:

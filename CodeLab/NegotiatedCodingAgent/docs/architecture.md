@@ -112,6 +112,19 @@ Each run records protocol and review surfaces alongside the flowcharts:
 
 These artifacts are evidence surfaces. They do not replace direct file inspection, tests, user instruction, or signed specifications.
 
+## Shaliach Perspective Trace
+
+Shaliach findings and response coordination artifacts include selected internal perspective records:
+
+- `ProtocolCounsel`: checks SOP, SJS, DataDrivenDesign, and local specification obligations.
+- `BoundaryMarshal`: checks scope, role, identity, authority, and lineage boundaries.
+- `EvidenceClerk`: checks support strength, provenance, and missing evidence.
+- `FailureExaminer`: checks blockers and recovery paths when relevant.
+- `FormKeeper`: checks artifact shape and required fields.
+- `ResponseCoordinator`: records the least intrusive sufficient response chosen from the finding.
+
+These records are deterministic scaffold traces. They make Shaliach’s reasoning legible, but they are not yet full live model-negotiated Shaliach self-debate.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

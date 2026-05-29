@@ -127,6 +127,7 @@
   + [implemented_slice] is S44_specification_implementation_status_audit
   + [implemented_slice] is S45_shaliach_internal_perspective_passes
   + [implemented_slice] is S46_shaliach_response_perspective_trace
+  + [implemented_slice] is S47_shaliach_internal_perspective_docs
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -183,6 +184,7 @@
   + [proof_result] is tests passed with 42 tests after S44 specification implementation status audit
   + [proof_result] is tests passed with 42 tests and suppressed dry-run showed Shaliach internal perspective records
   + [proof_result] is tests passed with 42 tests and suppressed dry-run showed Shaliach response perspective trace
+  + [proof_result] is tests passed with 42 tests after S47 Shaliach internal perspective docs
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -237,6 +239,7 @@
   + [ready_capability] is specification implementation status audit maps implemented partial and missing obligations
   + [ready_capability] is Shaliach findings include explicit internal perspective records and least-intrusive response selection
   + [ready_capability] is Shaliach response coordination artifacts include perspective traces explaining required response selection
+  + [ready_capability] is Shaliach perspective trace docs preserve deterministic scaffold boundary
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -272,6 +275,7 @@
   + [next_recommended_slice] is S45_shaliach_internal_perspective_passes
   + [next_recommended_slice] is S46_shaliach_response_perspective_trace
   + [next_recommended_slice] is S47_shaliach_internal_perspective_docs
+  + [next_recommended_slice] is S48_director_disagreement_ledger
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 
