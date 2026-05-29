@@ -1241,6 +1241,67 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("mailbox_rework_notice_suppressed", log)
             self.assertFalse((root / "coordination" / "mailbox").exists())
 
+    def test_run_executes_multiple_programmer_assignments_sequentially(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "coordination" / "conversations").mkdir(parents=True)
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ActiveConversationPointer] is active",
+                        "  + [active_conversation_uuid] is test-uuid",
+                        "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "coordination" / "conversations" / "test-uuid.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ConversationSurfaceFile] is active",
+                        "  + [conversation_uuid] is test-uuid",
+                        "  + [current_frontier] is old",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m"},
+                                {"name": "DirectorB", "model": "m"},
+                            ],
+                            "programmers": [
+                                {"name": "ProgrammerA", "model": "m", "role": "core"},
+                                {"name": "ProgrammerB", "model": "m", "role": "verification"},
+                            ],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                        "coordination": {"publish_rework_notices": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_root = NegotiatedCodingAgent(load_config(config_path), DryRunClient(), root).run("Build a test app")
+            log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
+            file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
+            self.assertTrue((run_root / "WS001_core_implementation.ProgrammerA.execution_result.sop").exists())
+            self.assertTrue((run_root / "WS002_verification.ProgrammerB.execution_result.sop").exists())
+            self.assertTrue((run_root / "WS003_documentation.ProgrammerA.execution_result.sop").exists())
+            self.assertIn("implementation/WS001_core_implementation.ProgrammerA/README.generated.txt", file_change_index)
+            self.assertIn("implementation/WS002_verification.ProgrammerB/README.generated.txt", file_change_index)
+            self.assertIn("implementation/WS003_documentation.ProgrammerA/README.generated.txt", file_change_index)
+            self.assertIn('"executed_assignment_count": 3', log)
+            self.assertIn('"merge_status": "pending_merge_review"', log)
+
 
 if __name__ == "__main__":
     unittest.main()

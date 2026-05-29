@@ -139,7 +139,6 @@ class NegotiatedCodingAgent:
 
         code_package_ref = run_root / "code.package.sop"
         planned_work_slices = create_planned_work_slices(code_package_ref, objective)
-        work_slice = planned_work_slices[0]
         assignment_plan = create_programmer_assignment_plan(planned_work_slices, self.config.programmers)
         execution_plan = build_multi_programmer_execution_plan(assignment_plan)
         merge_review_input = build_merge_review_input(execution_plan)
@@ -149,42 +148,65 @@ class NegotiatedCodingAgent:
         work_slices_by_id = {planned_work_slice.slice_id: planned_work_slice for planned_work_slice in planned_work_slices}
         for record in execution_plan.records:
             write_text(run_root / record.work_slice_ref, work_slices_by_id[record.slice_id].to_sop())
-        executed_record = execution_plan.records[0]
-        coder_output = self.client.complete(
-            self.config.coder,
-            coder_prompt(self.config.coder.role, objective, flowcharts),
-        ).text
-        write_text(run_root / "coder.raw.md", coder_output)
-        write_text(run_root / executed_record.raw_output_ref, coder_output)
-        write_text(
-            run_root / executed_record.programmer_report_ref,
-            programmer_report(work_slice.slice_id, executed_record.programmer_name, coder_output),
-        )
-        execution_result = execute_assignment_output(run_root, executed_record, coder_output)
-        written = list(execution_result.written_files)
-        write_text(run_root / f"{work_slice.slice_id}.{executed_record.programmer_name}.execution_result.sop", execution_result.to_sop(run_root))
-        work_slice_ref = executed_record.work_slice_ref
-        programmer_report_ref = executed_record.programmer_report_ref
-        manager_review_ref = executed_record.manager_review_ref
-        write_text(
-            run_root / manager_review_ref,
-            manager_review(work_slice.slice_id, written),
-        )
-        file_change_records = build_file_change_records(
-            run_root=run_root,
-            written_files=written,
-            work_slice_ref=work_slice_ref,
-            programmer_report_ref=programmer_report_ref,
-            manager_review_ref=manager_review_ref,
-            justification_ref="code.package.sop",
-        )
+        programmers_by_name = {programmer.name: programmer for programmer in self.config.programmers}
+        written: list[Path] = []
+        file_change_records = []
+        for index, record in enumerate(execution_plan.records):
+            assigned_programmer = programmers_by_name.get(record.programmer_name, self.config.coder)
+            assigned_work_slice = work_slices_by_id[record.slice_id]
+            coder_output = self.client.complete(
+                assigned_programmer,
+                coder_prompt(assigned_programmer.role, objective, flowcharts),
+            ).text
+            if index == 0:
+                write_text(run_root / "coder.raw.md", coder_output)
+            write_text(run_root / record.raw_output_ref, coder_output)
+            write_text(
+                run_root / record.programmer_report_ref,
+                programmer_report(record.slice_id, record.programmer_name, coder_output),
+            )
+            execution_result = execute_assignment_output(run_root, record, coder_output)
+            assignment_written = list(execution_result.written_files)
+            written.extend(assignment_written)
+            write_text(
+                run_root / f"{record.slice_id}.{record.programmer_name}.execution_result.sop",
+                execution_result.to_sop(run_root),
+            )
+            write_text(
+                run_root / record.manager_review_ref,
+                manager_review(record.slice_id, assignment_written),
+            )
+            file_change_records.extend(
+                build_file_change_records(
+                    run_root=run_root,
+                    written_files=assignment_written,
+                    work_slice_ref=record.work_slice_ref,
+                    programmer_report_ref=record.programmer_report_ref,
+                    manager_review_ref=record.manager_review_ref,
+                    justification_ref="code.package.sop",
+                )
+            )
+            self._log(
+                run_root,
+                {
+                    "event": "programmer_assignment_executed",
+                    "slice_id": record.slice_id,
+                    "programmer": record.programmer_name,
+                    "work_slice_ref": record.work_slice_ref,
+                    "programmer_report_ref": record.programmer_report_ref,
+                    "manager_review_ref": record.manager_review_ref,
+                    "execution_result_ref": f"{record.slice_id}.{record.programmer_name}.execution_result.sop",
+                    "files": [str(path.relative_to(run_root)) for path in assignment_written],
+                    "merge_status": "pending_merge_review",
+                },
+            )
         write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
         write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
             run_root,
             {
                 "event": "implementation_written",
-                "executed_slice": work_slice.slice_id,
+                "executed_assignment_count": len(execution_plan.records),
                 "multi_programmer_execution_plan_ref": "multi_programmer_execution_plan.sop",
                 "multi_programmer_merge_review_input_ref": "multi_programmer_merge_review_input.sop",
                 "files": [str(path.relative_to(run_root)) for path in written],

@@ -145,6 +145,7 @@
   + [implemented_slice] is S62_orchestrator_multi_programmer_plan_artifacts
   + [implemented_slice] is S63_multi_programmer_runner_execution_scaffold
   + [implemented_slice] is S64_orchestrator_assignment_executor_path
+  + [implemented_slice] is S65_sequential_multi_assignment_execution_loop
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -219,6 +220,7 @@
   + [proof_result] is tests passed with 49 tests after S62 orchestrator multi-Programmer plan artifacts
   + [proof_result] is tests passed with 50 tests after S63 isolated assignment execution scaffold
   + [proof_result] is tests passed with 50 tests after S64 orchestrator assignment executor path
+  + [proof_result] is tests passed with 51 tests after S65 sequential multi-assignment execution loop
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -291,6 +293,7 @@
   + [ready_capability] is orchestrator writes multi_programmer_execution_plan.sop and multi_programmer_merge_review_input.sop during normal runs
   + [ready_capability] is assignment execution scaffold writes one Programmer output to its isolated run-local output root
   + [ready_capability] is orchestrator single executed Programmer path now uses the assignment executor and per-assignment artifact refs
+  + [ready_capability] is orchestrator executes planned Programmer assignments sequentially with separate run-local outputs, reports, reviews, and pending merge status
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -344,8 +347,9 @@
   + [next_recommended_slice] is S63_multi_programmer_runner_execution_scaffold
   + [next_recommended_slice] is S64_orchestrator_assignment_executor_path
   + [next_recommended_slice] is S65_sequential_multi_assignment_execution_loop
-  + [next_reason] is sequential fan-out can now reuse isolated assignment execution without merging outputs
-  + [sleep_run_candidate] is continue S65 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S66_merge_conflict_ledger_scaffold
+  + [next_reason] is sequential fan-out needs visible overlap/conflict records before any merge decision
+  + [sleep_run_candidate] is continue S66 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

@@ -135,6 +135,7 @@
   + [last_proof] is tests passed with 49 tests after S62 orchestrator multi-Programmer plan artifacts
   + [last_proof] is tests passed with 50 tests after S63 isolated assignment execution scaffold
   + [last_proof] is tests passed with 50 tests after S64 orchestrator assignment executor path
+  + [last_proof] is tests passed with 51 tests after S65 sequential multi-assignment execution loop
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -286,9 +287,10 @@
   + [completed_slice] is S62_orchestrator_multi_programmer_plan_artifacts
   + [completed_slice] is S63_multi_programmer_runner_execution_scaffold
   + [completed_slice] is S64_orchestrator_assignment_executor_path
+  + [completed_slice] is S65_sequential_multi_assignment_execution_loop
 
-  + [current_frontier] is S65_sequential_multi_assignment_execution_loop after orchestrator assignment executor path
-  + [next_recommended_slice] is S65_sequential_multi_assignment_execution_loop
+  + [current_frontier] is S66_merge_conflict_ledger_scaffold after sequential multi-assignment execution
+  + [next_recommended_slice] is S66_merge_conflict_ledger_scaffold
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

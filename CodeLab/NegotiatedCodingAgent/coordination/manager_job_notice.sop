@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 69
+  + [job_notice_revision] is 70
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -87,7 +87,8 @@
     S62_orchestrator_multi_programmer_plan_artifacts |
     S63_multi_programmer_runner_execution_scaffold |
     S64_orchestrator_assignment_executor_path |
-    S65_sequential_multi_assignment_execution_loop
+    S65_sequential_multi_assignment_execution_loop |
+    S66_merge_conflict_ledger_scaffold
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -964,7 +965,7 @@
 
 & [WorkSliceDetail S65_sequential_multi_assignment_execution_loop] is a Programmer swarm implementation slice
   + [slice_id] is S65_sequential_multi_assignment_execution_loop
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is execute every planned assignment sequentially into isolated run-local output roots, without merging or target workspace mutation
   + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run test shows multiple Programmer reports, execution results, Manager reviews, and file-change records exist for configured assignments
@@ -972,3 +973,16 @@
   + [support_status] is prepared
   + [dependency_set] is S64_orchestrator_assignment_executor_path
   + [known_risks] is creating multiple outputs without a merge decision; keep outputs isolated and pending merge review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:10:00Z, proof_ref tests passed with 51 tests, result_summary orchestrator executes planned Programmer assignments sequentially into isolated run-local roots and leaves merge pending
+  + [completed_work_review] is support_delta verified normal runs can call multiple configured Programmers with separate artifacts; requirement_delta merge conflict ledger is still scaffold-only
+
+& [WorkSliceDetail S66_merge_conflict_ledger_scaffold] is a Programmer swarm implementation slice
+  + [slice_id] is S66_merge_conflict_ledger_scaffold
+  + [slice_status] is open
+  + [scope] is add a deterministic merge conflict ledger for accepted assignment outputs before any merge application
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing same relative output paths across assignment roots produce same_file_overlap conflict records
+  + [completion_criteria] is multi-Programmer runs can surface overlaps and pending merge decisions without applying merged output
+  + [support_status] is prepared
+  + [dependency_set] is S65_sequential_multi_assignment_execution_loop
+  + [known_risks] is treating conflict detection as merge resolution
