@@ -8,7 +8,7 @@ from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
 from negotiated_agent.apply_cli import main as apply_cli_main
-from negotiated_agent.apply_preflight import build_apply_mutation_preflight
+from negotiated_agent.apply_preflight import build_apply_mutation_preflight, materialize_snapshot_evidence
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -746,6 +746,58 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("ApplyMutationPreflight", (run_root / "apply_mutation_preflight.sop").read_text(encoding="utf-8"))
             self.assertIn("mutation_performed] is false", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
             self.assertFalse((target_root / "app.py").exists())
+
+    def test_snapshot_materialization_copies_existing_targets_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            run_root.mkdir()
+            target_root.mkdir()
+            (target_root / "existing.py").write_text("old\n", encoding="utf-8")
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(
+                    AcceptedFileMapEntry("implementation/existing.py", "existing.py", "assignment.sop"),
+                    AcceptedFileMapEntry("implementation/new.py", "new.py", "assignment.sop"),
+                ),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="test",
+            )
+            result = materialize_snapshot_evidence(run_root, target_root, packet)
+            self.assertEqual(len(result.entries), 2)
+            self.assertEqual((run_root / "apply_snapshots" / "existing.py").read_text(encoding="utf-8"), "old\n")
+            self.assertFalse((target_root / "new.py").exists())
+            self.assertIn("create_new", result.to_sop())
+            self.assertIn("snapshot_materialization_not_target_patch_application", result.to_sop())
+
+    def test_snapshot_materialization_rejects_workspace_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            run_root.mkdir()
+            target_root.mkdir()
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(AcceptedFileMapEntry("implementation/app.py", "../escape.py", "assignment.sop"),),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="test",
+            )
+            with self.assertRaisesRegex(ValueError, "escapes workspace"):
+                materialize_snapshot_evidence(run_root, target_root, packet)
 
 
 class MailboxCoordinationTests(unittest.TestCase):

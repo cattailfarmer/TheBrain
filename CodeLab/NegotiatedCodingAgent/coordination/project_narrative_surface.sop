@@ -370,6 +370,7 @@
   + [ready_capability] is apply mutation acknowledgement now runs preflight-only validation and writes evidence without target workspace mutation
   + [ready_capability] is specification implementation status audit distinguishes apply mutation preflight from absent target writer and rollback executor
   + [ready_capability] is long_run_checkpoint.sop records post-S99 66-test suite, dry-run, model inventory, non-gating endpoint health, and route draft status
+  + [ready_capability] is snapshot materialization helper writes rollback evidence under run root for existing targets and records create-new operations without applying generated code
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -444,9 +445,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S100_apply_snapshot_plan_writer
-  + [next_reason] is apply preflight is stable enough to add snapshot evidence helpers before any target patch writer
-  + [sleep_run_candidate] is continue S100 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S101_apply_cli_snapshot_preflight_artifact
+  + [next_reason] is snapshot helper should be wired into mutation preflight after gates pass while preserving no target patch application
+  + [sleep_run_candidate] is continue S101 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

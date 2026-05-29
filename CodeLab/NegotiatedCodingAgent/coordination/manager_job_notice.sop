@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 104
+  + [job_notice_revision] is 105
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -122,7 +122,8 @@
     S97_apply_mutation_preflight_validator |
     S98_spec_audit_refresh_after_apply_preflight |
     S99_long_run_checkpoint_after_apply_preflight |
-    S100_apply_snapshot_plan_writer
+    S100_apply_snapshot_plan_writer |
+    S101_apply_cli_snapshot_preflight_artifact
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1454,7 +1455,7 @@
 
 & [WorkSliceDetail S100_apply_snapshot_plan_writer] is an apply pipeline implementation slice
   + [slice_id] is S100_apply_snapshot_plan_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement snapshot plan/materialization helpers for future apply mutation using temporary workspace tests only
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover existing-file snapshot, create operation without snapshot, containment rejection, and no uncontrolled writes
@@ -1462,3 +1463,16 @@
   + [support_status] is prepared
   + [dependency_set] is S99_long_run_checkpoint_after_apply_preflight
   + [known_risks] is confusing snapshot writing with target patch application
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:27:00Z, proof_ref tests passed with 68 tests, result_summary apply_preflight now materializes rollback snapshot evidence under run root for existing target files while recording create-new operations without target patch application
+  + [completed_work_review] is support_delta verified snapshot evidence helper exists and remains separate from target writes; requirement_delta apply CLI preflight should write snapshot evidence only after gates pass
+
+& [WorkSliceDetail S101_apply_cli_snapshot_preflight_artifact] is an apply pipeline implementation slice
+  + [slice_id] is S101_apply_cli_snapshot_preflight_artifact
+  + [slice_status] is open
+  + [scope] is have mutation preflight command materialize snapshot evidence after successful gates while still refusing target patch application
+  + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
+  + [proof_route] is tests cover apply CLI writes snapshot evidence for existing target files and still does not write accepted source files
+  + [completion_criteria] is apply mutation acknowledgement writes apply_mutation_preflight.sop and snapshot_materialization.sop only when preflight is ready
+  + [support_status] is prepared
+  + [dependency_set] is S100_apply_snapshot_plan_writer
+  + [known_risks] is materializing snapshots before preflight gates pass
