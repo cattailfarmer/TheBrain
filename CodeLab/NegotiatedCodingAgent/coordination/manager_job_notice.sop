@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 120
+  + [job_notice_revision] is 121
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -138,7 +138,8 @@
     S113_post_apply_acceptance_design |
     S114_post_apply_acceptance_records |
     S115_post_apply_acceptance_cli_integration |
-    S116_long_run_checkpoint_after_post_apply_acceptance
+    S116_long_run_checkpoint_after_post_apply_acceptance |
+    S117_worker_runner_design
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1678,7 +1679,7 @@
 
 & [WorkSliceDetail S116_long_run_checkpoint_after_post_apply_acceptance] is a long-run reentry slice
   + [slice_id] is S116_long_run_checkpoint_after_post_apply_acceptance
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after post-apply acceptance CLI integration
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 76-test suite and route draft proof
@@ -1686,3 +1687,16 @@
   + [support_status] is prepared
   + [dependency_set] is S115_post_apply_acceptance_cli_integration
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:53:04Z, proof_ref long-run checkpoint passed 76 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after post-apply acceptance CLI integration
+  + [completed_work_review] is support_delta verified checkpoint captures post-apply acceptance frontier; requirement_delta next broad gap is worker runner design for mailbox-governed active workers
+
+& [WorkSliceDetail S117_worker_runner_design] is a coordination runtime design slice
+  + [slice_id] is S117_worker_runner_design
+  + [slice_status] is open
+  + [scope] is design an autonomous worker runner that consumes mailbox claims under Manager and Shaliach constraints
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP updated and tests remain passing
+  + [completion_criteria] is worker runner design names claim source, lease ownership, frontier updates, Shaliach pause conditions, Manager checkpoint cadence, and failure recovery artifacts
+  + [support_status] is prepared
+  + [dependency_set] is S116_long_run_checkpoint_after_post_apply_acceptance
+  + [known_risks] is creating a scheduler fantasy before the mailbox and run artifact boundaries are enforceable

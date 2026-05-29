@@ -222,7 +222,8 @@
   + [completed_slice] is S113_post_apply_acceptance_design
   + [completed_slice] is S114_post_apply_acceptance_records
   + [completed_slice] is S115_post_apply_acceptance_cli_integration
-  + [ready_slice] is S116_long_run_checkpoint_after_post_apply_acceptance
+  + [completed_slice] is S116_long_run_checkpoint_after_post_apply_acceptance
+  + [ready_slice] is S117_worker_runner_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
