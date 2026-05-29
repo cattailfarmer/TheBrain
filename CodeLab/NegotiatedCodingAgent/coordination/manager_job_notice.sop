@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 81
+  + [job_notice_revision] is 82
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -99,7 +99,8 @@
     S74_apply_plan_records |
     S75_apply_plan_dry_run_generation |
     S76_spec_audit_refresh_after_apply_plan |
-    S77_long_run_checkpoint_refresh
+    S77_long_run_checkpoint_refresh |
+    S78_apply_command_dry_run_cli_design
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1132,7 +1133,7 @@
 
 & [WorkSliceDetail S77_long_run_checkpoint_refresh] is a long-run reentry slice
   + [slice_id] is S77_long_run_checkpoint_refresh
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after the extended Programmer swarm and merge/apply evidence sequence
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness or tests update checkpoint without mutating target workspace
@@ -1140,3 +1141,16 @@
   + [support_status] is prepared
   + [dependency_set] is S76_spec_audit_refresh_after_apply_plan
   + [known_risks] is generating noisy dry-run artifacts or mailbox side effects
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:36:40Z, proof_ref long-run checkpoint passed tests dry-run model inventory and non-gating OpenAI healthcheck, result_summary refreshed coordination/long_run_checkpoint.sop after extended Programmer swarm sequence
+  + [completed_work_review] is support_delta verified long-run checkpoint records current frontier and environment state; requirement_delta apply command remains design-only
+
+& [WorkSliceDetail S78_apply_command_dry_run_cli_design] is a target workspace safety design slice
+  + [slice_id] is S78_apply_command_dry_run_cli_design
+  + [slice_status] is open
+  + [scope] is design the apply-manual-merge-packet CLI dry-run path before any mutation path exists
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is design surface written and tests remain passing
+  + [completion_criteria] is future CLI implementation has dry-run-only contract and mutation gate remains absent
+  + [support_status] is prepared
+  + [dependency_set] is S77_long_run_checkpoint_refresh
+  + [known_risks] is accidentally specifying a mutation command before dry-run validation is executable

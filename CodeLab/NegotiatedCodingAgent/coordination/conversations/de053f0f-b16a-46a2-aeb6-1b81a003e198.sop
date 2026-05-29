@@ -147,6 +147,7 @@
   + [last_proof] is tests passed with 58 tests after S74 apply plan records
   + [last_proof] is tests passed with 59 tests after S75 apply plan dry-run generation
   + [last_proof] is tests passed with 59 tests after S76 spec audit refresh
+  + [last_proof] is long-run checkpoint refreshed after S77 with tests dry-run model inventory and non-gating OpenAI healthcheck
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -227,6 +228,14 @@
   + [last_proof] is run 20260529T144953Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T144953Z
   + [last_proof] is run 20260529T144953Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T153630Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T153630Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T153630Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T153630Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T153630Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T153630Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T153630Z
+  + [last_proof] is run 20260529T153630Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -310,9 +319,10 @@
   + [completed_slice] is S74_apply_plan_records
   + [completed_slice] is S75_apply_plan_dry_run_generation
   + [completed_slice] is S76_spec_audit_refresh_after_apply_plan
+  + [completed_slice] is S77_long_run_checkpoint_refresh
 
-  + [current_frontier] is S77_long_run_checkpoint_refresh after spec audit refresh
-  + [next_recommended_slice] is S77_long_run_checkpoint_refresh
+  + [current_frontier] is S78_apply_command_dry_run_cli_design after long-run checkpoint refresh
+  + [next_recommended_slice] is S78_apply_command_dry_run_cli_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
