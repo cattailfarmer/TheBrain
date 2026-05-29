@@ -2544,7 +2544,7 @@
 
 & [WorkSliceDetail S181_long_run_checkpoint_after_packet_proposal_cli] is a long-run reentry slice
   + [slice_id] is S181_long_run_checkpoint_after_packet_proposal_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after packet proposal CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 140-test suite and route draft proof
@@ -2552,3 +2552,16 @@
   + [support_status] is prepared
   + [dependency_set] is S180_packet_proposal_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:41:49Z, proof_ref long-run checkpoint passed 140 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after packet proposal CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 140-test packet proposal frontier; requirement_delta next step is refresh spec audit after packet proposal support
+
+& [WorkSliceDetail S182_spec_audit_refresh_after_packet_proposal_cli] is a specification audit slice
+  + [slice_id] is S182_spec_audit_refresh_after_packet_proposal_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after packet proposal CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names packet proposal support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists draft to packet proposal conversion as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S181_long_run_checkpoint_after_packet_proposal_cli
+  + [known_risks] is overstating packet proposal as target workspace application
