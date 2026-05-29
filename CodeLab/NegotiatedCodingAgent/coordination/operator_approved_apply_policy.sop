@@ -1,0 +1,71 @@
+& [OperatorApprovedApplyPolicy] is the safety policy for applying ManualMergePacket output to a target workspace
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [manual_merge_policy] coordination/manual_merge_packet_policy.sop
+  @ [created_at] 2026-05-29T23:30:00Z
+
+  + [policy_status] is design_ready_not_executable
+  + [authority_boundary] is apply_policy_not_apply_command
+  + [default_behavior] is no_target_workspace_mutation
+  + [purpose] is ensure target workspace application can only happen through explicit operator intent, path-checked packet evidence, rollback evidence, and post-apply verification
+
+  = must: require an explicit operator command or flag before applying any packet
+  = must: require manual_merge_packet.sop and merge_review_decision.sop from the same run root
+  = must: require merge_review_decision is ready_for_manual_merge_review or manually_resolved
+  = must: reject apply when merge_conflict_ledger.sop has unresolved conflicts
+  = must: check every target path stays within target_workspace_root before writing
+  = must: snapshot every existing target file before replacement or deletion
+  = must: write an apply_plan.sop before file mutation
+  = must: write an apply_result.sop after mutation attempt
+  = must: run verification command after successful mutation
+  = must: make rollback command available from apply_result.sop
+
+  - never: apply by default during normal negotiation runs
+  - never: apply when target_workspace_root is inferred from the current shell without packet evidence
+  - never: apply if rollback snapshot creation fails
+  - never: hide partially applied files after a failed apply
+
+& [ApplyCommandContract] is the future explicit operator interface
+  + [command_name] is apply-manual-merge-packet
+  + [required_arg] is --run-root
+  + [required_arg] is --target-workspace-root
+  + [required_arg] is --i-understand-this-mutates-workspace
+  + [optional_arg] is --dry-run
+  + [optional_arg] is --verification-command
+  + [default_mode] is dry_run
+  + [mutation_mode] is enabled only by explicit mutation acknowledgement
+
+& [ApplyPlan] is the pre-mutation evidence artifact
+  + [field] is packet_ref
+  + [field] is target_workspace_root
+  + [field] is target_path_set
+  + [field] is snapshot_plan
+  + [field] is rollback_plan_ref
+  + [field] is verification_command
+  + [field] is manager_acceptance_ref
+  + [field] is shaliach_review_ref
+  + [field] is authority_boundary
+
+& [ApplyResult] is the post-mutation evidence artifact
+  + [field] is apply_status
+  + [field] is applied_file_set
+  + [field] is skipped_file_set
+  + [field] is snapshot_ref_set
+  + [field] is rollback_command
+  + [field] is verification_result_ref
+  + [field] is error_summary
+  + [field] is authority_boundary
+
+& [RollbackCommandContract] is the future explicit rollback interface
+  + [command_name] is rollback-manual-merge-packet
+  + [required_arg] is --apply-result
+  + [required_arg] is --target-workspace-root
+  + [required_arg] is --i-understand-this-mutates-workspace
+  + [default_mode] is dry_run
+  + [mutation_mode] is enabled only by explicit rollback acknowledgement
+
+& [ImplementationReadinessGate] is the minimum before building apply command code
+  + [required] is ManualMergePacket path checks are tested
+  + [required] is rollback snapshot path rules are tested
+  + [required] is dry-run apply plan generation is tested
+  + [required] is mutation mode requires explicit acknowledgement
+  + [required] is failed verification records apply_result.sop without deleting snapshots

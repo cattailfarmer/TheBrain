@@ -111,6 +111,8 @@ Before merge, `merge_conflict_ledger.sop` records same-file overlaps across isol
 
 When merge review is ready and conflict-free, the orchestrator can emit `manual_merge_packet.sop` as a dry-run packet. Conflict-blocked runs suppress this packet and keep the conflict ledger as the next review surface.
 
+`coordination/operator_approved_apply_policy.sop` defines the next safety boundary. Normal negotiation runs still never mutate the target workspace; any future apply command must default to dry-run and require an explicit mutation acknowledgement, path checks, rollback snapshots, and verification.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:
