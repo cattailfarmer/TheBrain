@@ -205,6 +205,8 @@ Preview an execution gate decision from existing refs:
 
 The preview command prints `ExecutionGateDecision` to stdout. It does not write gate files, authorizations, clearances, leases, cycles, claims, or read cursors.
 
+`coordination/execution_gate_decision_writer_design.sop` describes the next explicit write step. Its future command may persist the evaluated `ExecutionGateDecision` under `coordination/workers/<worker-uuid>/execution_gates/`, including blocked decisions for later review. Persisting that gate decision is not permission to execute implementation work, does not create Manager or Shaliach evidence, and does not move the Manager frontier.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

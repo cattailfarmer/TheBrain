@@ -220,6 +220,8 @@ The same module provides a deterministic execution gate evaluator. It combines M
 
 `negotiated_agent.execution_gate_cli` and `scripts/execution-gate-preview.ps1` implement that no-write preview. The CLI loads existing gate evidence refs, rejects malformed inputs, and prints the resulting `ExecutionGateDecision` without writing gate or worker artifacts.
 
+`coordination/execution_gate_decision_writer_design.sop` defines the next explicit mutation boundary. A future writer may persist an `ExecutionGateDecision` under `coordination/workers/<worker_uuid>/execution_gates/` from existing Manager authorization, Shaliach clearance, lease, and frontier evidence. That write is review evidence only: it must not create authorizations or clearances, claim mailbox work, advance read cursors, write worker cycles, mutate the active frontier, execute implementation work, or touch the target workspace.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

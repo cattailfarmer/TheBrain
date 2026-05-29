@@ -1998,7 +1998,7 @@
 
 & [WorkSliceDetail S139_execution_gate_decision_writer_design] is a coordination runtime design slice
   + [slice_id] is S139_execution_gate_decision_writer_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design an explicit execution gate decision writer that persists allowed or blocked ExecutionGateDecision records from existing refs
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP describes inputs output path mutation boundary proof expectations and no worker execution guarantee
@@ -2006,3 +2006,16 @@
   + [support_status] is prepared
   + [dependency_set] is S138_spec_audit_refresh_after_gate_preview_cli
   + [known_risks] is making decision persistence look like permission to execute code changes
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:12:00Z, proof_ref execution_gate_decision_writer_design.sop README architecture and operator guide updated, result_summary designed explicit gate decision writer boundary
+  + [completed_work_review] is support_delta verified persisted gate decisions remain review evidence only; requirement_delta next step is implement pure writer helper and CLI tests
+
+& [WorkSliceDetail S140_execution_gate_decision_writer_helper] is a coordination runtime implementation slice
+  + [slice_id] is S140_execution_gate_decision_writer_helper
+  + [slice_status] is open
+  + [scope] is add pure helper to persist ExecutionGateDecision artifacts under worker execution_gates directory from existing refs
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover allowed write blocked write no-overwrite and output containment
+  + [completion_criteria] is gate decision persistence exists as a helper without CLI launch or worker execution behavior
+  + [support_status] is prepared
+  + [dependency_set] is S139_execution_gate_decision_writer_design
+  + [known_risks] is helper accidentally writing outside worker gate evidence directory

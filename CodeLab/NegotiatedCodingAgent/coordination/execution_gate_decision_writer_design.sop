@@ -1,0 +1,62 @@
+& [ExecutionGateDecisionWriterDesign] is the design contract for explicitly persisting execution gate decisions
+  @ [source_design] coordination/worker_execution_gate_design.sop
+  @ [preview_design] coordination/execution_gate_preview_cli_design.sop
+  @ [record_model] src/negotiated_agent/execution_gate.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T20:12:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is gate_decision_write_not_worker_execution
+  + [primary_goal] is persist an ExecutionGateDecision generated from existing Manager authorization Shaliach clearance lease and frontier evidence
+  + [non_goal] is creating ManagerAuthorizationRecord
+  + [non_goal] is creating ShaliachExecutionClearance
+  + [non_goal] is claiming mailbox messages or advancing read cursors
+  + [non_goal] is executing worker implementation work
+  + [non_goal] is mutating the active Manager frontier or target workspace
+
+& [DecisionWriterInputs] is what the writer command must accept
+  + [required_arg] is project_root
+  + [required_arg] is worker_uuid
+  + [required_arg] is manager_authorization_ref
+  + [required_arg] is shaliach_clearance_ref
+  + [required_arg] is lease_ref
+  + [required_arg] is current_frontier or active conversation lookup
+  + [optional_arg] is gate_id
+  + [optional_arg] is output_dir defaulting to coordination/workers/<worker_uuid>/execution_gates
+  + [authority_boundary] is writer_inputs_existing_evidence_only
+  = must: reject missing or malformed required refs
+  = must: preserve input refs exactly as supplied in the written decision
+
+& [DecisionWriterOutput] is the only allowed mutation
+  + [artifact_name] is coordination/workers/<worker_uuid>/execution_gates/<gate_id>.sop
+  + [artifact_body] is ExecutionGateDecision.to_sop()
+  + [stdout_summary] is written artifact path plus gate_status
+  + [exit_code_zero] is decision artifact written successfully, even when gate_status is blocked
+  + [exit_code_nonzero] is malformed input, missing input file, output containment failure, or existing output collision
+  + [authority_boundary] is persisted_decision_not_completion_approval
+  = must: create the execution_gates directory when absent
+  = must: refuse to overwrite an existing gate artifact unless a future explicit replacement protocol is designed
+  = must: keep manager authorization, Shaliach clearance, lease, claims, read cursors, active conversation, worker cycles, and target workspace files unchanged
+  = must: include execution_gate_decision_not_completion_approval in the written artifact
+
+& [BlockedDecisionHandling] is the evidence behavior when execution is not allowed
+  + [blocked_status] is blocked_by_manager, blocked_by_shaliach, stale_frontier, or lease_invalid
+  + [write_behavior] is still write the blocked ExecutionGateDecision for review
+  + [follow_up] is a later worker cycle command may record paused_by_manager, paused_by_shaliach, stale_frontier, or failed_preflight using this gate ref
+  + [authority_boundary] is blocked_gate_record_not_failure_recovery
+  = must: not repair inputs automatically
+  = must: not request new Manager authorization automatically
+  = must: not produce a WorkerCycleRecord inside the gate writer
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is writes allowed proof-only decision to the default worker execution_gates directory
+  + [test_case] is writes blocked decision and exits zero without executing work
+  + [test_case] is rejects output path outside coordination worker gate directory
+  + [test_case] is refuses to overwrite an existing gate artifact
+  + [test_case] is leaves claim, cursor, cycle, authorization, clearance, and lease refs unchanged
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add pure write_execution_gate_decision helper around the existing evaluator
+  + [slice_2] is add explicit CLI write mode and PowerShell wrapper
+  + [slice_3] is add tests proving only the gate artifact is written
+  + [slice_4] is document operator use after behavior is stable
