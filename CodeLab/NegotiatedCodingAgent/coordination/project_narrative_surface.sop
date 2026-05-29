@@ -1590,3 +1590,10 @@
   + [run_root] is runs\20260529T190511Z
   + [current_frontier] is S194_spec_audit_refresh_after_frontier_application
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S194_spec_audit_refresh_after_frontier_application] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S194_spec_audit_refresh_after_frontier_application
+  + [implemented_capability] is spec_implementation_status.sop now recognizes frontier advancement and frontier application support through the 154-test checkpoint
+  + [current_frontier] is S195_narrative_coverage_stale_check_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

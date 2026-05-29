@@ -2713,7 +2713,7 @@
 
 & [WorkSliceDetail S194_spec_audit_refresh_after_frontier_application] is a specification audit slice
   + [slice_id] is S194_spec_audit_refresh_after_frontier_application
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after frontier application records CLI helper and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names frontier advancement and application support and chooses next gap
@@ -2721,3 +2721,16 @@
   + [support_status] is prepared
   + [dependency_set] is S193_long_run_checkpoint_after_frontier_apply_cli
   + [known_risks] is overstating deterministic frontier application as live Manager delegation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:26:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats frontier advancement/application as support and recommends executable narrative coverage stale-check records
+  + [completed_work_review] is support_delta verified frontier application support remains deterministic and not live Manager delegation; requirement_delta next step is design executable narrative coverage and stale-check update records
+
+& [WorkSliceDetail S195_narrative_coverage_stale_check_design] is a coordination runtime design slice
+  + [slice_id] is S195_narrative_coverage_stale_check_design
+  + [slice_status] is open
+  + [scope] is design executable narrative coverage and stale-check update records
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names narrative surface refs covered arcs stale arcs recomputation inputs and no narrative overwrite
+  + [completion_criteria] is design turns narrative coverage from append-only notes into recomputable evidence
+  + [support_status] is prepared
+  + [dependency_set] is S194_spec_audit_refresh_after_frontier_application
+  + [known_risks] is rewriting narrative history instead of appending coverage evidence

@@ -300,7 +300,8 @@
   + [completed_slice] is S191_frontier_application_apply_helper
   + [completed_slice] is S192_frontier_application_apply_cli
   + [completed_slice] is S193_long_run_checkpoint_after_frontier_apply_cli
-  + [ready_slice] is S194_spec_audit_refresh_after_frontier_application
+  + [completed_slice] is S194_spec_audit_refresh_after_frontier_application
+  + [ready_slice] is S195_narrative_coverage_stale_check_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
