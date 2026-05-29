@@ -49,6 +49,19 @@ class ShaliachFinding:
     + [reason] is {self.reason}
     + [required_response] is {self.required_response}"""
 
+    def to_response_coordination_sop(self, subject: str) -> str:
+        return f"""& [ShaliachResponseCoordination {subject}] is the required response plan for a Shaliach finding
+  + [finding] is {self.finding}
+  + [severity] is {self.severity}
+  + [target_role] is {self.target_role}
+  + [target_artifact] is {self.target_artifact}
+  + [action] is {self.action}
+  + [required_response] is {self.required_response}
+  + [repair_step] is inspect {self.target_artifact} for the cited reason
+  + [repair_step] is assign {self.target_role} to address the required response before treating this warning as resolved
+  + [completion_signal] is follow-up ShaliachFinding no_protocol_gap_detected or explicitly accepted residual risk
+  + [authority_boundary] is response_coordination_not_final_manager_approval"""
+
 
 def review_layer_negotiation(
     *,

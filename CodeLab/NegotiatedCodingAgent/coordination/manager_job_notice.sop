@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 24
+  + [job_notice_revision] is 25
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -42,7 +42,8 @@
     S17_blocked_run_lifecycle_records |
     S18_narrative_coverage_stale_recompute |
     S19_shaliach_ledger_critique |
-    S20_rework_response_coordination
+    S20_rework_response_coordination |
+    S21_mailbox_orchestrator_assignment
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -334,11 +335,24 @@
 
 & [WorkSliceDetail S20_rework_response_coordination] is a post-S16 governance expansion slice
   + [slice_id] is S20_rework_response_coordination
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is write response coordination artifacts when Shaliach returns request_rework or warning findings
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run emits response coordination artifacts for thin_ledger_evidence warnings
   + [completion_criteria] is Manager and Directors can see required response steps for non-blocking Shaliach warnings
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S19_shaliach_ledger_critique
   + [known_risks] is creating ceremonial rework artifacts without actionable repair steps
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T14:40:00Z, proof_ref tests passed with 30 tests and dry-run wrote runs/20260529T140204Z/*.shaliach_response.sop, result_summary Shaliach warnings now produce response coordination artifacts with required response, repair steps, and completion signal
+  + [completed_work_review] is support_delta verified non-blocking warnings have explicit response artifacts; requirement_delta orchestrator mailbox assignment for warnings remains future work
+
+& [WorkSliceDetail S21_mailbox_orchestrator_assignment] is a post-S16 governance expansion slice
+  + [slice_id] is S21_mailbox_orchestrator_assignment
+  + [slice_status] is open
+  + [scope] is publish mailbox coordination messages from orchestrator when Shaliach response coordination requires rework
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run writes mailbox notices or claims for response coordination events
+  + [completion_criteria] is rework findings can be routed to a Director conversation UUID through mailbox surfaces
+  + [support_status] is pending_dependency
+  + [dependency_set] is S13_mailbox_and_notice_coordination, S20_rework_response_coordination
+  + [known_risks] is assigning work to non-existent worker conversations without a clear recipient boundary

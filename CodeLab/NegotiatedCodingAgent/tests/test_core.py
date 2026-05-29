@@ -518,6 +518,7 @@ class ShaliachRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(finding.finding, "thin_ledger_evidence")
         self.assertEqual(finding.action, "request_rework")
+        self.assertIn("ShaliachResponseCoordination", finding.to_response_coordination_sop("application_layer_package"))
 
 
 class NarrativeUpdateTests(unittest.TestCase):
@@ -577,6 +578,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             package = (run_root / "application.package.sop").read_text(encoding="utf-8")
             protocol_activation = (run_root / "protocol_activation.sop").read_text(encoding="utf-8")
             shaliach_finding = (run_root / "application.shaliach_finding.sop").read_text(encoding="utf-8")
+            shaliach_response = (run_root / "application.shaliach_response.sop").read_text(encoding="utf-8")
             file_change_surface = (run_root / "file_change_surface.sop").read_text(encoding="utf-8")
             file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
             log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
@@ -591,9 +593,11 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("ProtocolActivationSet", protocol_activation)
             self.assertIn("project_narrative_surface", protocol_activation)
             self.assertIn("ShaliachFinding application_layer_package", shaliach_finding)
+            self.assertIn("ShaliachResponseCoordination application_layer_package", shaliach_response)
             self.assertIn("FileChangeSurface", file_change_surface)
             self.assertIn("implementation/README.generated.txt", file_change_index)
             self.assertIn("application.shaliach_finding.sop", log)
+            self.assertIn("application.shaliach_response.sop", log)
             self.assertIn("file_change_surface.sop", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:

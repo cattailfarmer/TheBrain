@@ -78,6 +78,13 @@ class NegotiatedCodingAgent:
                 run_root / shaliach_finding_ref,
                 shaliach_finding.to_sop(f"{layer}_layer_package"),
             )
+            shaliach_response_ref = ""
+            if shaliach_finding.action in {"request_rework", "pause"} or shaliach_finding.severity == "warning":
+                shaliach_response_ref = f"{layer}.shaliach_response.sop"
+                write_text(
+                    run_root / shaliach_response_ref,
+                    shaliach_finding.to_response_coordination_sop(f"{layer}_layer_package"),
+                )
             pending_package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
@@ -109,6 +116,7 @@ class NegotiatedCodingAgent:
                     "shaliach_finding": shaliach_finding.finding,
                     "shaliach_severity": shaliach_finding.severity,
                     "shaliach_finding_ref": shaliach_finding_ref,
+                    "shaliach_response_ref": shaliach_response_ref,
                     "protocol_activation_ref": "protocol_activation.sop",
                 },
             )
