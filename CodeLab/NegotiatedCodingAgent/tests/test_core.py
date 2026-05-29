@@ -3904,6 +3904,117 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("active conversation frontier", out.getvalue())
             self.assertFalse((advancement_dir / "frontier_application_plan.sop").exists())
 
+    def test_frontier_application_cli_apply_updates_surface_and_writes_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            surface_path = root / "coordination" / "conversations" / "convo-1.sop"
+            advancement_dir = root / "coordination" / "frontier_advancements" / "advance-1"
+            surface_path.parent.mkdir(parents=True)
+            advancement_dir.mkdir(parents=True)
+            surface_path.write_text(
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [completed_slice] is S191_frontier_application_apply_helper\n"
+                "  + [last_proof] is existing-proof.sop\n"
+                "  + [current_frontier] is S192_frontier_application_apply_cli\n",
+                encoding="utf-8",
+            )
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S192_frontier_application_apply_cli",
+                previous_frontier="S192_frontier_application_apply_cli",
+                next_frontier="S193_long_run_checkpoint_after_frontier_apply_cli",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="clear_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+            )
+            plan = build_frontier_application_plan(
+                plan_id="plan-1",
+                advancement_ref="frontier_advancement_record.sop",
+                advancement=advancement,
+                conversation_surface_ref="coordination/conversations/convo-1.sop",
+                current_frontier="S192_frontier_application_apply_cli",
+                completed_slice_refs_to_append=("S192_frontier_application_apply_cli",),
+            )
+            (advancement_dir / "frontier_application_plan.sop").write_text(plan.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_application_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--apply-plan",
+                            "--plan-ref",
+                            "coordination/frontier_advancements/advance-1/frontier_application_plan.sop",
+                            "--result-id",
+                            "result-1",
+                        ]
+                    ),
+                    0,
+                )
+            updated = surface_path.read_text(encoding="utf-8")
+            result = (advancement_dir / "frontier_application_result.sop").read_text(encoding="utf-8")
+            self.assertIn("current_frontier] is S193_long_run_checkpoint_after_frontier_apply_cli", updated)
+            self.assertIn("completed_slice] is S192_frontier_application_apply_cli", updated)
+            self.assertIn("applied_status] is applied", result)
+            self.assertIn("frontier_application_apply_not_code_apply", out.getvalue())
+
+    def test_frontier_application_cli_apply_blocks_stale_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            surface_path = root / "coordination" / "conversations" / "convo-1.sop"
+            advancement_dir = root / "coordination" / "frontier_advancements" / "advance-1"
+            surface_path.parent.mkdir(parents=True)
+            advancement_dir.mkdir(parents=True)
+            original = (
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S999_other\n"
+            )
+            surface_path.write_text(original, encoding="utf-8")
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S192_frontier_application_apply_cli",
+                previous_frontier="S192_frontier_application_apply_cli",
+                next_frontier="S193_long_run_checkpoint_after_frontier_apply_cli",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="clear_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+            )
+            plan = build_frontier_application_plan(
+                plan_id="plan-1",
+                advancement_ref="frontier_advancement_record.sop",
+                advancement=advancement,
+                conversation_surface_ref="coordination/conversations/convo-1.sop",
+                current_frontier="S192_frontier_application_apply_cli",
+            )
+            (advancement_dir / "frontier_application_plan.sop").write_text(plan.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_application_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--apply-plan",
+                            "--plan-ref",
+                            "coordination/frontier_advancements/advance-1/frontier_application_plan.sop",
+                            "--result-id",
+                            "result-1",
+                        ]
+                    ),
+                    1,
+                )
+            result = (advancement_dir / "frontier_application_result.sop").read_text(encoding="utf-8")
+            self.assertIn("applied_status] is blocked_stale_frontier", result)
+            self.assertEqual(surface_path.read_text(encoding="utf-8"), original)
+            self.assertIn("blocked_stale_frontier", out.getvalue())
+
     def test_frontier_application_result_serializes_applied_and_blocked_outcomes(self) -> None:
         advancement = build_frontier_advancement_record(
             advancement_id="advance-1",

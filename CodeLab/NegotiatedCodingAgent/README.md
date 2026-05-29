@@ -172,6 +172,8 @@ The wrapper `scripts/frontier-application-plan.ps1` writes `frontier_application
 
 The same module now has an explicit helper that can apply a valid frontier application plan to a conversation surface, append proof/completed-slice refs, and return a result; stale surfaces return a blocked result and remain unchanged. A CLI wrapper remains the next boundary.
 
+The wrapper `scripts/frontier-application-plan.ps1 -ApplyPlan` applies a frontier application plan and writes `frontier_application_result.sop`. It mutates only the active conversation surface named by the plan and never target workspace files.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

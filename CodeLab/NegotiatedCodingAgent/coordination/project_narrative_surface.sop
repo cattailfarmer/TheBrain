@@ -1565,3 +1565,11 @@
   + [proof_result] is tests passed with 152 tests
   + [current_frontier] is S192_frontier_application_apply_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S192_frontier_application_apply_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S192_frontier_application_apply_cli
+  + [implemented_capability] is frontier application apply CLI writes frontier_application_result.sop and applies current_frontier only on exact previous-frontier match
+  + [proof_result] is tests passed with 154 tests
+  + [current_frontier] is S193_long_run_checkpoint_after_frontier_apply_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

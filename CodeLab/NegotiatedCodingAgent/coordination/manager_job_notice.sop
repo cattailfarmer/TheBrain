@@ -2687,7 +2687,7 @@
 
 & [WorkSliceDetail S192_frontier_application_apply_cli] is a coordination runtime implementation slice
   + [slice_id] is S192_frontier_application_apply_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to apply frontier application plans and write result artifacts
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover applied result stale blocked result surface update proof append completed slice append and no target workspace mutation
@@ -2695,3 +2695,16 @@
   + [support_status] is prepared
   + [dependency_set] is S191_frontier_application_apply_helper
   + [known_risks] is CLI being used on stale plans after compaction
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:18:00Z, proof_ref tests passed with 154 tests, result_summary added frontier application apply CLI and wrapper
+  + [completed_work_review] is support_delta verified CLI applies only conversation surface frontier/proof refs and writes stale-blocked result when mismatched; requirement_delta next checkpoint should capture 154-test frontier application frontier
+
+& [WorkSliceDetail S193_long_run_checkpoint_after_frontier_apply_cli] is a long-run reentry slice
+  + [slice_id] is S193_long_run_checkpoint_after_frontier_apply_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after frontier application apply CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 154-test suite and route draft proof
+  + [completion_criteria] is checkpoint records frontier application apply frontier
+  + [support_status] is prepared
+  + [dependency_set] is S192_frontier_application_apply_cli
+  + [known_risks] is noisy generated dry-run artifacts

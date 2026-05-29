@@ -4,13 +4,23 @@ import argparse
 from pathlib import Path
 
 from .conversation import ActiveConversationPointer, ConversationSurface
-from .frontier_application import build_frontier_application_plan, load_frontier_advancement_record, write_frontier_application_plan
+from .frontier_application import (
+    apply_frontier_application_plan,
+    build_frontier_application_plan,
+    load_frontier_advancement_record,
+    load_frontier_application_plan,
+    write_frontier_application_plan,
+    write_frontier_application_result,
+)
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Write dry-run frontier application plans without mutating conversation surfaces.")
     parser.add_argument("--project-root", type=Path, default=Path.cwd())
-    parser.add_argument("--advancement-ref", required=True)
+    parser.add_argument("--advancement-ref", default=None)
+    parser.add_argument("--apply-plan", action="store_true")
+    parser.add_argument("--plan-ref", default="frontier_application_plan.sop")
+    parser.add_argument("--result-id", default="frontier-application-result-1")
     parser.add_argument("--output-dir", default=None)
     parser.add_argument("--plan-id", default="frontier-application-plan-1")
     parser.add_argument("--current-frontier", default=None)
@@ -20,6 +30,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--narrative-update-deferred", action="store_true")
     args = parser.parse_args(argv)
     try:
+        if args.apply_plan:
+            plan_path = _resolve(args.project_root, args.plan_ref)
+            plan = load_frontier_application_plan(plan_path)
+            result = apply_frontier_application_plan(
+                project_root=args.project_root,
+                plan=plan,
+                plan_ref=args.plan_ref,
+                result_id=args.result_id,
+                narrative_update_ref="coordination/project_narrative_surface.sop" if plan.narrative_update_required else "none",
+            )
+            output_dir = _resolve(args.project_root, args.output_dir or plan_path.parent.as_posix())
+            path = write_frontier_application_result(output_dir, result)
+            print(
+                "& [FrontierApplicationApplyResult] is frontier application explicit apply evidence\n"
+                f"  + [artifact_ref] is {path.relative_to(args.project_root).as_posix()}\n"
+                f"  + [applied_status] is {result.applied_status}\n"
+                "  + [authority_boundary] is frontier_application_apply_not_code_apply\n",
+                end="",
+            )
+            return 0 if result.applied_status == "applied" else 1
+        if not args.advancement_ref:
+            raise ValueError("--advancement-ref is required unless --apply-plan is set")
         advancement_path = _resolve(args.project_root, args.advancement_ref)
         advancement = load_frontier_advancement_record(advancement_path)
         if args.conversation_surface_ref:

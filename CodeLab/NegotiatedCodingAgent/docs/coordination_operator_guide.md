@@ -334,6 +334,17 @@ This writes `frontier_application_plan.sop` beside the advancement record. It do
 
 `coordination/frontier_application_apply_design.sop` describes the future explicit apply boundary. The apply command may mutate the active conversation surface only when the current frontier still equals the plan's previous frontier, and it must write a result artifact for both applied and blocked outcomes.
 
+Apply a frontier application plan:
+
+```powershell
+.\scripts\frontier-application-plan.ps1 `
+  -ApplyPlan `
+  -PlanRef coordination/frontier_advancements/<id>/frontier_application_plan.sop `
+  -ResultId <result-id>
+```
+
+The apply mode writes `frontier_application_result.sop`. It updates `current_frontier` only when the active surface still matches the plan's previous frontier; stale plans produce a blocked result.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
