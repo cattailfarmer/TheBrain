@@ -16,7 +16,7 @@ from negotiated_agent.apply_preflight import (
     build_apply_mutation_preflight,
     materialize_snapshot_evidence,
 )
-from negotiated_agent.artifact_validation import combine_artifact_validation
+from negotiated_agent.artifact_validation import CombinedArtifactValidation, combine_artifact_validation
 from negotiated_agent.artifact_validation_cli import main as artifact_validation_cli_main
 from negotiated_agent.checkpoint_probe import (
     load_checkpoint_probe_evidence,
@@ -60,6 +60,7 @@ from negotiated_agent.long_run import (
     LongRunCheckpoint,
     checkpoint_start_frontier,
     _dry_run_root_from_stdout,
+    _run_combined_artifact_validation,
     _run_shaliach_cross_artifact_probe,
 )
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
@@ -4576,6 +4577,7 @@ class LongRunHarnessTests(unittest.TestCase):
     def test_checkpoint_records_shaliach_cross_artifact_probe(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
         probe = CommandResult("shaliach_cross_artifact_probe", 0, "application:consistent", "")
+        combined = CombinedArtifactValidation("passed", "valid", 0, "passed", "ok", "non_gating_environment_state")
         checkpoint = LongRunCheckpoint(
             created_at="2026-05-29T12:00:00Z",
             conversation_uuid="test-uuid",
@@ -4585,10 +4587,12 @@ class LongRunHarnessTests(unittest.TestCase):
             dry_run_result=ok,
             model_inventory_result=ok,
             shaliach_cross_artifact_result=probe,
+            combined_artifact_validation=combined,
         )
         sop = checkpoint.to_sop()
         self.assertEqual(checkpoint.status, "ready_for_continuation")
         self.assertIn("shaliach_cross_artifact_status] is passed", sop)
+        self.assertIn("combined_artifact_validation_status] is passed", sop)
         self.assertIn("application:consistent", sop)
 
     def test_checkpoint_fails_when_shaliach_cross_artifact_probe_fails(self) -> None:
@@ -4607,6 +4611,30 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertEqual(checkpoint.status, "needs_attention")
         self.assertIn("shaliach_cross_artifact_status] is failed", checkpoint.to_sop())
 
+    def test_checkpoint_fails_when_combined_artifact_validation_fails(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        failed_combined = CombinedArtifactValidation(
+            "failed",
+            "missing_artifacts",
+            1,
+            "passed",
+            "shaliach_cross_artifact_probe_passed",
+            "non_gating_environment_state",
+        )
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S268",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            shaliach_cross_artifact_result=ok,
+            combined_artifact_validation=failed_combined,
+        )
+        self.assertEqual(checkpoint.status, "needs_attention")
+        self.assertIn("combined_artifact_validation_status] is failed", checkpoint.to_sop())
+
     def test_checkpoint_treats_missing_dry_run_root_probe_as_not_run(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
         probe = CommandResult("shaliach_cross_artifact_probe", 2, "dry_run_root_not_found", "")
@@ -4622,6 +4650,43 @@ class LongRunHarnessTests(unittest.TestCase):
         )
         self.assertEqual(checkpoint.status, "ready_for_continuation")
         self.assertIn("shaliach_cross_artifact_status] is not_run", checkpoint.to_sop())
+
+    def test_combined_artifact_validation_reads_dry_run_manifest_and_probe(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp)
+            (run_root / "present.sop").write_text("& [Present] is here\n", encoding="utf-8")
+            (run_root / "run_manifest.sop").write_text(
+                "& [RunArtifactManifest test] is manifest\n"
+                "  + [artifact_ref present] is present.sop\n",
+                encoding="utf-8",
+            )
+            result = _run_combined_artifact_validation(
+                f"Run written to: {run_root}",
+                CommandResult("shaliach_cross_artifact_probe", 0, "application:consistent", ""),
+                CommandResult("openai_health", 1, "status] is unavailable", ""),
+            )
+        self.assertEqual(result.status, "passed")
+        self.assertEqual(result.manifest_status, "valid")
+        self.assertEqual(result.checkpoint_probe_status, "passed")
+
+    def test_combined_artifact_validation_fails_missing_manifest_in_checkpoint_probe(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            result = _run_combined_artifact_validation(
+                f"Run written to: {Path(temp)}",
+                CommandResult("shaliach_cross_artifact_probe", 0, "application:consistent", ""),
+                CommandResult("openai_health", 1, "status] is unavailable", ""),
+            )
+        self.assertEqual(result.status, "failed")
+        self.assertEqual(result.manifest_status, "missing_manifest")
+
+    def test_combined_artifact_validation_reports_not_run_without_dry_root(self) -> None:
+        result = _run_combined_artifact_validation(
+            "no run root",
+            CommandResult("shaliach_cross_artifact_probe", 2, "dry_run_root_not_found", ""),
+            CommandResult("openai_health", 1, "status] is unavailable", ""),
+        )
+        self.assertEqual(result.status, "not_run")
+        self.assertEqual(result.manifest_status, "not_run")
 
     def test_dry_run_root_parser_reads_run_written_line(self) -> None:
         self.assertEqual(

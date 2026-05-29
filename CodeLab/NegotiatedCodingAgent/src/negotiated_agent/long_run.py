@@ -6,7 +6,10 @@ from pathlib import Path
 import re
 import subprocess
 
+from .artifact_validation import CombinedArtifactValidation, combine_artifact_validation
+from .checkpoint_probe import CheckpointProbeEvidence, validate_checkpoint_probe_evidence
 from .conversation import ConversationSurface
+from .run_manifest import validate_run_manifest
 from .shaliach import (
     inspect_shaliach_cross_artifact_consistency,
     load_shaliach_finding_fields,
@@ -39,6 +42,7 @@ class LongRunCheckpoint:
     openai_health_result: CommandResult | None = None
     route_draft_result: CommandResult | None = None
     shaliach_cross_artifact_result: CommandResult | None = None
+    combined_artifact_validation: CombinedArtifactValidation | None = None
 
     @property
     def status(self) -> str:
@@ -47,6 +51,7 @@ class LongRunCheckpoint:
             and self.dry_run_result.ok
             and self.model_inventory_result.ok
             and _probe_ok(self.shaliach_cross_artifact_result)
+            and _combined_validation_ok(self.combined_artifact_validation)
         ):
             return "ready_for_continuation"
         return "needs_attention"
@@ -63,6 +68,7 @@ class LongRunCheckpoint:
   + [dry_run_status] is {_status(self.dry_run_result)}
   + [model_inventory_status] is {_status(self.model_inventory_result)}
   + [shaliach_cross_artifact_status] is {_probe_status(self.shaliach_cross_artifact_result)}
+  + [combined_artifact_validation_status] is {self.combined_artifact_validation.status if self.combined_artifact_validation else "not_run"}
   + [openai_health_status] is {_status(self.openai_health_result) if self.openai_health_result else "not_run"}
   + [route_draft_status] is {_status(self.route_draft_result) if self.route_draft_result else "not_run"}
   + [authority_boundary] is harness_checkpoint_not_human_approval
@@ -87,6 +93,13 @@ class LongRunCheckpoint:
     + [stdout_tail] is {_field_value(self.shaliach_cross_artifact_result.stdout_tail if self.shaliach_cross_artifact_result else "")}
     + [stderr_tail] is {_field_value(self.shaliach_cross_artifact_result.stderr_tail if self.shaliach_cross_artifact_result else "")}
     + [authority_boundary] is consistency_probe_not_manager_approval
+
+  & [HarnessCommand combined_artifact_validation] is a read-only validation summary
+    + [status] is {self.combined_artifact_validation.status if self.combined_artifact_validation else "not_run"}
+    + [manifest_status] is {self.combined_artifact_validation.manifest_status if self.combined_artifact_validation else "not_run"}
+    + [checkpoint_probe_status] is {self.combined_artifact_validation.checkpoint_probe_status if self.combined_artifact_validation else "not_run"}
+    + [openai_health_gating] is {self.combined_artifact_validation.openai_health_gating if self.combined_artifact_validation else "not_applicable"}
+    + [authority_boundary] is combined_artifact_validation_not_acceptance_review
 
   & [HarnessCommand openai_health] is an environment-state summary
     + [returncode] is {self.openai_health_result.returncode if self.openai_health_result else "not_run"}
@@ -159,6 +172,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         ],
         project_root,
     )
+    combined_artifact_validation = _run_combined_artifact_validation(dry.stdout_tail, shaliach_probe, openai_health)
     end_surface = ConversationSurface.load_active(project_root)
     return LongRunCheckpoint(
         created_at=datetime.now(timezone.utc).isoformat(),
@@ -172,6 +186,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         openai_health_result=openai_health,
         route_draft_result=route_draft,
         shaliach_cross_artifact_result=shaliach_probe,
+        combined_artifact_validation=combined_artifact_validation,
     )
 
 
@@ -232,6 +247,46 @@ def _run_shaliach_cross_artifact_probe(dry_run_stdout: str) -> CommandResult:
     return CommandResult("shaliach_cross_artifact_probe", returncode, "; ".join(outputs), "")
 
 
+def _run_combined_artifact_validation(
+    dry_run_stdout: str,
+    shaliach_probe: CommandResult,
+    openai_health: CommandResult,
+) -> CombinedArtifactValidation:
+    run_root = _dry_run_root_from_stdout(dry_run_stdout)
+    if run_root is None:
+        return CombinedArtifactValidation(
+            status="not_run",
+            manifest_status="not_run",
+            manifest_missing_ref_count=0,
+            checkpoint_probe_status=_probe_status(shaliach_probe),
+            checkpoint_probe_reason="dry_run_root_not_found",
+            openai_health_gating="non_gating_environment_state",
+        )
+    manifest_path = run_root / "run_manifest.sop"
+    if not manifest_path.exists():
+        return CombinedArtifactValidation(
+            status="failed",
+            manifest_status="missing_manifest",
+            manifest_missing_ref_count=1,
+            checkpoint_probe_status=_probe_status(shaliach_probe),
+            checkpoint_probe_reason="run_manifest_missing",
+            openai_health_gating="non_gating_environment_state",
+        )
+    manifest = validate_run_manifest(manifest_path)
+    checkpoint_probe = validate_checkpoint_probe_evidence(
+        CheckpointProbeEvidence(
+            checkpoint_status="ready_for_continuation" if _probe_ok(shaliach_probe) else "needs_attention",
+            shaliach_cross_artifact_status=_probe_status(shaliach_probe),
+            openai_health_status=_status(openai_health),
+            probe_returncode=str(shaliach_probe.returncode),
+            probe_stdout_tail=shaliach_probe.stdout_tail or "none",
+            probe_stderr_tail=shaliach_probe.stderr_tail or "none",
+            probe_authority_boundary="consistency_probe_not_manager_approval",
+        )
+    )
+    return combine_artifact_validation(manifest, checkpoint_probe)
+
+
 def _dry_run_root_from_stdout(stdout: str) -> Path | None:
     match = re.search(r"Run written to:\s*(?P<path>.+)", stdout)
     if not match:
@@ -267,6 +322,10 @@ def _probe_status(result: CommandResult | None) -> str:
 
 def _probe_ok(result: CommandResult | None) -> bool:
     return result is None or result.returncode in {0, 2}
+
+
+def _combined_validation_ok(result: CombinedArtifactValidation | None) -> bool:
+    return result is None or result.status in {"passed", "not_run"}
 
 
 def _bool(value: bool) -> str:

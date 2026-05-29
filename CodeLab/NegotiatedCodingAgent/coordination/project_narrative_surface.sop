@@ -2315,3 +2315,11 @@
   + [proof_ref] is coordination/combined_validation_checkpoint_integration_design.sop
   + [current_frontier] is S268_combined_validation_checkpoint_integration
   + [narrative_role] is long_run_coordination and validation_design update
+
+
+& [LongRunNarrativeUpdate S268_combined_validation_checkpoint_integration] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S268_combined_validation_checkpoint_integration
+  + [implemented_capability] is long-run checkpoint now records combined_artifact_validation_status from dry-run manifest and in-memory Shaliach probe evidence
+  + [proof_result] is tests passed with 268 tests
+  + [current_frontier] is S269_long_run_checkpoint_after_combined_validation_integration
+  + [narrative_role] is long_run_coordination and validation_runtime update
