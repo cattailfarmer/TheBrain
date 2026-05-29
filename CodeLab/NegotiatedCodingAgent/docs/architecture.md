@@ -200,6 +200,8 @@ Operator commands for these helpers are documented in `docs/coordination_operato
 
 `coordination/worker_runner_design.sop` defines the next coordination runtime boundary. A future worker runner must write lease, cycle, pause, and failure records around mailbox claims, preserve Manager frontier authority, honor Shaliach pause conditions, and treat claims as evidence rather than trusted distributed locks.
 
+`negotiated_agent.worker_lifecycle` implements the first record types for that boundary: `WorkerLeaseRecord`, `WorkerCycleRecord`, and `WorkerFailureRecord`. They serialize the worker evidence needed for future automation without claiming to lock work, approve frontiers, or repair failures automatically.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

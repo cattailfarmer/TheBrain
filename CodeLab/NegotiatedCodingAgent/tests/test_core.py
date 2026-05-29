@@ -66,6 +66,7 @@ from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
+from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
 from negotiated_agent.writer import write_implementation
 
 
@@ -1251,6 +1252,58 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("worker-a", packet)
             self.assertIn("worker-b", packet)
             self.assertIn("worker-a finished S30", packet)
+
+    def test_worker_lease_record_preserves_non_lock_boundary(self) -> None:
+        record = WorkerLeaseRecord(
+            worker_uuid="worker-a",
+            mailbox_uuid="director_pool",
+            claim_id="claim-1",
+            message_id="message-1",
+            lease_status="active",
+            started_at="2026-05-29T18:05:00Z",
+            expires_at="2026-05-29T18:35:00Z",
+            frontier_at_claim="S118_worker_lifecycle_records",
+        )
+        sop = record.to_sop()
+        self.assertIn("WorkerLeaseRecord claim-1", sop)
+        self.assertIn("lease_status] is active", sop)
+        self.assertIn("claim_ref] is coordination/mailbox/director_pool/claims.sop#claim-1", sop)
+        self.assertIn("worker_lease_record_not_scheduler_lock", sop)
+
+    def test_worker_cycle_record_preserves_manager_boundary(self) -> None:
+        record = WorkerCycleRecord(
+            worker_uuid="worker-a",
+            cycle_id="cycle-1",
+            cycle_status="paused_by_shaliach",
+            claim_refs=("coordination/mailbox/director_pool/claims.sop#claim-1",),
+            slice_ref="manager_job_notice.sop#S118_worker_lifecycle_records",
+            proof_refs=("tests/test_core.py",),
+            changed_files=("src/negotiated_agent/worker_lifecycle.py",),
+            manager_frontier_request="S119_worker_runner_preview_cli",
+            shaliach_finding_ref="runs/last/component.shaliach_findings.sop",
+        )
+        sop = record.to_sop()
+        self.assertIn("cycle_status] is paused_by_shaliach", sop)
+        self.assertIn("manager_frontier_request] is S119_worker_runner_preview_cli", sop)
+        self.assertIn("worker_cycle_record_not_manager_approval", sop)
+
+    def test_worker_failure_record_records_safe_resume_evidence(self) -> None:
+        record = WorkerFailureRecord(
+            worker_uuid="worker-a",
+            failure_id="failure-1",
+            failure_status="failed_proof",
+            command_returncode=1,
+            stdout_tail="ok before failure",
+            stderr_tail="assertion failed",
+            dirty_worktree_summary="modified tests/test_core.py",
+            safe_resume_action="inspect failure record and rerun tests",
+            escalation_recipient="manager",
+        )
+        sop = record.to_sop()
+        self.assertIn("failure_status] is failed_proof", sop)
+        self.assertIn("command_returncode] is 1", sop)
+        self.assertIn("safe_resume_action] is inspect failure record and rerun tests", sop)
+        self.assertIn("worker_failure_record_not_automatic_repair", sop)
 
 
 class ModelInventoryTests(unittest.TestCase):

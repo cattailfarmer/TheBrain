@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 122
+  + [job_notice_revision] is 123
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -140,7 +140,8 @@
     S115_post_apply_acceptance_cli_integration |
     S116_long_run_checkpoint_after_post_apply_acceptance |
     S117_worker_runner_design |
-    S118_worker_lifecycle_records
+    S118_worker_lifecycle_records |
+    S119_worker_runner_preview_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1706,7 +1707,7 @@
 
 & [WorkSliceDetail S118_worker_lifecycle_records] is a coordination runtime implementation slice
   + [slice_id] is S118_worker_lifecycle_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add WorkerLeaseRecord and WorkerCycleRecord data models with SOP serialization
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover active completed expired conflict leases and completed blocked paused_by_shaliach failed_proof cycle records
@@ -1714,3 +1715,16 @@
   + [support_status] is prepared
   + [dependency_set] is S117_worker_runner_design
   + [known_risks] is turning record models into implicit scheduler locks
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:12:00Z, proof_ref tests passed with 79 tests, result_summary added WorkerLeaseRecord WorkerCycleRecord and WorkerFailureRecord SOP serialization
+  + [completed_work_review] is support_delta verified lifecycle records preserve non-lock non-approval and non-repair boundaries; requirement_delta next step is non-mutating worker runner preview CLI
+
+& [WorkSliceDetail S119_worker_runner_preview_cli] is a coordination runtime implementation slice
+  + [slice_id] is S119_worker_runner_preview_cli
+  + [slice_status] is open
+  + [scope] is add non-mutating worker-runner preview CLI that lists unread mailbox work and drafts proposed lease evidence without claiming
+  + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is tests cover unread mailbox preview, proposed lease serialization, no claim file writes, and stale frontier reporting
+  + [completion_criteria] is operator can preview worker cycle inputs without changing mailbox claims or cursors
+  + [support_status] is prepared
+  + [dependency_set] is S118_worker_lifecycle_records
+  + [known_risks] is preview accidentally marking mailbox messages claimed or read

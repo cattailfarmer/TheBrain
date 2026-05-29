@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T18:05:00Z
+  @ [updated_at] 2026-05-29T18:12:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -70,9 +70,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is multi-conversation coordination across active workers
-  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, and worker runner design for lease, cycle, Shaliach pause, Manager frontier, and failure records exist
-  + [gap] is no executable autonomous worker lifecycle runner exists yet
-  + [next_candidate] is implement WorkerLeaseRecord and WorkerCycleRecord data models
+  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, worker runner design, and WorkerLeaseRecord, WorkerCycleRecord, and WorkerFailureRecord data models exist
+  + [gap] is no executable autonomous worker lifecycle runner or preview CLI exists yet
+  + [next_candidate] is implement non-mutating worker-runner preview CLI
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is final acceptance over real code patches in the target workspace
@@ -87,6 +87,6 @@
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
-  + [candidate_2] is implement WorkerLeaseRecord and WorkerCycleRecord data models
+  + [candidate_2] is implement non-mutating worker-runner preview CLI
   + [candidate_3] is add live Manager/Shaliach post-apply deliberation after endpoint health is available
   + [candidate_4] is install and verify local live model serving when operator is ready
