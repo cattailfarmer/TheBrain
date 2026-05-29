@@ -198,6 +198,22 @@ def load_worker_lease(path: Path) -> WorkerLeaseRecord:
     )
 
 
+def load_execution_gate_decision(path: Path) -> ExecutionGateDecision:
+    fields = _read_fields(path)
+    return ExecutionGateDecision(
+        gate_id=fields["gate_id"],
+        worker_uuid=fields["worker_uuid"],
+        gate_status=fields["gate_status"],
+        manager_authorization_ref=fields["manager_authorization_ref"],
+        shaliach_clearance_ref=fields["shaliach_clearance_ref"],
+        lease_ref=fields["lease_ref"],
+        allowed_action=fields["allowed_action"],
+        proof_route=fields["proof_route"],
+        expires_at=fields["expires_at"],
+        block_reason=fields.get("block_reason", "none"),
+    )
+
+
 def _read_fields(path: Path) -> dict[str, str]:
     if not path.exists():
         raise FileNotFoundError(f"{path} is missing")

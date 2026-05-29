@@ -1134,3 +1134,11 @@
   + [implemented_capability] is gate_to_worker_cycle_bridge_design.sop maps persisted gate decisions into non-executing WorkerCycleRecord review evidence
   + [current_frontier] is S145_gate_to_worker_cycle_bridge_helper
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S145_gate_to_worker_cycle_bridge_helper] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S145_gate_to_worker_cycle_bridge_helper
+  + [implemented_capability] is ExecutionGateDecision loader and build_worker_cycle_from_gate_decision map persisted gate outcomes into non-executing WorkerCycleRecord objects
+  + [proof_result] is tests passed with 106 tests
+  + [current_frontier] is S146_gate_to_worker_cycle_bridge_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

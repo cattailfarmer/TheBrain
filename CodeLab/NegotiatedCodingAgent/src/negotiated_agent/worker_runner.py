@@ -7,6 +7,7 @@ import subprocess
 from uuid import NAMESPACE_URL, uuid5
 
 from .conversation import ConversationSurface
+from .execution_gate import ExecutionGateDecision
 from .mailbox import MailboxClaim, MailboxMessage, claim_message, list_unread
 from .worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
 
@@ -124,6 +125,28 @@ def write_worker_cycle_record(
     return path
 
 
+def build_worker_cycle_from_gate_decision(
+    *,
+    decision: ExecutionGateDecision,
+    execution_gate_ref: str,
+    cycle_id: str,
+    claim_ref: str | None = None,
+    slice_ref: str | None = None,
+    failure_ref: str = "none",
+) -> WorkerCycleRecord:
+    return WorkerCycleRecord(
+        worker_uuid=decision.worker_uuid,
+        cycle_id=cycle_id,
+        cycle_status=_cycle_status_for_gate(decision.gate_status),
+        claim_refs=(claim_ref or _claim_ref_from_lease_ref(decision.lease_ref),),
+        slice_ref=slice_ref or decision.manager_authorization_ref,
+        proof_refs=(execution_gate_ref,),
+        changed_files=(),
+        manager_frontier_request="none",
+        failure_ref=failure_ref,
+    )
+
+
 def run_worker_proof_command(
     project_root: Path,
     *,
@@ -218,6 +241,23 @@ def _write_lease(project_root: Path, lease: WorkerLeaseRecord) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(lease.to_sop(), encoding="utf-8")
     return path
+
+
+def _cycle_status_for_gate(gate_status: str) -> str:
+    mapping = {
+        "proof_only_allowed": "ready_for_proof",
+        "execution_allowed": "ready_for_run_local_execution",
+        "blocked_by_manager": "blocked",
+        "blocked_by_shaliach": "paused_by_shaliach",
+        "stale_frontier": "needs_manager_review",
+        "dirty_worktree_review_required": "needs_manager_review",
+        "lease_invalid": "conflict",
+    }
+    return mapping.get(gate_status, "needs_manager_review")
+
+
+def _claim_ref_from_lease_ref(lease_ref: str) -> str:
+    return lease_ref if "#" in lease_ref else f"{lease_ref}#claim"
 
 
 def _write_failure(project_root: Path, failure: WorkerFailureRecord) -> Path:

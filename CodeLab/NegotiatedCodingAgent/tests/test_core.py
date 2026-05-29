@@ -27,6 +27,7 @@ from negotiated_agent.execution_gate import (
     ManagerAuthorizationRecord,
     ShaliachExecutionClearance,
     evaluate_execution_gate,
+    load_execution_gate_decision,
     load_manager_authorization,
     load_shaliach_clearance,
     load_worker_lease,
@@ -79,7 +80,13 @@ from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
-from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, run_worker_proof_command, write_worker_cycle_record
+from negotiated_agent.worker_runner import (
+    build_worker_cycle_from_gate_decision,
+    build_worker_runner_preview,
+    claim_and_record_worker_leases,
+    run_worker_proof_command,
+    write_worker_cycle_record,
+)
 from negotiated_agent.worker_runner_cli import main as worker_runner_cli_main
 from negotiated_agent.writer import write_implementation
 
@@ -1945,6 +1952,89 @@ class MailboxCoordinationTests(unittest.TestCase):
                 write_execution_gate_decision(project_root=root, decision=decision)
             with self.assertRaisesRegex(ValueError, "worker execution_gates directory"):
                 write_execution_gate_decision(project_root=root, decision=decision, output_dir=root / "coordination")
+
+    def test_load_execution_gate_decision_parses_persisted_record(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            decision = evaluate_execution_gate(
+                gate_id="gate-1",
+                manager_authorization=_manager_auth("run_proof_only"),
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance=_shaliach_clearance("clear"),
+                shaliach_clearance_ref="clearance.sop",
+                lease=_worker_lease("claimed"),
+                lease_ref="lease.sop",
+                current_frontier="S131_worker_execution_gate_evaluator",
+            )
+            path = write_execution_gate_decision(project_root=root, decision=decision)
+            self.assertEqual(load_execution_gate_decision(path), decision)
+
+    def test_gate_to_worker_cycle_mapping_covers_blocked_and_allowed_statuses(self) -> None:
+        blocked = ExecutionGateDecision(
+            gate_id="gate-blocked",
+            worker_uuid="worker-a",
+            gate_status="blocked_by_manager",
+            manager_authorization_ref="manager_job_notice.sop#S145",
+            shaliach_clearance_ref="clearance.sop",
+            lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+            allowed_action="run_proof_only",
+            proof_route="scripts/test.ps1",
+            expires_at="2026-05-29T20:55:00Z",
+            block_reason="manager_denied",
+        )
+        proof_ready = ExecutionGateDecision(
+            gate_id="gate-proof",
+            worker_uuid="worker-a",
+            gate_status="proof_only_allowed",
+            manager_authorization_ref="manager_job_notice.sop#S145",
+            shaliach_clearance_ref="clearance.sop",
+            lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+            allowed_action="run_proof_only",
+            proof_route="scripts/test.ps1",
+            expires_at="2026-05-29T20:55:00Z",
+        )
+        blocked_cycle = build_worker_cycle_from_gate_decision(
+            decision=blocked,
+            execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-blocked.sop",
+            cycle_id="cycle-blocked",
+        )
+        proof_cycle = build_worker_cycle_from_gate_decision(
+            decision=proof_ready,
+            execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+            cycle_id="cycle-proof",
+        )
+        self.assertEqual(blocked_cycle.cycle_status, "blocked")
+        self.assertEqual(proof_cycle.cycle_status, "ready_for_proof")
+        self.assertEqual(blocked_cycle.changed_files, ())
+        self.assertEqual(proof_cycle.manager_frontier_request, "none")
+        self.assertIn("gate-blocked.sop", blocked_cycle.proof_refs[0])
+
+    def test_gate_to_worker_cycle_mapping_covers_shaliach_stale_and_conflict(self) -> None:
+        status_pairs = {
+            "blocked_by_shaliach": "paused_by_shaliach",
+            "stale_frontier": "needs_manager_review",
+            "lease_invalid": "conflict",
+        }
+        for gate_status, cycle_status in status_pairs.items():
+            with self.subTest(gate_status=gate_status):
+                decision = ExecutionGateDecision(
+                    gate_id=f"gate-{gate_status}",
+                    worker_uuid="worker-a",
+                    gate_status=gate_status,
+                    manager_authorization_ref="manager_job_notice.sop#S145",
+                    shaliach_clearance_ref="clearance.sop",
+                    lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+                    allowed_action="run_proof_only",
+                    proof_route="scripts/test.ps1",
+                    expires_at="2026-05-29T20:55:00Z",
+                )
+                record = build_worker_cycle_from_gate_decision(
+                    decision=decision,
+                    execution_gate_ref=f"coordination/workers/worker-a/execution_gates/{decision.gate_id}.sop",
+                    cycle_id=f"cycle-{gate_status}",
+                )
+                self.assertEqual(record.cycle_status, cycle_status)
+                self.assertEqual(record.manager_frontier_request, "none")
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

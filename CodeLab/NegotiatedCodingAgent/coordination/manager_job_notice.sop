@@ -2076,7 +2076,7 @@
 
 & [WorkSliceDetail S145_gate_to_worker_cycle_bridge_helper] is a coordination runtime implementation slice
   + [slice_id] is S145_gate_to_worker_cycle_bridge_helper
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ExecutionGateDecision loader and helper that maps persisted gate decisions into WorkerCycleRecord objects
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover blocked Manager Shaliach pause stale frontier proof-only ready conflict and worker mismatch
@@ -2084,3 +2084,16 @@
   + [support_status] is prepared
   + [dependency_set] is S144_gate_to_worker_cycle_bridge_design
   + [known_risks] is treating ready_for_proof or ready_for_run_local_execution as command launch
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:02:00Z, proof_ref tests passed with 106 tests, result_summary added ExecutionGateDecision loader and pure gate-to-worker-cycle mapping helper
+  + [completed_work_review] is support_delta verified bridge helper maps gate outcomes to non-executing WorkerCycleRecord objects; requirement_delta next step is explicit bridge CLI writer
+
+& [WorkSliceDetail S146_gate_to_worker_cycle_bridge_cli] is a coordination runtime implementation slice
+  + [slice_id] is S146_gate_to_worker_cycle_bridge_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI mode and wrapper support to write WorkerCycleRecord evidence from a persisted ExecutionGateDecision ref
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover blocked gate cycle write proof-ready cycle write existing cycle collision and worker mismatch rejection
+  + [completion_criteria] is operators can persist cycle evidence from a gate ref without executing implementation or proof commands
+  + [support_status] is prepared
+  + [dependency_set] is S145_gate_to_worker_cycle_bridge_helper
+  + [known_risks] is bridge CLI implying readiness means launch
