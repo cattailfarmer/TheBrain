@@ -381,6 +381,7 @@
   + [ready_capability] is specification implementation status audit recognizes explicit apply writer and rollback preview while preserving rollback mutation and post-apply review gaps
   + [ready_capability] is long_run_checkpoint.sop records post-S109 70-test suite, dry-run, model inventory, non-gating endpoint health, and route draft status
   + [ready_capability] is explicit rollback writer restores snapshot-backed files and removes create-new files with acknowledgement and rollback_result.sop evidence
+  + [ready_capability] is specification implementation status audit recognizes explicit apply and rollback writers while preserving post-apply Manager/Shaliach acceptance gap
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -455,9 +456,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S111_spec_audit_refresh_after_rollback_writer
-  + [next_reason] is rollback writer support should be reflected in the spec audit before final apply/rollback checkpoint
-  + [sleep_run_candidate] is continue S111 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S112_long_run_checkpoint_after_apply_rollback_writer
+  + [next_reason] is explicit apply and rollback writer support should be captured in a fresh checkpoint
+  + [sleep_run_candidate] is continue S112 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

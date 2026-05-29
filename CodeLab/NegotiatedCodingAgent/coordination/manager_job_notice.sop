@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 115
+  + [job_notice_revision] is 116
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -133,7 +133,8 @@
     S108_spec_audit_refresh_after_rollback_preview |
     S109_long_run_checkpoint_after_apply_rollback_preview |
     S110_operator_acknowledged_rollback_writer |
-    S111_spec_audit_refresh_after_rollback_writer
+    S111_spec_audit_refresh_after_rollback_writer |
+    S112_long_run_checkpoint_after_apply_rollback_writer
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1608,7 +1609,7 @@
 
 & [WorkSliceDetail S111_spec_audit_refresh_after_rollback_writer] is a documentation and planning slice
   + [slice_id] is S111_spec_audit_refresh_after_rollback_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation audit after rollback writer support
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit updated and tests remain passing
@@ -1616,3 +1617,16 @@
   + [support_status] is prepared
   + [dependency_set] is S110_operator_acknowledged_rollback_writer
   + [known_risks] is overstating rollback execution as final acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:04:00Z, proof_ref spec_implementation_status.sop updated and tests passed with 71 tests, result_summary audit recognizes explicit apply and rollback writers while preserving post-apply Manager/Shaliach acceptance gap
+  + [completed_work_review] is support_delta verified audit reflects rollback writer support; requirement_delta checkpoint should capture 71-test apply/rollback writer state
+
+& [WorkSliceDetail S112_long_run_checkpoint_after_apply_rollback_writer] is a long-run reentry slice
+  + [slice_id] is S112_long_run_checkpoint_after_apply_rollback_writer
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after explicit apply and rollback writer support
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 71-test suite and route draft proof
+  + [completion_criteria] is checkpoint records 71-test suite, dry-run run, model inventory, non-gating endpoint health, route_draft_status, and rollback writer frontier
+  + [support_status] is prepared
+  + [dependency_set] is S111_spec_audit_refresh_after_rollback_writer
+  + [known_risks] is noisy generated dry-run artifacts
