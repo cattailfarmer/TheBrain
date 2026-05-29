@@ -1409,3 +1409,11 @@
   + [implemented_capability] is run_local_to_merge_packet_bridge_design.sop defines draft accepted-file-map input bridge from eligible run-local output without issuing ManualMergePacket
   + [current_frontier] is S174_run_local_merge_draft_input_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S174_run_local_merge_draft_input_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S174_run_local_merge_draft_input_records
+  + [implemented_capability] is RunLocalMergeDraftInput represents eligible run-local generated files as non-mutating draft merge inputs with source and target containment checks
+  + [proof_result] is tests passed with 134 tests
+  + [current_frontier] is S175_run_local_merge_draft_input_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

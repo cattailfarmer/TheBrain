@@ -152,7 +152,7 @@ Run-local generated outputs still need Manager and Shaliach review before merge 
 
 The review wrapper is `scripts/run-local-output-review.ps1`; it can write review and eligibility evidence, not merge packets.
 
-The next bridge is specified in `coordination/run_local_to_merge_packet_bridge_design.sop`: eligible run-local outputs can become draft merge inputs, still not manual merge packets or apply actions.
+The next bridge is specified in `coordination/run_local_to_merge_packet_bridge_design.sop`: eligible run-local outputs can become draft merge inputs, still not manual merge packets or apply actions. `negotiated_agent.run_local_merge_draft` implements the draft input record and source/target containment checks; a writer CLI remains the next step.
 
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 

@@ -280,7 +280,8 @@
   + [completed_slice] is S171_long_run_checkpoint_after_run_local_review_cli
   + [completed_slice] is S172_spec_audit_refresh_after_run_local_review
   + [completed_slice] is S173_run_local_to_merge_packet_bridge_design
-  + [ready_slice] is S174_run_local_merge_draft_input_records
+  + [completed_slice] is S174_run_local_merge_draft_input_records
+  + [ready_slice] is S175_run_local_merge_draft_input_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

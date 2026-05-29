@@ -2453,7 +2453,7 @@
 
 & [WorkSliceDetail S174_run_local_merge_draft_input_records] is a coordination runtime implementation slice
   + [slice_id] is S174_run_local_merge_draft_input_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add RunLocalMergeDraftInput record and source/target containment helpers
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover eligible draft creation blocked eligibility escaped source escaped target and boundary text
@@ -2461,3 +2461,16 @@
   + [support_status] is prepared
   + [dependency_set] is S173_run_local_to_merge_packet_bridge_design
   + [known_risks] is draft input being treated as accepted patch
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T00:51:00Z, proof_ref tests passed with 134 tests, result_summary added RunLocalMergeDraftInput records and source target containment helpers
+  + [completed_work_review] is support_delta verified draft input remains non-mutating and not a ManualMergePacket; requirement_delta next step is explicit draft input writer CLI
+
+& [WorkSliceDetail S175_run_local_merge_draft_input_cli] is a coordination runtime implementation slice
+  + [slice_id] is S175_run_local_merge_draft_input_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to write run-local merge draft input evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover draft input write eligible path blocked eligibility escaped source escaped target and no manual merge packet creation
+  + [completion_criteria] is operators can write run_local_merge_draft_input.sop from eligible run-local output without creating manual_merge_packet.sop or applying files
+  + [support_status] is prepared
+  + [dependency_set] is S174_run_local_merge_draft_input_records
+  + [known_risks] is writer output being mistaken for accepted patch or apply authorization

@@ -83,10 +83,12 @@ from negotiated_agent.run_local_execution import (
 from negotiated_agent.run_local_execution_cli import main as run_local_execution_cli_main
 from negotiated_agent.run_local_review import (
     ManagerRunLocalOutputReview,
+    RunLocalMergeEligibilitySummary,
     ShaliachRunLocalOutputReview,
     decide_run_local_merge_eligibility,
 )
 from negotiated_agent.run_local_review_cli import main as run_local_review_cli_main
+from negotiated_agent.run_local_merge_draft import build_run_local_merge_draft_input
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -3142,6 +3144,101 @@ class MailboxCoordinationTests(unittest.TestCase):
                     1,
                 )
             self.assertIn("escapes", out.getvalue())
+
+    def test_run_local_merge_draft_input_preserves_non_packet_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            (run_root / "implementation").mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "implementation" / "README.generated.txt").write_text("body\n", encoding="utf-8")
+            eligibility = RunLocalMergeEligibilitySummary(
+                eligibility_id="eligibility-1",
+                eligibility_status="eligible_for_manual_merge_packet",
+                manager_review_ref="manager.sop",
+                shaliach_review_ref="shaliach.sop",
+                generated_files=("implementation/README.generated.txt",),
+            )
+            draft = build_run_local_merge_draft_input(
+                draft_id="draft-1",
+                eligibility=eligibility,
+                eligibility_ref="run_local_merge_eligibility.sop",
+                source_result_ref="run_local_execution_result.sop",
+                run_local_root=run_root,
+                target_workspace_root=target_root,
+            )
+            sop = draft.to_sop()
+            self.assertEqual(draft.entries[0].source_ref, "implementation/README.generated.txt")
+            self.assertEqual(draft.entries[0].target_path, "implementation/README.generated.txt")
+            self.assertIn("RunLocalMergeDraftInput draft-1", sop)
+            self.assertIn("draft_input_not_manual_merge_packet", sop)
+            self.assertFalse((run_root / "manual_merge_packet.sop").exists())
+
+    def test_run_local_merge_draft_input_rejects_blocked_eligibility(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            run_root.mkdir(parents=True)
+            target_root.mkdir()
+            eligibility = RunLocalMergeEligibilitySummary(
+                eligibility_id="eligibility-1",
+                eligibility_status="blocked_by_manager",
+                manager_review_ref="manager.sop",
+                shaliach_review_ref="shaliach.sop",
+                generated_files=("implementation/README.generated.txt",),
+            )
+            with self.assertRaisesRegex(ValueError, "not eligible"):
+                build_run_local_merge_draft_input(
+                    draft_id="draft-1",
+                    eligibility=eligibility,
+                    eligibility_ref="run_local_merge_eligibility.sop",
+                    source_result_ref="run_local_execution_result.sop",
+                    run_local_root=run_root,
+                    target_workspace_root=target_root,
+                )
+
+    def test_run_local_merge_draft_input_rejects_source_and_target_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            run_root.mkdir(parents=True)
+            target_root.mkdir()
+            eligibility = RunLocalMergeEligibilitySummary(
+                eligibility_id="eligibility-1",
+                eligibility_status="eligible_for_manual_merge_packet",
+                manager_review_ref="manager.sop",
+                shaliach_review_ref="shaliach.sop",
+                generated_files=("..\\escape.txt",),
+            )
+            with self.assertRaisesRegex(ValueError, "escapes run-local root"):
+                build_run_local_merge_draft_input(
+                    draft_id="draft-1",
+                    eligibility=eligibility,
+                    eligibility_ref="run_local_merge_eligibility.sop",
+                    source_result_ref="run_local_execution_result.sop",
+                    run_local_root=run_root,
+                    target_workspace_root=target_root,
+                )
+            eligibility = RunLocalMergeEligibilitySummary(
+                eligibility_id="eligibility-2",
+                eligibility_status="eligible_for_manual_merge_packet",
+                manager_review_ref="manager.sop",
+                shaliach_review_ref="shaliach.sop",
+                generated_files=("implementation/README.generated.txt",),
+            )
+            with self.assertRaisesRegex(ValueError, "escapes workspace"):
+                build_run_local_merge_draft_input(
+                    draft_id="draft-2",
+                    eligibility=eligibility,
+                    eligibility_ref="run_local_merge_eligibility.sop",
+                    source_result_ref="run_local_execution_result.sop",
+                    run_local_root=run_root,
+                    target_workspace_root=target_root,
+                    target_paths=("..\\outside.txt",),
+                )
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
