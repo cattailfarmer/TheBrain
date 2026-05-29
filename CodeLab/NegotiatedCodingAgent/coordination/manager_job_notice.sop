@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 38
+  + [job_notice_revision] is 39
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -56,7 +56,8 @@
     S31_mailbox_unread_cursor_cli |
     S32_mailbox_claim_listing_cli |
     S33_rendezvous_packet_cli |
-    S34_coordination_operator_guide
+    S34_coordination_operator_guide |
+    S35_vllm_wsl2_setup_preflight
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -530,7 +531,7 @@
 
 & [WorkSliceDetail S34_coordination_operator_guide] is a post-S16 governance expansion slice
   + [slice_id] is S34_coordination_operator_guide
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document mailbox, claim, cursor, rendezvous, manifest validation, and proof-run suppression operator workflows
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -538,3 +539,16 @@
   + [support_status] is prepared
   + [dependency_set] is S28_run_manifest_validation_cli, S33_rendezvous_packet_cli
   + [known_risks] is documenting intended scheduler behavior beyond current helpers
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:00:00Z, proof_ref tests passed with 38 tests, result_summary added coordination operator guide and README link
+  + [completed_work_review] is support_delta verified future conversations have concise operator docs for current coordination helpers; requirement_delta no new scheduler semantics added
+
+& [WorkSliceDetail S35_vllm_wsl2_setup_preflight] is a local model serving slice
+  + [slice_id] is S35_vllm_wsl2_setup_preflight
+  + [slice_status] is open
+  + [scope] is add a non-destructive preflight script/report for WSL2 vLLM setup readiness on this RTX 5090 machine
+  + [target_files] is src/negotiated_agent/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is script writes setup preflight SOP without installing WSL or vLLM
+  + [completion_criteria] is operator can see exact blockers and next manual install actions for vLLM route
+  + [support_status] is prepared
+  + [dependency_set] is S15_model_inventory_and_serving_probe
+  + [known_risks] is drifting into destructive system installation rather than reporting readiness

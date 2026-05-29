@@ -71,6 +71,7 @@ The generated implementation is intentionally conservative: the coder writes fil
 ## Design
 
 See `docs/architecture.md`.
+For long-running and multi-conversation operator helpers, see `docs/coordination_operator_guide.md`.
 
 ## Specification
 
