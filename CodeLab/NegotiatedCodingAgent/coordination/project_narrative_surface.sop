@@ -1348,3 +1348,10 @@
   + [run_root] is runs\20260529T181506Z
   + [current_frontier] is S167_spec_audit_refresh_after_run_local_writer
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S167_spec_audit_refresh_after_run_local_writer] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S167_spec_audit_refresh_after_run_local_writer
+  + [implemented_capability] is spec_implementation_status.sop now recognizes run-local execution writer helper CLI and 126-test checkpoint as scaffold support
+  + [current_frontier] is S168_run_local_output_review_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

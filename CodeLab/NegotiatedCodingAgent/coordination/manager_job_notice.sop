@@ -2362,7 +2362,7 @@
 
 & [WorkSliceDetail S167_spec_audit_refresh_after_run_local_writer] is a specification audit slice
   + [slice_id] is S167_spec_audit_refresh_after_run_local_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after run-local execution writer helper CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names run-local writer support and chooses next gap
@@ -2370,3 +2370,16 @@
   + [support_status] is prepared
   + [dependency_set] is S166_long_run_checkpoint_after_run_local_writer_cli
   + [known_risks] is overstating run-local generated evidence as target workspace application
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:48:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats run-local writer helper CLI as support and recommends generated-output review design
+  + [completed_work_review] is support_delta verified run-local writer support is current and not target workspace apply; requirement_delta next step is Manager/Shaliach review records for generated outputs
+
+& [WorkSliceDetail S168_run_local_output_review_design] is a coordination runtime design slice
+  + [slice_id] is S168_run_local_output_review_design
+  + [slice_status] is open
+  + [scope] is design Manager and Shaliach review records for run-local generated outputs before merge/apply eligibility
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names review inputs decisions risk handling and no target workspace mutation boundary
+  + [completion_criteria] is design distinguishes generated output review from manual merge packet acceptance and apply mutation
+  + [support_status] is prepared
+  + [dependency_set] is S167_spec_audit_refresh_after_run_local_writer
+  + [known_risks] is review records being mistaken for final apply acceptance

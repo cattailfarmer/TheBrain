@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T23:18:00Z
+  @ [updated_at] 2026-05-29T23:48:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -70,9 +70,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is multi-conversation coordination across active workers
-  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, worker runner design, WorkerLeaseRecord, WorkerCycleRecord, WorkerFailureRecord, non-mutating worker-runner preview CLI, explicit claim-record lease writer, explicit cycle-record writer, proof-command evidence runner, dirty-worktree failure summaries, worker execution gate design, execution gate record models, deterministic execution gate evaluator, no-write execution gate preview CLI, explicit execution gate decision writer helper and CLI, gate-to-worker-cycle bridge helper and CLI, ManagerProofHandoffRecord and writer CLI, handoff-aware proof runner helper and CLI, run-local execution plan/result records, run-local execution planner CLI, and long-run checkpoint proof for the 123-test run-local-planner frontier exist
-  + [gap] is no deterministic run-local implementation file writer, live Shaliach-gated implementation loop, or Manager-reviewed frontier advancement exists yet
-  + [next_candidate] is add deterministic run-local implementation file writer from approved run-local execution plans
+  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, worker runner design, WorkerLeaseRecord, WorkerCycleRecord, WorkerFailureRecord, non-mutating worker-runner preview CLI, explicit claim-record lease writer, explicit cycle-record writer, proof-command evidence runner, dirty-worktree failure summaries, worker execution gate design, execution gate record models, deterministic execution gate evaluator, no-write execution gate preview CLI, explicit execution gate decision writer helper and CLI, gate-to-worker-cycle bridge helper and CLI, ManagerProofHandoffRecord and writer CLI, handoff-aware proof runner helper and CLI, run-local execution plan/result records, run-local execution planner CLI, deterministic run-local execution writer helper and CLI, and long-run checkpoint proof for the 126-test run-local-writer frontier exist
+  + [gap] is no Manager/Shaliach review surface for run-local generated outputs, live Shaliach-gated implementation loop, or Manager-reviewed frontier advancement exists yet
+  + [next_candidate] is design Manager and Shaliach review records for run-local generated outputs before merge/apply eligibility
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is final acceptance over real code patches in the target workspace
@@ -87,6 +87,6 @@
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
-  + [candidate_2] is add deterministic run-local implementation file writer from approved run-local execution plans
+  + [candidate_2] is design Manager and Shaliach review records for run-local generated outputs
   + [candidate_3] is add live Manager/Shaliach post-apply deliberation after endpoint health is available
   + [candidate_4] is install and verify local live model serving when operator is ready

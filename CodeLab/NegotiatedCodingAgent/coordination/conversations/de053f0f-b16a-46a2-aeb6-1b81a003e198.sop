@@ -610,9 +610,10 @@
   + [completed_slice] is S164_run_local_execution_writer
   + [completed_slice] is S165_run_local_execution_writer_cli
   + [completed_slice] is S166_long_run_checkpoint_after_run_local_writer_cli
+  + [completed_slice] is S167_spec_audit_refresh_after_run_local_writer
 
-  + [current_frontier] is S167_spec_audit_refresh_after_run_local_writer after 126-test run-local writer checkpoint
-  + [next_recommended_slice] is S167_spec_audit_refresh_after_run_local_writer
+  + [current_frontier] is S168_run_local_output_review_design after spec audit refresh for run-local writer
+  + [next_recommended_slice] is S168_run_local_output_review_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
