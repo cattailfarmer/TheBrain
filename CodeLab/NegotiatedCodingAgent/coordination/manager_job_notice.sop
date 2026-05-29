@@ -2583,7 +2583,7 @@
 
 & [WorkSliceDetail S184_frontier_advancement_records] is a coordination runtime implementation slice
   + [slice_id] is S184_frontier_advancement_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add FrontierAdvancementRecord and validation helper
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover valid record stale frontier blocked Manager blocked Shaliach proof refs packet refs and no surface mutation
@@ -2591,3 +2591,16 @@
   + [support_status] is prepared
   + [dependency_set] is S183_frontier_advancement_record_design
   + [known_risks] is record builder becoming a hidden surface writer
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:08:00Z, proof_ref tests passed with 142 tests, result_summary added FrontierAdvancementRecord and validation helper
+  + [completed_work_review] is support_delta verified record builder does not mutate active conversation surfaces; requirement_delta next step is explicit writer CLI for frontier advancement records
+
+& [WorkSliceDetail S185_frontier_advancement_writer_cli] is a coordination runtime implementation slice
+  + [slice_id] is S185_frontier_advancement_writer_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to write frontier_advancement_record.sop evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover record write stale frontier blocked Manager blocked Shaliach proof refs packet refs and no current_frontier mutation
+  + [completion_criteria] is operators can write frontier advancement evidence without changing active conversation surfaces
+  + [support_status] is prepared
+  + [dependency_set] is S184_frontier_advancement_records
+  + [known_risks] is writer being mistaken for the future surface applier

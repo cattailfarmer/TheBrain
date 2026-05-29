@@ -22,6 +22,7 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
+from negotiated_agent.frontier_advancement import build_frontier_advancement_record
 from negotiated_agent.execution_gate import (
     ExecutionGateDecision,
     ManagerAuthorizationRecord,
@@ -3608,6 +3609,48 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("Manager acceptance", out.getvalue())
             self.assertFalse((run_root / "manual_merge_packet.sop").exists())
+
+    def test_frontier_advancement_record_preserves_surface_boundary(self) -> None:
+        record = build_frontier_advancement_record(
+            advancement_id="advance-1",
+            current_frontier="S184_frontier_advancement_records",
+            previous_frontier="S184_frontier_advancement_records",
+            next_frontier="S185_frontier_advancement_writer_cli",
+            manager_decision_ref="manager_frontier_decision.sop",
+            manager_decision_status="approved_for_frontier_advancement",
+            shaliach_review_ref="shaliach_frontier_review.sop",
+            shaliach_review_status="clear_for_frontier_advancement",
+            proof_refs=("coordination/long_run_checkpoint.sop",),
+            packet_refs=("runs/run-1/worker_execution/cycle-run/manual_merge_packet.sop",),
+            residual_risk_summary="live Manager deliberation still scaffolded",
+        )
+        sop = record.to_sop()
+        self.assertIn("FrontierAdvancementRecord advance-1", sop)
+        self.assertIn("frontier_advancement_record_not_surface_mutation", sop)
+        self.assertIn("packet_ref_set] is runs/run-1/worker_execution/cycle-run/manual_merge_packet.sop", sop)
+
+    def test_frontier_advancement_record_rejects_stale_or_blocked_inputs(self) -> None:
+        base = {
+            "advancement_id": "advance-1",
+            "current_frontier": "S184_frontier_advancement_records",
+            "previous_frontier": "S184_frontier_advancement_records",
+            "next_frontier": "S185_frontier_advancement_writer_cli",
+            "manager_decision_ref": "manager_frontier_decision.sop",
+            "manager_decision_status": "approved_for_frontier_advancement",
+            "shaliach_review_ref": "shaliach_frontier_review.sop",
+            "shaliach_review_status": "warning_for_frontier_advancement",
+            "proof_refs": ("coordination/long_run_checkpoint.sop",),
+            "packet_refs": (),
+            "residual_risk_summary": "none",
+        }
+        with self.assertRaisesRegex(ValueError, "current frontier"):
+            build_frontier_advancement_record(**{**base, "current_frontier": "S999_other"})
+        with self.assertRaisesRegex(ValueError, "Manager decision"):
+            build_frontier_advancement_record(**{**base, "manager_decision_status": "needs_revision"})
+        with self.assertRaisesRegex(ValueError, "Shaliach review"):
+            build_frontier_advancement_record(**{**base, "shaliach_review_status": "pause_required"})
+        with self.assertRaisesRegex(ValueError, "proof ref"):
+            build_frontier_advancement_record(**{**base, "proof_refs": ()})
 
 
 def _merge_draft(

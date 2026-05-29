@@ -254,7 +254,7 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `negotiated_agent.packet_proposal_cli` and `scripts/packet-proposal.ps1` expose that boundary to operators. They can write Manager packet acceptance, Shaliach packet review, and `manual_merge_packet.sop` proposal evidence under the run-local root, but they do not create `apply_plan.sop` or mutate the target workspace.
 
-`coordination/frontier_advancement_record_design.sop` defines the next Manager-control boundary. Packet proposals and proof artifacts may support moving the active work frontier, but a future `FrontierAdvancementRecord` must capture previous frontier, next frontier, Manager evidence, Shaliach evidence, proof refs, packet refs, and residual risk before any conversation surface is mutated.
+`coordination/frontier_advancement_record_design.sop` defines the next Manager-control boundary. Packet proposals and proof artifacts may support moving the active work frontier, but `FrontierAdvancementRecord` must capture previous frontier, next frontier, Manager evidence, Shaliach evidence, proof refs, packet refs, and residual risk before any conversation surface is mutated. `negotiated_agent.frontier_advancement` implements the pure record and validation helper; it does not write active conversation surfaces.
 
 ## Director Disagreement Ledger
 
