@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 58
+  + [job_notice_revision] is 59
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -76,7 +76,8 @@
     S51_multi_programmer_slice_assignment_plan |
     S52_programmer_assignment_docs |
     S53_multi_slice_planning_scaffold |
-    S54_multi_slice_planning_docs
+    S54_multi_slice_planning_docs |
+    S55_programmer_merge_review_protocol_surface
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -810,7 +811,7 @@
 
 & [WorkSliceDetail S54_multi_slice_planning_docs] is a Programmer swarm slice
   + [slice_id] is S54_multi_slice_planning_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document multi-slice planning scaffold and its current non-execution boundary
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -818,3 +819,16 @@
   + [support_status] is prepared
   + [dependency_set] is S53_multi_slice_planning_scaffold
   + [known_risks] is implying multi-slice planner is semantically extracting work from real code package content
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:20:00Z, proof_ref tests passed with 46 tests, result_summary documented multi-slice planning scaffold and non-execution boundary
+  + [completed_work_review] is support_delta verified multi-slice scaffold boundary is documented; requirement_delta merge review protocol remains future work
+
+& [WorkSliceDetail S55_programmer_merge_review_protocol_surface] is a Programmer swarm slice
+  + [slice_id] is S55_programmer_merge_review_protocol_surface
+  + [slice_status] is open
+  + [scope] is create a merge review protocol surface for future multi-Programmer outputs
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is protocol surface written and tests remain passing
+  + [completion_criteria] is future implementation has explicit merge review gates before parallel Programmer execution
+  + [support_status] is prepared
+  + [dependency_set] is S53_multi_slice_planning_scaffold
+  + [known_risks] is adding process surface without executable enforcement

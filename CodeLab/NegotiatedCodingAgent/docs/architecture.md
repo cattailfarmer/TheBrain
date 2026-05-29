@@ -87,6 +87,16 @@ Current boundary:
 
 This keeps the future swarm path explicit without pretending it already exists.
 
+## Multi-Slice Planning Scaffold
+
+The runtime can also represent a small deterministic set of planned implementation slices:
+
+- core implementation;
+- verification and test support;
+- documentation and operator notes.
+
+This scaffold is used to prove assignment planning across multiple configured Programmers. It is not yet semantic extraction from an arbitrary code package, and the orchestrator still executes one initial implementation slice.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:
