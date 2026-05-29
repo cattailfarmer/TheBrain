@@ -1,4 +1,6 @@
 from pathlib import Path
+import contextlib
+import io
 import json
 import tempfile
 import unittest
@@ -25,6 +27,7 @@ from negotiated_agent.mailbox import (
     publish_message,
     write_rendezvous_packet,
 )
+from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -312,6 +315,51 @@ class MailboxCoordinationTests(unittest.TestCase):
             conflict_inbox = root / "coordination" / "mailbox" / "worker-b" / "inbox.sop"
             self.assertIn("conflict_signal", conflict_inbox.read_text(encoding="utf-8"))
             self.assertEqual(len(list_messages(root, "director_pool")), 1)
+
+    def test_mailbox_cli_lists_and_claims_messages(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            message = publish_message(
+                root,
+                sender_uuid="manager",
+                recipient_uuid="director_pool",
+                kind="rework_notice",
+                subject="Repair layer package",
+                body="Inspect response coordination.",
+            )
+            out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "list",
+                    "--project-root",
+                    str(root),
+                    "--mailbox",
+                    "director_pool",
+                ],
+            ), contextlib.redirect_stdout(out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            self.assertIn(message.message_id, out.getvalue())
+            claim_out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "claim",
+                    "--project-root",
+                    str(root),
+                    "--mailbox",
+                    "director_pool",
+                    "--message-id",
+                    message.message_id,
+                    "--claimant",
+                    "worker-a",
+                ],
+            ), contextlib.redirect_stdout(claim_out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            self.assertIn("MailboxClaim", claim_out.getvalue())
+            self.assertIn("worker-a", claim_out.getvalue())
 
 
 class ModelInventoryTests(unittest.TestCase):

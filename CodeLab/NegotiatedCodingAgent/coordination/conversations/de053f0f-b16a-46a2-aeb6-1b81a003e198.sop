@@ -100,6 +100,7 @@
   + [last_proof] is tests passed with 32 tests after S27 run manifest log event
   + [last_proof] is tests passed with 33 tests and validate-run-manifest reported valid for runs\20260529T141744Z\run_manifest.sop
   + [last_proof] is tests passed with 34 tests and suppressed dry-run manifest validated for runs\20260529T141949Z\run_manifest.sop
+  + [last_proof] is tests passed with 35 tests and mailbox script listed director_pool messages
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -152,9 +153,10 @@
   + [completed_slice] is S27_run_manifest_log_event
   + [completed_slice] is S28_run_manifest_validation_cli
   + [completed_slice] is S29_proof_run_side_effect_controls
+  + [completed_slice] is S30_mailbox_claim_cli
 
-  + [current_frontier] is S30_mailbox_claim_cli after proof run side effect controls
-  + [next_recommended_slice] is S30_mailbox_claim_cli
+  + [current_frontier] is S31_mailbox_unread_cursor_cli after mailbox claim CLI
+  + [next_recommended_slice] is S31_mailbox_unread_cursor_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

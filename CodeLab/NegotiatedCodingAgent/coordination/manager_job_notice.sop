@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 34
+  + [job_notice_revision] is 35
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -52,7 +52,8 @@
     S27_run_manifest_log_event |
     S28_run_manifest_validation_cli |
     S29_proof_run_side_effect_controls |
-    S30_mailbox_claim_cli
+    S30_mailbox_claim_cli |
+    S31_mailbox_unread_cursor_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -474,7 +475,7 @@
 
 & [WorkSliceDetail S30_mailbox_claim_cli] is a post-S16 governance expansion slice
   + [slice_id] is S30_mailbox_claim_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add operator CLI helpers for listing mailbox messages and claiming a message by worker UUID
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests for list and claim CLI output over mailbox fixture
@@ -482,3 +483,16 @@
   + [support_status] is prepared
   + [dependency_set] is S22_mailbox_claim_conflict_resolution
   + [known_risks] is turning helper CLI into a scheduler before worker lifecycle exists
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:20:00Z, proof_ref tests passed with 35 tests and mailbox script listed director_pool messages, result_summary added mailbox CLI and PowerShell helper for listing and claiming mailbox messages
+  + [completed_work_review] is support_delta verified operator-facing mailbox list and claim helpers; requirement_delta worker lifecycle scheduling remains future work
+
+& [WorkSliceDetail S31_mailbox_unread_cursor_cli] is a post-S16 governance expansion slice
+  + [slice_id] is S31_mailbox_unread_cursor_cli
+  + [slice_status] is open
+  + [scope] is extend mailbox CLI with unread and cursor advancement helper
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests showing cursor advancement changes unread CLI output
+  + [completion_criteria] is a worker can mark mailbox messages observed after listing or claiming
+  + [support_status] is prepared
+  + [dependency_set] is S30_mailbox_claim_cli
+  + [known_risks] is read cursor semantics being mistaken for work completion
