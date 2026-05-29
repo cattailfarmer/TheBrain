@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 14
+  + [job_notice_revision] is 15
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -167,14 +167,16 @@
 
 & [WorkSliceDetail S10A_orchestrator_protocol_activation_artifacts] is a planned child slice
   + [slice_id] is S10A_orchestrator_protocol_activation_artifacts
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is emit protocol activation artifacts into each run using the existing SOP protocol registry
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run emits protocol_activation.sop with active protocols, reasons, and authority boundary
   + [completion_criteria] is run output records which SOP protocols were active and why without claiming full interpretation
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S10_shaliach_faculty_runtime or explicit manager split
   + [known_risks] is protocol references becoming decorative instead of governing later Shaliach checks
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:50:00Z, proof_ref tests passed with 20 tests and dry-run wrote runs/20260529T113929Z/protocol_activation.sop, result_summary orchestrator emits protocol_activation.sop and manager layer review log fields cite protocol_activation_ref
+  + [completed_work_review] is support_delta verified run protocol activation artifact and manager review log citation; requirement_delta S10B remains to write separate Shaliach finding artifacts beyond package sections and log fields
 
 & [WorkSliceDetail S10B_attach_shaliach_findings_to_layer_packages] is a planned child slice
   + [slice_id] is S10B_attach_shaliach_findings_to_layer_packages

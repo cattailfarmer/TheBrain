@@ -88,6 +88,7 @@
   + [implemented_slice] is S08_runtime_conversation_kernel
   + [implemented_slice] is S09_protocol_registry
   + [implemented_slice] is S10_shaliach_faculty_runtime
+  + [implemented_slice] is S10A_orchestrator_protocol_activation_artifacts
   + [implemented_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [implemented_slice] is S12_project_narrative_surface_runtime_update
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
@@ -109,6 +110,7 @@
   + [proof_result] is tests passed with 20 tests after S10 Shaliach faculty runtime
   + [proof_result] is dry-run wrote RunNarrativeUpdate 20260529T112648Z
   + [proof_result] is dry-run package wrote ShaliachFinding no_protocol_gap_detected in runs/20260529T113710Z
+  + [proof_result] is dry-run wrote protocol_activation.sop in runs/20260529T113929Z
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -126,24 +128,24 @@
   + [ready_capability] is layer packages now derive SJS and DataDesign ledgers from Director proposals and Manager settlements
   + [ready_capability] is orchestrator appends completed run summaries to project narrative surface and active conversation proof ledger
   + [ready_capability] is Shaliach runtime can review negotiated ledgers, protocol activation context, and parent lineage before Manager descent
+  + [ready_capability] is run emits protocol activation set artifact with authority boundary and activation reasons
   + [not_ready_capability] is orchestrator-integrated conversation-kernel updates during normal runs
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
-  + [not_ready_capability] is run_root protocol activation artifacts and deeper Shaliach faculty output expansion
+  + [not_ready_capability] is separate Shaliach finding run artifacts beyond package sections and log fields
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
   + [not_ready_capability] is mailbox and notice coordination between multiple active conversations
   + [not_ready_capability] is file-change surface solution_uuid indexing
   + [not_ready_capability] is verified local vLLM or Ollama multi-model serving
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is S10A_orchestrator_protocol_activation_artifacts
-  + [next_reason] is run outputs should now preserve ProtocolActivationSet artifacts so Shaliach findings can cite activation context directly
-  + [following_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [next_recommended_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [next_reason] is Shaliach findings should become first-class run artifacts now that protocol activation context is written to run_root
   + [following_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [following_slice] is S14_file_change_surface
   + [following_slice] is S13_mailbox_and_notice_coordination
   + [following_slice] is S15_model_inventory_and_serving_probe
   + [following_slice] is S16_long_run_harness
-  + [sleep_run_candidate] is S10A_orchestrator_protocol_activation_artifacts because it is bounded and proofable after S10
+  + [sleep_run_candidate] is S10B_attach_shaliach_findings_to_layer_packages because it is bounded and proofable after protocol activation artifacts
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -224,6 +226,15 @@
 
 & [RunNarrativeUpdate 20260529T113710Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T113710Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T113929Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T113929Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\README.generated.txt

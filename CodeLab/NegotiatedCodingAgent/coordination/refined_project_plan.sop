@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S10A_orchestrator_protocol_activation_artifacts
+  + [current_frontier] is S10B_attach_shaliach_findings_to_layer_packages
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -116,8 +116,8 @@
 
 & [ManagerQueue] is the refined next-slice order
   + [completed_slice] is S10_shaliach_faculty_runtime
-  + [ready_slice] is S10A_orchestrator_protocol_activation_artifacts
-  + [next_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [completed_slice] is S10A_orchestrator_protocol_activation_artifacts
+  + [ready_slice] is S10B_attach_shaliach_findings_to_layer_packages
   + [next_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [next_slice] is S14_file_change_surface
   + [next_slice] is S13_mailbox_and_notice_coordination

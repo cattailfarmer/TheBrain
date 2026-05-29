@@ -12,7 +12,7 @@ from .llm import LlmClient
 from .manager import review_layer_package
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
-from .protocols import ProtocolRegistry
+from .protocols import ProtocolRegistry, activations_to_sop
 from .shaliach import review_layer_negotiation
 from .slices import create_initial_work_slice, manager_review, programmer_report
 from .writer import write_implementation, write_text
@@ -29,13 +29,32 @@ class NegotiatedCodingAgent:
         flowcharts: dict[str, str] = {}
         parent_flowchart = "No parent flowchart yet. Start at application scope."
         parent_package_ref = "objective"
+        framework_root = self.project_root.parents[2] / "ReasoningFramework"
+        protocol_registry = ProtocolRegistry.default()
+        run_protocol_activations = protocol_registry.activate(
+            {
+                "conversation_work_attribution": "run needs active conversation and proof surfaces",
+                "project_narrative_surface": "run completion updates project narrative",
+                "sjs": "layer packages require negotiated SJS traceability",
+                "data_driven_design": "layer packages require data design ledger coverage",
+                "faculty_integration": "Shaliach review uses selected faculty perspectives",
+            }
+        )
+        write_text(
+            run_root / "protocol_activation.sop",
+            activations_to_sop(
+                run_protocol_activations,
+                subject="NegotiatedCodingAgent run",
+                framework_root=framework_root,
+            ),
+        )
 
         for layer in self.config.negotiation.layers:
             settled, proposals = self._negotiate_layer(layer, objective, parent_flowchart, run_root)
             flowcharts[layer] = settled
             write_text(run_root / f"{layer}.flowchart.md", settled)
             ledgers = negotiate_ledgers(layer, proposals, settled)
-            protocol_activations = ProtocolRegistry.default().activate(
+            protocol_activations = protocol_registry.activate(
                 {
                     "sjs": f"{layer} layer package requires negotiated SJS traceability",
                     "data_driven_design": f"{layer} layer package requires DataDrivenDesign ledger coverage",
@@ -78,6 +97,7 @@ class NegotiatedCodingAgent:
                     "reason": decision.reason,
                     "shaliach_finding": shaliach_finding.finding,
                     "shaliach_severity": shaliach_finding.severity,
+                    "protocol_activation_ref": "protocol_activation.sop",
                 },
             )
             if shaliach_finding.blocks_progress:
