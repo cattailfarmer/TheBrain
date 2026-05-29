@@ -1985,7 +1985,7 @@
 
 & [WorkSliceDetail S138_spec_audit_refresh_after_gate_preview_cli] is a specification audit slice
   + [slice_id] is S138_spec_audit_refresh_after_gate_preview_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after execution gate preview CLI and completed checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names no-write execution gate preview CLI as implemented scaffold support and selects next gap based on current state
@@ -1993,3 +1993,16 @@
   + [support_status] is prepared
   + [dependency_set] is S137_long_run_checkpoint_after_gate_preview_cli
   + [known_risks] is overstating preview CLI as an autonomous execution gate writer
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:04:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats gate preview checkpoint as current support and recommends an explicit gate decision writer
+  + [completed_work_review] is support_delta verified audit no longer points to completed S137 as next candidate; requirement_delta next step is design a decision writer that records gate decisions but does not execute worker implementation
+
+& [WorkSliceDetail S139_execution_gate_decision_writer_design] is a coordination runtime design slice
+  + [slice_id] is S139_execution_gate_decision_writer_design
+  + [slice_status] is open
+  + [scope] is design an explicit execution gate decision writer that persists allowed or blocked ExecutionGateDecision records from existing refs
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP describes inputs output path mutation boundary proof expectations and no worker execution guarantee
+  + [completion_criteria] is design distinguishes decision persistence from autonomous worker implementation launch
+  + [support_status] is prepared
+  + [dependency_set] is S138_spec_audit_refresh_after_gate_preview_cli
+  + [known_risks] is making decision persistence look like permission to execute code changes

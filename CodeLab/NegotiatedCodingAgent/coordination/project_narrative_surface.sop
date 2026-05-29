@@ -1073,3 +1073,10 @@
   + [run_root] is runs\20260529T173342Z
   + [current_frontier] is S138_spec_audit_refresh_after_gate_preview_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S138_spec_audit_refresh_after_gate_preview_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S138_spec_audit_refresh_after_gate_preview_cli
+  + [implemented_capability] is spec_implementation_status.sop now recognizes the no-write execution gate preview CLI and completed 99-test checkpoint as current scaffold support
+  + [current_frontier] is S139_execution_gate_decision_writer_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
