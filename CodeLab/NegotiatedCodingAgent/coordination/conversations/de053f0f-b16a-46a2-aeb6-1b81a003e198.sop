@@ -413,6 +413,14 @@
   + [last_proof] is run 20260529T175623Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T175623Z
   + [last_proof] is run 20260529T175623Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T180247Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T180247Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T180247Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T180247Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T180247Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T180247Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T180247Z
+  + [last_proof] is run 20260529T180247Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -576,9 +584,10 @@
   + [completed_slice] is S154_handoff_aware_proof_runner_design
   + [completed_slice] is S155_handoff_aware_proof_runner_helper
   + [completed_slice] is S156_handoff_aware_proof_runner_cli
+  + [completed_slice] is S157_long_run_checkpoint_after_handoff_proof_runner
 
-  + [current_frontier] is S157_long_run_checkpoint_after_handoff_proof_runner after handoff-aware proof runner CLI
-  + [next_recommended_slice] is S157_long_run_checkpoint_after_handoff_proof_runner
+  + [current_frontier] is S158_spec_audit_refresh_after_handoff_proof_runner after 118-test handoff-aware proof runner checkpoint
+  + [next_recommended_slice] is S158_spec_audit_refresh_after_handoff_proof_runner
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

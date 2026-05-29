@@ -2232,7 +2232,7 @@
 
 & [WorkSliceDetail S157_long_run_checkpoint_after_handoff_proof_runner] is a long-run reentry slice
   + [slice_id] is S157_long_run_checkpoint_after_handoff_proof_runner
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after handoff-aware proof runner CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 118-test suite and route draft proof
@@ -2240,3 +2240,16 @@
   + [support_status] is prepared
   + [dependency_set] is S156_handoff_aware_proof_runner_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:03:05Z, proof_ref long-run checkpoint passed 118 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after handoff-aware proof runner CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 118-test handoff-aware proof runner frontier; requirement_delta next step is refresh spec audit after proof runner consumption support
+
+& [WorkSliceDetail S158_spec_audit_refresh_after_handoff_proof_runner] is a specification audit slice
+  + [slice_id] is S158_spec_audit_refresh_after_handoff_proof_runner
+  + [slice_status] is open
+  + [scope] is refresh implementation status after handoff-aware proof runner helper CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names handoff-aware proof runner support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists handoff-aware proof command consumption as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S157_long_run_checkpoint_after_handoff_proof_runner
+  + [known_risks] is overstating proof consumption as implementation execution
