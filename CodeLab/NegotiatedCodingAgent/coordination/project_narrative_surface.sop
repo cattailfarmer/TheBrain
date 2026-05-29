@@ -362,6 +362,7 @@
   + [ready_capability] is long_run_checkpoint.sop records post-S89 61-test suite, dry-run, model inventory, non-gating endpoint state, and serving runbook frontier
   + [ready_capability] is live route draft helper writes non-mutating Manager Director Shaliach Programmer route suggestions while preserving endpoint and benchmark boundaries
   + [ready_capability] is specification implementation status audit recognizes live route draft support without claiming live serving or config mutation
+  + [ready_capability] is long_run_checkpoint.sop records post-S92 63-test suite, dry-run, model inventory, non-gating endpoint state, and route draft frontier
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -436,9 +437,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S92_long_run_checkpoint_after_route_draft
-  + [next_reason] is route-draft implementation and audit should be captured in a long-run checkpoint
-  + [sleep_run_candidate] is continue S92 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S93_long_run_harness_route_draft_check
+  + [next_reason] is route draft generation should become a first-class long-run harness proof
+  + [sleep_run_candidate] is continue S93 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -724,6 +725,15 @@
 
 & [RunNarrativeUpdate 20260529T155833Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T155833Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T160621Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T160621Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
