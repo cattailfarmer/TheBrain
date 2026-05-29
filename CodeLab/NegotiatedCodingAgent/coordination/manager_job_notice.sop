@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 93
+  + [job_notice_revision] is 94
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -111,7 +111,8 @@
     S86_long_run_checkpoint_after_apply_docs |
     S87_live_model_serving_readiness_recheck |
     S88_live_serving_bootstrap_operator_runbook |
-    S89_long_run_checkpoint_after_serving_runbook
+    S89_long_run_checkpoint_after_serving_runbook |
+    S90_live_route_config_draft
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1300,7 +1301,7 @@
 
 & [WorkSliceDetail S89_long_run_checkpoint_after_serving_runbook] is a long-run reentry slice
   + [slice_id] is S89_long_run_checkpoint_after_serving_runbook
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after serving readiness and bootstrap documentation
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness or tests update checkpoint without mutating target workspace
@@ -1308,3 +1309,16 @@
   + [support_status] is prepared
   + [dependency_set] is S88_live_serving_bootstrap_operator_runbook
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:58:43Z, proof_ref long-run checkpoint passed tests, dry-run, model inventory, and non-gating OpenAI healthcheck, result_summary refreshed long-run checkpoint after serving bootstrap runbook and wrote run 20260529T155833Z
+  + [completed_work_review] is support_delta verified checkpoint captures serving docs frontier; requirement_delta live route config draft should help transition from dry-run to OpenAI-compatible routes after vLLM is available
+
+& [WorkSliceDetail S90_live_route_config_draft] is a local model serving implementation slice
+  + [slice_id] is S90_live_route_config_draft
+  + [slice_status] is open
+  + [scope] is add a non-mutating helper that drafts role-route configuration guidance from current inventory and available OpenAI-compatible models
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**, coordination/**
+  + [proof_route] is tests cover unavailable endpoint and available-model drafting without changing agent.config.json
+  + [completion_criteria] is operator can generate a draft route profile for Manager, Directors, Shaliach, and Programmers before editing runtime config
+  + [support_status] is prepared
+  + [dependency_set] is S89_long_run_checkpoint_after_serving_runbook
+  + [known_risks] is pretending automated model choice is authoritative without benchmark proof
