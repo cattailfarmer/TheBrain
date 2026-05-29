@@ -235,6 +235,8 @@ Write a Manager proof handoff without running the command:
 
 The handoff writer validates that the source cycle is `ready_for_proof` and that the exact command matches the handoff evidence. It writes only the handoff artifact.
 
+`coordination/handoff_aware_proof_runner_design.sop` describes the next planned consumption step. An approved handoff may later feed the existing proof-command runner, but only after validation and only into a new proof result cycle; it must not advance cursors or frontiers.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

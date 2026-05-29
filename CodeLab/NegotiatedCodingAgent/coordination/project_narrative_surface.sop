@@ -1221,3 +1221,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes ManagerProofHandoffRecord writer CLI and 113-test checkpoint as scaffold support
   + [current_frontier] is S154_handoff_aware_proof_runner_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S154_handoff_aware_proof_runner_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S154_handoff_aware_proof_runner_design
+  + [implemented_capability] is handoff_aware_proof_runner_design.sop defines approved handoff consumption into proof result cycles without frontier or cursor mutation
+  + [current_frontier] is S155_handoff_aware_proof_runner_helper
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

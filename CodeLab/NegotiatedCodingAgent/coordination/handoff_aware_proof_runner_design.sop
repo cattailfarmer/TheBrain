@@ -1,0 +1,62 @@
+& [HandoffAwareProofRunnerDesign] is the design contract for consuming approved proof handoff evidence
+  @ [proof_handoff_design] coordination/manager_reviewed_proof_handoff_design.sop
+  @ [worker_runner_design] coordination/worker_runner_design.sop
+  @ [record_models] src/negotiated_agent/worker_lifecycle.py and src/negotiated_agent/worker_runner.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T22:07:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is handoff_aware_proof_runner_design_not_command_execution
+  + [primary_goal] is define how the existing proof-command runner consumes an approved ManagerProofHandoffRecord
+  + [non_goal] is autonomous worker implementation execution
+  + [non_goal] is target workspace mutation
+  + [non_goal] is mailbox read cursor advancement
+  + [non_goal] is Manager frontier advancement
+  + [non_goal] is proof command selection outside handoff evidence
+
+& [ConsumptionInputs] is what the proof runner must receive
+  + [required_ref] is ManagerProofHandoffRecord with handoff_status approved
+  + [required_ref] is ready_for_proof WorkerCycleRecord referenced by ready_cycle_ref
+  + [required_ref] is ExecutionGateDecision referenced by execution_gate_ref
+  + [required_arg] is requested proof command
+  + [required_arg] is current_frontier
+  + [required_arg] is worker_uuid
+  + [authority_boundary] is approved_handoff_not_completion_approval
+  = must: validate handoff using validate_manager_proof_handoff before running any command
+  = must: reject when requested command differs from handoff proof_command
+  = must: reject when current_frontier differs from frontier_at_handoff
+  = must: reject when worker_uuid differs from handoff or ready cycle
+
+& [ProofExecutionBehavior] is the allowed command execution path
+  + [runner_function] is run_worker_proof_command
+  + [command] is ManagerProofHandoffRecord.proof_command
+  + [cycle_id] is new proof result cycle id, not the ready cycle id
+  + [claim_refs] is inherited from the ready_for_proof WorkerCycleRecord
+  + [slice_ref] is inherited from the ready_for_proof WorkerCycleRecord
+  + [proof_refs] is ready_cycle_ref, handoff_ref, execution_gate_ref, and command proof ref
+  + [changed_files] is none unless a later proof-specific protocol designs generated proof artifacts
+  + [authority_boundary] is proof_result_cycle_not_manager_approval
+  = must: leave the ready_for_proof cycle unchanged
+  = must: write failed proof evidence through WorkerFailureRecord on nonzero command return
+  = must: return nonzero on failed proof
+
+& [ForbiddenSideEffects] is what handoff consumption must not do
+  - never: execute implementation work
+  - never: apply or rollback target workspace files
+  - never: advance mailbox read cursors
+  - never: mutate active conversation current_frontier
+  - never: mark Manager work slice completed
+  - never: overwrite ready cycle or handoff artifacts
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is approved handoff runs a harmless proof command and writes a new completed WorkerCycleRecord
+  + [test_case] is failed handoff proof writes WorkerFailureRecord and failed_proof cycle evidence
+  + [test_case] is command mismatch fails before running the command
+  + [test_case] is non-ready source cycle fails before running the command
+  + [test_case] is ready cycle and handoff artifacts remain unchanged
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add loaders for ManagerProofHandoffRecord and handoff-aware proof runner helper
+  + [slice_2] is add CLI mode to consume approved handoff refs
+  + [slice_3] is add operator docs and checkpoint
+  + [slice_4] is refresh spec audit before considering run-local implementation execution

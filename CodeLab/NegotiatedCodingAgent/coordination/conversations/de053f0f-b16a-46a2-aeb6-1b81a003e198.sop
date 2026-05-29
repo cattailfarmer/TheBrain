@@ -573,9 +573,10 @@
   + [completed_slice] is S151_manager_proof_handoff_writer_cli
   + [completed_slice] is S152_long_run_checkpoint_after_proof_handoff_writer
   + [completed_slice] is S153_spec_audit_refresh_after_proof_handoff_writer
+  + [completed_slice] is S154_handoff_aware_proof_runner_design
 
-  + [current_frontier] is S154_handoff_aware_proof_runner_design after spec audit refresh for proof handoff writer
-  + [next_recommended_slice] is S154_handoff_aware_proof_runner_design
+  + [current_frontier] is S155_handoff_aware_proof_runner_helper after handoff-aware proof runner design
+  + [next_recommended_slice] is S155_handoff_aware_proof_runner_helper
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
