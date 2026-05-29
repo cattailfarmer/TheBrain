@@ -132,6 +132,7 @@ from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_pr
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import (
+    ShaliachFinding,
     ShaliachSelfNegotiationPerspective,
     ShaliachSelfNegotiationRecord,
     ShaliachSelfNegotiationTension,
@@ -5933,6 +5934,22 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertEqual(record.status, "advisory")
         self.assertEqual(record.proposed_response_set, ("approve_with_advisory", "record_residual_tension"))
         self.assertIn("advisory tension recorded", record.to_sop())
+
+    def test_shaliach_finding_can_reference_self_negotiation_record(self) -> None:
+        finding = ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason="ledger fields are weakly supported",
+            required_response="repair ledger evidence",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord builder-advisory",
+        )
+        self.assertIn("self_negotiation_ref] is ShaliachSelfNegotiationRecord builder-advisory", finding.to_sop("application"))
+        response = finding.to_response_coordination_sop("application")
+        self.assertIn("self_negotiation_ref] is ShaliachSelfNegotiationRecord builder-advisory", response)
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

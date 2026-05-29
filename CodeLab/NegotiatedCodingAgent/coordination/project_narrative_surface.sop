@@ -1962,3 +1962,11 @@
   + [proof_result] is tests passed with 212 tests
   + [current_frontier] is S234_shaliach_finding_self_negotiation_refs
   + [narrative_role] is shaliach_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S234_shaliach_finding_self_negotiation_refs] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S234_shaliach_finding_self_negotiation_refs
+  + [implemented_capability] is ShaliachFinding and ShaliachResponseCoordination SOP can cite optional self_negotiation_ref while preserving none for older findings
+  + [proof_result] is tests passed with 213 tests
+  + [current_frontier] is S235_shaliach_self_negotiation_from_finding
+  + [narrative_role] is shaliach_arc and integration_arc update

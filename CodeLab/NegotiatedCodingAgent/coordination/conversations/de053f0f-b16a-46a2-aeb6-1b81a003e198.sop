@@ -767,7 +767,9 @@
   + [last_proof] is tests passed with 209 tests after Shaliach self-negotiation record implementation
   + [completed_slice] is S233_shaliach_self_negotiation_builder
   + [last_proof] is tests passed with 212 tests after Shaliach self-negotiation builder implementation
-  + [next_recommended_slice] is S234_shaliach_finding_self_negotiation_refs
+  + [completed_slice] is S234_shaliach_finding_self_negotiation_refs
+  + [last_proof] is tests passed with 213 tests after Shaliach finding self-negotiation reference integration
+  + [next_recommended_slice] is S235_shaliach_self_negotiation_from_finding
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

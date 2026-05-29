@@ -162,6 +162,7 @@ class ShaliachFinding:
     lower_reasoning: str = "artifact fields inspected"
     perspective_set: tuple[str, ...] = ("ProtocolCounsel", "BoundaryMarshal", "EvidenceClerk")
     perspective_records: tuple[ShaliachPerspectiveRecord, ...] = ()
+    self_negotiation_ref: str = ""
 
     @property
     def blocks_progress(self) -> bool:
@@ -171,6 +172,7 @@ class ShaliachFinding:
         perspectives = ", ".join(self.perspective_set)
         perspective_records = self.perspective_records or _perspective_records(self)
         record_lines = "\n".join(record.to_sop_line() for record in perspective_records)
+        self_negotiation_line = _self_negotiation_ref_line(self.self_negotiation_ref, indent="    ")
         return f"""& [ShaliachFinding {subject}] is the Shaliach response coordination output
     + [finding] is {self.finding}
     + [severity] is {self.severity}
@@ -182,12 +184,14 @@ class ShaliachFinding:
     + [lower_reasoning] is {self.lower_reasoning}
     + [perspective_set] is {perspectives}
 {record_lines}
+{self_negotiation_line}
     + [reason] is {self.reason}
     + [required_response] is {self.required_response}"""
 
     def to_response_coordination_sop(self, subject: str) -> str:
         perspective_records = self.perspective_records or _perspective_records(self)
         record_lines = "\n".join(f"  + [perspective_trace {record.perspective}] is {record.finding}" for record in perspective_records)
+        self_negotiation_line = _self_negotiation_ref_line(self.self_negotiation_ref, indent="  ")
         return f"""& [ShaliachResponseCoordination {subject}] is the required response plan for a Shaliach finding
   + [finding] is {self.finding}
   + [severity] is {self.severity}
@@ -196,6 +200,7 @@ class ShaliachFinding:
   + [action] is {self.action}
   + [required_response] is {self.required_response}
 {record_lines}
+{self_negotiation_line}
   + [repair_step] is inspect {self.target_artifact} for the cited reason
   + [repair_step] is assign {self.target_role} to address the required response before treating this warning as resolved
   + [completion_signal] is follow-up ShaliachFinding no_protocol_gap_detected or explicitly accepted residual risk
@@ -357,6 +362,12 @@ def _join_record_lines(lines_groups) -> str:
     for group in lines_groups:
         lines.extend(group)
     return "\n".join(lines)
+
+
+def _self_negotiation_ref_line(self_negotiation_ref: str, *, indent: str) -> str:
+    if not self_negotiation_ref:
+        return f"{indent}+ [self_negotiation_ref] is none"
+    return f"{indent}+ [self_negotiation_ref] is {self_negotiation_ref}"
 
 
 def _perspective_records(finding: ShaliachFinding) -> tuple[ShaliachPerspectiveRecord, ...]:
