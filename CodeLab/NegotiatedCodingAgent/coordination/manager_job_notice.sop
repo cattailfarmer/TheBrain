@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 60
+  + [job_notice_revision] is 61
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -78,7 +78,8 @@
     S53_multi_slice_planning_scaffold |
     S54_multi_slice_planning_docs |
     S55_programmer_merge_review_protocol_surface |
-    S56_spec_audit_refresh_after_programmer_swarm_groundwork
+    S56_spec_audit_refresh_after_programmer_swarm_groundwork |
+    S57_director_multi_round_carry_forward
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -838,7 +839,7 @@
 
 & [WorkSliceDetail S56_spec_audit_refresh_after_programmer_swarm_groundwork] is a documentation and planning slice
   + [slice_id] is S56_spec_audit_refresh_after_programmer_swarm_groundwork
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation status audit after Shaliach, Director, and Programmer swarm groundwork
   + [target_files] is coordination/spec_implementation_status.sop
   + [proof_route] is audit surface updated and tests remain passing
@@ -846,3 +847,16 @@
   + [support_status] is prepared
   + [dependency_set] is S55_programmer_merge_review_protocol_surface
   + [known_risks] is recasting planned surfaces as executable support
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:40:00Z, proof_ref tests passed with 46 tests, result_summary spec implementation audit refreshed after Shaliach Director and Programmer groundwork
+  + [completed_work_review] is support_delta verified spec audit reflects current implemented and partial support; requirement_delta multi-round Director disagreement carry-forward remains next gap
+
+& [WorkSliceDetail S57_director_multi_round_carry_forward] is a Director negotiation depth slice
+  + [slice_id] is S57_director_multi_round_carry_forward
+  + [slice_status] is open
+  + [scope] is carry Director disagreement and open concerns from one negotiation round into the next round prompt/context
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing second round prompt receives prior disagreement context
+  + [completion_criteria] is multi-round negotiation does not discard first-round disagreements before Manager settlement
+  + [support_status] is prepared
+  + [dependency_set] is S48_director_disagreement_ledger
+  + [known_risks] is bloating prompts with stale concerns in single-round runs

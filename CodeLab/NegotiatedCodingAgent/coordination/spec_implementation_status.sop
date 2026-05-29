@@ -3,6 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
+  @ [updated_at] 2026-05-29T20:30:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -45,9 +46,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Shaliach internal higher/lower reasoning and perspective negotiation
-  + [support] is Shaliach runtime has deterministic finding logic and scaffolded perspective concepts
+  + [support] is ShaliachFinding and ShaliachResponseCoordination now include deterministic internal perspective records and response traces
   + [gap] is no live model-negotiated higher/lower Shaliach internal debate exists yet
-  + [next_candidate] is implement explicit Shaliach internal perspective passes over layer packages and response severity
+  + [next_candidate] is add live Shaliach self-negotiation once local model serving is available
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is two or more LLMs negotiate around the objective
@@ -57,15 +58,15 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Directors preserve distinct perspectives and negotiate disagreements
-  + [support] is multiple Director configs produce proposals and ledger evidence
-  + [gap] is no explicit multi-round disagreement memory or model-family diversity proof exists yet
-  + [next_candidate] is add Director stance profiles and disagreement ledger before Manager settlement
+  + [support] is multiple Director configs produce proposals, dry-run roles emit distinct stances, and layer packages include DirectorDisagreementLedger
+  + [gap] is no live model-family diversity proof or multi-round disagreement memory exists yet
+  + [next_candidate] is add multi-round disagreement carry-forward before Manager settlement
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Programmers are a small swarm of lightweight implementers
-  + [support] is config supports programmer list and bounded work slice reports
-  + [gap] is orchestrator currently uses one configured Programmer for the initial implementation slice
-  + [next_candidate] is add multi-programmer slice assignment and merge/review protocol
+  + [support] is config supports programmer list, planned multi-slice representation exists, ProgrammerAssignmentPlan is emitted, and merge review protocol surface exists
+  + [gap] is orchestrator currently executes one configured Programmer for the initial implementation slice and merge review is not executable
+  + [next_candidate] is implement executable multi-Programmer runner under merge review gates
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is multi-conversation coordination across active workers
@@ -84,7 +85,7 @@
   + [reason] is current work has stayed non-destructive and setup remains a manual operator step
 
 & [NextGapOrder] is the recommended next work based on this audit
-  + [candidate_1] is implement explicit Shaliach internal perspective passes
-  + [candidate_2] is add Director disagreement ledger and stance profiles
-  + [candidate_3] is add multi-Programmer slice assignment after Manager-approved code package
+  + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
+  + [candidate_2] is add multi-round Director disagreement carry-forward
+  + [candidate_3] is implement executable multi-Programmer runner under merge review gates
   + [candidate_4] is install and verify local live model serving when operator is ready
