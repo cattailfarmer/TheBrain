@@ -340,6 +340,17 @@ class NegotiatedCodingAgent:
         shaliach_response_ref: str,
         shaliach_finding: object,
     ) -> None:
+        if not self.config.coordination.publish_rework_notices:
+            self._log(
+                run_root,
+                {
+                    "event": "mailbox_rework_notice_suppressed",
+                    "layer": layer,
+                    "reason": "coordination.publish_rework_notices disabled",
+                    "shaliach_response_ref": shaliach_response_ref,
+                },
+            )
+            return
         try:
             sender_uuid = ConversationSurface.load_active(self.project_root).first("conversation_uuid", "manager") or "manager"
             message = publish_message(

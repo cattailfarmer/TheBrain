@@ -33,6 +33,7 @@ class NegotiationConfig:
 @dataclass(frozen=True)
 class CoordinationConfig:
     director_pool_recipient: str = "director_pool"
+    publish_rework_notices: bool = True
 
 
 @dataclass(frozen=True)
@@ -151,4 +152,5 @@ def validate_config(config: AppConfig, minimum_directors: int = 2) -> None:
 def _coordination(data: dict[str, Any]) -> CoordinationConfig:
     return CoordinationConfig(
         director_pool_recipient=str(data.get("director_pool_recipient", "director_pool")),
+        publish_rework_notices=bool(data.get("publish_rework_notices", True)),
     )

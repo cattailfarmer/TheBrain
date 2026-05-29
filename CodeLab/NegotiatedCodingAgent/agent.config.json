@@ -50,7 +50,8 @@
     ]
   },
   "coordination": {
-    "director_pool_recipient": "director_pool"
+    "director_pool_recipient": "director_pool",
+    "publish_rework_notices": true
   },
   "artifact_forms": {
     "layer_package": "sop",

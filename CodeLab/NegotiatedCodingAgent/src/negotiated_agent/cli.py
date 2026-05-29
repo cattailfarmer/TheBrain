@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 
-from .config import load_config
+from .config import CoordinationConfig, load_config
 from .llm import make_client
 from .orchestrator import NegotiatedCodingAgent
 
@@ -18,11 +19,24 @@ def main(argv: list[str] | None = None) -> int:
     run_parser.add_argument("--config", type=Path, default=Path("agent.config.json"))
     run_parser.add_argument("--project-root", type=Path, default=Path.cwd())
     run_parser.add_argument("--dry-run", action="store_true", help="Use deterministic fake LLM responses.")
+    run_parser.add_argument(
+        "--suppress-mailbox",
+        action="store_true",
+        help="Do not publish coordination mailbox notices during this run.",
+    )
 
     args = parser.parse_args(argv)
     if args.command == "run":
         objective = _read_objective(args.objective, args.objective_file)
         config = load_config(args.config)
+        if args.suppress_mailbox:
+            config = replace(
+                config,
+                coordination=CoordinationConfig(
+                    director_pool_recipient=config.coordination.director_pool_recipient,
+                    publish_rework_notices=False,
+                ),
+            )
         client = make_client(config.llm, args.dry_run)
         agent = NegotiatedCodingAgent(config, client, args.project_root)
         run_root = agent.run(objective)
@@ -39,4 +53,3 @@ def _read_objective(objective: str | None, objective_file: Path | None) -> str:
     if objective:
         return objective.strip()
     raise SystemExit("Provide --objective or --objective-file.")
-

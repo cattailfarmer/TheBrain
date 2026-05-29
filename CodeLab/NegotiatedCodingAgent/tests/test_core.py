@@ -94,7 +94,10 @@ class ConfigTests(unittest.TestCase):
                             "layers": ["application"],
                         },
                         "artifact_forms": {"layer_package": "sop"},
-                        "coordination": {"director_pool_recipient": "custom-directors"},
+                        "coordination": {
+                            "director_pool_recipient": "custom-directors",
+                            "publish_rework_notices": False,
+                        },
                     }
                 ),
                 encoding="utf-8",
@@ -106,6 +109,7 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual(config.programmers[0].name, "Programmer")
             self.assertEqual(config.artifact_forms["layer_package"], "sop")
             self.assertEqual(config.coordination.director_pool_recipient, "custom-directors")
+            self.assertFalse(config.coordination.publish_rework_notices)
 
     def test_hierarchical_config_requires_two_directors(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -777,6 +781,58 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("wrote run_manifest.sop", surface)
             self.assertIn("run_repair_plan.sop", log)
             self.assertIn("run_manifest_written", log)
+
+    def test_suppressed_mailbox_keeps_response_artifacts_run_local(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "coordination" / "conversations").mkdir(parents=True)
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ActiveConversationPointer] is active",
+                        "  + [active_conversation_uuid] is test-uuid",
+                        "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "coordination" / "conversations" / "test-uuid.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ConversationSurfaceFile] is active",
+                        "  + [conversation_uuid] is test-uuid",
+                        "  + [current_frontier] is old",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m"},
+                                {"name": "DirectorB", "model": "m"},
+                            ],
+                            "programmers": [{"name": "Programmer", "model": "m"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                        "coordination": {"publish_rework_notices": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_root = NegotiatedCodingAgent(load_config(config_path), DryRunClient(), root).run("Build a test app")
+            log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
+            self.assertTrue((run_root / "application.shaliach_response.sop").exists())
+            self.assertIn("mailbox_rework_notice_suppressed", log)
+            self.assertFalse((root / "coordination" / "mailbox").exists())
 
 
 if __name__ == "__main__":
