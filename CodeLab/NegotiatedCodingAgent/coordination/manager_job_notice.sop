@@ -3129,7 +3129,7 @@
 
 & [WorkSliceDetail S226_long_run_checkpoint_after_review_synthesis] is a long-run reentry slice
   + [slice_id] is S226_long_run_checkpoint_after_review_synthesis
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after review artifact synthesis CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 206-test suite and review synthesis frontier
@@ -3137,3 +3137,16 @@
   + [support_status] is prepared
   + [dependency_set] is S225_review_artifact_synthesis_cli
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:01:00Z, proof_ref long-run checkpoint passed 206 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after review artifact synthesis CLI
+  + [completed_work_review] is support_delta verified checkpoint records S226 frontier and 206-test synthesis support with ready_for_continuation; requirement_delta next step is refresh spec audit after review synthesis
+
+& [WorkSliceDetail S227_spec_audit_refresh_after_review_synthesis] is a specification audit slice
+  + [slice_id] is S227_spec_audit_refresh_after_review_synthesis
+  + [slice_status] is open
+  + [scope] is refresh implementation status after deterministic review artifact synthesis CLI
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names synthesis builders and CLI and chooses next non-live deterministic gap
+  + [completion_criteria] is spec audit reflects review synthesis support without treating it as live deliberation
+  + [support_status] is prepared
+  + [dependency_set] is S226_long_run_checkpoint_after_review_synthesis
+  + [known_risks] is audit blurring deterministic drafts with real Manager/Shaliach review
