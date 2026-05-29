@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 28
+  + [job_notice_revision] is 29
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -46,7 +46,8 @@
     S21_mailbox_orchestrator_assignment |
     S22_mailbox_claim_conflict_resolution |
     S23_role_model_assignment_profile |
-    S24_configurable_mailbox_recipients
+    S24_configurable_mailbox_recipients |
+    S25_blocked_run_repair_plan_synthesis
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -390,7 +391,7 @@
 
 & [WorkSliceDetail S24_configurable_mailbox_recipients] is a post-S16 governance expansion slice
   + [slice_id] is S24_configurable_mailbox_recipients
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is replace hard-coded director_pool mailbox routing with configuration-backed coordination recipients
   + [target_files] is src/negotiated_agent/**, agent.config.json, tests/**
   + [proof_route] is tests showing orchestrator mailbox rework notices route to configured recipient UUID
@@ -398,3 +399,16 @@
   + [support_status] is prepared
   + [dependency_set] is S21_mailbox_orchestrator_assignment
   + [known_risks] is adding scheduler semantics when only recipient routing is needed
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:20:00Z, proof_ref tests passed with 32 tests, result_summary added coordination config for director_pool_recipient and routed Shaliach rework mailbox notices through it
+  + [completed_work_review] is support_delta verified response coordination recipients are configuration-backed; requirement_delta real worker scheduling remains future work
+
+& [WorkSliceDetail S25_blocked_run_repair_plan_synthesis] is a post-S16 governance expansion slice
+  + [slice_id] is S25_blocked_run_repair_plan_synthesis
+  + [slice_status] is open
+  + [scope] is attach actionable repair plan surfaces to blocked Manager or Shaliach run lifecycle records
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests for blocked run writing repair plan references and specific inspection actions
+  + [completion_criteria] is blocked reentry has a repair plan surface instead of only blocker metadata
+  + [support_status] is prepared
+  + [dependency_set] is S17_blocked_run_lifecycle_records
+  + [known_risks] is synthesizing vague repair plans that do not identify artifacts to inspect

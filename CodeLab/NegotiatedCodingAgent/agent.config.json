@@ -49,6 +49,9 @@
       "code"
     ]
   },
+  "coordination": {
+    "director_pool_recipient": "director_pool"
+  },
   "artifact_forms": {
     "layer_package": "sop",
     "sjs_ledger": "sop",

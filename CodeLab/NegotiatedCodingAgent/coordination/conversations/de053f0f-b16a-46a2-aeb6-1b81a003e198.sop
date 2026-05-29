@@ -94,6 +94,7 @@
   + [last_proof] is tests passed with 30 tests and dry-run published director_pool mailbox rework notices in runs\20260529T140405Z
   + [last_proof] is tests passed with 31 tests after S22 mailbox claim conflict resolution
   + [last_proof] is tests passed with 32 tests and role model profile wrote coordination/role_model_profile.sop
+  + [last_proof] is tests passed with 32 tests after S24 configurable mailbox recipients
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -124,9 +125,10 @@
   + [completed_slice] is S21_mailbox_orchestrator_assignment
   + [completed_slice] is S22_mailbox_claim_conflict_resolution
   + [completed_slice] is S23_role_model_assignment_profile
+  + [completed_slice] is S24_configurable_mailbox_recipients
 
-  + [current_frontier] is S24_configurable_mailbox_recipients after role model assignment profile
-  + [next_recommended_slice] is S24_configurable_mailbox_recipients
+  + [current_frontier] is S25_blocked_run_repair_plan_synthesis after configurable mailbox recipients
+  + [next_recommended_slice] is S25_blocked_run_repair_plan_synthesis
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

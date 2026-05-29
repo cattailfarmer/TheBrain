@@ -305,7 +305,7 @@ class NegotiatedCodingAgent:
             message = publish_message(
                 self.project_root,
                 sender_uuid=sender_uuid,
-                recipient_uuid="director_pool",
+                recipient_uuid=self.config.coordination.director_pool_recipient,
                 kind="rework_notice",
                 subject=f"{layer} layer Shaliach response coordination",
                 body=(
@@ -318,7 +318,7 @@ class NegotiatedCodingAgent:
                 {
                     "event": "mailbox_rework_notice_published",
                     "layer": layer,
-                    "recipient_uuid": "director_pool",
+                    "recipient_uuid": self.config.coordination.director_pool_recipient,
                     "message_id": message.message_id,
                     "shaliach_response_ref": shaliach_response_ref,
                 },

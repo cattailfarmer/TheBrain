@@ -93,6 +93,7 @@ class ConfigTests(unittest.TestCase):
                             "layers": ["application"],
                         },
                         "artifact_forms": {"layer_package": "sop"},
+                        "coordination": {"director_pool_recipient": "custom-directors"},
                     }
                 ),
                 encoding="utf-8",
@@ -103,6 +104,7 @@ class ConfigTests(unittest.TestCase):
             self.assertEqual([agent.name for agent in config.directors], ["DirectorA", "DirectorB"])
             self.assertEqual(config.programmers[0].name, "Programmer")
             self.assertEqual(config.artifact_forms["layer_package"], "sop")
+            self.assertEqual(config.coordination.director_pool_recipient, "custom-directors")
 
     def test_hierarchical_config_requires_two_directors(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -348,6 +350,7 @@ class ModelInventoryTests(unittest.TestCase):
                             "programmers": [{"name": "Programmer", "model": "small"}],
                         },
                         "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                        "coordination": {"director_pool_recipient": "custom-director-pool"},
                     }
                 ),
                 encoding="utf-8",
@@ -629,6 +632,7 @@ class NarrativeUpdateTests(unittest.TestCase):
                             "programmers": [{"name": "Programmer", "model": "m"}],
                         },
                         "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                        "coordination": {"director_pool_recipient": "custom-director-pool"},
                     }
                 ),
                 encoding="utf-8",
@@ -642,7 +646,9 @@ class NarrativeUpdateTests(unittest.TestCase):
             shaliach_response = (run_root / "application.shaliach_response.sop").read_text(encoding="utf-8")
             file_change_surface = (run_root / "file_change_surface.sop").read_text(encoding="utf-8")
             file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
-            director_inbox = (root / "coordination" / "mailbox" / "director_pool" / "inbox.sop").read_text(encoding="utf-8")
+            director_inbox = (
+                root / "coordination" / "mailbox" / "custom-director-pool" / "inbox.sop"
+            ).read_text(encoding="utf-8")
             log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
             self.assertIn("RunNarrativeUpdate", narrative)
             self.assertIn("Build a test app", narrative)
@@ -663,6 +669,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("application.shaliach_finding.sop", log)
             self.assertIn("application.shaliach_response.sop", log)
             self.assertIn("mailbox_rework_notice_published", log)
+            self.assertIn("custom-director-pool", log)
             self.assertIn("file_change_surface.sop", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:

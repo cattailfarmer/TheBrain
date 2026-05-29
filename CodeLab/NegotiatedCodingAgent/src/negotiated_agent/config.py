@@ -31,6 +31,11 @@ class NegotiationConfig:
 
 
 @dataclass(frozen=True)
+class CoordinationConfig:
+    director_pool_recipient: str = "director_pool"
+
+
+@dataclass(frozen=True)
 class AppConfig:
     llm: LlmConfig
     shaliach: AgentConfig
@@ -38,6 +43,7 @@ class AppConfig:
     directors: list[AgentConfig]
     programmers: list[AgentConfig]
     negotiation: NegotiationConfig
+    coordination: CoordinationConfig
     artifact_forms: dict[str, str]
 
     @property
@@ -90,6 +96,7 @@ def _load_hierarchical_config(data: dict[str, Any]) -> AppConfig:
             rounds_per_layer=int(negotiation.get("rounds_per_layer", 1)),
             layers=[str(layer) for layer in negotiation.get("layers", [])],
         ),
+        coordination=_coordination(data.get("coordination", {})),
         artifact_forms={str(key): str(value) for key, value in data.get("artifact_forms", {}).items()},
     )
     validate_config(config)
@@ -119,6 +126,7 @@ def _load_legacy_config(data: dict[str, Any]) -> AppConfig:
             rounds_per_layer=int(negotiation.get("rounds_per_layer", 1)),
             layers=[str(layer) for layer in negotiation.get("layers", [])],
         ),
+        coordination=_coordination(data.get("coordination", {})),
         artifact_forms={},
     )
     validate_config(config, minimum_directors=1)
@@ -136,3 +144,11 @@ def validate_config(config: AppConfig, minimum_directors: int = 2) -> None:
         raise ValueError("Config requires at least one Programmer.")
     if not config.negotiation.layers:
         raise ValueError("Config requires at least one negotiation layer.")
+    if not config.coordination.director_pool_recipient.strip():
+        raise ValueError("Config requires a non-empty director pool recipient.")
+
+
+def _coordination(data: dict[str, Any]) -> CoordinationConfig:
+    return CoordinationConfig(
+        director_pool_recipient=str(data.get("director_pool_recipient", "director_pool")),
+    )
