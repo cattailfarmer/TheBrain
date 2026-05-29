@@ -226,6 +226,8 @@ The existing execution gate CLI now has explicit write mode for that boundary. I
 
 `coordination/gate_to_worker_cycle_bridge_design.sop` defines the next bridge from persisted gate decisions into `WorkerCycleRecord` evidence. Blocked, paused, stale, conflict, and proof-ready gate outcomes can become worker cycle records for review, but the bridge must not run proof commands, execute implementation work, advance read cursors, or move the Manager frontier.
 
+`negotiated_agent.worker_runner_cli` and `scripts/worker-runner-preview.ps1` now support explicit gate-cycle bridge mode. It loads a persisted `ExecutionGateDecision`, maps the gate status to a non-executing `WorkerCycleRecord`, writes one cycle artifact, and rejects worker mismatches or existing cycle collisions.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

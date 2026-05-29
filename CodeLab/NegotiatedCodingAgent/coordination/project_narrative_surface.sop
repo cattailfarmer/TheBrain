@@ -1142,3 +1142,11 @@
   + [proof_result] is tests passed with 106 tests
   + [current_frontier] is S146_gate_to_worker_cycle_bridge_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S146_gate_to_worker_cycle_bridge_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S146_gate_to_worker_cycle_bridge_cli
+  + [implemented_capability] is worker runner CLI and wrapper can persist WorkerCycleRecord evidence from a gate ref without executing implementation or proof commands
+  + [proof_result] is tests passed with 108 tests
+  + [current_frontier] is S147_long_run_checkpoint_after_gate_cycle_bridge
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -549,9 +549,10 @@
   + [completed_slice] is S143_spec_audit_refresh_after_gate_writer
   + [completed_slice] is S144_gate_to_worker_cycle_bridge_design
   + [completed_slice] is S145_gate_to_worker_cycle_bridge_helper
+  + [completed_slice] is S146_gate_to_worker_cycle_bridge_cli
 
-  + [current_frontier] is S146_gate_to_worker_cycle_bridge_cli after pure gate-to-cycle bridge helper
-  + [next_recommended_slice] is S146_gate_to_worker_cycle_bridge_cli
+  + [current_frontier] is S147_long_run_checkpoint_after_gate_cycle_bridge after explicit gate-cycle bridge CLI
+  + [next_recommended_slice] is S147_long_run_checkpoint_after_gate_cycle_bridge
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

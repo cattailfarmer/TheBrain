@@ -217,6 +217,14 @@ Write mode creates exactly one `ExecutionGateDecision` artifact under `coordinat
 
 The next planned bridge is `coordination/gate_to_worker_cycle_bridge_design.sop`. It maps persisted gate decisions to `WorkerCycleRecord` review evidence, for example Manager blocks become `blocked`, Shaliach blocks become `paused_by_shaliach`, stale frontiers become `needs_manager_review`, and proof-only allowed gates become `ready_for_proof`. That bridge remains non-executing.
 
+Record a worker cycle from a persisted gate decision:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -RecordGateCycle -ExecutionGateRef <gate-ref> -CycleId <cycle-id>
+```
+
+Gate-cycle bridge mode writes one `WorkerCycleRecord` from the existing gate ref. It does not run proof commands, execute implementation work, or advance the read cursor.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

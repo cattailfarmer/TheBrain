@@ -2036,6 +2036,102 @@ class MailboxCoordinationTests(unittest.TestCase):
                 self.assertEqual(record.cycle_status, cycle_status)
                 self.assertEqual(record.manager_frontier_request, "none")
 
+    def test_worker_runner_cli_writes_cycle_from_gate_ref(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            decision = ExecutionGateDecision(
+                gate_id="gate-blocked",
+                worker_uuid="worker-a",
+                gate_status="blocked_by_manager",
+                manager_authorization_ref="manager_job_notice.sop#S146",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+                allowed_action="run_proof_only",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T21:05:00Z",
+                block_reason="manager_denied",
+            )
+            gate_path = write_execution_gate_decision(project_root=root, decision=decision)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--record-gate-cycle",
+                            "--execution-gate-ref",
+                            gate_path.relative_to(root).as_posix(),
+                            "--cycle-id",
+                            "cycle-from-gate",
+                        ]
+                    ),
+                    0,
+                )
+            cycle_path = root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-from-gate.sop"
+            self.assertTrue(cycle_path.exists())
+            self.assertIn("cycle_status] is blocked", cycle_path.read_text(encoding="utf-8"))
+            self.assertIn("GateWorkerCycleBridgeResult", out.getvalue())
+            self.assertIn("gate_to_cycle_bridge_not_worker_execution", out.getvalue())
+
+    def test_worker_runner_cli_gate_cycle_rejects_collision_and_worker_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            decision = ExecutionGateDecision(
+                gate_id="gate-proof",
+                worker_uuid="worker-a",
+                gate_status="proof_only_allowed",
+                manager_authorization_ref="manager_job_notice.sop#S146",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+                allowed_action="run_proof_only",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T21:05:00Z",
+            )
+            gate_path = write_execution_gate_decision(project_root=root, decision=decision)
+            args = [
+                "--project-root",
+                str(root),
+                "--worker",
+                "worker-a",
+                "--mailbox",
+                "director_pool",
+                "--record-gate-cycle",
+                "--execution-gate-ref",
+                gate_path.relative_to(root).as_posix(),
+                "--cycle-id",
+                "cycle-from-gate",
+            ]
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(worker_runner_cli_main(args), 0)
+            collision = io.StringIO()
+            with contextlib.redirect_stdout(collision):
+                self.assertEqual(worker_runner_cli_main(args), 1)
+            mismatch = io.StringIO()
+            with contextlib.redirect_stdout(mismatch):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-b",
+                            "--mailbox",
+                            "director_pool",
+                            "--record-gate-cycle",
+                            "--execution-gate-ref",
+                            gate_path.relative_to(root).as_posix(),
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("GateWorkerCycleBridgeError", collision.getvalue())
+            self.assertIn("worker_uuid does not match", mismatch.getvalue())
+
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
         authorization_id="auth-1",

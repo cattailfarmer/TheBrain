@@ -7,6 +7,8 @@ param(
   [int]$LeaseMinutes = 30,
   [switch]$ClaimRecord,
   [switch]$RecordCycle,
+  [switch]$RecordGateCycle,
+  [string]$ExecutionGateRef = "",
   [string]$CycleId = "",
   [string]$CycleStatus = "completed",
   [string[]]$ClaimRef = @(),
@@ -58,6 +60,22 @@ if ($RecordCycle) {
     "--commit-ref", $CommitRef,
     "--failure-ref", $FailureRef
   )
+}
+if ($RecordGateCycle) {
+  $argsList += "--record-gate-cycle"
+  if ($ExecutionGateRef -ne "") {
+    $argsList += @("--execution-gate-ref", $ExecutionGateRef)
+  }
+  if ($CycleId -ne "") {
+    $argsList += @("--cycle-id", $CycleId)
+  }
+  foreach ($Ref in $ClaimRef) {
+    $argsList += @("--claim-ref", $Ref)
+  }
+  if ($SliceRef -ne "none") {
+    $argsList += @("--slice-ref", $SliceRef)
+  }
+  $argsList += @("--failure-ref", $FailureRef)
 }
 if ($RunProofCommand -ne "") {
   $argsList += @("--run-proof-command", $RunProofCommand, "--timeout-seconds", $TimeoutSeconds)

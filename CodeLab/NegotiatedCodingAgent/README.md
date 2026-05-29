@@ -130,6 +130,8 @@ That explicit write mode is available through `scripts/execution-gate-preview.ps
 
 The next planned bridge maps persisted gate decisions into worker-cycle review evidence. It is designed to make blocked and proof-ready outcomes visible to the Manager without running proofs, executing implementation work, or moving the frontier.
 
+The worker runner wrapper can now record that bridge explicitly with `scripts/worker-runner-preview.ps1 -RecordGateCycle -ExecutionGateRef <gate-ref>`.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

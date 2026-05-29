@@ -2089,7 +2089,7 @@
 
 & [WorkSliceDetail S146_gate_to_worker_cycle_bridge_cli] is a coordination runtime implementation slice
   + [slice_id] is S146_gate_to_worker_cycle_bridge_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI mode and wrapper support to write WorkerCycleRecord evidence from a persisted ExecutionGateDecision ref
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover blocked gate cycle write proof-ready cycle write existing cycle collision and worker mismatch rejection
@@ -2097,3 +2097,16 @@
   + [support_status] is prepared
   + [dependency_set] is S145_gate_to_worker_cycle_bridge_helper
   + [known_risks] is bridge CLI implying readiness means launch
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:12:00Z, proof_ref tests passed with 108 tests, result_summary worker runner CLI and wrapper can write non-executing WorkerCycleRecord evidence from persisted gate decisions
+  + [completed_work_review] is support_delta verified bridge CLI rejects worker mismatch and existing cycle collisions; requirement_delta next checkpoint should capture 108-test gate-cycle bridge frontier
+
+& [WorkSliceDetail S147_long_run_checkpoint_after_gate_cycle_bridge] is a long-run reentry slice
+  + [slice_id] is S147_long_run_checkpoint_after_gate_cycle_bridge
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after gate-to-worker-cycle bridge CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 108-test suite and route draft proof
+  + [completion_criteria] is checkpoint records gate-cycle bridge frontier
+  + [support_status] is prepared
+  + [dependency_set] is S146_gate_to_worker_cycle_bridge_cli
+  + [known_risks] is noisy generated dry-run artifacts
