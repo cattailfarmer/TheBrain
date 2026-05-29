@@ -123,6 +123,10 @@ from negotiated_agent.packet_proposal import (
 )
 from negotiated_agent.packet_proposal_cli import main as packet_proposal_cli_main
 from negotiated_agent.post_apply import build_post_apply_acceptance_record
+from negotiated_agent.prelive_review import (
+    build_manager_prelive_review_packet,
+    build_shaliach_prelive_review_packet,
+)
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
@@ -6308,6 +6312,60 @@ class RunManifestTests(unittest.TestCase):
             exit_code = artifact_validation_cli_main(["--manifest", str(manifest_path), "--out", str(out_path)])
             self.assertEqual(exit_code, 0)
             self.assertIn("CombinedArtifactValidation", out_path.read_text(encoding="utf-8"))
+
+
+class PreliveReviewPacketTests(unittest.TestCase):
+    def _combined(self, status: str = "passed") -> CombinedArtifactValidation:
+        return CombinedArtifactValidation(
+            status=status,
+            manifest_status="valid" if status == "passed" else "missing_artifacts",
+            manifest_missing_ref_count=0 if status == "passed" else 1,
+            checkpoint_probe_status="passed",
+            checkpoint_probe_reason="shaliach_cross_artifact_probe_passed",
+            openai_health_gating="non_gating_environment_state",
+        )
+
+    def test_manager_prelive_packet_is_review_ready_when_combined_validation_passed(self) -> None:
+        packet = build_manager_prelive_review_packet(
+            packet_id="manager-prelive-1",
+            objective_ref="objective.sop",
+            combined_validation_ref="combined_artifact_validation.sop",
+            checkpoint_ref="coordination/long_run_checkpoint.sop",
+            combined_validation=self._combined(),
+        )
+        sop = packet.to_sop()
+        self.assertEqual(packet.readiness_status, "review_ready")
+        self.assertIn("manager_review_packet_not_manager_approval", sop)
+        self.assertIn("future_live_prompt_surface] is manager_live_review_prompt_from_packet", sop)
+
+    def test_manager_prelive_packet_blocks_failed_combined_validation(self) -> None:
+        packet = build_manager_prelive_review_packet(
+            packet_id="manager-prelive-2",
+            objective_ref="objective.sop",
+            combined_validation_ref="combined_artifact_validation.sop",
+            checkpoint_ref="coordination/long_run_checkpoint.sop",
+            combined_validation=self._combined("failed"),
+        )
+        self.assertEqual(packet.readiness_status, "blocked_by_combined_validation")
+
+    def test_shaliach_prelive_packet_is_review_ready_when_combined_validation_passed(self) -> None:
+        packet = build_shaliach_prelive_review_packet(
+            packet_id="shaliach-prelive-1",
+            combined_validation=self._combined(),
+        )
+        sop = packet.to_sop()
+        self.assertEqual(packet.recommended_response, "review_ready")
+        self.assertIn("preserve_authority_boundary", sop)
+        self.assertIn("shaliach_review_packet_not_shaliach_clearance", sop)
+
+    def test_shaliach_prelive_packet_blocks_failed_combined_validation(self) -> None:
+        packet = build_shaliach_prelive_review_packet(
+            packet_id="shaliach-prelive-2",
+            combined_validation=self._combined("failed"),
+        )
+        self.assertEqual(packet.recommended_response, "block_for_evidence_repair")
+        self.assertIn("combined_validation_status_failed", packet.evidence_gaps)
+        self.assertIn("continuation_without_passed_combined_validation", packet.boundary_risks)
 
 
 class ConversationKernelTests(unittest.TestCase):

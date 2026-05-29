@@ -927,7 +927,9 @@
   + [last_proof] is spec audit refreshed after live-serving readiness recheck
   + [completed_slice] is S273_prelive_manager_shaliach_review_design
   + [last_proof] is designed deterministic pre-live Manager and Shaliach review packet boundary
-  + [next_recommended_slice] is S274_prelive_review_packet_records
+  + [completed_slice] is S274_prelive_review_packet_records
+  + [last_proof] is tests passed with 272 tests after deterministic pre-live Manager and Shaliach review packet records
+  + [next_recommended_slice] is S275_prelive_review_packet_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

@@ -2372,3 +2372,11 @@
   + [proof_ref] is coordination/prelive_manager_shaliach_review_design.sop
   + [current_frontier] is S274_prelive_review_packet_records
   + [narrative_role] is review_design and live_serving_bridge update
+
+
+& [LongRunNarrativeUpdate S274_prelive_review_packet_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S274_prelive_review_packet_records
+  + [implemented_capability] is prelive_review builds deterministic Manager and Shaliach review packets from combined validation evidence with future live prompt surfaces
+  + [proof_result] is tests passed with 272 tests
+  + [current_frontier] is S275_prelive_review_packet_cli
+  + [narrative_role] is review_runtime and live_serving_bridge update

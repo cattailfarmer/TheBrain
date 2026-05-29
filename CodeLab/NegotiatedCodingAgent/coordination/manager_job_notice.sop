@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 160
+  + [job_notice_revision] is 161
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3753,7 +3753,7 @@
 
 & [WorkSliceDetail S274_prelive_review_packet_records] is a review implementation slice
   + [slice_id] is S274_prelive_review_packet_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement deterministic pre-live Manager and Shaliach review packet records
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover review_ready blocked status future prompt fields and authority boundaries
@@ -3761,3 +3761,16 @@
   + [support_status] is prepared
   + [dependency_set] is S273_prelive_manager_shaliach_review_design
   + [known_risks] is packet records being mistaken for final acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:36:00Z, proof_ref tests passed with 272 tests, result_summary added deterministic Manager and Shaliach pre-live review packet records
+  + [completed_work_review] is support_delta verified review_ready blocked future prompt surfaces and authority boundaries; requirement_delta next step is expose pre-live review packets through a CLI and wrapper
+
+& [WorkSliceDetail S275_prelive_review_packet_cli] is a review implementation slice
+  + [slice_id] is S275_prelive_review_packet_cli
+  + [slice_status] is open
+  + [scope] is expose deterministic pre-live Manager and Shaliach review packet writers through a CLI and PowerShell wrapper
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover manager packet output shaliach packet output blocked status output files and wrapper docs
+  + [completion_criteria] is operators can generate review-ready packet evidence from combined validation status without live serving
+  + [support_status] is prepared
+  + [dependency_set] is S274_prelive_review_packet_records
+  + [known_risks] is CLI wording implying live Manager or Shaliach approval
