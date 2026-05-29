@@ -2934,7 +2934,7 @@
 
 & [WorkSliceDetail S211_quiet_narrative_append_cli_tests] is a quality slice
   + [slice_id] is S211_quiet_narrative_append_cli_tests
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is quiet narrative append CLI tests by capturing stdout around apply and blocked plan calls
   + [target_files] is tests/test_core.py
   + [proof_route] is tests still pass with no narrative append SOP noise in harness stdout
@@ -2942,3 +2942,16 @@
   + [support_status] is prepared
   + [dependency_set] is S210_spec_audit_refresh_after_narrative_append
   + [known_risks] is spending too much time on test ergonomics instead of core runtime features
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:54:00Z, proof_ref tests passed with 190 tests and clean summary output, result_summary captured narrative append CLI stdout in tests
+  + [completed_work_review] is support_delta verified harness test tails should now be readable again; requirement_delta next step is refresh checkpoint after quiet test output
+
+& [WorkSliceDetail S212_long_run_checkpoint_after_quiet_cli_tests] is a long-run reentry slice
+  + [slice_id] is S212_long_run_checkpoint_after_quiet_cli_tests
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after quieting narrative append CLI tests
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records 190-test suite with readable stdout tail
+  + [completion_criteria] is checkpoint stays ready_for_continuation and records current frontier after S211
+  + [support_status] is prepared
+  + [dependency_set] is S211_quiet_narrative_append_cli_tests
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

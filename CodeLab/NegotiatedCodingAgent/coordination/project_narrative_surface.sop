@@ -1733,3 +1733,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S211_quiet_narrative_append_cli_tests
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S211_quiet_narrative_append_cli_tests] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S211_quiet_narrative_append_cli_tests
+  + [implemented_capability] is narrative append CLI tests capture stdout so harness output tails remain readable
+  + [proof_result] is tests passed with 190 tests and clean summary output
+  + [current_frontier] is S212_long_run_checkpoint_after_quiet_cli_tests
+  + [narrative_role] is quality_arc and proof_arc update

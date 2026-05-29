@@ -5068,16 +5068,17 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             narrative.write_text(original, encoding="utf-8")
             self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S207",))
             out_path = coordination / "narrative_append_result.sop"
-            narrative_append_cli_main(
-                [
-                    "--project-root",
-                    str(root),
-                    "--expected-surface-guard",
-                    "size:1",
-                    "--out",
-                    str(out_path),
-                ]
-            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--expected-surface-guard",
+                        "size:1",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
             written = out_path.read_text(encoding="utf-8")
             self.assertIn("append_status] is blocked", written)
             self.assertIn("blocked_reason] is narrative_surface_guard_mismatch", written)
@@ -5134,19 +5135,20 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             narrative.write_text(original, encoding="utf-8")
             self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S208",))
             out_path = coordination / "narrative_append_result.sop"
-            narrative_append_cli_main(
-                [
-                    "--project-root",
-                    str(root),
-                    "--apply",
-                    "--result-id",
-                    "result-apply",
-                    "--expected-surface-guard",
-                    narrative_surface_guard(original),
-                    "--out",
-                    str(out_path),
-                ]
-            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--apply",
+                        "--result-id",
+                        "result-apply",
+                        "--expected-surface-guard",
+                        narrative_surface_guard(original),
+                        "--out",
+                        str(out_path),
+                    ]
+                )
             result_text = out_path.read_text(encoding="utf-8")
             narrative_text = narrative.read_text(encoding="utf-8")
             self.assertIn("append_status] is applied", result_text)
@@ -5164,17 +5166,18 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             narrative.write_text(original, encoding="utf-8")
             self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S208",))
             out_path = coordination / "narrative_append_result.sop"
-            narrative_append_cli_main(
-                [
-                    "--project-root",
-                    str(root),
-                    "--apply",
-                    "--expected-surface-guard",
-                    "size:1",
-                    "--out",
-                    str(out_path),
-                ]
-            )
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--apply",
+                        "--expected-surface-guard",
+                        "size:1",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
             self.assertIn("append_status] is blocked", out_path.read_text(encoding="utf-8"))
             self.assertEqual(narrative.read_text(encoding="utf-8"), original)
 
