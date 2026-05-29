@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 80
+  + [job_notice_revision] is 81
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -98,7 +98,8 @@
     S73_operator_approved_apply_policy |
     S74_apply_plan_records |
     S75_apply_plan_dry_run_generation |
-    S76_spec_audit_refresh_after_apply_plan
+    S76_spec_audit_refresh_after_apply_plan |
+    S77_long_run_checkpoint_refresh
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1118,7 +1119,7 @@
 
 & [WorkSliceDetail S76_spec_audit_refresh_after_apply_plan] is a documentation and planning slice
   + [slice_id] is S76_spec_audit_refresh_after_apply_plan
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation audit after dry-run apply plan and apply result evidence
   + [target_files] is coordination/spec_implementation_status.sop
   + [proof_route] is audit updated and tests remain passing
@@ -1126,3 +1127,16 @@
   + [support_status] is prepared
   + [dependency_set] is S75_apply_plan_dry_run_generation
   + [known_risks] is overstating apply_plan.sop as an actual workspace apply
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:55:00Z, proof_ref tests passed with 59 tests, result_summary spec audit refreshed after dry-run apply plan/result evidence
+  + [completed_work_review] is support_delta verified audit distinguishes dry-run apply evidence from mutation command; requirement_delta long-run checkpoint should reflect current frontier
+
+& [WorkSliceDetail S77_long_run_checkpoint_refresh] is a long-run reentry slice
+  + [slice_id] is S77_long_run_checkpoint_refresh
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after the extended Programmer swarm and merge/apply evidence sequence
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness or tests update checkpoint without mutating target workspace
+  + [completion_criteria] is checkpoint records current frontier, test count, and non-gating model health state after recent slices
+  + [support_status] is prepared
+  + [dependency_set] is S76_spec_audit_refresh_after_apply_plan
+  + [known_risks] is generating noisy dry-run artifacts or mailbox side effects
