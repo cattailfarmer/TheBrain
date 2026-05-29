@@ -1620,3 +1620,11 @@
   + [proof_result] is tests passed with 158 tests
   + [current_frontier] is S198_narrative_coverage_update_record_design
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S198_narrative_coverage_update_record_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S198_narrative_coverage_update_record_design
+  + [implemented_capability] is narrative coverage update records are designed as stale-check-derived evidence rather than narrative mutation
+  + [proof_ref] is coordination/narrative_coverage_update_record_design.sop
+  + [current_frontier] is S199_narrative_coverage_update_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

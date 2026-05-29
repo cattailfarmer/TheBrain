@@ -1,0 +1,60 @@
+& [NarrativeCoverageUpdateRecordDesign] is the design contract for append-only narrative update recommendations
+  @ [created_at] 2026-05-30T04:08:00Z
+  @ [parent_design] coordination/narrative_coverage_stale_check_design.sop
+  @ [stale_check_writer] scripts/narrative-coverage.ps1 -StaleCheck
+  @ [narrative_surface] coordination/project_narrative_surface.sop
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is narrative_update_record_not_history_rewrite
+  + [primary_goal] is transform stale-check evidence into an append-only update plan without mutating narrative history
+  + [non_goal] is editing or deleting existing project narrative arcs
+  + [non_goal] is appending to project_narrative_surface.sop
+  + [non_goal] is proving that recommended updates are semantically sufficient
+  + [non_goal] is treating stale-check evidence as Manager completion approval
+
+& [UpdateInputs] is the evidence required to build a coverage update record
+  + [required_ref] is coordination/narrative_stale_check.sop or explicit NarrativeStaleCheckRecord artifact
+  + [required_ref] is coordination/project_narrative_surface.sop
+  + [optional_ref] is coordination/manager_job_notice.sop
+  + [optional_ref] is coordination/refined_project_plan.sop
+  + [optional_ref] is active conversation surface
+  + [authority_boundary] is stale_check_evidence_not_narrative_mutation
+  = must: preserve stale claims exactly as evidence refs or deferred update reasons
+  = must: carry missing arc recommendations forward as append candidates
+  = must: carry latest run and current frontier recommendations forward as append candidates
+  = must: mark any unsupported or duplicate recommendation as deferred rather than deleting it
+
+& [NarrativeCoverageUpdateRecord] is the future artifact form
+  + [field] is update_id
+  + [field] is stale_check_ref
+  + [field] is narrative_surface_ref
+  + [field] is appended_update_set
+  + [field] is deferred_update_set
+  + [field] is stale_claim_ref_set
+  + [field] is authority_boundary
+  + [authority_boundary] is narrative_update_record_not_history_rewrite
+  = must: serialize appended_update_count and deferred_update_count
+  = must: include stale_check_ref so future append commands can trace why an update was proposed
+  = must: output no appended updates when the stale-check status is current
+  = must: write an evidence record only; later narrative append commands need a separate explicit boundary
+
+& [DeferredUpdateReasons] is how the record keeps uncertainty visible
+  + [reason] is duplicate_update_already_represented
+  + [reason] is recommendation_lacks_append_form
+  + [reason] is stale_check_current
+  + [reason] is stale_check_ref_missing
+  + [reason] is narrative_surface_missing
+  = must: defer rather than silently drop recommendations
+  = must: keep deferred updates auditable for a later Shaliach or Manager review
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is update record carries recommended updates into appended_update_set
+  + [test_case] is current stale-check creates no appended updates and records a deferred current-state reason
+  + [test_case] is duplicate narrative update candidates are deferred without rewriting history
+  + [test_case] is SOP output includes stale_check_ref narrative_surface_ref counts and authority boundary
+  + [test_case] is future CLI writer refuses to mutate project_narrative_surface.sop in update-record mode
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add NarrativeCoverageUpdateRecord and pure builder from NarrativeStaleCheckRecord
+  + [slice_2] is add explicit update-record CLI writer
+  + [slice_3] is design narrative append command from reviewed update records

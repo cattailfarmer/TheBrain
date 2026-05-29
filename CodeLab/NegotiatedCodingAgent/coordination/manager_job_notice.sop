@@ -2765,7 +2765,7 @@
 
 & [WorkSliceDetail S198_narrative_coverage_update_record_design] is a coordination runtime design slice
   + [slice_id] is S198_narrative_coverage_update_record_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design append-only narrative coverage update records from stale-check evidence
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names stale-check refs appended update refs deferred updates and no history rewrite
@@ -2773,3 +2773,16 @@
   + [support_status] is prepared
   + [dependency_set] is S197_narrative_stale_check_cli
   + [known_risks] is update record being mistaken for narrative surface mutation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T04:08:00Z, proof_ref narrative_coverage_update_record_design.sop docs updated, result_summary designed append-only coverage update record boundary from stale-check evidence
+  + [completed_work_review] is support_delta verified update records remain evidence-only and carry deferred updates; requirement_delta next step is add NarrativeCoverageUpdateRecord and pure builder
+
+& [WorkSliceDetail S199_narrative_coverage_update_records] is a coordination runtime implementation slice
+  + [slice_id] is S199_narrative_coverage_update_records
+  + [slice_status] is open
+  + [scope] is add NarrativeCoverageUpdateRecord and pure builder from NarrativeStaleCheckRecord
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover recommended updates current status deferred updates stale refs counts and no mutation
+  + [completion_criteria] is stale-check evidence can produce structured append/update recommendation records without changing narrative
+  + [support_status] is prepared
+  + [dependency_set] is S198_narrative_coverage_update_record_design
+  + [known_risks] is treating update records as authority to append narrative without Manager/Shaliach review
