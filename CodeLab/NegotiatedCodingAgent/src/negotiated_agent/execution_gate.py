@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .worker_lifecycle import WorkerLeaseRecord
+
 
 @dataclass(frozen=True)
 class ManagerAuthorizationRecord:
@@ -86,3 +88,44 @@ class ExecutionGateDecision:
 
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
+
+
+def evaluate_execution_gate(
+    *,
+    gate_id: str,
+    manager_authorization: ManagerAuthorizationRecord,
+    manager_authorization_ref: str,
+    shaliach_clearance: ShaliachExecutionClearance,
+    shaliach_clearance_ref: str,
+    lease: WorkerLeaseRecord,
+    lease_ref: str,
+    current_frontier: str,
+) -> ExecutionGateDecision:
+    status = "execution_allowed"
+    block_reason = "none"
+    if lease.lease_status not in {"claimed", "active"}:
+        status = "lease_invalid"
+        block_reason = f"lease_status_{lease.lease_status}"
+    elif manager_authorization.authorization_status != "authorized":
+        status = "blocked_by_manager"
+        block_reason = f"manager_{manager_authorization.authorization_status}"
+    elif manager_authorization.frontier_at_authorization != current_frontier:
+        status = "stale_frontier"
+        block_reason = "frontier_changed"
+    elif shaliach_clearance.clearance_status in {"pause_required", "rework_required"}:
+        status = "blocked_by_shaliach"
+        block_reason = f"shaliach_{shaliach_clearance.clearance_status}"
+    elif manager_authorization.allowed_action == "run_proof_only":
+        status = "proof_only_allowed"
+    return ExecutionGateDecision(
+        gate_id=gate_id,
+        worker_uuid=manager_authorization.worker_uuid,
+        gate_status=status,
+        manager_authorization_ref=manager_authorization_ref,
+        shaliach_clearance_ref=shaliach_clearance_ref,
+        lease_ref=lease_ref,
+        allowed_action=manager_authorization.allowed_action,
+        proof_route=manager_authorization.proof_route,
+        expires_at=manager_authorization.expires_at,
+        block_reason=block_reason,
+    )

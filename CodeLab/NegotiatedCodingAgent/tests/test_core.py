@@ -22,7 +22,7 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
-from negotiated_agent.execution_gate import ExecutionGateDecision, ManagerAuthorizationRecord, ShaliachExecutionClearance
+from negotiated_agent.execution_gate import ExecutionGateDecision, ManagerAuthorizationRecord, ShaliachExecutionClearance, evaluate_execution_gate
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
 from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
@@ -1634,6 +1634,110 @@ class MailboxCoordinationTests(unittest.TestCase):
         self.assertIn("gate_status] is stale_frontier", sop)
         self.assertIn("block_reason] is frontier_changed", sop)
         self.assertIn("execution_gate_decision_not_completion_approval", sop)
+
+    def test_execution_gate_evaluator_allows_proof_only(self) -> None:
+        decision = evaluate_execution_gate(
+            gate_id="gate-1",
+            manager_authorization=_manager_auth("run_proof_only"),
+            manager_authorization_ref="auth.sop",
+            shaliach_clearance=_shaliach_clearance("clear"),
+            shaliach_clearance_ref="clearance.sop",
+            lease=_worker_lease("claimed"),
+            lease_ref="lease.sop",
+            current_frontier="S131_worker_execution_gate_evaluator",
+        )
+        self.assertEqual(decision.gate_status, "proof_only_allowed")
+        self.assertEqual(decision.block_reason, "none")
+
+    def test_execution_gate_evaluator_blocks_manager_denial(self) -> None:
+        decision = evaluate_execution_gate(
+            gate_id="gate-1",
+            manager_authorization=_manager_auth("run_proof_only", authorization_status="denied"),
+            manager_authorization_ref="auth.sop",
+            shaliach_clearance=_shaliach_clearance("clear"),
+            shaliach_clearance_ref="clearance.sop",
+            lease=_worker_lease("claimed"),
+            lease_ref="lease.sop",
+            current_frontier="S131_worker_execution_gate_evaluator",
+        )
+        self.assertEqual(decision.gate_status, "blocked_by_manager")
+        self.assertEqual(decision.block_reason, "manager_denied")
+
+    def test_execution_gate_evaluator_blocks_shaliach_pause(self) -> None:
+        decision = evaluate_execution_gate(
+            gate_id="gate-1",
+            manager_authorization=_manager_auth("execute_run_local_implementation"),
+            manager_authorization_ref="auth.sop",
+            shaliach_clearance=_shaliach_clearance("pause_required"),
+            shaliach_clearance_ref="clearance.sop",
+            lease=_worker_lease("claimed"),
+            lease_ref="lease.sop",
+            current_frontier="S131_worker_execution_gate_evaluator",
+        )
+        self.assertEqual(decision.gate_status, "blocked_by_shaliach")
+        self.assertEqual(decision.block_reason, "shaliach_pause_required")
+
+    def test_execution_gate_evaluator_detects_stale_frontier_and_invalid_lease(self) -> None:
+        stale = evaluate_execution_gate(
+            gate_id="gate-1",
+            manager_authorization=_manager_auth("run_proof_only"),
+            manager_authorization_ref="auth.sop",
+            shaliach_clearance=_shaliach_clearance("clear"),
+            shaliach_clearance_ref="clearance.sop",
+            lease=_worker_lease("claimed"),
+            lease_ref="lease.sop",
+            current_frontier="S999_other",
+        )
+        invalid = evaluate_execution_gate(
+            gate_id="gate-2",
+            manager_authorization=_manager_auth("run_proof_only"),
+            manager_authorization_ref="auth.sop",
+            shaliach_clearance=_shaliach_clearance("clear"),
+            shaliach_clearance_ref="clearance.sop",
+            lease=_worker_lease("conflict"),
+            lease_ref="lease.sop",
+            current_frontier="S131_worker_execution_gate_evaluator",
+        )
+        self.assertEqual(stale.gate_status, "stale_frontier")
+        self.assertEqual(invalid.gate_status, "lease_invalid")
+
+def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
+    return ManagerAuthorizationRecord(
+        authorization_id="auth-1",
+        worker_uuid="worker-a",
+        authorization_status=authorization_status,
+        claim_ref="coordination/mailbox/director_pool/claims.sop#claim-1",
+        slice_ref="manager_job_notice.sop#S131_worker_execution_gate_evaluator",
+        frontier_at_authorization="S131_worker_execution_gate_evaluator",
+        allowed_action=allowed_action,
+        proof_route="scripts/test.ps1",
+        expires_at="2026-05-29T19:42:00Z",
+    )
+
+
+def _shaliach_clearance(clearance_status: str) -> ShaliachExecutionClearance:
+    return ShaliachExecutionClearance(
+        clearance_id="clear-1",
+        worker_uuid="worker-a",
+        clearance_status=clearance_status,
+        claim_ref="coordination/mailbox/director_pool/claims.sop#claim-1",
+        slice_ref="manager_job_notice.sop#S131_worker_execution_gate_evaluator",
+        checked_protocols=("SOP", "SJS"),
+        required_response="proceed" if clearance_status == "clear" else "pause_for_manager",
+    )
+
+
+def _worker_lease(lease_status: str) -> WorkerLeaseRecord:
+    return WorkerLeaseRecord(
+        worker_uuid="worker-a",
+        mailbox_uuid="director_pool",
+        claim_id="claim-1",
+        message_id="message-1",
+        lease_status=lease_status,
+        started_at="2026-05-29T19:12:00Z",
+        expires_at="2026-05-29T19:42:00Z",
+        frontier_at_claim="S131_worker_execution_gate_evaluator",
+    )
 
 
 class ModelInventoryTests(unittest.TestCase):
