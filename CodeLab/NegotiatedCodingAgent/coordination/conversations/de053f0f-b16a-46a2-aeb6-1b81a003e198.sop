@@ -417,9 +417,10 @@
   + [completed_slice] is S99_long_run_checkpoint_after_apply_preflight
   + [completed_slice] is S100_apply_snapshot_plan_writer
   + [completed_slice] is S101_apply_cli_snapshot_preflight_artifact
+  + [completed_slice] is S102_spec_audit_refresh_after_snapshot_preflight
 
-  + [current_frontier] is S102_spec_audit_refresh_after_snapshot_preflight after apply CLI snapshot preflight artifact
-  + [next_recommended_slice] is S102_spec_audit_refresh_after_snapshot_preflight
+  + [current_frontier] is S103_long_run_checkpoint_after_snapshot_preflight after snapshot preflight spec audit
+  + [next_recommended_slice] is S103_long_run_checkpoint_after_snapshot_preflight
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

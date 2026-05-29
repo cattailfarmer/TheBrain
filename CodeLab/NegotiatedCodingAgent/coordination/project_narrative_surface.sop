@@ -372,6 +372,7 @@
   + [ready_capability] is long_run_checkpoint.sop records post-S99 66-test suite, dry-run, model inventory, non-gating endpoint health, and route draft status
   + [ready_capability] is snapshot materialization helper writes rollback evidence under run root for existing targets and records create-new operations without applying generated code
   + [ready_capability] is mutation preflight CLI writes snapshot_materialization.sop after ready gates while preserving no target patch application
+  + [ready_capability] is specification implementation status audit recognizes snapshot materialization support without claiming target patch application
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -446,9 +447,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S102_spec_audit_refresh_after_snapshot_preflight
-  + [next_reason] is snapshot materialization support should be reflected in the spec audit before further apply work
-  + [sleep_run_candidate] is continue S102 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S103_long_run_checkpoint_after_snapshot_preflight
+  + [next_reason] is snapshot preflight support and audit should be captured in a fresh checkpoint
+  + [sleep_run_candidate] is continue S103 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
