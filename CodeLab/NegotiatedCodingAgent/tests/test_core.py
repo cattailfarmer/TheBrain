@@ -77,6 +77,7 @@ from negotiated_agent.multi_programmer import (
     execute_assignment_output,
 )
 from negotiated_agent.narrative_coverage import compute_narrative_coverage, compute_narrative_stale_check
+from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_cli_main
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
@@ -4542,6 +4543,69 @@ class NarrativeCoverageTests(unittest.TestCase):
             self.assertIn("coordination/manager_job_notice.sop", report.missing)
             self.assertIn("NarrativeCoverageReport", report.to_sop())
             self.assertTrue(any("coordination/active_conversation.sop" in risk for risk in report.stale_risk))
+
+    def test_stale_check_cli_writes_without_mutating_narrative(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            conversation_dir = coordination / "conversations"
+            runs = root / "runs" / "20260529T190511Z"
+            conversation_dir.mkdir(parents=True)
+            runs.mkdir(parents=True)
+            (coordination / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is pointer\n"
+                "  + [active_conversation_uuid] is convo-1\n"
+                "  + [conversation_surface_file] is coordination/conversations/convo-1.sop\n",
+                encoding="utf-8",
+            )
+            (conversation_dir / "convo-1.sop").write_text(
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S197_narrative_stale_check_cli\n",
+                encoding="utf-8",
+            )
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            out_path = coordination / "narrative_stale_check.sop"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_coverage_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--stale-check",
+                            "--check-id",
+                            "check-1",
+                            "--out",
+                            str(out_path),
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("NarrativeStaleCheckRecord check-1", out_path.read_text(encoding="utf-8"))
+            self.assertIn("stale_check_record_not_narrative_rewrite", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_stale_check_cli_rejects_output_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            (coordination / "project_narrative_surface.sop").write_text("& [OriginArc] is origin\n", encoding="utf-8")
+            out_path = coordination / "narrative_stale_check.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_coverage_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--stale-check",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
 
 
 class RunManifestTests(unittest.TestCase):

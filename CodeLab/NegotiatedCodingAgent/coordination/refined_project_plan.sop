@@ -303,7 +303,8 @@
   + [completed_slice] is S194_spec_audit_refresh_after_frontier_application
   + [completed_slice] is S195_narrative_coverage_stale_check_design
   + [completed_slice] is S196_narrative_stale_check_records
-  + [ready_slice] is S197_narrative_stale_check_cli
+  + [completed_slice] is S197_narrative_stale_check_cli
+  + [ready_slice] is S198_narrative_coverage_update_record_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

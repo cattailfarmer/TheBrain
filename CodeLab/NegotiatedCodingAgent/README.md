@@ -178,6 +178,8 @@ The wrapper `scripts/frontier-application-plan.ps1 -ApplyPlan` applies a frontie
 
 `negotiated_agent.narrative_coverage` now includes `NarrativeStaleCheckRecord`, which recomputes expected narrative arcs, latest-run references, and active-frontier references without mutating the narrative surface.
 
+The wrapper `scripts/narrative-coverage.ps1 -StaleCheck` writes `coordination/narrative_stale_check.sop` as evidence only; it refuses to overwrite an existing stale-check file.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

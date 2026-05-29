@@ -1612,3 +1612,11 @@
   + [proof_result] is tests passed with 156 tests
   + [current_frontier] is S197_narrative_stale_check_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S197_narrative_stale_check_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S197_narrative_stale_check_cli
+  + [implemented_capability] is narrative coverage CLI stale-check mode writes narrative_stale_check.sop without mutating project narrative surface
+  + [proof_result] is tests passed with 158 tests
+  + [current_frontier] is S198_narrative_coverage_update_record_design
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

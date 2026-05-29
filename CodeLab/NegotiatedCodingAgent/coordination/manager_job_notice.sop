@@ -2752,7 +2752,7 @@
 
 & [WorkSliceDetail S197_narrative_stale_check_cli] is a coordination runtime implementation slice
   + [slice_id] is S197_narrative_stale_check_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write narrative_stale_check.sop
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover CLI write stale findings current status output collision and no narrative mutation
@@ -2760,3 +2760,16 @@
   + [support_status] is prepared
   + [dependency_set] is S196_narrative_stale_check_records
   + [known_risks] is CLI being mistaken for append/update mode
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:55:00Z, proof_ref tests passed with 158 tests, result_summary added narrative stale-check CLI and wrapper
+  + [completed_work_review] is support_delta verified CLI writes stale-check evidence and does not mutate narrative; requirement_delta next step is design append-only narrative coverage update records
+
+& [WorkSliceDetail S198_narrative_coverage_update_record_design] is a coordination runtime design slice
+  + [slice_id] is S198_narrative_coverage_update_record_design
+  + [slice_status] is open
+  + [scope] is design append-only narrative coverage update records from stale-check evidence
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names stale-check refs appended update refs deferred updates and no history rewrite
+  + [completion_criteria] is design separates stale-check evidence from future narrative append mutation
+  + [support_status] is prepared
+  + [dependency_set] is S197_narrative_stale_check_cli
+  + [known_risks] is update record being mistaken for narrative surface mutation

@@ -274,6 +274,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `NarrativeStaleCheckRecord` now recomputes expected narrative arcs, latest-run references, and active-frontier references from current files. It reports stale claims and recommended updates without rewriting the narrative surface.
 
+`scripts/narrative-coverage.ps1 -StaleCheck` exposes the stale-check writer. It writes `coordination/narrative_stale_check.sop`, rejects output collisions, and does not mutate `project_narrative_surface.sop`.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

@@ -1,3 +1,9 @@
+param(
+  [switch]$StaleCheck,
+  [string]$CheckId = "narrative-stale-check-1",
+  [string]$Out = ""
+)
+
 $ErrorActionPreference = "Stop"
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $Python = "C:\Users\enjer\AppData\Local\Programs\Python\Python312\python.exe"
@@ -5,4 +11,14 @@ if (-not (Test-Path $Python)) {
   $Python = "python"
 }
 $env:PYTHONPATH = Join-Path $ProjectRoot "src"
-& $Python -m negotiated_agent.narrative_coverage_cli --project-root $ProjectRoot --out (Join-Path $ProjectRoot "coordination\narrative_coverage_report.sop")
+$argsList = @("-m", "negotiated_agent.narrative_coverage_cli", "--project-root", $ProjectRoot)
+if ($StaleCheck) {
+  $defaultOut = Join-Path $ProjectRoot "coordination\narrative_stale_check.sop"
+  $argsList += @("--stale-check", "--check-id", $CheckId)
+} else {
+  $defaultOut = Join-Path $ProjectRoot "coordination\narrative_coverage_report.sop"
+}
+if ($Out -eq "") { $Out = $defaultOut }
+$argsList += @("--out", $Out)
+& $Python @argsList
+exit $LASTEXITCODE

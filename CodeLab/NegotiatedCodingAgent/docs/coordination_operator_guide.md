@@ -345,6 +345,14 @@ Apply a frontier application plan:
 
 The apply mode writes `frontier_application_result.sop`. It updates `current_frontier` only when the active surface still matches the plan's previous frontier; stale plans produce a blocked result.
 
+Write recomputed narrative stale-check evidence:
+
+```powershell
+.\scripts\narrative-coverage.ps1 -StaleCheck -CheckId <check-id>
+```
+
+This writes `coordination/narrative_stale_check.sop` and does not mutate `project_narrative_surface.sop`.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
