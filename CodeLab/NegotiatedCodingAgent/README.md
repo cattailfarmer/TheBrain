@@ -65,9 +65,11 @@ Runs are written under `runs/<timestamp>/`:
 - `programmer_assignment_plan.sop`
 - `multi_programmer_execution_plan.sop`
 - `multi_programmer_merge_review_input.sop`
-- `WS001_core_implementation.work_slice.sop`
-- `WS001_core_implementation.programmer_report.sop`
-- `WS001_core_implementation.manager_review.sop`
+- `WS001_core_implementation.<Programmer>.work_slice.sop`
+- `WS001_core_implementation.<Programmer>.raw.md`
+- `WS001_core_implementation.<Programmer>.programmer_report.sop`
+- `WS001_core_implementation.<Programmer>.manager_review.sop`
+- `WS001_core_implementation.<Programmer>.execution_result.sop`
 - `coder.raw.md`
 - `implementation/`
 - `file_change_surface.sop`

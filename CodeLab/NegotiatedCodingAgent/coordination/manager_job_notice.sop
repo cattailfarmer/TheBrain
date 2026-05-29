@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 68
+  + [job_notice_revision] is 69
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -86,7 +86,8 @@
     S61_multi_programmer_runner_records |
     S62_orchestrator_multi_programmer_plan_artifacts |
     S63_multi_programmer_runner_execution_scaffold |
-    S64_orchestrator_assignment_executor_path
+    S64_orchestrator_assignment_executor_path |
+    S65_sequential_multi_assignment_execution_loop
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -950,7 +951,7 @@
 
 & [WorkSliceDetail S64_orchestrator_assignment_executor_path] is a Programmer swarm implementation slice
   + [slice_id] is S64_orchestrator_assignment_executor_path
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is route the orchestrator's executed Programmer output through the assignment execution scaffold
   + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run test shows implementation output lives under the executed assignment output_root and file-change records cite that path
@@ -958,3 +959,16 @@
   + [support_status] is prepared
   + [dependency_set] is S63_multi_programmer_runner_execution_scaffold
   + [known_risks] is breaking existing output inventory or file-change lineage assumptions
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:00:00Z, proof_ref tests passed with 50 tests, result_summary orchestrator routes executed Programmer output through isolated assignment executor and file-change lineage cites per-assignment path
+  + [completed_work_review] is support_delta verified single execution path now uses future runner contract; requirement_delta not all planned assignments execute yet
+
+& [WorkSliceDetail S65_sequential_multi_assignment_execution_loop] is a Programmer swarm implementation slice
+  + [slice_id] is S65_sequential_multi_assignment_execution_loop
+  + [slice_status] is open
+  + [scope] is execute every planned assignment sequentially into isolated run-local output roots, without merging or target workspace mutation
+  + [target_files] is src/negotiated_agent/orchestrator.py, src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run test shows multiple Programmer reports, execution results, Manager reviews, and file-change records exist for configured assignments
+  + [completion_criteria] is a normal run can call more than one configured Programmer role while preserving separate review artifacts
+  + [support_status] is prepared
+  + [dependency_set] is S64_orchestrator_assignment_executor_path
+  + [known_risks] is creating multiple outputs without a merge decision; keep outputs isolated and pending merge review

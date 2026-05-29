@@ -1069,6 +1069,9 @@ class NarrativeUpdateTests(unittest.TestCase):
             assignment_plan = (run_root / "programmer_assignment_plan.sop").read_text(encoding="utf-8")
             execution_plan = (run_root / "multi_programmer_execution_plan.sop").read_text(encoding="utf-8")
             merge_review_input = (run_root / "multi_programmer_merge_review_input.sop").read_text(encoding="utf-8")
+            execution_result = (run_root / "WS001_core_implementation.Programmer.execution_result.sop").read_text(
+                encoding="utf-8"
+            )
             director_inbox = (
                 root / "coordination" / "mailbox" / "custom-director-pool" / "inbox.sop"
             ).read_text(encoding="utf-8")
@@ -1087,17 +1090,19 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("ShaliachFinding application_layer_package", shaliach_finding)
             self.assertIn("ShaliachResponseCoordination application_layer_package", shaliach_response)
             self.assertIn("FileChangeSurface", file_change_surface)
-            self.assertIn("implementation/README.generated.txt", file_change_index)
+            self.assertIn("implementation/WS001_core_implementation.Programmer/README.generated.txt", file_change_index)
             self.assertIn("RunArtifactManifest", run_manifest)
             self.assertIn("lifecycle_status] is completed", run_manifest)
             self.assertIn("artifact_ref layer_package] is application.package.sop", run_manifest)
             self.assertIn("artifact_ref multi_programmer_execution_plan] is multi_programmer_execution_plan.sop", run_manifest)
             self.assertIn("artifact_ref multi_programmer_merge_review_input] is multi_programmer_merge_review_input.sop", run_manifest)
+            self.assertIn("artifact_ref assignment_execution_result] is WS001_core_implementation.Programmer.execution_result.sop", run_manifest)
             self.assertIn("ProgrammerAssignmentPlan", assignment_plan)
             self.assertIn("Programmer", assignment_plan)
             self.assertIn("MultiProgrammerExecutionPlan", execution_plan)
             self.assertIn("WS001_core_implementation", execution_plan)
             self.assertIn("MultiProgrammerMergeReviewInput", merge_review_input)
+            self.assertIn("run_local_output_not_workspace_patch", execution_result)
             self.assertIn("rework_notice", director_inbox)
             self.assertIn("application.shaliach_response.sop", director_inbox)
             self.assertIn("application.shaliach_finding.sop", log)

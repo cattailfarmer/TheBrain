@@ -12,13 +12,13 @@ from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
 from .mailbox import publish_message
-from .multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan
+from .multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan, execute_assignment_output
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
 from .shaliach import review_layer_negotiation
 from .slices import create_planned_work_slices, create_programmer_assignment_plan, manager_review, programmer_report
-from .writer import write_implementation, write_text
+from .writer import write_text
 
 
 class NegotiatedCodingAgent:
@@ -146,21 +146,26 @@ class NegotiatedCodingAgent:
         write_text(run_root / "programmer_assignment_plan.sop", assignment_plan.to_sop())
         write_text(run_root / "multi_programmer_execution_plan.sop", execution_plan.to_sop())
         write_text(run_root / "multi_programmer_merge_review_input.sop", merge_review_input.to_sop())
-        for planned_work_slice in planned_work_slices:
-            write_text(run_root / f"{planned_work_slice.slice_id}.work_slice.sop", planned_work_slice.to_sop())
+        work_slices_by_id = {planned_work_slice.slice_id: planned_work_slice for planned_work_slice in planned_work_slices}
+        for record in execution_plan.records:
+            write_text(run_root / record.work_slice_ref, work_slices_by_id[record.slice_id].to_sop())
+        executed_record = execution_plan.records[0]
         coder_output = self.client.complete(
             self.config.coder,
             coder_prompt(self.config.coder.role, objective, flowcharts),
         ).text
         write_text(run_root / "coder.raw.md", coder_output)
+        write_text(run_root / executed_record.raw_output_ref, coder_output)
         write_text(
-            run_root / f"{work_slice.slice_id}.programmer_report.sop",
-            programmer_report(work_slice.slice_id, self.config.coder.name, coder_output),
+            run_root / executed_record.programmer_report_ref,
+            programmer_report(work_slice.slice_id, executed_record.programmer_name, coder_output),
         )
-        written = write_implementation(run_root, coder_output)
-        work_slice_ref = f"{work_slice.slice_id}.work_slice.sop"
-        programmer_report_ref = f"{work_slice.slice_id}.programmer_report.sop"
-        manager_review_ref = f"{work_slice.slice_id}.manager_review.sop"
+        execution_result = execute_assignment_output(run_root, executed_record, coder_output)
+        written = list(execution_result.written_files)
+        write_text(run_root / f"{work_slice.slice_id}.{executed_record.programmer_name}.execution_result.sop", execution_result.to_sop(run_root))
+        work_slice_ref = executed_record.work_slice_ref
+        programmer_report_ref = executed_record.programmer_report_ref
+        manager_review_ref = executed_record.manager_review_ref
         write_text(
             run_root / manager_review_ref,
             manager_review(work_slice.slice_id, written),
@@ -506,6 +511,10 @@ def _artifact_role(name: str) -> str:
         return "work_slice"
     if name.endswith(".programmer_report.sop"):
         return "programmer_report"
+    if name.endswith(".execution_result.sop"):
+        return "assignment_execution_result"
     if name == "coder.raw.md":
         return "programmer_raw_output"
+    if name.endswith(".raw.md"):
+        return "assignment_raw_output"
     return "artifact"
