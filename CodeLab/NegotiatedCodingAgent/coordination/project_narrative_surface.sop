@@ -881,6 +881,14 @@
   + [narrative_role] is long_run_coordination and coordination_runtime_arc update
 
 
+& [LongRunNarrativeUpdate S121_worker_cycle_record_scaffold] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S121_worker_cycle_record_scaffold
+  + [implemented_capability] is worker runner cycle-record mode writes WorkerCycleRecord outcome evidence from explicit refs without Manager frontier mutation
+  + [proof_result] is tests passed with 85 tests
+  + [current_frontier] is S122_worker_proof_command_runner_scaffold
+  + [narrative_role] is long_run_coordination and coordination_runtime_arc update
+
+
 & [RunNarrativeUpdate 20260529T165246Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T165246Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat

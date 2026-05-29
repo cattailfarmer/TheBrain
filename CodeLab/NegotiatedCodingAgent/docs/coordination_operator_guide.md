@@ -171,6 +171,14 @@ Claim bounded unread work and write lease evidence:
 
 Claim-record mode writes mailbox claim evidence and `coordination/workers/<worker-uuid>/leases/<claim-id>.sop`. It still does not execute the work, advance read cursors, or update the Manager frontier.
 
+Record a worker cycle outcome from explicit evidence refs:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -RecordCycle -CycleId <cycle-id> -CycleStatus paused_by_shaliach -ClaimRef <claim-ref> -SliceRef <slice-ref> -ProofRef <proof-ref>
+```
+
+Cycle-record mode writes `coordination/workers/<worker-uuid>/cycles/<cycle-id>.sop`. It is Manager review input, not completion approval, and it does not mutate the active conversation frontier.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

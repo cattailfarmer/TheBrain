@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 125
+  + [job_notice_revision] is 126
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -143,7 +143,8 @@
     S118_worker_lifecycle_records |
     S119_worker_runner_preview_cli |
     S120_worker_claim_record_cli |
-    S121_worker_cycle_record_scaffold
+    S121_worker_cycle_record_scaffold |
+    S122_worker_proof_command_runner_scaffold
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1748,7 +1749,7 @@
 
 & [WorkSliceDetail S121_worker_cycle_record_scaffold] is a coordination runtime implementation slice
   + [slice_id] is S121_worker_cycle_record_scaffold
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add worker cycle record command that writes completed blocked paused or failed proof outcome records from explicit inputs
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests cover completed blocked paused_by_shaliach failed_proof cycle outputs and no Manager frontier mutation
@@ -1756,3 +1757,16 @@
   + [support_status] is prepared
   + [dependency_set] is S120_worker_claim_record_cli
   + [known_risks] is treating cycle record as completion approval instead of Manager review input
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:38:00Z, proof_ref tests passed with 85 tests, result_summary worker runner can write WorkerCycleRecord outcome artifacts from explicit refs without frontier mutation
+  + [completed_work_review] is support_delta verified cycle records preserve Manager approval boundary; requirement_delta next step is proof command runner scaffold under explicit cycle evidence
+
+& [WorkSliceDetail S122_worker_proof_command_runner_scaffold] is a coordination runtime implementation slice
+  + [slice_id] is S122_worker_proof_command_runner_scaffold
+  + [slice_status] is open
+  + [scope] is add a proof command runner helper that executes explicit proof commands and records WorkerCycleRecord or WorkerFailureRecord evidence
+  + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is tests cover passing proof command, failing proof command, stdout/stderr tails, and no Manager frontier mutation
+  + [completion_criteria] is worker can run bounded proof commands and record outcome evidence without executing arbitrary slice implementation
+  + [support_status] is prepared
+  + [dependency_set] is S121_worker_cycle_record_scaffold
+  + [known_risks] is making arbitrary command execution too broad before Shaliach/Manager gates are enforced

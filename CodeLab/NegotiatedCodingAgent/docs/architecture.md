@@ -206,6 +206,8 @@ Operator commands for these helpers are documented in `docs/coordination_operato
 
 The same worker-runner CLI can now run explicit claim-record mode. That path claims bounded unread messages and writes `WorkerLeaseRecord` files under `coordination/workers/<worker_uuid>/leases/`, but still does not execute work, advance read cursors, or update Manager frontier state.
 
+Worker cycle-record mode writes `WorkerCycleRecord` artifacts under `coordination/workers/<worker_uuid>/cycles/` from explicit claim, slice, proof, file, Shaliach, commit, or failure refs. These records are Manager review input and preserve the `worker_cycle_record_not_manager_approval` boundary.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

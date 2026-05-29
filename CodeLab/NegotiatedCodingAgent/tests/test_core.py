@@ -67,7 +67,7 @@ from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
-from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases
+from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, write_worker_cycle_record
 from negotiated_agent.worker_runner_cli import main as worker_runner_cli_main
 from negotiated_agent.writer import write_implementation
 
@@ -1447,6 +1447,64 @@ class MailboxCoordinationTests(unittest.TestCase):
             conflict_claim = [claim for claim in list_claims(root, "director_pool") if claim.claimant_uuid == "worker-b"][0]
             lease_path = root / "coordination" / "workers" / "worker-b" / "leases" / f"{conflict_claim.claim_id}.sop"
             self.assertTrue(lease_path.exists())
+
+    def test_worker_cycle_record_writer_writes_outcome_without_frontier_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-1",
+                cycle_status="failed_proof",
+                claim_refs=("coordination/mailbox/director_pool/claims.sop#claim-1",),
+                slice_ref="manager_job_notice.sop#S121_worker_cycle_record_scaffold",
+                proof_refs=("coordination/workers/worker-a/failures/failure-1.sop",),
+                changed_files=("src/negotiated_agent/worker_runner.py",),
+                manager_frontier_request="none",
+                failure_ref="coordination/workers/worker-a/failures/failure-1.sop",
+            )
+            path = write_worker_cycle_record(root, record)
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("cycle_status] is failed_proof", text)
+            self.assertIn("worker_cycle_record_not_manager_approval", text)
+            self.assertFalse((root / "coordination" / "active_conversation.sop").exists())
+
+    def test_worker_cycle_record_cli_writes_paused_cycle(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--record-cycle",
+                            "--cycle-id",
+                            "cycle-1",
+                            "--cycle-status",
+                            "paused_by_shaliach",
+                            "--claim-ref",
+                            "coordination/mailbox/director_pool/claims.sop#claim-1",
+                            "--slice-ref",
+                            "manager_job_notice.sop#S121_worker_cycle_record_scaffold",
+                            "--proof-ref",
+                            "tests/test_core.py",
+                            "--changed-file",
+                            "src/negotiated_agent/worker_runner.py",
+                            "--shaliach-finding-ref",
+                            "runs/current/component.shaliach_findings.sop",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("cycle_status] is paused_by_shaliach", out.getvalue())
+            path = root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-1.sop"
+            self.assertTrue(path.exists())
+            self.assertIn("worker_cycle_record_not_manager_approval", path.read_text(encoding="utf-8"))
 
 
 class ModelInventoryTests(unittest.TestCase):

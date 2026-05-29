@@ -468,9 +468,10 @@
   + [completed_slice] is S118_worker_lifecycle_records
   + [completed_slice] is S119_worker_runner_preview_cli
   + [completed_slice] is S120_worker_claim_record_cli
+  + [completed_slice] is S121_worker_cycle_record_scaffold
 
-  + [current_frontier] is S121_worker_cycle_record_scaffold after worker claim-record support
-  + [next_recommended_slice] is S121_worker_cycle_record_scaffold
+  + [current_frontier] is S122_worker_proof_command_runner_scaffold after worker cycle outcome records
+  + [next_recommended_slice] is S122_worker_proof_command_runner_scaffold
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

@@ -7,7 +7,7 @@ from uuid import NAMESPACE_URL, uuid5
 
 from .conversation import ConversationSurface
 from .mailbox import MailboxClaim, MailboxMessage, claim_message, list_unread
-from .worker_lifecycle import WorkerLeaseRecord
+from .worker_lifecycle import WorkerCycleRecord, WorkerLeaseRecord
 
 
 @dataclass(frozen=True)
@@ -111,6 +111,16 @@ def claim_and_record_worker_leases(
         leases.append(lease)
     status = "no_unread_messages" if not leases else "claims_recorded"
     return WorkerClaimRecordResult(worker_uuid, mailbox_uuid, frontier, tuple(leases), status)
+
+
+def write_worker_cycle_record(
+    project_root: Path,
+    record: WorkerCycleRecord,
+) -> Path:
+    path = project_root / "coordination" / "workers" / record.worker_uuid / "cycles" / f"{record.cycle_id}.sop"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(record.to_sop(), encoding="utf-8")
+    return path
 
 
 def _lease_for_message(

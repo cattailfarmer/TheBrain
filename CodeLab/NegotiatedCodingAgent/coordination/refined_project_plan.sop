@@ -227,7 +227,8 @@
   + [completed_slice] is S118_worker_lifecycle_records
   + [completed_slice] is S119_worker_runner_preview_cli
   + [completed_slice] is S120_worker_claim_record_cli
-  + [ready_slice] is S121_worker_cycle_record_scaffold
+  + [completed_slice] is S121_worker_cycle_record_scaffold
+  + [ready_slice] is S122_worker_proof_command_runner_scaffold
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
