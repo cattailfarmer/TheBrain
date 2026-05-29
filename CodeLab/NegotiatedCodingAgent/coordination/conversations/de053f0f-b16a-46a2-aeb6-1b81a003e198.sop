@@ -1,0 +1,61 @@
+& [ConversationSurfaceFile] is the durable state surface for one CodeLab Codex conversation
+  @ [conversation_work_attribution] C:\Project\ReasoningFramework\platform\refinement\Conversation_Work_Attribution.sop
+  @ [project_root] C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent
+  @ [created_at] 2026-05-29T10:50:00Z
+
+  + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [conversation_label] is CodeLab hierarchical Shaliach agent runtime
+  + [surface_path] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  + [workspace_scope] is C:\Project\TheBrain
+  + [active_scope] is CodeLab/NegotiatedCodingAgent
+  + [ramp_level] is work_tracking
+  + [status] is active
+
+  + [attention_binding] is current Codex thread working on NegotiatedCodingAgent hierarchical runtime
+  + [active_subject] is implementing and preserving Shaliach-advised Manager/Director/Programmer architecture
+  + [minimum_survival_token] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+
+  + [governing_specification] is specifications/Hierarchical_Agent_Swarm.sop
+  + [source_document] is specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  + [manager_job_notice] is coordination/manager_job_notice.sop
+  + [github_repository] is https://github.com/cattailfarmer/TheBrain
+
+  + [completed_commit] is ea8acb9 Add hierarchical swarm specification rails
+  + [completed_commit] is 9a5b779 Implement hierarchical agent runtime scaffold
+
+  + [last_proof] is tests passed with 11 tests after implementation scaffold
+  + [last_push] is main pushed to origin after commit 9a5b779
+  + [git_state] is clean at creation of this conversation surface
+
+  + [completed_slice] is S01_commit_spec_rails
+  + [completed_slice] is S02_hierarchical_config
+  + [completed_slice] is S03_provider_routing
+  + [completed_slice] is S04_layer_package_artifacts
+  + [completed_slice] is S05_manager_gates
+  + [completed_slice] is S06_programmer_slices
+  + [completed_slice] is S07_docs_and_acceptance_review
+
+  + [current_frontier] is durable attention survival and long-run manager substrate hardening
+  + [next_recommended_slice] is add conversation surface/reentry read-write support to scripts or runtime
+
+  + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
+  + [unresolved_item] is SJS and DataDesign ledgers are scaffold-generated, not yet model-negotiated by Directors and Shaliach
+  + [unresolved_item] is vLLM WSL2 backend is not installed or verified
+  + [unresolved_item] is workspace-write policy remains isolated to run implementation directories
+
+  & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
+    + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+    + [then_load] is coordination/manager_job_notice.sop
+    + [then_load] is specifications/Hierarchical_Agent_Swarm.sop
+    + [then_check] is git status at C:\Project\TheBrain
+    + [then_run] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
+    + [resume_action] is continue from current_frontier unless user gives a newer objective
+
+  & [WorktreeAttribution] is the dirty-worktree policy for this conversation
+    + [owned_work] is files modified by this conversation under CodeLab/NegotiatedCodingAgent
+    + [foreign_work] is any uncommitted change outside active_scope unless inspected and attributed
+    + [generated_work] is CodeLab/NegotiatedCodingAgent/runs and Python __pycache__
+    = must: inspect git status before editing
+    = must: avoid reverting foreign or unknown work
+    = must: update this conversation surface after meaningful frontier, proof, commit, or blocker changes
+

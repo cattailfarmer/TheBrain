@@ -6,6 +6,7 @@
 
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
+  + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
   + [job_notice_revision] is 7
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
