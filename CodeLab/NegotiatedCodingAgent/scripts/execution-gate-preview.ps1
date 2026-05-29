@@ -6,7 +6,9 @@ param(
   [Parameter(Mandatory = $true)]
   [string]$LeaseRef,
   [string]$CurrentFrontier = "",
-  [string]$GateId = ""
+  [string]$GateId = "",
+  [switch]$Write,
+  [string]$OutputDir = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -26,6 +28,12 @@ if ($CurrentFrontier -ne "") {
 }
 if ($GateId -ne "") {
   $argsList += @("--gate-id", $GateId)
+}
+if ($Write) {
+  $argsList += @("--write")
+}
+if ($OutputDir -ne "") {
+  $argsList += @("--output-dir", $OutputDir)
 }
 
 & $Python @argsList

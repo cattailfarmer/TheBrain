@@ -222,6 +222,8 @@ The same module provides a deterministic execution gate evaluator. It combines M
 
 `coordination/execution_gate_decision_writer_design.sop` defines the next explicit mutation boundary. A future writer may persist an `ExecutionGateDecision` under `coordination/workers/<worker_uuid>/execution_gates/` from existing Manager authorization, Shaliach clearance, lease, and frontier evidence. That write is review evidence only: it must not create authorizations or clearances, claim mailbox work, advance read cursors, write worker cycles, mutate the active frontier, execute implementation work, or touch the target workspace.
 
+The existing execution gate CLI now has explicit write mode for that boundary. It evaluates the same inputs as preview mode, writes a single gate artifact, allows blocked decisions to be persisted for review, and refuses output collisions.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

@@ -1095,3 +1095,11 @@
   + [proof_result] is tests passed with 101 tests
   + [current_frontier] is S141_execution_gate_decision_writer_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S141_execution_gate_decision_writer_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S141_execution_gate_decision_writer_cli
+  + [implemented_capability] is execution gate CLI and PowerShell wrapper can explicitly persist one ExecutionGateDecision artifact while defaulting to no-write preview
+  + [proof_result] is tests passed with 103 tests
+  + [current_frontier] is S142_long_run_checkpoint_after_gate_writer_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

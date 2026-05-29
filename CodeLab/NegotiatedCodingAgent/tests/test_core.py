@@ -1797,6 +1797,103 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("ExecutionGatePreviewError", out.getvalue())
             self.assertIn("preview_error_not_gate_decision", out.getvalue())
 
+    def test_execution_gate_cli_write_mode_writes_one_gate_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            auth_path = root / "coordination" / "workers" / "worker-a" / "authorizations" / "auth-1.sop"
+            clearance_path = root / "coordination" / "workers" / "worker-a" / "shaliach_clearance" / "clear-1.sop"
+            lease_path = root / "coordination" / "workers" / "worker-a" / "leases" / "claim-1.sop"
+            auth_path.parent.mkdir(parents=True)
+            clearance_path.parent.mkdir(parents=True)
+            lease_path.parent.mkdir(parents=True)
+            auth_path.write_text(_manager_auth("run_proof_only").to_sop(), encoding="utf-8")
+            clearance_path.write_text(_shaliach_clearance("clear").to_sop(), encoding="utf-8")
+            lease_path.write_text(_worker_lease("claimed").to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    execution_gate_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-authorization-ref",
+                            "coordination/workers/worker-a/authorizations/auth-1.sop",
+                            "--shaliach-clearance-ref",
+                            "coordination/workers/worker-a/shaliach_clearance/clear-1.sop",
+                            "--lease-ref",
+                            "coordination/workers/worker-a/leases/claim-1.sop",
+                            "--current-frontier",
+                            "S131_worker_execution_gate_evaluator",
+                            "--gate-id",
+                            "gate-written",
+                            "--write",
+                        ]
+                    ),
+                    0,
+                )
+            gate_path = root / "coordination" / "workers" / "worker-a" / "execution_gates" / "gate-written.sop"
+            self.assertTrue(gate_path.exists())
+            self.assertIn("ExecutionGateWriteResult", out.getvalue())
+            self.assertIn("gate_decision_write_not_worker_execution", out.getvalue())
+            self.assertEqual(len(list((root / "coordination" / "workers" / "worker-a" / "execution_gates").glob("*.sop"))), 1)
+
+    def test_execution_gate_cli_write_mode_writes_blocked_decision_and_rejects_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            auth_path = root / "auth.sop"
+            clearance_path = root / "clearance.sop"
+            lease_path = root / "lease.sop"
+            auth_path.write_text(_manager_auth("run_proof_only", authorization_status="denied").to_sop(), encoding="utf-8")
+            clearance_path.write_text(_shaliach_clearance("clear").to_sop(), encoding="utf-8")
+            lease_path.write_text(_worker_lease("claimed").to_sop(), encoding="utf-8")
+            first = io.StringIO()
+            with contextlib.redirect_stdout(first):
+                self.assertEqual(
+                    execution_gate_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-authorization-ref",
+                            "auth.sop",
+                            "--shaliach-clearance-ref",
+                            "clearance.sop",
+                            "--lease-ref",
+                            "lease.sop",
+                            "--current-frontier",
+                            "S131_worker_execution_gate_evaluator",
+                            "--gate-id",
+                            "blocked-gate",
+                            "--write",
+                        ]
+                    ),
+                    0,
+                )
+            gate_path = root / "coordination" / "workers" / "worker-a" / "execution_gates" / "blocked-gate.sop"
+            self.assertIn("gate_status] is blocked_by_manager", gate_path.read_text(encoding="utf-8"))
+            second = io.StringIO()
+            with contextlib.redirect_stdout(second):
+                self.assertEqual(
+                    execution_gate_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-authorization-ref",
+                            "auth.sop",
+                            "--shaliach-clearance-ref",
+                            "clearance.sop",
+                            "--lease-ref",
+                            "lease.sop",
+                            "--current-frontier",
+                            "S131_worker_execution_gate_evaluator",
+                            "--gate-id",
+                            "blocked-gate",
+                            "--write",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("ExecutionGatePreviewError", second.getvalue())
+
     def test_execution_gate_decision_writer_persists_allowed_and_blocked_decisions(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

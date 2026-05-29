@@ -2024,7 +2024,7 @@
 
 & [WorkSliceDetail S141_execution_gate_decision_writer_cli] is a coordination runtime implementation slice
   + [slice_id] is S141_execution_gate_decision_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI write mode and wrapper for persisting ExecutionGateDecision artifacts
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover write CLI writes one gate artifact, blocked decisions exit zero, and existing output collisions return nonzero
@@ -2032,3 +2032,16 @@
   + [support_status] is prepared
   + [dependency_set] is S140_execution_gate_decision_writer_helper
   + [known_risks] is making write mode appear as authorization creation or execution launch
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:33:00Z, proof_ref tests passed with 103 tests, result_summary execution gate CLI and PowerShell wrapper support explicit gate decision write mode
+  + [completed_work_review] is support_delta verified write mode persists exactly one gate artifact and keeps preview default; requirement_delta next checkpoint should capture 103-test gate writer state
+
+& [WorkSliceDetail S142_long_run_checkpoint_after_gate_writer_cli] is a long-run reentry slice
+  + [slice_id] is S142_long_run_checkpoint_after_gate_writer_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after execution gate decision writer CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 103-test suite and route draft proof
+  + [completion_criteria] is checkpoint records explicit gate writer CLI frontier
+  + [support_status] is prepared
+  + [dependency_set] is S141_execution_gate_decision_writer_cli
+  + [known_risks] is noisy generated dry-run artifacts

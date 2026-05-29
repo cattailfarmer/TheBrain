@@ -207,6 +207,14 @@ The preview command prints `ExecutionGateDecision` to stdout. It does not write 
 
 `coordination/execution_gate_decision_writer_design.sop` describes the next explicit write step. Its future command may persist the evaluated `ExecutionGateDecision` under `coordination/workers/<worker-uuid>/execution_gates/`, including blocked decisions for later review. Persisting that gate decision is not permission to execute implementation work, does not create Manager or Shaliach evidence, and does not move the Manager frontier.
 
+Persist the evaluated gate decision as review evidence:
+
+```powershell
+.\scripts\execution-gate-preview.ps1 -ManagerAuthorizationRef <auth-ref> -ShaliachClearanceRef <clearance-ref> -LeaseRef <lease-ref> -CurrentFrontier <frontier> -GateId <gate-id> -Write
+```
+
+Write mode creates exactly one `ExecutionGateDecision` artifact under `coordination/workers/<worker-uuid>/execution_gates/` and refuses to overwrite an existing gate file.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

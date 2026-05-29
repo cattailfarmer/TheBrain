@@ -126,6 +126,8 @@ Before any future autonomous worker executes implementation work, the execution 
 
 The current preview command prints gate decisions without writing files. The next designed boundary is an explicit gate-decision writer that persists `ExecutionGateDecision` review evidence under a worker execution-gates directory while still refusing to create authorizations, claim work, advance frontiers, execute implementation work, or mutate the target workspace.
 
+That explicit write mode is available through `scripts/execution-gate-preview.ps1 -Write`; default command behavior remains a no-write preview.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
