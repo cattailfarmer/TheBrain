@@ -66,6 +66,7 @@
   + [last_proof] is run 20260529T135356Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T135356Z
   + [last_proof] is long-run harness passed tests dry-run and model inventory in coordination/long_run_checkpoint.sop
+  + [last_proof] is tests passed with 28 tests after S17 blocked run lifecycle records
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -89,9 +90,10 @@
   + [completed_slice] is S14_file_change_surface
   + [completed_slice] is S15_model_inventory_and_serving_probe
   + [completed_slice] is S16_long_run_harness
+  + [completed_slice] is S17_blocked_run_lifecycle_records
 
-  + [current_frontier] is post_S16_unsliced_governance_expansion after long-run harness proof
-  + [next_recommended_slice] is refine next manager slices from remaining unresolved SOP integration gaps
+  + [current_frontier] is S18_narrative_coverage_stale_recompute after blocked run lifecycle records
+  + [next_recommended_slice] is S18_narrative_coverage_stale_recompute
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers
@@ -103,7 +105,7 @@
   + [unresolved_item] is protocol registry records SOP activation references and authority boundary, and run artifacts now include protocol activation sets
   + [unresolved_item] is automatic narrative updates append completed run summaries, but narrative coverage and stale-check recomputation remain future work
   + [unresolved_item] is Shaliach faculty runtime is active in scaffold form, but deeper model-negotiated internal perspectives remain future work
-  + [unresolved_item] is conversation lifecycle updates now cover start, layer approval, implementation, and completion, but blocked/failure lifecycle recovery remains future work
+  + [unresolved_item] is conversation lifecycle updates now cover start, layer approval, implementation, completion, and blocked Manager or Shaliach exits
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 21
+  + [job_notice_revision] is 22
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -38,7 +38,9 @@
     S13_mailbox_and_notice_coordination |
     S14_file_change_surface |
     S15_model_inventory_and_serving_probe |
-    S16_long_run_harness
+    S16_long_run_harness |
+    S17_blocked_run_lifecycle_records |
+    S18_narrative_coverage_stale_recompute
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -288,3 +290,27 @@
   = must: update support_delta or requirement_delta before assigning or claiming the next slice
   = must: record explicit no_delta_reviewed when the completed slice changes no support or requirements
   - never: treat completed work as only a completion stamp
+
+& [WorkSliceDetail S17_blocked_run_lifecycle_records] is a post-S16 governance expansion slice
+  + [slice_id] is S17_blocked_run_lifecycle_records
+  + [slice_status] is completed
+  + [scope] is write run_blocked.sop, log event, and conversation-surface proof when Shaliach pauses or Manager rejects a layer
+  + [target_files] is src/negotiated_agent/orchestrator.py, tests/**
+  + [proof_route] is tests for Manager rejection writing blocked lifecycle record and reentry frontier
+  + [completion_criteria] is failed layer descent has a durable blocked lifecycle artifact before RuntimeError leaves the run
+  + [support_status] is prepared
+  + [dependency_set] is S10C_conversation_surface_run_lifecycle_updates, S16_long_run_harness
+  + [known_risks] is blocked records becoming too generic to support repair
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T14:10:00Z, proof_ref tests passed with 28 tests, result_summary orchestrator writes run_blocked.sop and updates conversation surface before Manager rejection or Shaliach pause raises
+  + [completed_work_review] is support_delta verified blocked lifecycle exits are reentry-visible; requirement_delta richer repair plan synthesis remains future work
+
+& [WorkSliceDetail S18_narrative_coverage_stale_recompute] is a post-S16 governance expansion slice
+  + [slice_id] is S18_narrative_coverage_stale_recompute
+  + [slice_status] is open
+  + [scope] is recompute narrative coverage and stale status from current project artifacts instead of relying only on append-only run updates
+  + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
+  + [proof_route] is tests and generated narrative coverage report
+  + [completion_criteria] is narrative surface can identify covered, missing, and stale artifacts from actual files
+  + [support_status] is pending_dependency
+  + [dependency_set] is S12_project_narrative_surface, S14_file_change_surface
+  + [known_risks] is overclaiming semantic coverage from file presence alone

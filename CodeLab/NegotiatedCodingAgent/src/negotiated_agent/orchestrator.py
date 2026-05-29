@@ -113,8 +113,10 @@ class NegotiatedCodingAgent:
                 },
             )
             if shaliach_finding.blocks_progress:
+                self._record_run_blocked(run_root, layer, "shaliach_pause", shaliach_finding.reason)
                 raise RuntimeError(f"Shaliach paused {layer} layer: {shaliach_finding.reason}")
             if not decision.approved:
+                self._record_run_blocked(run_root, layer, "manager_rejection", decision.reason)
                 raise RuntimeError(f"Manager rejected {layer} layer: {decision.reason}")
             self._update_conversation_surface(
                 run_root,
@@ -253,6 +255,33 @@ class NegotiatedCodingAgent:
                     "reason": "active conversation surface unavailable or malformed",
                 },
             )
+
+    def _record_run_blocked(self, run_root: Path, layer: str, blocker: str, reason: str) -> None:
+        write_text(
+            run_root / "run_blocked.sop",
+            f"""& [RunBlocked {run_root.name}] is the lifecycle record for a blocked NegotiatedCodingAgent run
+  + [run_root] is {run_root.relative_to(self.project_root)}
+  + [blocked_layer] is {layer}
+  + [blocker] is {blocker}
+  + [reason] is {_sop_field_value(reason, limit=240)}
+  + [reentry_action] is inspect run_blocked.sop, layer package, manager review, and shaliach finding before resuming
+""",
+        )
+        self._log(
+            run_root,
+            {
+                "event": "run_blocked",
+                "layer": layer,
+                "blocker": blocker,
+                "reason": reason,
+                "run_blocked_ref": "run_blocked.sop",
+            },
+        )
+        self._update_conversation_surface(
+            run_root,
+            current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
+            proofs=[f"run {run_root.name} wrote run_blocked.sop"],
+        )
 
     def _write_run_narrative_update(
         self,

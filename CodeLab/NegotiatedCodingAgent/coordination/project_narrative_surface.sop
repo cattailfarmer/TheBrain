@@ -97,6 +97,7 @@
   + [implemented_slice] is S14_file_change_surface
   + [implemented_slice] is S15_model_inventory_and_serving_probe
   + [implemented_slice] is S16_long_run_harness
+  + [implemented_slice] is S17_blocked_run_lifecycle_records
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -123,6 +124,7 @@
   + [proof_result] is tests passed with 23 tests after S13 mailbox coordination substrate
   + [proof_result] is tests passed with 25 tests and model inventory wrote coordination/model_serving_inventory.sop
   + [proof_result] is long-run harness passed tests dry-run and model inventory in coordination/long_run_checkpoint.sop
+  + [proof_result] is tests passed with 28 tests after S17 blocked run lifecycle records
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -147,7 +149,8 @@
   + [ready_capability] is two conversation UUIDs can exchange mailbox messages, advance read cursors, enumerate unread messages, and write rendezvous packets
   + [ready_capability] is local model serving probe detects RTX 5090 hardware, missing serving stack, OpenAI-compatible availability, and role route fallback profile
   + [ready_capability] is long-run harness can write a reentry checkpoint after tests, dry-run execution, and model inventory probe
-  + [not_ready_capability] is blocked/failure lifecycle recovery records during normal runs
+  + [ready_capability] is blocked Manager or Shaliach layer exits write run_blocked.sop and update the conversation frontier before raising
+  + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
   + [not_ready_capability] is orchestrator-integrated multi-worker mailbox scheduling and conflict resolution
@@ -156,9 +159,9 @@
   + [not_ready_capability] is WSL2, Docker, Ollama, and vLLM installation
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is refine next manager slices from remaining unresolved SOP integration gaps
-  + [next_reason] is the original sliced queue is complete through S16 and the user wants continued unbounded work rather than stopping at the tidy checkpoint
-  + [sleep_run_candidate] is continue unsliced governance expansion because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S18_narrative_coverage_stale_recompute
+  + [next_reason] is append-only narrative updates now need coverage and stale-status recomputation from actual artifacts
+  + [sleep_run_candidate] is continue S18 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
 from negotiated_agent.conversation import (
@@ -14,6 +15,7 @@ from negotiated_agent.ledgers import negotiate_ledgers
 from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
+from negotiated_agent.manager import ManagerDecision
 from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -544,6 +546,70 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("implementation/README.generated.txt", file_change_index)
             self.assertIn("application.shaliach_finding.sop", log)
             self.assertIn("file_change_surface.sop", log)
+
+    def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "coordination" / "conversations").mkdir(parents=True)
+            (root / "coordination" / "project_narrative_surface.sop").write_text(
+                "& [ProjectNarrativeSurface] is active\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ActiveConversationPointer] is active",
+                        "  + [active_conversation_uuid] is test-uuid",
+                        "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "coordination" / "conversations" / "test-uuid.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ConversationSurfaceFile] is active",
+                        "  + [conversation_uuid] is test-uuid",
+                        "  + [current_frontier] is old",
+                        "  + [last_proof] is old proof",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m"},
+                                {"name": "DirectorB", "model": "m"},
+                            ],
+                            "programmers": [{"name": "Programmer", "model": "m"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            with patch(
+                "negotiated_agent.orchestrator.review_layer_package",
+                return_value=ManagerDecision("rejected", "forced test rejection"),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "Manager rejected"):
+                    NegotiatedCodingAgent(load_config(config_path), DryRunClient(), root).run("Build a test app")
+            run_root = next((root / "runs").iterdir())
+            blocked = (run_root / "run_blocked.sop").read_text(encoding="utf-8")
+            surface = (root / "coordination" / "conversations" / "test-uuid.sop").read_text(encoding="utf-8")
+            self.assertIn("manager_rejection", blocked)
+            self.assertIn("forced test rejection", blocked)
+            self.assertIn("blocked at application by manager_rejection", surface)
+            self.assertIn("wrote run_blocked.sop", surface)
 
 
 if __name__ == "__main__":
