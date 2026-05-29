@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 155
+  + [job_notice_revision] is 156
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3688,7 +3688,7 @@
 
 & [WorkSliceDetail S269_long_run_checkpoint_after_combined_validation_integration] is a long-run reentry slice
   + [slice_id] is S269_long_run_checkpoint_after_combined_validation_integration
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after combined validation is integrated into harness output
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 268-test suite and combined_artifact_validation_status passed
@@ -3696,3 +3696,16 @@
   + [support_status] is prepared
   + [dependency_set] is S268_combined_validation_checkpoint_integration
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:14:00Z, proof_ref long-run checkpoint passed 268 tests and validate-artifacts reported passed, result_summary refreshed checkpoint with combined_artifact_validation_status passed
+  + [completed_work_review] is support_delta verified checkpoint records combined_artifact_validation_status passed and external validate-artifacts agrees; requirement_delta next step is refresh spec audit after combined validation checkpoint integration
+
+& [WorkSliceDetail S270_spec_audit_refresh_after_combined_checkpoint_integration] is a specification audit slice
+  + [slice_id] is S270_spec_audit_refresh_after_combined_checkpoint_integration
+  + [slice_status] is open
+  + [scope] is refresh implementation status after combined validation checkpoint integration
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names checkpoint-integrated combined validation and latest long-run proof
+  + [completion_criteria] is audit reflects combined validation as continuation evidence not final acceptance
+  + [support_status] is prepared
+  + [dependency_set] is S269_long_run_checkpoint_after_combined_validation_integration
+  + [known_risks] is audit treating checkpoint readiness as acceptance of generated code

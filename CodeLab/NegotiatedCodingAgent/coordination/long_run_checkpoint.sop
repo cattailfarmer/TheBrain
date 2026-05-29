@@ -1,14 +1,15 @@
 & [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
-  + [created_at] is 2026-05-29T21:07:19.004796+00:00
+  + [created_at] is 2026-05-29T21:14:16.033045+00:00
   + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
-  + [start_current_frontier] is S265_long_run_checkpoint_after_combined_validation_cli
-  + [end_current_frontier] is run 20260529T210700Z completed and narrative updated with artifact manifest
+  + [start_current_frontier] is S269_long_run_checkpoint_after_combined_validation_integration
+  + [end_current_frontier] is run 20260529T211357Z completed and narrative updated with artifact manifest
   + [git_clean_before] is true
   + [status] is ready_for_continuation
   + [test_status] is passed
   + [dry_run_status] is passed
   + [model_inventory_status] is passed
   + [shaliach_cross_artifact_status] is passed
+  + [combined_artifact_validation_status] is passed
   + [openai_health_status] is failed
   + [route_draft_status] is passed
   + [authority_boundary] is harness_checkpoint_not_human_approval
@@ -20,7 +21,7 @@
 
   & [HarnessCommand dry_run] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T210700Z
+    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T211357Z
     + [stderr_tail] is none
 
   & [HarnessCommand model_inventory] is a command proof summary
@@ -33,6 +34,13 @@
     + [stdout_tail] is application:consistent; code:consistent; component:consistent; subsystem:consistent
     + [stderr_tail] is none
     + [authority_boundary] is consistency_probe_not_manager_approval
+
+  & [HarnessCommand combined_artifact_validation] is a read-only validation summary
+    + [status] is passed
+    + [manifest_status] is valid
+    + [checkpoint_probe_status] is passed
+    + [openai_health_gating] is non_gating_environment_state
+    + [authority_boundary] is combined_artifact_validation_not_acceptance_review
 
   & [HarnessCommand openai_health] is an environment-state summary
     + [returncode] is 1

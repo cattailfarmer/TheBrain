@@ -2323,3 +2323,20 @@
   + [proof_result] is tests passed with 268 tests
   + [current_frontier] is S269_long_run_checkpoint_after_combined_validation_integration
   + [narrative_role] is long_run_coordination and validation_runtime update
+
+
+& [RunNarrativeUpdate 20260529T211357Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T211357Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S269_long_run_checkpoint_after_combined_validation_integration] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S269_long_run_checkpoint_after_combined_validation_integration
+  + [proof_result] is long-run checkpoint passed 268 tests with combined_artifact_validation_status passed and validate-artifacts passed
+  + [run_root] is runs\20260529T211357Z
+  + [current_frontier] is S270_spec_audit_refresh_after_combined_checkpoint_integration
+  + [narrative_role] is long_run_coordination and proof_arc update
