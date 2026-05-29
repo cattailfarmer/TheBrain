@@ -2511,3 +2511,11 @@
   + [run_root] is runs\20260529T214357Z
   + [current_frontier] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
   + [narrative_role] is long_run_coordination and conversation_memory update
+
+
+& [LongRunNarrativeUpdate S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
+  + [implemented_capability] is spec audit reflects current_frontier/run_lifecycle_frontier split and 279-test lifecycle checkpoint proof
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
+  + [narrative_role] is specification_audit and narrative_memory update

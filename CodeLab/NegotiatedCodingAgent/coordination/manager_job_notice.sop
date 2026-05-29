@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 174
+  + [job_notice_revision] is 175
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3935,7 +3935,7 @@
 
 & [WorkSliceDetail S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint] is a specification audit slice
   + [slice_id] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after lifecycle frontier checkpoint proof
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names current_frontier/run_lifecycle_frontier separation and 279-test checkpoint proof
@@ -3943,3 +3943,16 @@
   + [support_status] is prepared
   + [dependency_set] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
   + [known_risks] is audit implying lifecycle field is semantic narrative coverage rather than run status evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T15:50:00Z, proof_ref spec_implementation_status.sop and tests passed with 279 tests, result_summary audit reflects current_frontier/run_lifecycle_frontier separation and lifecycle checkpoint proof
+  + [completed_work_review] is support_delta verified audit treats lifecycle field as run status evidence rather than semantic narrative coverage; requirement_delta next step is refresh narrative coverage after lifecycle frontier audit
+
+& [WorkSliceDetail S289_narrative_coverage_after_lifecycle_frontier_checkpoint] is a narrative memory validation slice
+  + [slice_id] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
+  + [slice_status] is open
+  + [scope] is refresh narrative coverage and stale-check evidence after lifecycle frontier checkpoint and audit
+  + [target_files] is coordination/**
+  + [proof_route] is narrative coverage report and stale-check prove latest run and S289 frontier are referenced
+  + [completion_criteria] is narrative stale-check remains current with current_frontier as a slice id and run_lifecycle_frontier as lifecycle evidence
+  + [support_status] is prepared
+  + [dependency_set] is S288_spec_audit_refresh_after_lifecycle_frontier_checkpoint
+  + [known_risks] is stale-check ignoring lifecycle fields that should remain proof context but not active frontier
