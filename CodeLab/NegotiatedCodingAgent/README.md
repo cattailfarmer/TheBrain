@@ -128,6 +128,8 @@ The current preview command prints gate decisions without writing files. The nex
 
 That explicit write mode is available through `scripts/execution-gate-preview.ps1 -Write`; default command behavior remains a no-write preview.
 
+The next planned bridge maps persisted gate decisions into worker-cycle review evidence. It is designed to make blocked and proof-ready outcomes visible to the Manager without running proofs, executing implementation work, or moving the frontier.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

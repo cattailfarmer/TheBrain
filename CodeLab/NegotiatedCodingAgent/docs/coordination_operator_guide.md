@@ -215,6 +215,8 @@ Persist the evaluated gate decision as review evidence:
 
 Write mode creates exactly one `ExecutionGateDecision` artifact under `coordination/workers/<worker-uuid>/execution_gates/` and refuses to overwrite an existing gate file.
 
+The next planned bridge is `coordination/gate_to_worker_cycle_bridge_design.sop`. It maps persisted gate decisions to `WorkerCycleRecord` review evidence, for example Manager blocks become `blocked`, Shaliach blocks become `paused_by_shaliach`, stale frontiers become `needs_manager_review`, and proof-only allowed gates become `ready_for_proof`. That bridge remains non-executing.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

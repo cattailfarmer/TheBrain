@@ -1,0 +1,73 @@
+& [GateToWorkerCycleBridgeDesign] is the design contract for converting persisted gate decisions into worker cycle evidence
+  @ [source_gate_design] coordination/worker_execution_gate_design.sop
+  @ [decision_writer_design] coordination/execution_gate_decision_writer_design.sop
+  @ [worker_runner_design] coordination/worker_runner_design.sop
+  @ [record_models] src/negotiated_agent/execution_gate.py and src/negotiated_agent/worker_lifecycle.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T20:52:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is gate_to_cycle_bridge_not_worker_execution
+  + [primary_goal] is turn an already-persisted ExecutionGateDecision into WorkerCycleRecord review evidence
+  + [non_goal] is evaluating a new gate decision
+  + [non_goal] is executing implementation work
+  + [non_goal] is running arbitrary proof commands
+  + [non_goal] is advancing read cursors or Manager frontier
+  + [non_goal] is repairing denied stale or paused gate inputs
+
+& [BridgeInputs] is what the bridge must accept
+  + [required_arg] is project_root
+  + [required_arg] is worker_uuid
+  + [required_arg] is execution_gate_ref
+  + [required_arg] is cycle_id or deterministic cycle id
+  + [optional_arg] is claim_ref override when the gate lease cannot be loaded
+  + [optional_arg] is slice_ref override when the Manager authorization ref is not enough context
+  + [optional_arg] is failure_ref for prior failure evidence
+  + [authority_boundary] is persisted_gate_ref_not_execution_instruction
+  = must: reject missing or malformed ExecutionGateDecision refs
+  = must: preserve execution_gate_ref as a proof_ref in the WorkerCycleRecord
+
+& [StatusMapping] is how gate results become worker cycle outcomes
+  + [gate_status proof_only_allowed] maps_to cycle_status ready_for_proof
+  + [gate_status execution_allowed] maps_to cycle_status ready_for_run_local_execution
+  + [gate_status blocked_by_manager] maps_to cycle_status blocked
+  + [gate_status blocked_by_shaliach] maps_to cycle_status paused_by_shaliach
+  + [gate_status stale_frontier] maps_to cycle_status needs_manager_review
+  + [gate_status dirty_worktree_review_required] maps_to cycle_status needs_manager_review
+  + [gate_status lease_invalid] maps_to cycle_status conflict
+  + [authority_boundary] is cycle_status_review_signal_not_runner_action
+  = must: set changed_file_set to none
+  = must: set manager_frontier_request to none
+  = must: include execution_gate_ref in proof_ref_set
+
+& [BridgeOutput] is the only allowed mutation
+  + [artifact_name] is coordination/workers/<worker_uuid>/cycles/<cycle_id>.sop
+  + [artifact_body] is WorkerCycleRecord.to_sop()
+  + [stdout_summary] is written cycle artifact path and mapped cycle_status
+  + [exit_code_zero] is cycle evidence written successfully, including blocked and paused outcomes
+  + [exit_code_nonzero] is malformed gate ref, worker mismatch, output containment failure, or existing output collision
+  + [authority_boundary] is worker_cycle_record_not_manager_approval
+  = must: refuse to overwrite an existing cycle artifact unless a future replacement protocol is designed
+  = must: leave gate decisions, authorizations, clearances, leases, claims, read cursors, active conversation, and target workspace files unchanged
+
+& [AllowedStatusCaution] is how allowed gates remain non-executing
+  + [ready_for_proof] is a cue for a later explicit proof-command slice or command
+  + [ready_for_run_local_execution] is a Manager review signal, not a launch
+  + [authority_boundary] is allowed_gate_cycle_not_autonomous_start
+  = must: not run proof commands inside this bridge
+  = must: not write implementation files inside this bridge
+  = must: not advance mailbox read cursors inside this bridge
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is blocked_by_manager gate writes blocked WorkerCycleRecord with gate proof ref and no changed files
+  + [test_case] is blocked_by_shaliach gate writes paused_by_shaliach WorkerCycleRecord
+  + [test_case] is proof_only_allowed gate writes ready_for_proof without running proof commands
+  + [test_case] is lease_invalid gate writes conflict WorkerCycleRecord
+  + [test_case] is existing cycle artifact collision fails without overwriting
+  + [test_case] is worker mismatch fails without writing a cycle
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add ExecutionGateDecision loader and map_gate_decision_to_worker_cycle helper
+  + [slice_2] is add explicit bridge CLI mode that writes WorkerCycleRecord from a gate ref
+  + [slice_3] is add PowerShell wrapper support and operator docs
+  + [slice_4] is later consider proof-command handoff only after Manager reviews ready_for_proof cycle evidence
