@@ -2492,7 +2492,7 @@
 
 & [WorkSliceDetail S177_spec_audit_refresh_after_merge_draft_cli] is a specification audit slice
   + [slice_id] is S177_spec_audit_refresh_after_merge_draft_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after run-local merge draft input CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names run-local merge draft input support and chooses next gap
@@ -2500,3 +2500,16 @@
   + [support_status] is prepared
   + [dependency_set] is S176_long_run_checkpoint_after_merge_draft_cli
   + [known_risks] is overstating draft input as manual merge packet generation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T01:12:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats run-local merge draft input as support and recommends manual merge packet proposal conversion
+  + [completed_work_review] is support_delta verified draft input support remains non-mutating; requirement_delta next step is design conversion from draft input to ManualMergePacket proposal with Manager/Shaliach acceptance refs
+
+& [WorkSliceDetail S178_merge_draft_to_packet_proposal_design] is a coordination runtime design slice
+  + [slice_id] is S178_merge_draft_to_packet_proposal_design
+  + [slice_status] is open
+  + [scope] is design non-mutating conversion from run-local merge draft input into manual merge packet proposal evidence
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names Manager acceptance Shaliach review rollback evidence verification and no apply mutation
+  + [completion_criteria] is design distinguishes draft input conversion from target workspace application and frontier advancement
+  + [support_status] is prepared
+  + [dependency_set] is S177_spec_audit_refresh_after_merge_draft_cli
+  + [known_risks] is treating draft input as sufficient Manager acceptance

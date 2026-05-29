@@ -1442,3 +1442,10 @@
   + [run_root] is runs\20260529T183121Z
   + [current_frontier] is S177_spec_audit_refresh_after_merge_draft_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S177_spec_audit_refresh_after_merge_draft_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S177_spec_audit_refresh_after_merge_draft_cli
+  + [implemented_capability] is spec_implementation_status.sop now recognizes run-local merge draft input CLI and 136-test checkpoint as scaffold support
+  + [current_frontier] is S178_merge_draft_to_packet_proposal_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
