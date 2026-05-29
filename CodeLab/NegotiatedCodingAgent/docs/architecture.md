@@ -121,6 +121,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `negotiated_agent.apply_cli` and `scripts/apply-merge-dry-run.ps1` implement that dry-run validation path. The CLI writes `apply_plan.sop`, `apply_result.sop`, and `apply_command_log.sop` under the run root; it rejects the mutation acknowledgement flag because mutation mode is not implemented.
 
+`coordination/operator_approved_apply_mutation_design.sop` now defines the later mutation contract without enabling it. It requires explicit operator acknowledgement, same-run merge evidence, conflict-free status, Manager acceptance, Shaliach review, target-path containment checks, pre-write snapshots, verification, rollback evidence, and post-apply review gates before target workspace mutation can be implemented.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

@@ -1,0 +1,88 @@
+& [OperatorApprovedApplyMutationDesign] is the design contract for future target-workspace mutation
+  @ [governing_policy] coordination/operator_approved_apply_policy.sop
+  @ [dry_run_cli_design] coordination/apply_command_dry_run_cli_design.sop
+  @ [created_at] 2026-05-29T16:15:00Z
+
+  + [design_status] is ready_for_later_implementation
+  + [authority_boundary] is mutation_design_not_mutation_command
+  + [default_behavior] is dry_run_only_until_explicit_mutation_implementation
+  + [purpose] is define the exact gates for applying a ManualMergePacket to a target workspace without allowing accidental writes
+
+  = must: keep current apply CLI dry-run default
+  = must: require --i-understand-this-mutates-workspace for mutation mode
+  = must: require --run-root and --target-workspace-root as explicit operator arguments
+  = must: reject mutation when target_workspace_root is missing, relative, or inferred
+  = must: reject mutation when manual_merge_packet.sop is missing
+  = must: reject mutation when merge_review_decision.sop is missing or not ready_for_manual_merge_review/manually_resolved
+  = must: reject mutation when merge_conflict_ledger.sop reports unresolved conflicts
+  = must: reject mutation when Manager acceptance ref is missing
+  = must: reject mutation when Shaliach review ref is missing or records pause/rework_required
+  = must: check every target path with ensure_target_path_within_workspace before snapshot or write
+  = must: create snapshots for every existing target file before writing
+  = must: record missing preexisting files as create operations rather than snapshot failures
+  = must: write apply_plan.sop before any target write
+  = must: write apply_result.sop after every mutation attempt, including partial failure
+  = must: run verification command after writes finish
+  = must: record verification stdout, stderr, and return code
+  = must: leave rollback snapshots in place until a future explicit cleanup command
+  = must: produce rollback-manual-merge-packet command text in apply_result.sop
+
+  - never: mutate the target workspace from normal negotiated-agent runs
+  - never: delete rollback snapshots after failed verification
+  - never: continue applying later files after a path containment failure
+  - never: treat verification failure as silent success
+  - never: rewrite files outside target_workspace_root even if packet text requests it
+
+& [MutationCommandContract] is the future explicit apply interface
+  + [command_name] is apply-manual-merge-packet
+  + [required_arg] is --run-root
+  + [required_arg] is --target-workspace-root
+  + [required_arg] is --i-understand-this-mutates-workspace
+  + [optional_arg] is --verification-command
+  + [optional_arg] is --allow-create
+  + [optional_arg] is --allow-overwrite
+  + [optional_arg] is --dry-run
+  + [default_mode] is dry_run
+  + [mutation_mode] is explicit_acknowledgement_only
+
+& [PreflightGateSet] is the ordered mutation preflight
+  + [gate_1] is load manual_merge_packet.sop and merge_review_decision.sop from the same run root
+  + [gate_2] is verify merge decision status is ready_for_manual_merge_review or manually_resolved
+  + [gate_3] is verify merge_conflict_ledger.sop has no unresolved conflicts
+  + [gate_4] is verify Manager acceptance and Shaliach review refs exist
+  + [gate_5] is verify every accepted source ref exists under the run root
+  + [gate_6] is verify every target path remains inside target_workspace_root
+  + [gate_7] is verify target create/overwrite behavior matches operator flags
+  + [gate_8] is write apply_plan.sop with snapshot and rollback plan before mutation
+
+& [MutationWritePlan] is the target workspace write sequence
+  + [step_1] is create an apply-scoped snapshot directory under the run root
+  + [step_2] is snapshot every existing target file before replacing it
+  + [step_3] is copy accepted source refs to target paths one at a time
+  + [step_4] is stop on first write error and record partial apply state
+  + [step_5] is run verification command only after all planned writes succeed
+  + [step_6] is write apply_result.sop with applied files, skipped files, snapshots, rollback command, verification ref, and error summary
+
+& [RollbackDesign] is the future explicit rollback contract
+  + [command_name] is rollback-manual-merge-packet
+  + [required_arg] is --apply-result
+  + [required_arg] is --target-workspace-root
+  + [required_arg] is --i-understand-this-mutates-workspace
+  + [default_mode] is dry_run
+  + [mutation_mode] is explicit_acknowledgement_only
+  + [rollback_rule] is restore files from snapshot refs and remove created files only when apply_result marks them as created_by_apply
+  + [rollback_evidence] is rollback_result.sop with restored_file_set, removed_file_set, skipped_file_set, and verification result
+
+& [PostApplyReviewGate] is the review required after mutation
+  + [manager_review] is required after verification completes
+  + [shaliach_review] is required when applied files change scope, lineage, protocol obligations, or verification fails
+  + [acceptance_status] is accepted only when verification passes and Manager accepts the applied result
+  + [blocked_status] is blocked when verification fails, rollback fails, or Shaliach requires rework
+
+& [ImplementationOrder] is the recommended slice order before enabling mutation
+  + [slice_1] is implement preflight-only mutation validator that still performs no writes
+  + [slice_2] is implement snapshot plan writer with filesystem tests in a temporary workspace
+  + [slice_3] is implement mutation writer behind explicit acknowledgement and temporary-workspace tests
+  + [slice_4] is implement rollback dry-run and rollback mutation commands
+  + [slice_5] is implement post-apply Manager and Shaliach review artifacts
+  + [slice_6] is document operator workflow and add long-run checkpoint proof

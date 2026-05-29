@@ -403,9 +403,10 @@
   + [completed_slice] is S93_long_run_harness_route_draft_check
   + [completed_slice] is S94_long_run_harness_route_draft_docs
   + [completed_slice] is S95_long_run_checkpoint_after_route_draft_harness
+  + [completed_slice] is S96_operator_approved_apply_mutation_design
 
-  + [current_frontier] is S96_operator_approved_apply_mutation_design after route draft harness checkpoint
-  + [next_recommended_slice] is S96_operator_approved_apply_mutation_design
+  + [current_frontier] is S97_apply_mutation_preflight_validator after operator-approved apply mutation design
+  + [next_recommended_slice] is S97_apply_mutation_preflight_validator
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

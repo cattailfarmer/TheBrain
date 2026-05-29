@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 100
+  + [job_notice_revision] is 101
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -118,7 +118,8 @@
     S93_long_run_harness_route_draft_check |
     S94_long_run_harness_route_draft_docs |
     S95_long_run_checkpoint_after_route_draft_harness |
-    S96_operator_approved_apply_mutation_design
+    S96_operator_approved_apply_mutation_design |
+    S97_apply_mutation_preflight_validator
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1398,7 +1399,7 @@
 
 & [WorkSliceDetail S96_operator_approved_apply_mutation_design] is an apply pipeline design slice
   + [slice_id] is S96_operator_approved_apply_mutation_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design the future mutation-capable apply command with rollback, verification, Manager acceptance, and Shaliach gates
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP created and tests remain passing
@@ -1406,3 +1407,16 @@
   + [support_status] is prepared
   + [dependency_set] is S95_long_run_checkpoint_after_route_draft_harness
   + [known_risks] is accidentally enabling workspace mutation before design gates are explicit
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:15:00Z, proof_ref operator_approved_apply_mutation_design.sop and architecture docs updated, result_summary future mutation path now has explicit preflight, write, rollback, verification, Manager, and Shaliach gates without enabling mutation
+  + [completed_work_review] is support_delta verified mutation design is explicit and non-executable; requirement_delta next safe implementation is preflight-only validator with no writes
+
+& [WorkSliceDetail S97_apply_mutation_preflight_validator] is an apply pipeline implementation slice
+  + [slice_id] is S97_apply_mutation_preflight_validator
+  + [slice_status] is open
+  + [scope] is implement a preflight-only validator for future mutation mode without writing target workspace files
+  + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
+  + [proof_route] is tests cover merge decision, conflict ledger, Manager/Shaliach refs, path containment, and no target writes
+  + [completion_criteria] is apply CLI can report mutation preflight readiness/rejection while still rejecting actual mutation writes
+  + [support_status] is prepared
+  + [dependency_set] is S96_operator_approved_apply_mutation_design
+  + [known_risks] is implementing writes before preflight evidence is mature

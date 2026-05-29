@@ -366,6 +366,7 @@
   + [ready_capability] is long-run harness now records route_draft_status and a non-gating route_draft command proof
   + [ready_capability] is coordination operator guide explains route_draft_status as non-gating non-mutating configuration guidance
   + [ready_capability] is long_run_checkpoint.sop records post-S95 clean-start checkpoint with route_draft_status passing
+  + [ready_capability] is operator-approved apply mutation design defines preflight write rollback verification Manager and Shaliach gates without enabling mutation
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -440,9 +441,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S96_operator_approved_apply_mutation_design
-  + [next_reason] is dry-run apply is mature enough to design the explicit operator-approved mutation path without enabling it yet
-  + [sleep_run_candidate] is continue S96 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S97_apply_mutation_preflight_validator
+  + [next_reason] is mutation design is explicit enough to implement preflight-only validation without writing target files
+  + [sleep_run_candidate] is continue S97 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
