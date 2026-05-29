@@ -109,6 +109,8 @@ Before merge, `merge_conflict_ledger.sop` records same-file overlaps across isol
 
 `negotiated_agent.merge_packet` provides the pure record forms for that packet and rollback plan, plus target-path containment checks. These records still do not apply changes; they make a future apply command prove its evidence first.
 
+When merge review is ready and conflict-free, the orchestrator can emit `manual_merge_packet.sop` as a dry-run packet. Conflict-blocked runs suppress this packet and keep the conflict ledger as the next review surface.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

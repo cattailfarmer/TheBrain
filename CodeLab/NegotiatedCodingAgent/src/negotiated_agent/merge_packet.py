@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from .multi_programmer import AssignmentExecutionResult
+
 
 @dataclass(frozen=True)
 class AcceptedFileMapEntry:
@@ -89,3 +91,51 @@ def ensure_target_path_within_workspace(target_workspace_root: Path, target_path
     if not str(candidate).startswith(str(workspace)):
         raise ValueError(f"Target path escapes workspace root: {target_path}")
     return candidate
+
+
+def build_manual_merge_packet(
+    *,
+    packet_id: str,
+    source_run_root: Path,
+    target_workspace_root: Path,
+    execution_results: list[AssignmentExecutionResult],
+    merge_decision: str,
+    verification_command: str,
+) -> ManualMergePacket | None:
+    if merge_decision != "ready_for_manual_merge_review":
+        return None
+    accepted_files: list[AcceptedFileMapEntry] = []
+    rollback_entries: list[RollbackPlanEntry] = []
+    for result in execution_results:
+        assignment_root = (source_run_root / result.record.output_root).resolve()
+        for path in result.written_files:
+            relative_target = str(path.resolve().relative_to(assignment_root)).replace("\\", "/")
+            ensure_target_path_within_workspace(target_workspace_root, relative_target)
+            source_ref = str(path.relative_to(source_run_root)).replace("\\", "/")
+            accepted_files.append(
+                AcceptedFileMapEntry(
+                    source_ref=source_ref,
+                    target_path=relative_target,
+                    source_assignment_ref=f"{result.record.slice_id}.{result.record.programmer_name}.execution_result.sop",
+                )
+            )
+            rollback_entries.append(
+                RollbackPlanEntry(
+                    target_path=relative_target,
+                    reverse_operation="restore_or_remove_target_path",
+                    pre_application_snapshot_ref=f"snapshots/{relative_target}.before",
+                )
+            )
+    rollback_plan = RollbackPlan(entries=tuple(rollback_entries), verification_command=verification_command)
+    return ManualMergePacket(
+        packet_id=packet_id,
+        source_run_root=str(source_run_root.name),
+        target_workspace_root=str(target_workspace_root),
+        accepted_files=tuple(accepted_files),
+        rejected_output_refs=(),
+        conflict_resolution_refs=(),
+        rollback_plan=rollback_plan,
+        manager_acceptance_ref="merge_review_decision.sop",
+        shaliach_review_ref="not_yet_run",
+        verification_command=verification_command,
+    )

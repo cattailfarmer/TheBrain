@@ -12,6 +12,7 @@ from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
 from .mailbox import publish_message
+from .merge_packet import build_manual_merge_packet
 from .multi_programmer import (
     build_merge_conflict_ledger,
     build_merge_review_input,
@@ -212,6 +213,18 @@ class NegotiatedCodingAgent:
         merge_review_decision = decide_merge_review(merge_conflict_ledger)
         write_text(run_root / "merge_conflict_ledger.sop", merge_conflict_ledger.to_sop())
         write_text(run_root / "merge_review_decision.sop", merge_review_decision.to_sop())
+        manual_merge_packet = build_manual_merge_packet(
+            packet_id=f"MMP_{run_root.name}",
+            source_run_root=run_root,
+            target_workspace_root=self.project_root,
+            execution_results=execution_results,
+            merge_decision=merge_review_decision.decision,
+            verification_command="powershell -ExecutionPolicy Bypass -File scripts\\test.ps1",
+        )
+        manual_merge_packet_ref = ""
+        if manual_merge_packet:
+            manual_merge_packet_ref = "manual_merge_packet.sop"
+            write_text(run_root / manual_merge_packet_ref, manual_merge_packet.to_sop())
         write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
         write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
@@ -225,6 +238,7 @@ class NegotiatedCodingAgent:
                 "merge_review_decision_ref": "merge_review_decision.sop",
                 "merge_conflict_count": len(merge_conflict_ledger.conflicts),
                 "merge_decision": merge_review_decision.decision,
+                "manual_merge_packet_ref": manual_merge_packet_ref,
                 "files": [str(path.relative_to(run_root)) for path in written],
                 "file_change_surface_ref": "file_change_surface.sop",
                 "file_change_index_ref": "file_change_index.sop",
@@ -539,6 +553,8 @@ def _artifact_role(name: str) -> str:
         return "merge_conflict_ledger"
     if name == "merge_review_decision.sop":
         return "merge_review_decision"
+    if name == "manual_merge_packet.sop":
+        return "manual_merge_packet"
     if name.endswith(".flowchart.md"):
         return "flowchart"
     if name.endswith(".package.sop"):

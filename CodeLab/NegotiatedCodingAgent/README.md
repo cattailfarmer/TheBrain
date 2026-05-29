@@ -67,6 +67,7 @@ Runs are written under `runs/<timestamp>/`:
 - `multi_programmer_merge_review_input.sop`
 - `merge_conflict_ledger.sop`
 - `merge_review_decision.sop`
+- `manual_merge_packet.sop` when merge review is ready and no conflicts block packet creation
 - `WS001_core_implementation.<Programmer>.work_slice.sop`
 - `WS001_core_implementation.<Programmer>.raw.md`
 - `WS001_core_implementation.<Programmer>.programmer_report.sop`

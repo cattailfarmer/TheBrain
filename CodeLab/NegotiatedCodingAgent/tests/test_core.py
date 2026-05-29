@@ -34,6 +34,7 @@ from negotiated_agent.merge_packet import (
     ManualMergePacket,
     RollbackPlan,
     RollbackPlanEntry,
+    build_manual_merge_packet,
     ensure_target_path_within_workspace,
 )
 from negotiated_agent.multi_programmer import (
@@ -166,6 +167,16 @@ class RecordingDryRunClient(DryRunClient):
 
     def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
         self.prompts.append((agent.name, prompt))
+        return super().complete(agent, prompt)
+
+
+class UniqueProgrammerOutputClient(DryRunClient):
+    def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
+        if agent.name.startswith("Programmer"):
+            return LlmResponse(
+                text=f"```text path={agent.name}.txt\noutput from {agent.name}\n```",
+                model=agent.model,
+            )
         return super().complete(agent, prompt)
 
 
@@ -487,6 +498,18 @@ class ManualMergePacketTests(unittest.TestCase):
             self.assertEqual(ensure_target_path_within_workspace(root, "app.py"), root / "app.py")
             with self.assertRaisesRegex(ValueError, "escapes workspace"):
                 ensure_target_path_within_workspace(root, "../outside.py")
+
+    def test_build_manual_merge_packet_returns_none_when_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            packet = build_manual_merge_packet(
+                packet_id="MMP001",
+                source_run_root=Path(temp) / "run",
+                target_workspace_root=Path(temp) / "workspace",
+                execution_results=[],
+                merge_decision="blocked_by_conflict",
+                verification_command="test",
+            )
+            self.assertIsNone(packet)
 
 
 class MailboxCoordinationTests(unittest.TestCase):
@@ -1216,6 +1239,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("merge_conflict_ledger.sop", log)
             self.assertIn("merge_review_decision.sop", log)
             self.assertIn("run_manifest_written", log)
+            self.assertFalse((run_root / "manual_merge_packet.sop").exists())
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -1405,6 +1429,68 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("implementation/WS003_documentation.ProgrammerA/README.generated.txt", file_change_index)
             self.assertIn('"executed_assignment_count": 3', log)
             self.assertIn('"merge_status": "pending_merge_review"', log)
+
+    def test_no_conflict_run_emits_manual_merge_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "coordination" / "conversations").mkdir(parents=True)
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ActiveConversationPointer] is active",
+                        "  + [active_conversation_uuid] is test-uuid",
+                        "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "coordination" / "conversations" / "test-uuid.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ConversationSurfaceFile] is active",
+                        "  + [conversation_uuid] is test-uuid",
+                        "  + [current_frontier] is old",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m"},
+                                {"name": "DirectorB", "model": "m"},
+                            ],
+                            "programmers": [
+                                {"name": "ProgrammerA", "model": "m", "role": "core"},
+                                {"name": "ProgrammerB", "model": "m", "role": "verification"},
+                                {"name": "ProgrammerC", "model": "m", "role": "docs"},
+                            ],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                        "coordination": {"publish_rework_notices": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_root = NegotiatedCodingAgent(load_config(config_path), UniqueProgrammerOutputClient(), root).run(
+                "Build a test app"
+            )
+            decision = (run_root / "merge_review_decision.sop").read_text(encoding="utf-8")
+            packet = (run_root / "manual_merge_packet.sop").read_text(encoding="utf-8")
+            manifest = (run_root / "run_manifest.sop").read_text(encoding="utf-8")
+            self.assertIn("ready_for_manual_merge_review", decision)
+            self.assertIn("ManualMergePacket", packet)
+            self.assertIn("manual_merge_packet_not_workspace_application", packet)
+            self.assertIn("ProgrammerA.txt", packet)
+            self.assertIn("artifact_ref manual_merge_packet] is manual_merge_packet.sop", manifest)
 
 
 if __name__ == "__main__":
