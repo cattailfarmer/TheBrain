@@ -1782,3 +1782,11 @@
   + [proof_result] is tests passed with 195 tests
   + [current_frontier] is S216_shaliach_narrative_append_clearance_writer
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S216_shaliach_narrative_append_clearance_writer] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S216_shaliach_narrative_append_clearance_writer
+  + [implemented_capability] is scripts/narrative-append.ps1 -ShaliachClearance writes Shaliach narrative append clearance evidence with protocols findings and required rework
+  + [proof_result] is tests passed with 198 tests
+  + [current_frontier] is S217_long_run_checkpoint_after_review_writers
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -5322,6 +5322,92 @@ class NarrativeAppendReviewTests(unittest.TestCase):
                     ]
                 )
 
+    def test_narrative_append_cli_writes_shaliach_clearance_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            out_path = coordination / "shaliach_narrative_append_clearance.sop"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_append_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--shaliach-clearance",
+                            "--clearance-id",
+                            "shaliach-cli",
+                            "--update-record-ref",
+                            "coordination/narrative_coverage_update_record.sop",
+                            "--clearance-status",
+                            "clear_for_narrative_append",
+                            "--checked-protocol",
+                            "SOP",
+                            "--checked-protocol",
+                            "SJS",
+                            "--finding",
+                            "append is evidence-scoped",
+                            "--out",
+                            str(out_path),
+                        ]
+                    ),
+                    0,
+                )
+            written = out_path.read_text(encoding="utf-8")
+            self.assertIn("ShaliachNarrativeAppendClearance shaliach-cli", written)
+            self.assertIn("checked_protocol] is SJS", written)
+            self.assertIn("finding] is append is evidence-scoped", written)
+            self.assertIn("shaliach_clearance_not_surface_mutation", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_writes_shaliach_rework_clearance(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            out_path = coordination / "shaliach_narrative_append_clearance.sop"
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--shaliach-clearance",
+                        "--clearance-id",
+                        "shaliach-rework",
+                        "--clearance-status",
+                        "rework_required_for_narrative_append",
+                        "--required-rework",
+                        "tighten guard evidence",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+            parsed = parse_shaliach_narrative_append_clearance_sop(out_path.read_text(encoding="utf-8"))
+            self.assertFalse(parsed.allows_append)
+            self.assertEqual(parsed.required_rework, ("tighten guard evidence",))
+
+    def test_narrative_append_cli_shaliach_clearance_rejects_output_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            out_path = coordination / "shaliach_narrative_append_clearance.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--shaliach-clearance",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .narrative_append import (
     ManagerNarrativeAppendApproval,
+    ShaliachNarrativeAppendClearance,
     apply_reviewed_narrative_append,
     build_narrative_append_result,
     narrative_surface_guard,
@@ -29,11 +30,17 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--expected-surface-guard")
     parser.add_argument("--guard-discovery", action="store_true")
     parser.add_argument("--manager-approval", action="store_true")
+    parser.add_argument("--shaliach-clearance", action="store_true")
     parser.add_argument("--approval-id", default="manager-narrative-append-approval-1")
     parser.add_argument("--approval-status", default="approved_for_narrative_append")
     parser.add_argument("--approved-update-count", type=int, default=1)
     parser.add_argument("--frontier-at-approval", default="")
     parser.add_argument("--residual-risk", action="append", default=[])
+    parser.add_argument("--clearance-id", default="shaliach-narrative-append-clearance-1")
+    parser.add_argument("--clearance-status", default="clear_for_narrative_append")
+    parser.add_argument("--checked-protocol", action="append", default=[])
+    parser.add_argument("--finding", action="append", default=[])
+    parser.add_argument("--required-rework", action="append", default=[])
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--out", type=Path, default=Path("coordination/narrative_append_result.sop"))
     args = parser.parse_args(argv)
@@ -57,6 +64,24 @@ def main(argv: list[str] | None = None) -> int:
             approved_update_count=args.approved_update_count,
             frontier_at_approval=args.frontier_at_approval or "unknown",
             residual_risks=tuple(args.residual_risk),
+        )
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(record.to_sop(), encoding="utf-8")
+        print(record.to_sop())
+        return 0
+    if args.shaliach_clearance:
+        if args.out == Path("coordination/narrative_append_result.sop"):
+            args.out = Path("coordination/shaliach_narrative_append_clearance.sop")
+        out = _resolve(project_root, args.out)
+        if out.exists():
+            raise FileExistsError(f"{out} already exists")
+        record = ShaliachNarrativeAppendClearance(
+            clearance_id=args.clearance_id,
+            update_record_ref=_ref_text(args.update_record_ref),
+            clearance_status=args.clearance_status,
+            checked_protocols=tuple(args.checked_protocol or ["SOP"]),
+            findings=tuple(args.finding),
+            required_rework=tuple(args.required_rework),
         )
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(record.to_sop(), encoding="utf-8")

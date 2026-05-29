@@ -7,11 +7,17 @@ param(
   [string]$ExpectedSurfaceGuard,
   [switch]$GuardDiscovery,
   [switch]$ManagerApproval,
+  [switch]$ShaliachClearance,
   [string]$ApprovalId = "manager-narrative-append-approval-1",
   [string]$ApprovalStatus = "approved_for_narrative_append",
   [int]$ApprovedUpdateCount = 1,
   [string]$FrontierAtApproval = "",
   [string[]]$ResidualRisk = @(),
+  [string]$ClearanceId = "shaliach-narrative-append-clearance-1",
+  [string]$ClearanceStatus = "clear_for_narrative_append",
+  [string[]]$CheckedProtocol = @("SOP"),
+  [string[]]$Finding = @(),
+  [string[]]$RequiredRework = @(),
   [switch]$Apply,
   [string]$Out = ""
 )
@@ -22,13 +28,16 @@ $Python = "C:\Users\enjer\AppData\Local\Programs\Python\Python312\python.exe"
 if (-not (Test-Path $Python)) {
   $Python = "python"
 }
-if (-not $GuardDiscovery -and -not $ManagerApproval -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
+if (-not $GuardDiscovery -and -not $ManagerApproval -and -not $ShaliachClearance -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
   throw "ExpectedSurfaceGuard is required for plan mode"
 }
 $env:PYTHONPATH = Join-Path $ProjectRoot "src"
 if ($Out -eq "") { $Out = Join-Path $ProjectRoot "coordination\narrative_append_result.sop" }
 if ($ManagerApproval -and $Out -eq (Join-Path $ProjectRoot "coordination\narrative_append_result.sop")) {
   $Out = Join-Path $ProjectRoot "coordination\manager_narrative_append_approval.sop"
+}
+if ($ShaliachClearance -and $Out -eq (Join-Path $ProjectRoot "coordination\narrative_append_result.sop")) {
+  $Out = Join-Path $ProjectRoot "coordination\shaliach_narrative_append_clearance.sop"
 }
 $argsList = @(
   "-m", "negotiated_agent.narrative_append_cli",
@@ -52,6 +61,21 @@ if ($GuardDiscovery) {
   )
   foreach ($risk in $ResidualRisk) {
     $argsList += @("--residual-risk", $risk)
+  }
+} elseif ($ShaliachClearance) {
+  $argsList += @(
+    "--shaliach-clearance",
+    "--clearance-id", $ClearanceId,
+    "--clearance-status", $ClearanceStatus
+  )
+  foreach ($protocol in $CheckedProtocol) {
+    $argsList += @("--checked-protocol", $protocol)
+  }
+  foreach ($item in $Finding) {
+    $argsList += @("--finding", $item)
+  }
+  foreach ($item in $RequiredRework) {
+    $argsList += @("--required-rework", $item)
   }
 } else {
   $argsList += @("--expected-surface-guard", $ExpectedSurfaceGuard)

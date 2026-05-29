@@ -2999,7 +2999,7 @@
 
 & [WorkSliceDetail S216_shaliach_narrative_append_clearance_writer] is a coordination runtime implementation slice
   + [slice_id] is S216_shaliach_narrative_append_clearance_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add narrative append CLI Shaliach clearance writer mode
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover clearance artifact write required rework collision rejection and no narrative mutation
@@ -3007,3 +3007,16 @@
   + [support_status] is prepared
   + [dependency_set] is S215_manager_narrative_append_approval_writer
   + [known_risks] is clearance writer being treated as a substitute for live Shaliach deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:39:00Z, proof_ref tests passed with 198 tests, result_summary added Shaliach narrative append clearance writer mode
+  + [completed_work_review] is support_delta verified Shaliach clearance writer supports clear/rework statuses findings protocols and collision rejection without narrative mutation; requirement_delta next step is refresh checkpoint after full reviewed narrative append workflow
+
+& [WorkSliceDetail S217_long_run_checkpoint_after_review_writers] is a long-run reentry slice
+  + [slice_id] is S217_long_run_checkpoint_after_review_writers
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after Manager and Shaliach narrative append review writers
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records 198-test suite and reviewed append writer frontier
+  + [completion_criteria] is checkpoint captures complete reviewed append writer workflow and ready continuation
+  + [support_status] is prepared
+  + [dependency_set] is S216_shaliach_narrative_append_clearance_writer
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

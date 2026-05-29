@@ -416,6 +416,19 @@ Write Manager narrative append approval evidence:
 
 This writes `coordination/manager_narrative_append_approval.sop` and does not plan or apply append.
 
+Write Shaliach narrative append clearance evidence:
+
+```powershell
+.\scripts\narrative-append.ps1 `
+  -ShaliachClearance `
+  -ClearanceId <clearance-id> `
+  -ClearanceStatus clear_for_narrative_append `
+  -CheckedProtocol SOP `
+  -CheckedProtocol SJS
+```
+
+This writes `coordination/shaliach_narrative_append_clearance.sop` and does not plan or apply append.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
