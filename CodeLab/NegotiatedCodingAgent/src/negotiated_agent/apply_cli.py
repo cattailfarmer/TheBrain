@@ -8,6 +8,7 @@ from .apply_preflight import apply_packet_files_to_workspace, build_apply_mutati
 from .apply_plan import ApplyResult
 from .apply_plan import build_dry_run_apply_artifacts
 from .merge_packet import AcceptedFileMapEntry, ManualMergePacket, RollbackPlan, ensure_target_path_within_workspace
+from .post_apply import build_post_apply_acceptance_record
 from .writer import write_text
 
 
@@ -104,6 +105,8 @@ def main(argv: list[str] | None = None) -> int:
                     error_summary=write_result.error_summary,
                 )
                 write_text(run_root / "apply_result.sop", apply_result.to_sop())
+                acceptance = build_post_apply_acceptance_record(apply_result, _verification_returncode(verification))
+                write_text(run_root / "post_apply_acceptance.sop", acceptance.to_sop())
             write_text(
                 run_root / "apply_command_log.sop",
                 "& [ApplyCommandLog] is a mutation preflight command log\n"
@@ -180,6 +183,17 @@ def _run_verification(command: str, cwd: Path) -> str:
   + [stderr_tail] is {_tail(result.stderr)}
   + [authority_boundary] is verification_result_not_manager_acceptance
 """
+
+
+def _verification_returncode(verification_sop: str) -> int:
+    for line in verification_sop.splitlines():
+        parsed = _field(line)
+        if parsed and parsed[0] == "returncode":
+            try:
+                return int(parsed[1])
+            except ValueError:
+                return 1
+    return 1
 
 
 def _tail(text: str, limit: int = 240) -> str:

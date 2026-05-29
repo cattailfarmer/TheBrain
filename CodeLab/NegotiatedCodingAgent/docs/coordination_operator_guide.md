@@ -46,7 +46,7 @@ This writes or refreshes `apply_plan.sop`, `apply_result.sop`, and `apply_comman
 
 The dry-run CLI rejects mutation acknowledgement flags by design. Treat `apply_result.sop` with `apply_status` set to `dry_run` as validation evidence only, not as proof that code was applied.
 
-When the mutation acknowledgement flag is supplied, the command runs the preflight gate, writes `apply_mutation_preflight.sop`, writes `snapshot_materialization.sop` under the run root, applies accepted packet files to the explicit target workspace, runs verification, writes `verification_result.sop`, and writes `apply_result.sop`. Use this only with a deliberate target workspace and reviewed packet evidence.
+When the mutation acknowledgement flag is supplied, the command runs the preflight gate, writes `apply_mutation_preflight.sop`, writes `snapshot_materialization.sop` under the run root, applies accepted packet files to the explicit target workspace, runs verification, writes `verification_result.sop`, writes `apply_result.sop`, and writes `post_apply_acceptance.sop`. Use this only with a deliberate target workspace and reviewed packet evidence.
 
 Before running any future rollback mutation, generate a preview:
 
@@ -62,13 +62,18 @@ To execute rollback, add the explicit mutation acknowledgement and target worksp
 .\scripts\rollback-preview.ps1 -RunRoot .\runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain -IUnderstandThisMutatesWorkspace
 ```
 
-Rollback restores files from snapshot refs and removes files recorded as created by the apply result. It writes `rollback_result.sop`.
+Rollback restores files from snapshot refs and removes files recorded as created by the apply result. It writes `rollback_result.sop` and refreshes `post_apply_acceptance.sop` with the rollback outcome.
 
 Expected dry-run artifacts:
 
 - `apply_plan.sop`: target paths, snapshot plan, rollback reference, and verification command that would be used by a future apply command.
 - `apply_result.sop`: `apply_status` remains `dry_run`; proposed target files are listed as skipped, not applied.
 - `apply_command_log.sop`: records whether validation completed or was rejected.
+
+Expected mutation-only artifacts:
+
+- `verification_result.sop`: command, return code, and output tails from post-apply verification.
+- `post_apply_acceptance.sop`: Manager/Shaliach acceptance synthesis over apply, verification, and rollback evidence. This is still a record boundary, not an extra filesystem operation.
 
 If the merge decision is `blocked_by_conflict`, inspect `merge_conflict_ledger.sop` first. Do not run dry-run apply validation until a conflict-free `manual_merge_packet.sop` exists.
 

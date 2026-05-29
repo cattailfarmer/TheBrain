@@ -756,7 +756,57 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("mutation_performed] is true", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
             self.assertIn("snapshot_materialization] is written", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
             self.assertIn("apply_status] is applied", (run_root / "apply_result.sop").read_text(encoding="utf-8"))
+            acceptance = (run_root / "post_apply_acceptance.sop").read_text(encoding="utf-8")
+            self.assertIn("acceptance_status] is accepted", acceptance)
+            self.assertIn("manager_decision] is accept", acceptance)
             self.assertEqual((target_root / "app.py").read_text(encoding="utf-8"), "print('ok')\n")
+
+    def test_apply_cli_writes_post_apply_rejection_for_failed_verification(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            source = run_root / "implementation" / "app.py"
+            source.parent.mkdir(parents=True)
+            target_root.mkdir()
+            source.write_text("print('needs fix')\n", encoding="utf-8")
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="cmd /c exit 1"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="merge.shaliach_review.sop",
+                verification_command="cmd /c exit 1",
+            )
+            (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
+            (run_root / "merge_review_decision.sop").write_text(
+                "& [MergeReviewDecision] is test\n  + [decision] is ready_for_manual_merge_review\n",
+                encoding="utf-8",
+            )
+            (run_root / "merge_conflict_ledger.sop").write_text(
+                "& [MergeConflictLedger] is test\n  + [conflict_count] is 0\n",
+                encoding="utf-8",
+            )
+            self.assertEqual(
+                apply_cli_main(
+                    [
+                        "--run-root",
+                        str(run_root),
+                        "--target-workspace-root",
+                        str(target_root),
+                        "--i-understand-this-mutates-workspace",
+                    ]
+                ),
+                2,
+            )
+            acceptance = (run_root / "post_apply_acceptance.sop").read_text(encoding="utf-8")
+            self.assertIn("acceptance_status] is blocked_by_verification", acceptance)
+            self.assertIn("manager_decision] is reject", acceptance)
+            self.assertIn("remaining_risk_set] is verification_failed", acceptance)
 
     def test_snapshot_materialization_copies_existing_targets_only(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -910,6 +960,10 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("rollback_status] is rolled_back", result)
             self.assertIn("restored_file_set] is existing.py", result)
             self.assertIn("removed_file_set] is new.py", result)
+            acceptance = (run_root / "post_apply_acceptance.sop").read_text(encoding="utf-8")
+            self.assertIn("acceptance_status] is rolled_back", acceptance)
+            self.assertIn("manager_decision] is rollback_acknowledged", acceptance)
+            self.assertIn("rollback_result_ref] is rollback_result.sop", acceptance)
 
     def test_post_apply_acceptance_accepts_verified_apply(self) -> None:
         apply_result = ApplyResult(

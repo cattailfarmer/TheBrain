@@ -5,6 +5,7 @@ from pathlib import Path
 
 from .apply_preflight import SnapshotMaterializationEntry, SnapshotMaterializationResult
 from .apply_plan import ApplyResult
+from .post_apply import build_post_apply_acceptance_record
 from .rollback import build_rollback_preview, execute_rollback_preview
 
 
@@ -28,6 +29,8 @@ def main(argv: list[str] | None = None) -> int:
                 raise ValueError("--target-workspace-root is required for rollback mutation")
             result = execute_rollback_preview(run_root, Path(args.target_workspace_root), preview)
             (run_root / "rollback_result.sop").write_text(result.to_sop(), encoding="utf-8")
+            acceptance = build_post_apply_acceptance_record(apply_result, 1, result)
+            (run_root / "post_apply_acceptance.sop").write_text(acceptance.to_sop(), encoding="utf-8")
         print(preview.to_sop(), end="")
         return 0
     except (FileNotFoundError, KeyError, ValueError) as exc:

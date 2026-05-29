@@ -133,6 +133,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `negotiated_agent.post_apply` provides that pure acceptance record model. It can synthesize accepted, verification-blocked, rollback-acknowledged, rollback-blocked, and Shaliach-blocked outcomes while preserving the boundary that acceptance records do not perform filesystem operations.
 
+The explicit apply and rollback mutation CLIs now write `post_apply_acceptance.sop` from their actual run evidence. This makes final acceptance visible as a separate record after verification or rollback rather than burying it inside filesystem success.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:
