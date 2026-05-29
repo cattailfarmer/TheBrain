@@ -682,8 +682,8 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S291_long_run_checkpoint_after_upsert_anchor_fields
-  + [run_lifecycle_frontier] is run 20260529T214357Z completed and narrative updated with artifact manifest
+  + [current_frontier] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
+  + [run_lifecycle_frontier] is run 20260529T214903Z completed and narrative updated with artifact manifest
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -986,6 +986,17 @@
   + [last_proof] is narrative coverage report covered and stale-check current after lifecycle frontier checkpoint proof
   + [completed_slice] is S290_conversation_upsert_anchor_fields
   + [last_proof] is tests passed with 279 tests after run_lifecycle_frontier upserts were anchored after current_frontier
+  + [last_proof] is run 20260529T214903Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T214903Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T214903Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T214903Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T214903Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T214903Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T214903Z
+  + [last_proof] is run 20260529T214903Z wrote run_manifest.sop
+  + [completed_slice] is S291_long_run_checkpoint_after_upsert_anchor_fields
+  + [last_proof] is long-run checkpoint passed 279 tests and active conversation kept run_lifecycle_frontier anchored after current_frontier
+  + [next_recommended_slice] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
   + [next_recommended_slice] is S291_long_run_checkpoint_after_upsert_anchor_fields
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
