@@ -16,6 +16,7 @@ from negotiated_agent.apply_preflight import (
     build_apply_mutation_preflight,
     materialize_snapshot_evidence,
 )
+from negotiated_agent.artifact_validation import combine_artifact_validation
 from negotiated_agent.checkpoint_probe import (
     load_checkpoint_probe_evidence,
     parse_checkpoint_probe_evidence_sop,
@@ -6023,6 +6024,19 @@ class NarrativeAppendReviewTests(unittest.TestCase):
 
 
 class RunManifestTests(unittest.TestCase):
+    def _write_manifest_fixture(self, root: Path, *, include_missing: bool = False) -> Path:
+        (root / "present.sop").write_text("& [Present] is here\n", encoding="utf-8")
+        lines = [
+            "& [RunArtifactManifest test] is manifest",
+            "  + [artifact_ref present] is present.sop",
+        ]
+        if include_missing:
+            lines.append("  + [artifact_ref missing] is missing.sop")
+        lines.append("")
+        manifest = root / "run_manifest.sop"
+        manifest.write_text("\n".join(lines), encoding="utf-8")
+        return manifest
+
     def test_run_manifest_validation_detects_missing_artifacts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -6097,6 +6111,65 @@ class RunManifestTests(unittest.TestCase):
             self.assertEqual(result.artifact_refs[0].role, "shaliach_self_negotiation")
             self.assertEqual(result.missing_refs, ("application.shaliach_self_negotiation.sop",))
             self.assertIn("missing_artifacts", result.to_sop())
+
+    def test_combined_artifact_validation_passes_manifest_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = validate_run_manifest(self._write_manifest_fixture(Path(temp)))
+
+            result = combine_artifact_validation(manifest)
+
+        self.assertTrue(result.ok)
+        self.assertEqual(result.status, "passed")
+        self.assertEqual(result.checkpoint_probe_status, "omitted")
+        self.assertIn("combined_artifact_validation_not_acceptance_review", result.to_sop())
+
+    def test_combined_artifact_validation_fails_missing_manifest_refs(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = validate_run_manifest(self._write_manifest_fixture(Path(temp), include_missing=True))
+
+            result = combine_artifact_validation(manifest)
+
+        self.assertFalse(result.ok)
+        self.assertEqual(result.status, "failed")
+        self.assertEqual(result.manifest_missing_ref_count, 1)
+
+    def test_combined_artifact_validation_reports_incomplete_checkpoint_probe(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = validate_run_manifest(self._write_manifest_fixture(Path(temp)))
+        checkpoint = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(
+                CheckpointProbeEvidenceTests()._checkpoint_sop(
+                    probe_status="not_run",
+                    probe_returncode="2",
+                    probe_stdout="dry_run_root_not_found",
+                )
+            )
+        )
+
+        result = combine_artifact_validation(manifest, checkpoint)
+
+        self.assertEqual(result.status, "incomplete")
+        self.assertEqual(result.checkpoint_probe_reason, "shaliach_cross_artifact_probe_not_run")
+        self.assertEqual(result.openai_health_gating, "non_gating_environment_state")
+
+    def test_combined_artifact_validation_fails_failed_checkpoint_probe(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest = validate_run_manifest(self._write_manifest_fixture(Path(temp)))
+        checkpoint = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(
+                CheckpointProbeEvidenceTests()._checkpoint_sop(
+                    checkpoint_status="needs_attention",
+                    probe_status="failed",
+                    probe_returncode="1",
+                    probe_stdout="application:inconsistent",
+                )
+            )
+        )
+
+        result = combine_artifact_validation(manifest, checkpoint)
+
+        self.assertEqual(result.status, "failed")
+        self.assertFalse(result.ok)
 
 
 class ConversationKernelTests(unittest.TestCase):

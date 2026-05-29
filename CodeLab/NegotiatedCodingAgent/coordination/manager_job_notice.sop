@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 149
+  + [job_notice_revision] is 150
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3610,7 +3610,7 @@
 
 & [WorkSliceDetail S263_combined_artifact_validation_result] is a validation implementation slice
   + [slice_id] is S263_combined_artifact_validation_result
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement pure combined validation result for run manifest and optional checkpoint probe evidence
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover passed failed incomplete and manifest-only combined results
@@ -3618,3 +3618,16 @@
   + [support_status] is prepared
   + [dependency_set] is S262_combined_artifact_validation_design
   + [known_risks] is treating combined validation status as final code acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:18:00Z, proof_ref tests passed with 259 tests, result_summary added pure combined artifact validation result
+  + [completed_work_review] is support_delta verified passed failed incomplete and manifest-only combined summaries with non-acceptance boundary; requirement_delta next step is expose combined validation through a CLI and wrapper
+
+& [WorkSliceDetail S264_combined_artifact_validation_cli] is a validation implementation slice
+  + [slice_id] is S264_combined_artifact_validation_cli
+  + [slice_status] is open
+  + [scope] is expose combined run manifest and checkpoint probe validation through a CLI and PowerShell wrapper
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover CLI manifest-only passed missing refs incomplete checkpoint failed checkpoint output file and exit codes
+  + [completion_criteria] is operators can run one command for read-only manifest plus optional checkpoint proof validation
+  + [support_status] is prepared
+  + [dependency_set] is S263_combined_artifact_validation_result
+  + [known_risks] is CLI wording implying final acceptance or apply permission

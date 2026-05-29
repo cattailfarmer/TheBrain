@@ -2266,3 +2266,11 @@
   + [proof_ref] is coordination/combined_artifact_validation_design.sop
   + [current_frontier] is S263_combined_artifact_validation_result
   + [narrative_role] is validation_design and operator_tooling update
+
+
+& [LongRunNarrativeUpdate S263_combined_artifact_validation_result] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S263_combined_artifact_validation_result
+  + [implemented_capability] is artifact_validation combines run manifest validation and optional checkpoint probe validation into passed incomplete or failed read-only summary
+  + [proof_result] is tests passed with 259 tests
+  + [current_frontier] is S264_combined_artifact_validation_cli
+  + [narrative_role] is validation_runtime and operator_tooling update
