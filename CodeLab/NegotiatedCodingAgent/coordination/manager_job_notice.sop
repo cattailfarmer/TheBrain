@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 140
+  + [job_notice_revision] is 141
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -158,7 +158,8 @@
     S133_execution_gate_readme_inventory |
     S134_long_run_checkpoint_after_execution_gate_docs |
     S135_execution_gate_preview_cli_design |
-    S136_execution_gate_preview_cli
+    S136_execution_gate_preview_cli |
+    S137_long_run_checkpoint_after_gate_preview_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1958,7 +1959,7 @@
 
 & [WorkSliceDetail S136_execution_gate_preview_cli] is a coordination runtime implementation slice
   + [slice_id] is S136_execution_gate_preview_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement SOP loaders and no-write execution gate preview CLI
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests cover allowed and blocked preview decisions, missing field rejection, and no output files written
@@ -1966,3 +1967,16 @@
   + [support_status] is prepared
   + [dependency_set] is S135_execution_gate_preview_cli_design
   + [known_risks] is preview accidentally writing gate or worker cycle artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:55:00Z, proof_ref tests passed with 99 tests, result_summary execution gate preview CLI loads existing refs and prints decisions without writing files
+  + [completed_work_review] is support_delta verified no-write preview behavior and malformed input rejection; requirement_delta next checkpoint should capture 99-test gate preview state
+
+& [WorkSliceDetail S137_long_run_checkpoint_after_gate_preview_cli] is a long-run reentry slice
+  + [slice_id] is S137_long_run_checkpoint_after_gate_preview_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after no-write execution gate preview CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 99-test suite and route draft proof
+  + [completion_criteria] is checkpoint records execution gate preview CLI frontier
+  + [support_status] is prepared
+  + [dependency_set] is S136_execution_gate_preview_cli
+  + [known_risks] is noisy generated dry-run artifacts

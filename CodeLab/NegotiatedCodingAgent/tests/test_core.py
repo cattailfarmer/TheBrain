@@ -22,7 +22,16 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
-from negotiated_agent.execution_gate import ExecutionGateDecision, ManagerAuthorizationRecord, ShaliachExecutionClearance, evaluate_execution_gate
+from negotiated_agent.execution_gate import (
+    ExecutionGateDecision,
+    ManagerAuthorizationRecord,
+    ShaliachExecutionClearance,
+    evaluate_execution_gate,
+    load_manager_authorization,
+    load_shaliach_clearance,
+    load_worker_lease,
+)
+from negotiated_agent.execution_gate_cli import main as execution_gate_cli_main
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
 from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
@@ -1700,6 +1709,92 @@ class MailboxCoordinationTests(unittest.TestCase):
         )
         self.assertEqual(stale.gate_status, "stale_frontier")
         self.assertEqual(invalid.gate_status, "lease_invalid")
+
+    def test_execution_gate_loaders_parse_sop_records(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            auth = _manager_auth("run_proof_only")
+            clearance = _shaliach_clearance("clear")
+            lease = _worker_lease("claimed")
+            auth_path = root / "auth.sop"
+            clearance_path = root / "clearance.sop"
+            lease_path = root / "lease.sop"
+            auth_path.write_text(auth.to_sop(), encoding="utf-8")
+            clearance_path.write_text(clearance.to_sop(), encoding="utf-8")
+            lease_path.write_text(lease.to_sop(), encoding="utf-8")
+            self.assertEqual(load_manager_authorization(auth_path), auth)
+            self.assertEqual(load_shaliach_clearance(clearance_path), clearance)
+            self.assertEqual(load_worker_lease(lease_path), lease)
+
+    def test_execution_gate_preview_cli_prints_decision_without_writing_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            auth_path = root / "coordination" / "workers" / "worker-a" / "authorizations" / "auth-1.sop"
+            clearance_path = root / "coordination" / "workers" / "worker-a" / "shaliach_clearance" / "clear-1.sop"
+            lease_path = root / "coordination" / "workers" / "worker-a" / "leases" / "claim-1.sop"
+            auth_path.parent.mkdir(parents=True)
+            clearance_path.parent.mkdir(parents=True)
+            lease_path.parent.mkdir(parents=True)
+            auth_path.write_text(_manager_auth("run_proof_only").to_sop(), encoding="utf-8")
+            clearance_path.write_text(_shaliach_clearance("clear").to_sop(), encoding="utf-8")
+            lease_path.write_text(_worker_lease("claimed").to_sop(), encoding="utf-8")
+            before = sorted(path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file())
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    execution_gate_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-authorization-ref",
+                            "coordination/workers/worker-a/authorizations/auth-1.sop",
+                            "--shaliach-clearance-ref",
+                            "coordination/workers/worker-a/shaliach_clearance/clear-1.sop",
+                            "--lease-ref",
+                            "coordination/workers/worker-a/leases/claim-1.sop",
+                            "--current-frontier",
+                            "S131_worker_execution_gate_evaluator",
+                            "--gate-id",
+                            "gate-1",
+                        ]
+                    ),
+                    0,
+                )
+            after = sorted(path.relative_to(root).as_posix() for path in root.rglob("*") if path.is_file())
+            self.assertEqual(before, after)
+            self.assertIn("gate_status] is proof_only_allowed", out.getvalue())
+            self.assertIn("execution_gate_decision_not_completion_approval", out.getvalue())
+
+    def test_execution_gate_preview_cli_rejects_missing_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            auth_path = root / "auth.sop"
+            clearance_path = root / "clearance.sop"
+            lease_path = root / "lease.sop"
+            auth_path.write_text("& [ManagerAuthorizationRecord broken] is broken\n", encoding="utf-8")
+            clearance_path.write_text(_shaliach_clearance("clear").to_sop(), encoding="utf-8")
+            lease_path.write_text(_worker_lease("claimed").to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    execution_gate_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-authorization-ref",
+                            "auth.sop",
+                            "--shaliach-clearance-ref",
+                            "clearance.sop",
+                            "--lease-ref",
+                            "lease.sop",
+                            "--current-frontier",
+                            "S131_worker_execution_gate_evaluator",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("ExecutionGatePreviewError", out.getvalue())
+            self.assertIn("preview_error_not_gate_decision", out.getvalue())
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

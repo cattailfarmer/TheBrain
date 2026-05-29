@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from .worker_lifecycle import WorkerLeaseRecord
 
@@ -129,3 +130,67 @@ def evaluate_execution_gate(
         expires_at=manager_authorization.expires_at,
         block_reason=block_reason,
     )
+
+
+def load_manager_authorization(path: Path) -> ManagerAuthorizationRecord:
+    fields = _read_fields(path)
+    return ManagerAuthorizationRecord(
+        authorization_id=fields["authorization_id"],
+        worker_uuid=fields["worker_uuid"],
+        authorization_status=fields["authorization_status"],
+        claim_ref=fields["claim_ref"],
+        slice_ref=fields["slice_ref"],
+        frontier_at_authorization=fields["frontier_at_authorization"],
+        allowed_action=fields["allowed_action"],
+        proof_route=fields["proof_route"],
+        expires_at=fields["expires_at"],
+    )
+
+
+def load_shaliach_clearance(path: Path) -> ShaliachExecutionClearance:
+    fields = _read_fields(path)
+    return ShaliachExecutionClearance(
+        clearance_id=fields["clearance_id"],
+        worker_uuid=fields["worker_uuid"],
+        clearance_status=fields["clearance_status"],
+        claim_ref=fields["claim_ref"],
+        slice_ref=fields["slice_ref"],
+        checked_protocols=_split_set(fields.get("checked_protocol_set", "")),
+        finding_ref=fields.get("finding_ref", "none"),
+        required_response=fields["required_response"],
+    )
+
+
+def load_worker_lease(path: Path) -> WorkerLeaseRecord:
+    fields = _read_fields(path)
+    claim_ref = fields["claim_ref"]
+    message_ref = fields["message_ref"]
+    return WorkerLeaseRecord(
+        worker_uuid=fields["worker_uuid"],
+        mailbox_uuid=fields["mailbox_uuid"],
+        claim_id=claim_ref.rsplit("#", 1)[-1],
+        message_id=message_ref.rsplit("#", 1)[-1],
+        lease_status=fields["lease_status"],
+        started_at=fields["started_at"],
+        expires_at=fields["expires_at"],
+        frontier_at_claim=fields["frontier_at_claim"],
+        conflict_with=fields.get("conflict_with", "none"),
+    )
+
+
+def _read_fields(path: Path) -> dict[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing")
+    fields = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            fields[key] = value
+    return fields
+
+
+def _split_set(value: str) -> tuple[str, ...]:
+    if not value or value == "none":
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())

@@ -218,6 +218,8 @@ The same module provides a deterministic execution gate evaluator. It combines M
 
 `coordination/execution_gate_preview_cli_design.sop` defines a future no-write preview command for that evaluator. The preview command should parse existing Manager authorization, Shaliach clearance, and lease records, print an `ExecutionGateDecision` to stdout, and leave all worker, mailbox, and conversation files unchanged.
 
+`negotiated_agent.execution_gate_cli` and `scripts/execution-gate-preview.ps1` implement that no-write preview. The CLI loads existing gate evidence refs, rejects malformed inputs, and prints the resulting `ExecutionGateDecision` without writing gate or worker artifacts.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

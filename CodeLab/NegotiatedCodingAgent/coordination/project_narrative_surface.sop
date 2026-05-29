@@ -996,6 +996,14 @@
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
 
 
+& [LongRunNarrativeUpdate S136_execution_gate_preview_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S136_execution_gate_preview_cli
+  + [implemented_capability] is execution gate preview CLI loads Manager authorization Shaliach clearance and lease refs then prints ExecutionGateDecision without writing gate files
+  + [proof_result] is tests passed with 99 tests
+  + [current_frontier] is S137_long_run_checkpoint_after_gate_preview_cli
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
 & [RunNarrativeUpdate 20260529T165246Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T165246Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat

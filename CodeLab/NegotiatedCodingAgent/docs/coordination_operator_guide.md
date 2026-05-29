@@ -197,6 +197,14 @@ Before a future worker runner executes claimed implementation work, it must have
 
 The deterministic evaluator can allow proof-only work or block on Manager denial, Shaliach pause/rework, stale frontier, or invalid lease. It does not run live Manager/Shaliach deliberation, execute implementation work, or mutate the target workspace.
 
+Preview an execution gate decision from existing refs:
+
+```powershell
+.\scripts\execution-gate-preview.ps1 -ManagerAuthorizationRef <auth-ref> -ShaliachClearanceRef <clearance-ref> -LeaseRef <lease-ref> -CurrentFrontier <frontier>
+```
+
+The preview command prints `ExecutionGateDecision` to stdout. It does not write gate files, authorizations, clearances, leases, cycles, claims, or read cursors.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

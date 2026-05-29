@@ -523,9 +523,10 @@
   + [completed_slice] is S133_execution_gate_readme_inventory
   + [completed_slice] is S134_long_run_checkpoint_after_execution_gate_docs
   + [completed_slice] is S135_execution_gate_preview_cli_design
+  + [completed_slice] is S136_execution_gate_preview_cli
 
-  + [current_frontier] is S136_execution_gate_preview_cli after execution gate preview CLI design
-  + [next_recommended_slice] is S136_execution_gate_preview_cli
+  + [current_frontier] is S137_long_run_checkpoint_after_gate_preview_cli after no-write execution gate preview CLI
+  + [next_recommended_slice] is S137_long_run_checkpoint_after_gate_preview_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
