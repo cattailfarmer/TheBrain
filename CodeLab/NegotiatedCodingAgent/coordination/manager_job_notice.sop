@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 92
+  + [job_notice_revision] is 93
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -110,7 +110,8 @@
     S85_spec_audit_refresh_after_apply_docs |
     S86_long_run_checkpoint_after_apply_docs |
     S87_live_model_serving_readiness_recheck |
-    S88_live_serving_bootstrap_operator_runbook
+    S88_live_serving_bootstrap_operator_runbook |
+    S89_long_run_checkpoint_after_serving_runbook
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1286,7 +1287,7 @@
 
 & [WorkSliceDetail S88_live_serving_bootstrap_operator_runbook] is a local model serving documentation slice
   + [slice_id] is S88_live_serving_bootstrap_operator_runbook
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is consolidate current machine readiness findings into a cautious operator runbook for WSL2 plus vLLM bootstrap
   + [target_files] is docs/**, README.md, coordination/**
   + [proof_route] is docs updated, readiness boundaries preserved, and tests remain passing
@@ -1294,3 +1295,16 @@
   + [support_status] is prepared
   + [dependency_set] is S87_live_model_serving_readiness_recheck
   + [known_risks] is presenting installation commands as already executed or implying native Windows vLLM support
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:58:00Z, proof_ref docs/local_model_serving.md, docs/vllm_wsl2_operator_guide.md, README.md, and spec status updated, result_summary operator docs now name current RTX 5090 readiness, WSL2/Docker/Ollama/server blockers, disk-conscious setup ladder, verification gates, and first live route shape
+  + [completed_work_review] is support_delta verified operator bootstrap route is explicit without claiming installation; requirement_delta checkpoint should capture serving runbook and current proof state
+
+& [WorkSliceDetail S89_long_run_checkpoint_after_serving_runbook] is a long-run reentry slice
+  + [slice_id] is S89_long_run_checkpoint_after_serving_runbook
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after serving readiness and bootstrap documentation
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness or tests update checkpoint without mutating target workspace
+  + [completion_criteria] is checkpoint records current frontier, 61-test suite, dry-run run, model inventory, OpenAI-compatible health, and serving runbook frontier
+  + [support_status] is prepared
+  + [dependency_set] is S88_live_serving_bootstrap_operator_runbook
+  + [known_risks] is noisy generated dry-run artifacts

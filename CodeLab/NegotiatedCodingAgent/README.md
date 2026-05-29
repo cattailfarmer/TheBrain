@@ -116,6 +116,7 @@ Programmer swarm support is currently staged. The runtime can represent multiple
 
 See `docs/architecture.md`.
 For long-running and multi-conversation operator helpers, see `docs/coordination_operator_guide.md`.
+For current local serving readiness and the disk-conscious setup ladder, see `docs/local_model_serving.md`.
 For the RTX 5090 WSL2/vLLM serving path, see `docs/vllm_wsl2_operator_guide.md`.
 For a focused OpenAI-compatible endpoint check, run `.\scripts\openai-health.ps1`.
 

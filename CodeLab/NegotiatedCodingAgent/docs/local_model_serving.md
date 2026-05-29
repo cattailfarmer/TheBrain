@@ -1,13 +1,16 @@
 # Local Model Serving
 
-S15 records machine readiness separately from installation.
+S15 and S87 record machine readiness separately from installation.
 
 Current observed state on this machine:
 
 - NVIDIA RTX 5090 is visible through `nvidia-smi` with about 32 GB VRAM.
+- Windows NVIDIA driver is visible from the probe as `596.49`.
+- Windows CUDA version is visible from the probe as `13.2`.
 - Ollama is not installed on the Windows `PATH`.
 - WSL is not installed.
 - Docker is not installed.
+- `http://localhost:8000/v1/models` is not serving an OpenAI-compatible model endpoint.
 - vLLM is therefore not currently runnable here, because the preferred vLLM path needs Linux through WSL2 or a Linux host.
 
 Recommended route:
@@ -16,6 +19,20 @@ Recommended route:
 2. Use vLLM inside WSL2 for the high-throughput OpenAI-compatible server path.
 3. Keep Ollama as the simpler fallback route if you want a fast Windows-native first live run.
 4. Keep dry-run mode as the governance proof route when no model server is available.
+
+Disk-conscious boundary:
+
+- WSL2 with one Ubuntu distribution is the preferred local path over a full dual-boot Linux install on a 1 TB drive.
+- Do not install model weights casually. Pick one Manager-capable model first, then add Director and Programmer models only after the endpoint and role routing are proven.
+- Keep generated run artifacts under `runs/` disposable. The durable state is the repository, SOP surfaces, and selected model-serving configuration.
+
+Serving readiness ladder:
+
+1. `dry_run_until_serving_installed`: current state; all orchestration and governance tests can continue.
+2. `wsl_ready`: WSL2 is installed and `wsl --status` works.
+3. `gpu_visible_in_wsl`: `nvidia-smi` works inside Ubuntu without installing a Linux NVIDIA kernel driver.
+4. `vllm_endpoint_ready`: vLLM responds at `http://localhost:8000/v1/models`.
+5. `role_routes_ready`: `agent.config.json` assigns explicit Manager, Director, Shaliach, and Programmer models against the OpenAI-compatible endpoint.
 
 Run the repeatable probe:
 
@@ -34,3 +51,10 @@ After starting any vLLM or OpenAI-compatible server, run the focused endpoint he
 ```
 
 An unavailable healthcheck is expected when no server is running. An available healthcheck proves `/v1/models` responds; it does not prove model quality, role fit, or throughput.
+
+Primary setup references:
+
+- Microsoft WSL install guide: <https://learn.microsoft.com/windows/wsl/install>
+- Microsoft CUDA on WSL guide: <https://learn.microsoft.com/windows/ai/directml/gpu-cuda-in-wsl>
+- NVIDIA CUDA on WSL guide: <https://docs.nvidia.com/cuda/wsl-user-guide/>
+- vLLM quickstart: <https://docs.vllm.ai/en/latest/getting_started/quickstart.html>

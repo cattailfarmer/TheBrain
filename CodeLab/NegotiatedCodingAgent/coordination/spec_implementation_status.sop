@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T23:59:59Z
+  @ [updated_at] 2026-05-29T15:58:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -41,8 +41,8 @@
 
 & [ImplementedObligation] is a proof-backed specification capability
   + [obligation] is local model serving route is explicit before live setup
-  + [support] is model inventory, role-model profile, vLLM WSL2 preflight, OpenAI-compatible healthcheck, and docs are present
-  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop
+  + [support] is model inventory, role-model profile, vLLM WSL2 preflight, OpenAI-compatible healthcheck, local serving docs, and WSL2/vLLM operator guide are present
+  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop, docs/local_model_serving.md, docs/vllm_wsl2_operator_guide.md
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Shaliach internal higher/lower reasoning and perspective negotiation
