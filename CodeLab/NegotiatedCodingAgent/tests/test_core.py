@@ -4543,6 +4543,7 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertIn("test-uuid", sop)
         self.assertIn("start_current_frontier] is S16", sop)
         self.assertIn("end_current_frontier] is S16", sop)
+        self.assertIn("end_run_lifecycle_frontier] is not_recorded", sop)
 
     def test_checkpoint_marks_failed_command(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
@@ -4572,6 +4573,7 @@ class LongRunHarnessTests(unittest.TestCase):
             dry_run_result=ok,
             model_inventory_result=ok,
             end_current_frontier="S40_end",
+            end_run_lifecycle_frontier="run completed",
             openai_health_result=unavailable,
             route_draft_result=route_draft,
         )
@@ -4579,6 +4581,7 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertEqual(checkpoint.status, "ready_for_continuation")
         self.assertIn("start_current_frontier] is S39", sop)
         self.assertIn("end_current_frontier] is S40_end", sop)
+        self.assertIn("end_run_lifecycle_frontier] is run completed", sop)
         self.assertIn("openai_health_status] is failed", sop)
         self.assertIn("non_gating_environment_state", sop)
         self.assertIn("route_draft_status] is passed", sop)
@@ -6508,6 +6511,19 @@ class ConversationKernelTests(unittest.TestCase):
             self.assertEqual(surface.first("next_recommended_slice"), "S08")
             self.assertEqual(surface.fields["unresolved_item"], ["existing item", "new item"])
             self.assertEqual(surface.fields["last_proof"], ["existing proof", "new proof"])
+
+    def test_updates_can_add_lifecycle_frontier_without_current_frontier_change(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self._write_surface(root)
+            surface = update_active_conversation_surface(
+                root,
+                set_fields={"run_lifecycle_frontier": "run 1 completed"},
+                proofs=["run proof"],
+            )
+            self.assertEqual(surface.first("current_frontier"), "old frontier")
+            self.assertEqual(surface.first("run_lifecycle_frontier"), "run 1 completed")
+            self.assertEqual(surface.fields["last_proof"], ["existing proof", "run proof"])
 
 
 class ProtocolRegistryTests(unittest.TestCase):

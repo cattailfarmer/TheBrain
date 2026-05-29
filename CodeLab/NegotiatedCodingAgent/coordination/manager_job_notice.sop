@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 172
+  + [job_notice_revision] is 173
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3909,7 +3909,7 @@
 
 & [WorkSliceDetail S286_conversation_lifecycle_frontier_fields] is a conversation memory implementation slice
   + [slice_id] is S286_conversation_lifecycle_frontier_fields
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement run_lifecycle_frontier fields for orchestrator updates and checkpoint summaries
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests prove dry-run lifecycle updates preserve current_frontier and write run_lifecycle_frontier
@@ -3917,3 +3917,16 @@
   + [support_status] is prepared
   + [dependency_set] is S285_conversation_frontier_lifecycle_boundary
   + [known_risks] is tests and checkpoint readers relying on completed run text in current_frontier
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T15:12:00Z, proof_ref tests passed with 279 tests, result_summary orchestrator run lifecycle updates now write run_lifecycle_frontier and checkpoint reports end_run_lifecycle_frontier
+  + [completed_work_review] is support_delta verified conversation updates can add lifecycle frontier without current_frontier change; requirement_delta next step is refresh long-run checkpoint with lifecycle frontier fields
+
+& [WorkSliceDetail S287_long_run_checkpoint_after_lifecycle_frontier_fields] is a long-run reentry slice
+  + [slice_id] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after lifecycle frontier field implementation
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 279-test suite current_frontier slice id and end_run_lifecycle_frontier run completion marker
+  + [completion_criteria] is checkpoint proves active frontier and lifecycle frontier are separate in generated evidence
+  + [support_status] is prepared
+  + [dependency_set] is S286_conversation_lifecycle_frontier_fields
+  + [known_risks] is dry-run still writing useful lifecycle breadcrumbs that must not confuse stale-checks

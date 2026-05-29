@@ -61,7 +61,7 @@ class ConversationSurface:
     def set_fields(self, updates: Mapping[str, str]) -> None:
         text = self.text
         for key, value in updates.items():
-            text = replace_first_field(text, key, value)
+            text = upsert_first_field(text, key, value)
         self.text = text
         self.fields = parse_sop_fields(text)
 
@@ -97,6 +97,13 @@ def replace_first_field(text: str, key: str, value: str) -> str:
             lines[index] = f"{match.group('indent')}+ [{key}] is {value}"
             return "\n".join(lines) + ("\n" if text.endswith("\n") else "")
     raise KeyError(f"Field not found: {key}")
+
+
+def upsert_first_field(text: str, key: str, value: str, after_key: str | None = None) -> str:
+    try:
+        return replace_first_field(text, key, value)
+    except KeyError:
+        return insert_field(text, key, value, after_key=after_key or key)
 
 
 def insert_field(text: str, key: str, value: str, after_key: str) -> str:

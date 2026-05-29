@@ -62,7 +62,7 @@ class NegotiatedCodingAgent:
         )
         self._update_conversation_surface(
             run_root,
-            current_frontier=f"run {run_root.name} started with protocol activation",
+            run_lifecycle_frontier=f"run {run_root.name} started with protocol activation",
             proofs=[f"run {run_root.name} started and wrote protocol_activation.sop"],
         )
 
@@ -153,7 +153,7 @@ class NegotiatedCodingAgent:
                 raise RuntimeError(f"Manager rejected {layer} layer: {decision.reason}")
             self._update_conversation_surface(
                 run_root,
-                current_frontier=f"run {run_root.name} approved {layer} layer",
+                run_lifecycle_frontier=f"run {run_root.name} approved {layer} layer",
                 proofs=[f"run {run_root.name} approved {layer} layer with {shaliach_finding_ref}"],
             )
             parent_flowchart = settled
@@ -264,7 +264,7 @@ class NegotiatedCodingAgent:
         )
         self._update_conversation_surface(
             run_root,
-            current_frontier=f"run {run_root.name} wrote implementation",
+            run_lifecycle_frontier=f"run {run_root.name} wrote implementation",
             proofs=[f"run {run_root.name} wrote implementation files"],
         )
         self._write_run_narrative_update(run_root, objective, flowcharts, written)
@@ -341,13 +341,21 @@ class NegotiatedCodingAgent:
         self,
         run_root: Path,
         *,
-        current_frontier: str,
+        current_frontier: str | None = None,
+        run_lifecycle_frontier: str | None = None,
         proofs: list[str],
     ) -> None:
+        if current_frontier is None and run_lifecycle_frontier is None:
+            raise ValueError("conversation surface update needs a frontier value")
+        set_fields = {}
+        if current_frontier is not None:
+            set_fields["current_frontier"] = current_frontier
+        if run_lifecycle_frontier is not None:
+            set_fields["run_lifecycle_frontier"] = run_lifecycle_frontier
         try:
             update_active_conversation_surface(
                 self.project_root,
-                set_fields={"current_frontier": current_frontier},
+                set_fields=set_fields,
                 proofs=proofs,
             )
         except (FileNotFoundError, KeyError, ValueError):
@@ -355,7 +363,7 @@ class NegotiatedCodingAgent:
                 run_root,
                 {
                     "event": "conversation_surface_update_skipped",
-                    "frontier": current_frontier,
+                    "frontier": current_frontier or run_lifecycle_frontier,
                     "reason": "active conversation surface unavailable or malformed",
                 },
             )
@@ -390,7 +398,7 @@ class NegotiatedCodingAgent:
         )
         self._update_conversation_surface(
             run_root,
-            current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
+            run_lifecycle_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
             proofs=[f"run {run_root.name} wrote run_blocked.sop and {repair_plan_ref}"],
         )
         self._write_run_manifest(
@@ -501,7 +509,7 @@ class NegotiatedCodingAgent:
             handle.write(update)
         self._update_conversation_surface(
             run_root,
-            current_frontier=f"run {run_root.name} completed and narrative updated",
+            run_lifecycle_frontier=f"run {run_root.name} completed and narrative updated",
             proofs=[f"run narrative update written for {rel_run}"],
         )
 
@@ -532,7 +540,7 @@ class NegotiatedCodingAgent:
         )
         self._update_conversation_surface(
             run_root,
-            current_frontier=frontier,
+            run_lifecycle_frontier=frontier,
             proofs=[f"run {run_root.name} wrote run_manifest.sop"],
         )
 

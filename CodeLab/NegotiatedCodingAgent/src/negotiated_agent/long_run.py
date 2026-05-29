@@ -43,6 +43,7 @@ class LongRunCheckpoint:
     dry_run_result: CommandResult
     model_inventory_result: CommandResult
     end_current_frontier: str = ""
+    end_run_lifecycle_frontier: str = ""
     openai_health_result: CommandResult | None = None
     route_draft_result: CommandResult | None = None
     shaliach_cross_artifact_result: CommandResult | None = None
@@ -66,6 +67,7 @@ class LongRunCheckpoint:
   + [conversation_uuid] is {self.conversation_uuid}
   + [start_current_frontier] is {self.current_frontier}
   + [end_current_frontier] is {self.end_current_frontier or self.current_frontier}
+  + [end_run_lifecycle_frontier] is {self.end_run_lifecycle_frontier or "not_recorded"}
   + [git_clean_before] is {_bool(self.git_clean_before)}
   + [status] is {self.status}
   + [test_status] is {_status(self.test_result)}
@@ -187,6 +189,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         conversation_uuid=surface.first("conversation_uuid", "unknown") or "unknown",
         current_frontier=start_frontier,
         end_current_frontier=end_surface.first("current_frontier", start_frontier) or start_frontier,
+        end_run_lifecycle_frontier=end_surface.first("run_lifecycle_frontier", "") or "",
         git_clean_before=git_clean,
         test_result=test,
         dry_run_result=dry,

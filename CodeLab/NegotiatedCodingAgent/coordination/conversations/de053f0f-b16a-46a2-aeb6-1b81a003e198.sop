@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S286_conversation_lifecycle_frontier_fields
+  + [current_frontier] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -967,7 +967,9 @@
   + [last_proof] is narrative coverage report stale check and update record refreshed after pre-live recipe reference checkpoint and audit
   + [completed_slice] is S285_conversation_frontier_lifecycle_boundary
   + [last_proof] is conversation_frontier_lifecycle_boundary_design.sop separates active current_frontier from run_lifecycle_frontier
-  + [next_recommended_slice] is S286_conversation_lifecycle_frontier_fields
+  + [completed_slice] is S286_conversation_lifecycle_frontier_fields
+  + [last_proof] is tests passed with 279 tests after orchestrator lifecycle updates moved to run_lifecycle_frontier and checkpoint gained end_run_lifecycle_frontier
+  + [next_recommended_slice] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

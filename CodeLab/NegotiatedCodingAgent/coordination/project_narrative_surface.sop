@@ -2486,3 +2486,11 @@
   + [proof_ref] is coordination/conversation_frontier_lifecycle_boundary_design.sop
   + [current_frontier] is S286_conversation_lifecycle_frontier_fields
   + [narrative_role] is conversation_memory and lifecycle_boundary update
+
+
+& [LongRunNarrativeUpdate S286_conversation_lifecycle_frontier_fields] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S286_conversation_lifecycle_frontier_fields
+  + [implemented_capability] is orchestrator writes run lifecycle milestones to run_lifecycle_frontier while preserving current_frontier for resumable work slices; long-run checkpoint reports end_run_lifecycle_frontier
+  + [proof_result] is tests passed with 279 tests
+  + [current_frontier] is S287_long_run_checkpoint_after_lifecycle_frontier_fields
+  + [narrative_role] is conversation_memory and checkpoint_boundary update
