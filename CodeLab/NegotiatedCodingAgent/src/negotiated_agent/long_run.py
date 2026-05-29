@@ -85,7 +85,7 @@ class LongRunCheckpoint:
 
 def run_harness(project_root: Path) -> LongRunCheckpoint:
     surface = ConversationSurface.load_active(project_root)
-    start_frontier = surface.first("current_frontier", "unknown") or "unknown"
+    start_frontier = checkpoint_start_frontier(surface)
     git_clean = _git_clean(project_root.parents[1])
     test = _run("test", ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(project_root / "scripts" / "test.ps1")], project_root)
     dry = _run(
@@ -152,6 +152,14 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         openai_health_result=openai_health,
         route_draft_result=route_draft,
     )
+
+
+def checkpoint_start_frontier(surface: ConversationSurface) -> str:
+    current = surface.first("current_frontier", "unknown") or "unknown"
+    next_slice = surface.first("next_recommended_slice", "") or ""
+    if current.startswith("run ") and next_slice:
+        return next_slice
+    return current
 
 
 def _run(name: str, command: list[str], cwd: Path) -> CommandResult:

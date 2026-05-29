@@ -47,7 +47,7 @@ from negotiated_agent.execution_gate import (
 )
 from negotiated_agent.execution_gate_cli import main as execution_gate_cli_main
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
-from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
+from negotiated_agent.long_run import CommandResult, LongRunCheckpoint, checkpoint_start_frontier
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.manager import ManagerDecision
@@ -4550,6 +4550,31 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertIn("non_gating_environment_state", sop)
         self.assertIn("route_draft_status] is passed", sop)
         self.assertIn("non_gating_configuration_draft", sop)
+
+    def test_checkpoint_start_frontier_prefers_next_slice_after_run_lifecycle_marker(self) -> None:
+        surface = ConversationSurface(
+            path=Path("conversation.sop"),
+            text="",
+            fields={
+                "current_frontier": ["run 20260529T201810Z completed and narrative updated with artifact manifest"],
+                "next_recommended_slice": ["S237_long_run_checkpoint_after_shaliach_self_negotiation"],
+            },
+        )
+        self.assertEqual(
+            checkpoint_start_frontier(surface),
+            "S237_long_run_checkpoint_after_shaliach_self_negotiation",
+        )
+
+    def test_checkpoint_start_frontier_keeps_explicit_work_frontier(self) -> None:
+        surface = ConversationSurface(
+            path=Path("conversation.sop"),
+            text="",
+            fields={
+                "current_frontier": ["S238_spec_audit_refresh_after_shaliach_self_negotiation"],
+                "next_recommended_slice": ["S239_next"],
+            },
+        )
+        self.assertEqual(checkpoint_start_frontier(surface), "S238_spec_audit_refresh_after_shaliach_self_negotiation")
 
 
 class NarrativeCoverageTests(unittest.TestCase):
