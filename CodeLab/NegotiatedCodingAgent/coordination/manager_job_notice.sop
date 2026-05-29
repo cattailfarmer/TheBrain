@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 27
+  + [job_notice_revision] is 28
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -45,7 +45,8 @@
     S20_rework_response_coordination |
     S21_mailbox_orchestrator_assignment |
     S22_mailbox_claim_conflict_resolution |
-    S23_role_model_assignment_profile
+    S23_role_model_assignment_profile |
+    S24_configurable_mailbox_recipients
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -376,11 +377,24 @@
 
 & [WorkSliceDetail S23_role_model_assignment_profile] is a post-S16 governance expansion slice
   + [slice_id] is S23_role_model_assignment_profile
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is materialize Manager Director Programmer Shaliach model assignment profile from model inventory and config
   + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
   + [proof_route] is generated role model profile showing current dry-run fallbacks and future vLLM route expectations
   + [completion_criteria] is role-to-model assignment is explicit even before local serving is installed
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S15_model_inventory_and_serving_probe
   + [known_risks] is hard-coding model names before actual local model inventory exists
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:10:00Z, proof_ref tests passed with 32 tests and coordination/role_model_profile.sop written, result_summary generated explicit role-to-model serving assignments from config and inventory fallback route
+  + [completed_work_review] is support_delta verified Manager Director Programmer and Shaliach routes are explicit before serving installation; requirement_delta configurable real provider and model installation remains future work
+
+& [WorkSliceDetail S24_configurable_mailbox_recipients] is a post-S16 governance expansion slice
+  + [slice_id] is S24_configurable_mailbox_recipients
+  + [slice_status] is open
+  + [scope] is replace hard-coded director_pool mailbox routing with configuration-backed coordination recipients
+  + [target_files] is src/negotiated_agent/**, agent.config.json, tests/**
+  + [proof_route] is tests showing orchestrator mailbox rework notices route to configured recipient UUID
+  + [completion_criteria] is response coordination recipients can be changed without editing orchestrator code
+  + [support_status] is prepared
+  + [dependency_set] is S21_mailbox_orchestrator_assignment
+  + [known_risks] is adding scheduler semantics when only recipient routing is needed

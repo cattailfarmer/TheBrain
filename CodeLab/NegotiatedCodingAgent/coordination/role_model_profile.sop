@@ -1,0 +1,40 @@
+& [RoleModelProfile] is the explicit role-to-model serving profile
+  + [recommended_route] is install_wsl2_then_vllm
+  + [assignment_count] is 5
+  + [authority_boundary] is routing_profile_snapshot_not_model_installation_proof
+
+  & [RoleModelAssignment shaliach] is the serving assignment for one agent role
+    + [role_key] is shaliach
+    + [agent_name] is Shaliach
+    + [configured_model] is llama3.1:8b
+    + [configured_provider] is ollama
+    + [active_route] is dry_run_until_serving_installed
+    + [readiness] is fallback
+  & [RoleModelAssignment manager] is the serving assignment for one agent role
+    + [role_key] is manager
+    + [agent_name] is Manager
+    + [configured_model] is llama3.1:8b
+    + [configured_provider] is ollama
+    + [active_route] is dry_run_until_serving_installed
+    + [readiness] is fallback
+  & [RoleModelAssignment director_1] is the serving assignment for one agent role
+    + [role_key] is director_1
+    + [agent_name] is SystemsDirector
+    + [configured_model] is qwen2.5-coder:7b
+    + [configured_provider] is ollama
+    + [active_route] is dry_run_until_serving_installed
+    + [readiness] is fallback
+  & [RoleModelAssignment director_2] is the serving assignment for one agent role
+    + [role_key] is director_2
+    + [agent_name] is FailureDirector
+    + [configured_model] is llama3.1:8b
+    + [configured_provider] is ollama
+    + [active_route] is dry_run_until_serving_installed
+    + [readiness] is fallback
+  & [RoleModelAssignment programmer_1] is the serving assignment for one agent role
+    + [role_key] is programmer_1
+    + [agent_name] is Programmer
+    + [configured_model] is qwen2.5-coder:7b
+    + [configured_provider] is ollama
+    + [active_route] is dry_run_until_serving_installed
+    + [readiness] is fallback

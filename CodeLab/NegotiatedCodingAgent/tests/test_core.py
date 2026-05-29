@@ -30,6 +30,7 @@ from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
+from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import create_initial_work_slice
 from negotiated_agent.writer import write_implementation
@@ -332,6 +333,38 @@ class ModelInventoryTests(unittest.TestCase):
         )
         self.assertEqual(inventory.recommended_route, "install_wsl2_then_vllm")
         self.assertEqual(role_route_profile(inventory)["programmer"], "dry_run_until_serving_installed")
+
+    def test_role_profile_uses_configured_agents_and_fallback_routes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            config_path = Path(temp) / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {"provider": "ollama"},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "large"},
+                            "manager": {"name": "Manager", "model": "large"},
+                            "directors": [{"name": "DirectorA", "model": "medium"}, {"name": "DirectorB", "model": "medium"}],
+                            "programmers": [{"name": "Programmer", "model": "small"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            inventory = ModelInventory(
+                gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+                ollama=ToolProbe("ollama", False, "not found"),
+                wsl=ToolProbe("wsl", False, "not installed"),
+                docker=ToolProbe("docker", False, "not found"),
+                openai_compatible=ToolProbe("openai_compatible", False, "unavailable"),
+                ollama_models=(),
+            )
+            assignments = build_role_model_assignments(load_config(config_path), inventory)
+            sop = assignments_to_sop(assignments, inventory.recommended_route)
+            self.assertIn("RoleModelProfile", sop)
+            self.assertIn("director_2", sop)
+            self.assertIn("dry_run_until_serving_installed", sop)
 
 
 class LongRunHarnessTests(unittest.TestCase):

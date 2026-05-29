@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S23_role_model_assignment_profile
+  + [current_frontier] is S24_configurable_mailbox_recipients
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -129,7 +129,8 @@
   + [completed_slice] is S20_rework_response_coordination
   + [completed_slice] is S21_mailbox_orchestrator_assignment
   + [completed_slice] is S22_mailbox_claim_conflict_resolution
-  + [ready_slice] is S23_role_model_assignment_profile
+  + [completed_slice] is S23_role_model_assignment_profile
+  + [ready_slice] is S24_configurable_mailbox_recipients
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
