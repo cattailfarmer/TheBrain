@@ -74,6 +74,19 @@ Defines code-level program flow:
 
 The coder only starts after this level exists.
 
+## Programmer Assignment Plan
+
+After the code-layer package is approved, the runtime writes `programmer_assignment_plan.sop`. This is a pre-execution planning artifact that maps approved work slices to configured Programmers.
+
+Current boundary:
+
+- assignment planning is implemented;
+- one initial work slice is executed;
+- parallel Programmer execution is not yet implemented;
+- merge review for multiple Programmer outputs is not yet implemented.
+
+This keeps the future swarm path explicit without pretending it already exists.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

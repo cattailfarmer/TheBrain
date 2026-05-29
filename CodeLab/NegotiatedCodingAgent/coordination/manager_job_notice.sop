@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 56
+  + [job_notice_revision] is 57
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -74,7 +74,8 @@
     S49_dry_run_director_stance_diversity |
     S50_director_disagreement_docs |
     S51_multi_programmer_slice_assignment_plan |
-    S52_programmer_assignment_docs
+    S52_programmer_assignment_docs |
+    S53_multi_slice_planning_scaffold
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -782,7 +783,7 @@
 
 & [WorkSliceDetail S52_programmer_assignment_docs] is a Programmer swarm slice
   + [slice_id] is S52_programmer_assignment_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document ProgrammerAssignmentPlan and its boundary from actual parallel execution
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -790,3 +791,16 @@
   + [support_status] is prepared
   + [dependency_set] is S51_multi_programmer_slice_assignment_plan
   + [known_risks] is implying a multi-Programmer swarm exists before merge/review protocol exists
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:00:00Z, proof_ref tests passed with 45 tests, result_summary documented ProgrammerAssignmentPlan and its boundary from parallel Programmer execution
+  + [completed_work_review] is support_delta verified assignment plan boundary is documented; requirement_delta multi-slice planning remains future work
+
+& [WorkSliceDetail S53_multi_slice_planning_scaffold] is a Programmer swarm slice
+  + [slice_id] is S53_multi_slice_planning_scaffold
+  + [slice_status] is open
+  + [scope] is add a deterministic scaffold for deriving multiple implementation work slices from code package sections
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing slice planning can create multiple planned slices without executing them
+  + [completion_criteria] is runtime can represent more than one code slice before multi-Programmer execution exists
+  + [support_status] is prepared
+  + [dependency_set] is S51_multi_programmer_slice_assignment_plan
+  + [known_risks] is splitting work mechanically without enough code package semantics

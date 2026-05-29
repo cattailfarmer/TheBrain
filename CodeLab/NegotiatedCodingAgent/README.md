@@ -61,6 +61,7 @@ Runs are written under `runs/<timestamp>/`:
 - `<layer>.shaliach_finding.sop`
 - `<layer>.shaliach_response.sop` when Shaliach requires a response
 - `<layer>.manager_review.sop`
+- `programmer_assignment_plan.sop`
 - `WS001_initial_implementation.work_slice.sop`
 - `WS001_initial_implementation.programmer_report.sop`
 - `WS001_initial_implementation.manager_review.sop`
