@@ -5,10 +5,16 @@ from pathlib import Path
 
 
 @dataclass(frozen=True)
+class RunManifestArtifactRef:
+    role: str
+    ref: str
+
+
+@dataclass(frozen=True)
 class RunManifestValidation:
     manifest_path: Path
     status: str
-    artifact_refs: tuple[str, ...]
+    artifact_refs: tuple[RunManifestArtifactRef, ...]
     missing_refs: tuple[str, ...]
 
     @property
@@ -23,8 +29,8 @@ class RunManifestValidation:
             f"  + [artifact_count] is {len(self.artifact_refs)}",
             "  + [authority_boundary] is file_existence_check_not_semantic_validation",
         ]
-        for ref in self.artifact_refs:
-            lines.append(f"  + [artifact_ref] is {ref}")
+        for artifact in self.artifact_refs:
+            lines.append(f"  + [artifact_ref {artifact.role}] is {artifact.ref}")
         for ref in self.missing_refs:
             lines.append(f"  + [missing_ref] is {ref}")
         return "\n".join(lines) + "\n"
@@ -33,8 +39,8 @@ class RunManifestValidation:
 def validate_run_manifest(manifest_path: Path) -> RunManifestValidation:
     text = manifest_path.read_text(encoding="utf-8")
     artifact_refs = tuple(_artifact_ref(line) for line in text.splitlines() if "[artifact_ref" in line)
-    artifact_refs = tuple(ref for ref in artifact_refs if ref)
-    missing = tuple(ref for ref in artifact_refs if not (manifest_path.parent / ref).exists())
+    artifact_refs = tuple(artifact for artifact in artifact_refs if artifact.ref)
+    missing = tuple(artifact.ref for artifact in artifact_refs if not (manifest_path.parent / artifact.ref).exists())
     return RunManifestValidation(
         manifest_path=manifest_path,
         status="valid" if not missing else "missing_artifacts",
@@ -43,8 +49,13 @@ def validate_run_manifest(manifest_path: Path) -> RunManifestValidation:
     )
 
 
-def _artifact_ref(line: str) -> str:
+def _artifact_ref(line: str) -> RunManifestArtifactRef:
     marker = "] is "
     if marker not in line:
-        return ""
-    return line.split(marker, 1)[1].strip()
+        return RunManifestArtifactRef(role="unknown", ref="")
+    header, ref = line.split(marker, 1)
+    role = "unknown"
+    role_marker = "[artifact_ref"
+    if role_marker in header:
+        role = header.split(role_marker, 1)[1].strip(" ]") or "unknown"
+    return RunManifestArtifactRef(role=role, ref=ref.strip())

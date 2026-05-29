@@ -5848,7 +5848,61 @@ class RunManifestTests(unittest.TestCase):
             )
             result = validate_run_manifest(manifest)
             self.assertFalse(result.ok)
+            self.assertEqual(tuple(artifact.role for artifact in result.artifact_refs), ("present", "missing"))
+            self.assertEqual(tuple(artifact.ref for artifact in result.artifact_refs), ("present.sop", "missing.sop"))
             self.assertEqual(result.missing_refs, ("missing.sop",))
+            self.assertIn("artifact_ref present] is present.sop", result.to_sop())
+            self.assertIn("missing_artifacts", result.to_sop())
+
+    def test_run_manifest_validation_preserves_shaliach_self_negotiation_role(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "application.shaliach_self_negotiation.sop").write_text(
+                "& [ShaliachSelfNegotiationRecord application.shaliach_self_negotiation] is resolved\n",
+                encoding="utf-8",
+            )
+            manifest = root / "run_manifest.sop"
+            manifest.write_text(
+                "\n".join(
+                    [
+                        "& [RunArtifactManifest test] is manifest",
+                        "  + [artifact_ref shaliach_self_negotiation] is application.shaliach_self_negotiation.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            result = validate_run_manifest(manifest)
+
+            self.assertTrue(result.ok)
+            self.assertEqual(result.artifact_refs[0].role, "shaliach_self_negotiation")
+            self.assertEqual(result.artifact_refs[0].ref, "application.shaliach_self_negotiation.sop")
+            self.assertIn(
+                "artifact_ref shaliach_self_negotiation] is application.shaliach_self_negotiation.sop",
+                result.to_sop(),
+            )
+
+    def test_run_manifest_validation_detects_missing_shaliach_self_negotiation_ref(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest = root / "run_manifest.sop"
+            manifest.write_text(
+                "\n".join(
+                    [
+                        "& [RunArtifactManifest test] is manifest",
+                        "  + [artifact_ref shaliach_self_negotiation] is application.shaliach_self_negotiation.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            result = validate_run_manifest(manifest)
+
+            self.assertFalse(result.ok)
+            self.assertEqual(result.artifact_refs[0].role, "shaliach_self_negotiation")
+            self.assertEqual(result.missing_refs, ("application.shaliach_self_negotiation.sop",))
             self.assertIn("missing_artifacts", result.to_sop())
 
 

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 141
+  + [job_notice_revision] is 142
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3506,7 +3506,7 @@
 
 & [WorkSliceDetail S255_manifest_shaliach_self_negotiation_role_validation] is a manifest validation implementation slice
   + [slice_id] is S255_manifest_shaliach_self_negotiation_role_validation
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is extend manifest validation around shaliach_self_negotiation artifact refs
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover manifest artifact role and missing ref behavior for self-negotiation artifacts
@@ -3514,3 +3514,16 @@
   + [support_status] is prepared
   + [dependency_set] is S254_manifest_shaliach_probe_validation_design
   + [known_risks] is treating artifact presence as semantic acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:32:00Z, proof_ref tests passed with 240 tests, result_summary run manifest validation now preserves artifact roles and detects missing shaliach_self_negotiation refs
+  + [completed_work_review] is support_delta verified artifact role and missing-ref behavior without semantic approval; requirement_delta next step is design manifest/checkpoint validation for cross-artifact probe evidence
+
+& [WorkSliceDetail S256_manifest_checkpoint_probe_validation_design] is a manifest validation design slice
+  + [slice_id] is S256_manifest_checkpoint_probe_validation_design
+  + [slice_status] is open
+  + [scope] is design manifest or checkpoint validation awareness for Shaliach cross-artifact probe evidence
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is design names probe evidence fields, expected status refs, and non-approval validation boundary
+  + [completion_criteria] is future validation can reason about checkpoint Shaliach probe evidence without conflating it with semantic correctness
+  + [support_status] is prepared
+  + [dependency_set] is S255_manifest_shaliach_self_negotiation_role_validation
+  + [known_risks] is making checkpoint proof validation brittle before live model serving exists

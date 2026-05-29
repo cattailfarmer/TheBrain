@@ -2193,3 +2193,11 @@
   + [proof_ref] is coordination/manifest_shaliach_probe_validation_design.sop
   + [current_frontier] is S255_manifest_shaliach_self_negotiation_role_validation
   + [narrative_role] is manifest_validation and design_arc update
+
+
+& [LongRunNarrativeUpdate S255_manifest_shaliach_self_negotiation_role_validation] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S255_manifest_shaliach_self_negotiation_role_validation
+  + [implemented_capability] is run manifest validation now preserves artifact roles and explicitly covers shaliach_self_negotiation refs
+  + [proof_result] is tests passed with 240 tests
+  + [current_frontier] is S256_manifest_checkpoint_probe_validation_design
+  + [narrative_role] is manifest_validation and shaliach_arc update
