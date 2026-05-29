@@ -2552,3 +2552,11 @@
   + [run_root] is runs\20260529T214903Z
   + [current_frontier] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
   + [narrative_role] is long_run_coordination and surface_hygiene update
+
+
+& [LongRunNarrativeUpdate S292_spec_audit_refresh_after_upsert_anchor_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
+  + [implemented_capability] is spec audit reflects anchored run_lifecycle_frontier placement and 279-test anchored lifecycle checkpoint proof
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [narrative_role] is specification_audit and narrative_memory update

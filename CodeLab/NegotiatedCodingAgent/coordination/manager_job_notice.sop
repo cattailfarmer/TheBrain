@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 178
+  + [job_notice_revision] is 179
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3987,7 +3987,7 @@
 
 & [WorkSliceDetail S292_spec_audit_refresh_after_upsert_anchor_checkpoint] is a specification audit slice
   + [slice_id] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after anchored lifecycle field checkpoint proof
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names anchored run_lifecycle_frontier placement and 279-test checkpoint proof
@@ -3995,3 +3995,16 @@
   + [support_status] is prepared
   + [dependency_set] is S291_long_run_checkpoint_after_upsert_anchor_fields
   + [known_risks] is audit overvaluing field order beyond readability and stale-check reliability
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T16:54:00Z, proof_ref spec_implementation_status.sop and tests passed with 279 tests, result_summary audit reflects anchored lifecycle field placement and checkpoint proof
+  + [completed_work_review] is support_delta verified audit treats field order as conversation readability and stale-check support rather than semantic approval; requirement_delta next step is refresh narrative coverage after anchored lifecycle audit
+
+& [WorkSliceDetail S293_narrative_coverage_after_upsert_anchor_checkpoint] is a narrative memory validation slice
+  + [slice_id] is S293_narrative_coverage_after_upsert_anchor_checkpoint
+  + [slice_status] is open
+  + [scope] is refresh narrative coverage and stale-check evidence after anchored lifecycle field checkpoint and audit
+  + [target_files] is coordination/**
+  + [proof_route] is narrative coverage report and stale-check prove latest run and S293 frontier are referenced
+  + [completion_criteria] is narrative memory remains current after anchored lifecycle field checkpoint proof
+  + [support_status] is prepared
+  + [dependency_set] is S292_spec_audit_refresh_after_upsert_anchor_checkpoint
+  + [known_risks] is repeatedly refreshing coverage without progressing toward live serving or semantic review
