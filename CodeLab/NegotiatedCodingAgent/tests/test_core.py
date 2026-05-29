@@ -12,6 +12,7 @@ from negotiated_agent.conversation import (
 from negotiated_agent.llm import LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.package import LayerPackage
+from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.slices import create_initial_work_slice
 from negotiated_agent.writer import write_implementation
 
@@ -236,6 +237,29 @@ class ConversationKernelTests(unittest.TestCase):
             self.assertEqual(surface.first("next_recommended_slice"), "S08")
             self.assertEqual(surface.fields["unresolved_item"], ["existing item", "new item"])
             self.assertEqual(surface.fields["last_proof"], ["existing proof", "new proof"])
+
+
+class ProtocolRegistryTests(unittest.TestCase):
+    def test_default_registry_activates_protocol_references(self) -> None:
+        registry = ProtocolRegistry.default()
+        activations = registry.activate(
+            {
+                "conversation_work_attribution": "reentry needs the active UUID surface",
+                "sjs": "layer packages need traceability",
+            }
+        )
+        self.assertEqual([activation.protocol.key for activation in activations], ["conversation_work_attribution", "sjs"])
+
+    def test_protocol_activation_sop_preserves_authority_boundary(self) -> None:
+        registry = ProtocolRegistry.default()
+        sop = activations_to_sop(
+            registry.activate({"project_narrative_surface": "frontier must survive compaction"}),
+            subject="NegotiatedCodingAgent",
+            framework_root=Path("C:/Project/ReasoningFramework"),
+        )
+        self.assertIn("ProtocolActivationSet", sop)
+        self.assertIn("protocol_reference_registry_not_full_sop_interpreter", sop)
+        self.assertIn("Project_Narrative_Surface.sop", sop)
 
 
 if __name__ == "__main__":

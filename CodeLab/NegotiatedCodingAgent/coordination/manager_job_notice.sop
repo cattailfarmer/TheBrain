@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 10
+  + [job_notice_revision] is 11
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -135,14 +135,16 @@
 
 & [WorkSliceDetail S09_protocol_registry] is a planned dependency slice
   + [slice_id] is S09_protocol_registry
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is represent loaded SOP protocol references, activation conditions, dispatch reasons, and uncertainty in CodeLab runtime state
   + [target_files] is src/negotiated_agent/**, agent.config.json, tests/**
   + [proof_route] is tests for protocol registration, activation filtering, and run artifact references
   + [completion_criteria] is a run can record which SOP protocols were active and why without claiming full interpretation
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S08_runtime_conversation_kernel
   + [known_risks] is confusing protocol references with executable SOP semantics
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:29:00Z, proof_ref tests passed with 15 tests, result_summary added negotiated_agent.protocols registry for SOP protocol references, activation reasons, authority boundary, and SOP activation output
+  + [completed_work_review] is support_delta verified protocol registry and activation output; requirement_delta orchestrator does not yet emit protocol activation artifacts during normal runs
 
 & [WorkSliceDetail S10_shaliach_faculty_runtime] is a planned dependency slice
   + [slice_id] is S10_shaliach_faculty_runtime
