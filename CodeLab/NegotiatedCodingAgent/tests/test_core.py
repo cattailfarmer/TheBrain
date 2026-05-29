@@ -11,7 +11,7 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
-from negotiated_agent.ledgers import negotiate_ledgers
+from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
 from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
@@ -491,6 +491,33 @@ class ShaliachRuntimeTests(unittest.TestCase):
         )
         self.assertEqual(finding.severity, "pause")
         self.assertTrue(finding.blocks_progress)
+
+    def test_shaliach_warns_on_present_but_thin_ledger_evidence(self) -> None:
+        ledgers = NegotiatedLedgers(
+            sjs={
+                "requirement": ["manager_settlement: preserve layer authority"],
+                "constraint": ["package_writer: scope boundary exists"],
+                "condition": ["manager_settlement: approval before descent"],
+                "risk": ["package_writer: generic risk"],
+                "form": ["package_writer: package form"],
+            },
+            data_design={
+                "data_subject": ["package_writer: flowchart"],
+                "identity": ["package_writer: layer key"],
+                "relation": ["package_writer: parent_package_ref"],
+                "transform": ["package_writer: proposals to package"],
+                "operator": ["package_writer: layer_negotiation"],
+                "lifecycle": ["manager_gate: pending to approved"],
+                "provenance": ["negotiation_log: source evidence"],
+            },
+        )
+        finding = review_layer_negotiation(
+            layer="application",
+            ledgers=ledgers,
+            protocol_activations=ProtocolRegistry.default().activate({"sjs": "traceability"}),
+        )
+        self.assertEqual(finding.finding, "thin_ledger_evidence")
+        self.assertEqual(finding.action, "request_rework")
 
 
 class NarrativeUpdateTests(unittest.TestCase):

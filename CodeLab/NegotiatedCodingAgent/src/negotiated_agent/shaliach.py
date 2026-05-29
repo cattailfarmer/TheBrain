@@ -103,6 +103,21 @@ def review_layer_negotiation(
             lower_reasoning="one or more required ledger fields were empty",
             perspective_set=("ProtocolCounsel", "EvidenceClerk", "FormKeeper", "ResponseCoordinator"),
         )
+    thin_fields = _thin_evidence_fields(ledgers)
+    if thin_fields:
+        return ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger,data_design_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason=f"ledger fields present but weakly supported by Director evidence: {', '.join(thin_fields)}",
+            required_response="add or regenerate Director proposal evidence for thin ledger fields",
+            higher_reasoning="present ledger form is not sufficient without support strength",
+            lower_reasoning="ledger fields were populated only by package or manager defaults",
+            perspective_set=("ProtocolCounsel", "EvidenceClerk", "FormKeeper", "ResponseCoordinator"),
+        )
     return ShaliachFinding(
         finding="no_protocol_gap_detected",
         severity="info",
@@ -118,3 +133,19 @@ def review_layer_negotiation(
 
 def _missing(ledger: dict[str, list[str]], keys: list[str]) -> list[str]:
     return [key for key in keys if not ledger.get(key)]
+
+
+def _thin_evidence_fields(ledgers: NegotiatedLedgers) -> list[str]:
+    thin: list[str] = []
+    for key in ["requirement", "constraint", "condition", "risk", "form"]:
+        if not _has_director_evidence(ledgers.sjs.get(key, [])):
+            thin.append(key)
+    for key in ["data_subject", "identity", "relation", "transform", "operator", "lifecycle", "provenance"]:
+        if not _has_director_evidence(ledgers.data_design.get(key, [])):
+            thin.append(key)
+    return thin
+
+
+def _has_director_evidence(values: list[str]) -> bool:
+    default_prefixes = ("package_writer:", "manager_settlement:", "manager_gate:", "negotiation_log:")
+    return any(":" in value and not value.startswith(default_prefixes) for value in values)
