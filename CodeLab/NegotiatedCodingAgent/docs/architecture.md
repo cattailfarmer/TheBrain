@@ -290,6 +290,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `apply_reviewed_narrative_append` is the first append-capable helper. It requires a ready result and an exact surface guard, appends only to the end of the narrative surface, and returns an applied or blocked `NarrativeAppendResult`.
 
+`coordination/reviewed_narrative_append_cli_design.sop` defines the operator wrapper boundary. The future CLI must parse review artifacts rather than accept freeform statuses, write result artifacts for blocked and applied outcomes, and require an explicit apply flag before mutation.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

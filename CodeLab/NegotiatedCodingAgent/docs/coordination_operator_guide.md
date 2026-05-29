@@ -374,6 +374,8 @@ The Manager and Shaliach review record types now exist in `negotiated_agent.narr
 
 The guarded append helper exists in code, but no shell wrapper loads review artifacts yet. Use it only through tests or a later CLI that validates Manager and Shaliach refs.
 
+The reviewed append CLI is designed in `coordination/reviewed_narrative_append_cli_design.sop`. Until the parser and wrapper slices land, do not use shell commands to apply narrative update records.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

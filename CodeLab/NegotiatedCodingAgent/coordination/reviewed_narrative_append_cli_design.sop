@@ -1,0 +1,67 @@
+& [ReviewedNarrativeAppendCliDesign] is the design contract for operator-facing reviewed narrative append
+  @ [created_at] 2026-05-30T05:45:00Z
+  @ [append_design] coordination/reviewed_narrative_append_design.sop
+  @ [append_helper] src/negotiated_agent/narrative_append.py
+  @ [narrative_surface] coordination/project_narrative_surface.sop
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is reviewed_append_cli_not_freeform_review
+  + [primary_goal] is load reviewed append evidence artifacts, build a result, and optionally apply append under an exact surface guard
+  + [non_goal] is accepting ad hoc approval statuses from CLI flags
+  + [non_goal] is generating Manager or Shaliach review evidence
+  + [non_goal] is editing existing narrative entries
+  + [non_goal] is advancing the work frontier
+
+& [CliInputs] is the explicit artifact set the CLI must load
+  + [required_ref] is NarrativeCoverageUpdateRecord artifact
+  + [required_ref] is ManagerNarrativeAppendApproval artifact
+  + [required_ref] is ShaliachNarrativeAppendClearance artifact
+  + [required_ref] is project narrative surface
+  + [required_value] is result_id
+  + [required_value] is expected_surface_guard unless dry-run guard discovery is requested
+  + [optional_ref] is result_out path
+  + [authority_boundary] is artifact_loading_not_status_forgery
+  = must: parse records from SOP artifacts rather than taking approval statuses as freeform CLI flags
+  = must: reject output collisions for result artifacts
+  = must: write a result artifact for both ready/applied and blocked outcomes
+  = must: require an explicit apply flag before mutating the narrative surface
+
+& [CliModes] is the safe operator surface
+  + [mode] is plan_only
+  + [mode] is apply_reviewed_append
+  + [mode] is guard_discovery
+  + [authority_boundary] is plan_mode_not_mutation
+  = must: plan_only builds and writes NarrativeAppendResult without touching the narrative surface
+  = must: apply_reviewed_append calls the guarded helper and writes the returned result
+  = must: guard_discovery prints or writes the current narrative surface guard without appending
+
+& [ParserRequirements] is the minimal SOP parsing boundary
+  + [record] is NarrativeCoverageUpdateRecord
+  + [record] is ManagerNarrativeAppendApproval
+  + [record] is ShaliachNarrativeAppendClearance
+  + [authority_boundary] is sop_parser_not_semantic_verifier
+  = must: recover ids status fields refs counts and list fields needed by the helper
+  = must: reject missing headers
+  = must: preserve unknown findings and risks as strings
+
+& [ResultArtifactRules] is how CLI output remains auditable
+  + [default_out] is coordination/narrative_append_result.sop
+  + [collision_rule] is reject_existing_result_artifact
+  + [blocked_outcome] is written_without_mutation
+  + [applied_outcome] is written_after_append
+  + [authority_boundary] is result_artifact_not_frontier_advancement
+  = must: include pre and post append guards
+  = must: include Manager and Shaliach artifact refs
+  = must: include blocked reasons for every rejection
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is CLI plan mode writes ready result without narrative mutation
+  + [test_case] is CLI apply mode appends only when loaded artifacts allow append and guard matches
+  + [test_case] is CLI apply mode writes blocked result and preserves file when guard is stale
+  + [test_case] is CLI rejects result output collision
+  + [test_case] is CLI rejects malformed or missing review artifact headers
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add SOP parsers for update record Manager approval and Shaliach clearance
+  + [slice_2] is add reviewed append CLI plan mode
+  + [slice_3] is add reviewed append CLI apply mode and wrapper

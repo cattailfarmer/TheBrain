@@ -194,6 +194,8 @@ The same module now includes `NarrativeAppendResult` and a pure `build_narrative
 
 `apply_reviewed_narrative_append` adds the guarded helper for actual append-only narrative writes. It appends reviewed update entries only when the result is ready and the narrative surface guard still matches; blocked cases preserve the file.
 
+`coordination/reviewed_narrative_append_cli_design.sop` defines the future operator CLI. It must load update, Manager approval, and Shaliach clearance artifacts; plan mode remains non-mutating, and apply mode must write applied or blocked results.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

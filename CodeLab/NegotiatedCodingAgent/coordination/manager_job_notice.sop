@@ -2856,7 +2856,7 @@
 
 & [WorkSliceDetail S205_reviewed_narrative_append_cli_design] is a coordination runtime design slice
   + [slice_id] is S205_reviewed_narrative_append_cli_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design operator CLI for reviewed narrative append artifact loading and guarded apply
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design names update record loader Manager approval loader Shaliach clearance loader surface guard result artifact and collision rules
@@ -2864,3 +2864,16 @@
   + [support_status] is prepared
   + [dependency_set] is S204_reviewed_narrative_append_helper
   + [known_risks] is CLI taking freeform statuses instead of loading signed evidence records
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T05:45:00Z, proof_ref reviewed_narrative_append_cli_design.sop docs updated, result_summary designed reviewed append CLI artifact loading and result persistence boundary
+  + [completed_work_review] is support_delta verified future CLI must load SOP artifacts and require explicit apply before mutation; requirement_delta next step is add SOP parsers for narrative append artifacts
+
+& [WorkSliceDetail S206_narrative_append_artifact_parsers] is a coordination runtime implementation slice
+  + [slice_id] is S206_narrative_append_artifact_parsers
+  + [slice_status] is open
+  + [scope] is add SOP parsers for NarrativeCoverageUpdateRecord Manager approval and Shaliach clearance
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover parsed fields list fields missing header rejection and boundary preservation
+  + [completion_criteria] is reviewed append CLI can load exact review evidence artifacts in a later slice
+  + [support_status] is prepared
+  + [dependency_set] is S205_reviewed_narrative_append_cli_design
+  + [known_risks] is parser overclaiming validation beyond SOP field extraction
