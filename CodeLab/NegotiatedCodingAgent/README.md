@@ -53,3 +53,8 @@ The generated implementation is intentionally conservative: the coder writes fil
 ## Design
 
 See `docs/architecture.md`.
+
+## Specification
+
+The hierarchical manager/council/worker architecture is captured in `specifications/Hierarchical_Agent_Swarm.sop`.
+The original dictated intent is preserved separately in `specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop`.

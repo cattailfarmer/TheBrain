@@ -1,0 +1,25 @@
+& [DictatedHierarchicalAgentSwarmSource] is the preserved user intent for the next architecture of NegotiatedCodingAgent
+  @ [date] 2026-05-29
+  @ [source] user conversation in current Codex thread
+
+  + [project_root] is C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent
+  + [objective] is to build a local-LLM coding-agent system with strong rails before implementation
+
+  ! [user_intent] is preserved
+    @ [quote] "I want to have a strong model as an overseer/manager, then a couple or a few medium-weight models for negotiating project flow, then a small swarm of lightweight models to implement code."
+    @ [quote] "I want the core agent system to run 2 or more LLMs around the objective as they negotiate a program flowchart first at a higher scope, and over iterative passes of layered flowchart negotiations reach the code scope of the flowchart, and then begin programming."
+    @ [quote] "I would like the flowchart passes to be 4 levels, Application-level scope, Subsystem-level scope, Component-level scope, then Code-level scope, and then write the actual code once the program-level scope flowchart is established inside a component inside a subsystem inside the application."
+    @ [quote] "I'd like this written up as a specification so we have strong rails to move forward on."
+    @ [quote] "then we need to tie in to the Specification-Justification-Solution Data-Driven Design protocols for how the system negotiates the objectives, conditions, failures, forms, etc."
+    @ [quote] "we should make a persistent Observer as the SOP-observant copilot to the whole system, present at every level."
+    @ [quote] "I need stronger terms for the levels. Let's make the \"Manager/Overseer\" simply Manager, then the flowcontrol medium weight agents are Directors, and the programming agents are just programmers."
+    @ [quote] "so the observer will be an adivsor/controller at every level, Manager, Director, and Programmer."
+    @ [quote] "let's go with Shaliach, distinct from the band name, but holding the strong meaning."
+    @ [quote] "I'd like the Shaliach system to be it's own higher and lower reasoning system that negotiates within itself to refine and optimize it's intentions, purpose, and coordinate responses from a diversity of perspective."
+
+  + [hosting_preference] is local LLM hosting on the user's RTX 5090 workstation
+  + [hosting_direction] is WSL2 Linux with vLLM as the likely primary swarm backend, while preserving Ollama as a lower-friction fallback
+  + [disk_constraint] is one terabyte local drive, so model storage must avoid unnecessary duplicate caches
+
+  + [source_status] is preserved_source
+  - never: overwrite this source file with refined or implementation-ready specification material

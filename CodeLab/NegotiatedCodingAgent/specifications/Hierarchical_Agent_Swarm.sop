@@ -1,0 +1,500 @@
+& [HierarchicalAgentSwarmSpecification] is the working canonical specification for a Shaliach-advised, Manager-governed, Director-negotiated, Programmer-implemented local coding agent
+  @ [source_document] specifications/source/2026-05-29_hierarchical_agent_swarm_source.sop
+  @ [project_root] C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent
+  @ [sop_interpretation] C:\Project\ReasoningFramework\platform\source\SOP_Markdown.md
+  @ [sjs_protocol] C:\Project\ReasoningFramework\platform\refinement\Specification_Justification_Solution.sop
+  @ [data_driven_design_protocol] C:\Project\ReasoningFramework\platform\refinement\Data_Driven_Design.sop
+
+  + [source_snapshot_uuid] is 7f0d2d53-b8dc-4cb3-b7b9-8a7e35d5d82c
+  + [signature_protocol_uuid] is ad10f10f-d506-48ef-a805-f8b0a133766c
+  + [processing_state] is working_specification_unsigned
+  + [authority_scope] is architecture, orchestration, model tiering, flowchart negotiation, implementation slicing, programmer review, and local model hosting for NegotiatedCodingAgent
+  + [non_authority_scope] is final security sandbox policy, final model inventory, production deployment, billing, cloud inference, and unrelated TheBrain projects
+  + [resolution] is [AcceptedArchitecture], [ImplementationFrontier], [OpenQuestion], or [Blocked]
+
+  ? [use_when: modifying NegotiatedCodingAgent architecture, configuration, prompts, provider routing, work slicing, programmer orchestration, or flowchart gates]
+    = must: preserve this specification as the active architecture rail
+    = must: preserve source_document as provenance
+    = must: keep implementation changes traceable to one or more requirements in this specification
+    = must: apply [SJSNegotiationProtocol] and [DataDrivenNegotiationProtocol] when objectives, conditions, failures, forms, data identity, transforms, operators, or lifecycle affect negotiation
+
+  - never: collapse Shaliach, Manager, Director, and Programmer responsibilities into one undifferentiated agent role
+  - never: allow Programmers to expand scope beyond assigned implementation slices
+  - never: begin code implementation before application, subsystem, component, and code flowcharts are settled or explicitly waived by the manager
+
+## Core Objective
+
+& [CoreObjective] is the product-level goal
+  + [system] is a local-LLM coding-agent system
+  + [operating_pattern] is Shaliach-advised, Manager-governed, Director-negotiated, Programmer-implemented
+  + [primary_output] is source code created from a nested flowchart chain
+  + [secondary_output] is auditable negotiation, decisions, work slices, implementation evidence, and review feedback
+
+  = must: run two or more LLMs around the objective before programming begins
+  = must: negotiate flowcharts in four layers before implementation
+  = must: keep a persistent Shaliach present as advisor/controller across Manager, Director, and Programmer levels
+  = must: use a strong Manager model for objective integrity, layer approval, work slicing, and final review
+  = must: use a small group of medium-weight Directors to negotiate project flow
+  = must: use lightweight Programmers to implement bounded code slices
+  = must: support model diversity as a first-class design goal rather than treating prompt roles on one model as sufficient diversity
+  = must: negotiate objectives, conditions, failures, forms, data subjects, transforms, and solution state through structured artifacts rather than unbounded chat
+
+## Agent Tiers
+
+& [ShaliachTier] is the persistent protocol counsel and enforcement tier
+  + [agent_name] is Shaliach
+  + [name_origin] is selected as distinct from Schaliach while preserving the strong meaning of delegated agency
+  + [model_weight] is medium_or_strong depending on available local models and run risk
+  + [cardinality] is exactly one persistent Shaliach system per run
+  + [responsibility] is SOP protocol observance, lineage watch, boundary watch, SJS and DataDrivenDesign completeness, uncertainty preservation, artifact form discipline, and escalation control
+  + [input] is user objective, source documents, active run state, Manager decisions, Director proposals, Programmer outputs, layer packages, ledgers, failure records, and open questions
+  + [output] is observation notes, protocol compliance findings, missing-ledger warnings, scope-drift warnings, uncertainty preservation notices, pause signals, and escalation recommendations
+  + [internal_system] is [ShaliachInternalReasoningSystem]
+
+  ? [use_when: any Manager, Director, Programmer, package, decision, implementation slice, review, or acceptance event is active]
+    = must: activate [ShaliachTier]
+
+  = must: be present at every Manager, Director, and Programmer level
+  = must: negotiate internally before issuing consequential warnings, pause signals, escalation recommendations, or rework orders
+  = must: advise each role on SOP compliance without replacing that role's responsibility
+  = must: control protocol gates by warning, pausing, or escalating when SJS, DataDrivenDesign, lineage, uncertainty, or artifact-form requirements are violated
+  = must: inspect whether SJSNegotiationProtocol and DataDrivenNegotiationProtocol obligations are being met
+  = must: warn when objectives, conditions, failures, forms, data subjects, transforms, operators, provenance, or open questions are missing or blurred
+  = must: preserve uncertainty and open questions instead of allowing false closure
+  = must: produce Shaliach notes for each layer package, work-slicing decision, Programmer output, and Manager review
+  - never: implement code as a Programmer
+  - never: negotiate flow as a Director unless explicitly assigned a separate Director role
+  - never: make final acceptance decisions as Manager
+  - never: silently repair protocol gaps without recording the observation
+
+& [ShaliachInternalReasoningSystem] is the Shaliach's higher/lower internal negotiation system for refining intent, purpose, and response coordination
+  + [higher_reasoning] is the Shaliach's protocol-purpose, authority, lineage, and objective-integrity reasoning pass
+  + [lower_reasoning] is the Shaliach's concrete artifact, field, ledger, condition, failure, and form-inspection pass
+  + [internal_perspective] is one specialized viewpoint participating in Shaliach self-negotiation
+  + [internal_negotiation] is the structured exchange between higher_reasoning, lower_reasoning, and internal_perspectives before Shaliach output
+  + [intention_refinement] is the pass that clarifies what the Shaliach is trying to protect or enforce in the current context
+  + [purpose_optimization] is the pass that selects the least intrusive intervention that preserves protocol integrity
+  + [coordinated_response] is the final Shaliach output after internal negotiation
+  + [resolution] is advisory_note, warning, pause_signal, escalation_recommendation, rework_order, no_finding, or uncertainty
+
+  ? [use_when: Shaliach output may affect Manager approval, Director negotiation, Programmer implementation, layer descent, artifact authority, or acceptance]
+    = must: activate [ShaliachInternalReasoningSystem]
+
+  = must: run higher_reasoning and lower_reasoning before consequential Shaliach output
+  = must: let higher_reasoning test purpose, authority, lineage, and objective integrity
+  = must: let lower_reasoning inspect concrete ledgers, flowcharts, forms, fields, conditions, failures, evidence, and outputs
+  = must: negotiate between higher_reasoning and lower_reasoning when they disagree
+  = must: refine intention before choosing enforcement strength
+  = must: optimize purpose toward the least intrusive sufficient intervention
+  = must: preserve internal disagreement when it affects confidence or escalation
+  = must: emit uncertainty rather than forcing a clean Shaliach finding when internal negotiation remains unresolved
+  - never: issue a blocking Shaliach action from only one internal perspective unless time, safety, or corruption risk requires immediate hold
+  - never: let internal negotiation become delay when a simple no-finding or advisory note is sufficient
+
+& [ShaliachInternalPerspectives] is the default diversity set used by Shaliach internal negotiation
+  + [ProtocolCounsel] is the perspective that interprets SOP, SJS, DataDrivenDesign, and local specification obligations
+  + [BoundaryMarshal] is the perspective that detects scope drift, false identity, hidden assumptions, and authority overreach
+  + [EvidenceClerk] is the perspective that checks lineage, claims, support, provenance, and missing citations
+  + [FailureExaminer] is the perspective that identifies failure modes, retry conditions, dead ends, and recovery obligations
+  + [FormKeeper] is the perspective that checks whether artifact shape, serialization, and minimum fields fit the intended reader and purpose
+  + [ResponseCoordinator] is the perspective that composes the final Shaliach note, warning, pause signal, or escalation recommendation
+
+  = must: activate only the internal perspectives relevant to the active Shaliach question
+  = must: include ProtocolCounsel for protocol compliance questions
+  = must: include BoundaryMarshal when scope, role, identity, or authority is uncertain
+  = must: include EvidenceClerk when claims, approvals, or acceptance depend on support
+  = must: include FailureExaminer when failures, blockers, retries, or dead ends affect next action
+  = must: include FormKeeper when package, ledger, report, review, or log shape affects usefulness
+  = must: let ResponseCoordinator produce the final coordinated_response after other active perspectives report
+  - never: activate every internal perspective by default when a narrower Shaliach pass is sufficient
+
+& [ShaliachResponseCoordination] is the output control protocol for Shaliach internal findings
+  + [finding] is the concrete issue, absence of issue, uncertainty, or protocol risk found by internal negotiation
+  + [severity] is info, advisory, warning, pause, blocking, or escalation
+  + [target_role] is Manager, Director, Programmer, Shaliach, or user
+  + [target_artifact] is layer_package, flowchart, sjs_ledger, data_design_ledger, work_slice, programmer_output, manager_review, run_log, or solution_record
+  + [action] is accept, warn, pause, request_rework, escalate, defer, or no_action
+  + [confidence] is accepted, high, moderate, low, uncertain, or conflicted
+
+  = must: choose severity from evidence, risk, reversibility, and protocol consequence
+  = must: target the role or artifact that can repair the issue
+  = must: distinguish advisory notes from enforcement actions
+  = must: include reason and required_response for warnings, pauses, blocking findings, and escalations
+  = must: preserve confidence and internal disagreement when they affect the action
+  - never: escalate when warning or local rework is sufficient
+  - never: use advisory language for a finding that must block implementation authority
+
+& [ManagerTier] is the strong Manager tier
+  + [agent_name] is Manager
+  + [model_weight] is strong
+  + [cardinality] is exactly one active manager per run unless a future specification defines manager handoff
+  + [responsibility] is objective integrity, scope boundary, layer transition approval, conflict arbitration, work slicing, implementation review, and final acceptance
+  + [input] is user objective, prior run state, all settled flowcharts, Director disagreements, Programmer reports, Shaliach notes, test evidence, and open questions
+  + [output] is layer instructions, approval or rejection decisions, work slices, review directives, and final run verdict
+
+  = must: preserve the user's objective across every layer
+  = must: require SJS and DataDrivenDesign ledgers before approving layer transition when the layer affects implementation authority
+  = must: approve or reject each layer transition
+  = must: reject flowchart convergence that hides unresolved requirements, risk, or missing boundaries
+  = must: create implementation slices only after code-level flowchart settlement
+  = must: review Programmer outputs against the assigned slice and the settled flowchart chain
+  = should: delegate detailed exploration to Directors and Programmers rather than doing all work directly
+  = should: treat Shaliach pause signals as blocking until accepted, rejected with justification, or routed to rework
+
+& [DirectorTier] is the medium-model flow-control tier
+  + [model_weight] is medium
+  + [cardinality] is two to four active Directors per run
+  + [responsibility] is flowchart proposal, critique, boundary formation, interface design, risk discovery, and convergence support
+  + [input] is user objective, Manager instruction, parent flowchart, prior Director proposals, and relevant constraints
+  + [output] is layer-specific flowchart proposals, critiques, preserved disagreements, and convergence candidates
+
+  = must: negotiate each flowchart layer before Manager approval
+  = must: emit structured SJS proposals for requirements, constraints, assumptions, non_goals, risks, failure_modes, variants, acceptance_criteria, and verification_plan
+  = must: emit structured DataDrivenDesign proposals for data_subject, identity, hierarchy, relations, transforms, operators, lifecycle, provenance, and decision_surface when relevant
+  = must: preserve distinct model perspectives when possible through different model families, sizes, or training biases
+  = must: keep each proposal within the active layer boundary
+  = must: surface disagreements as explicit open questions or risk notes
+  = should: include at least one systems-mapping perspective and one failure-analysis perspective
+
+& [ProgrammerTier] is the lightweight programming tier
+  + [model_weight] is light
+  + [cardinality] is three to twelve available Programmers, with active count bounded by local hardware and task size
+  + [responsibility] is implementing small code slices, tests, fixtures, documentation, refactors, and repair tasks
+  + [input] is one assigned work slice, relevant code-level flowchart section, permitted file set, local coding conventions, and acceptance checks
+  + [output] is patch, changed file list, test evidence, blocker report, or completion report
+
+  = must: operate only inside assigned slice boundaries
+  = must: implement from assigned [WorkSlice] plus governing [CodeLayerPackage], not from broad objective text alone
+  = must: report blockers instead of inventing missing authority
+  = must: produce implementation evidence suitable for Manager review
+  = must: keep local changes small enough for reliable review
+  = should: specialize Programmer roles by implementation surface such as storage, interface, tests, docs, integration, and cleanup
+
+## Flowchart Layers
+
+& [FlowchartLayerSystem] is the required four-layer descent from objective to code
+  + [layer_order] is application, subsystem, component, code
+  + [settled_flowchart] is a manager-approved flowchart for one layer
+  + [layer_package] is the full structured output for one layer containing flowchart, SJS ledger, data design ledger, justification, and open questions
+  + [parent_flowchart] is the nearest broader settled flowchart
+  + [child_flowchart] is the narrower flowchart derived from parent_flowchart
+
+  = must: process layers in layer_order
+  = must: produce [LayerNegotiationPackage] for each layer
+  = must: preserve parent-child lineage between flowcharts
+  = must: keep broader-layer decisions visible to narrower-layer passes
+  = must: allow the manager to request another negotiation round when a layer is unstable
+  = must: stop descent when the active layer has unresolved blockers that would make the next layer dishonest
+
+& [ApplicationLayer] is the whole-product flowchart layer
+  + [scope] is users, entry points, major capabilities, external dependencies, persistence boundaries, safety constraints, and application-level failure states
+  = must: define the whole application boundary before subsystem decomposition
+  = must: identify application-level data subjects, trust boundaries, lifecycle states, and failure modes before subsystem decomposition
+  - never: define code files, functions, or implementation details except as constraints or examples
+
+& [SubsystemLayer] is the major internal-system flowchart layer
+  + [scope] is subsystem boundaries, ownership, interfaces, data movement, state ownership, and cross-subsystem dependencies
+  = must: derive subsystems from the settled application flowchart
+  = must: preserve the reason each subsystem exists
+  = must: identify data ownership, authoritative stores, projections, cross-subsystem transforms, and synchronization responsibilities
+  - never: split into components before subsystem responsibilities are stable
+
+& [ComponentLayer] is the module/component flowchart layer
+  + [scope] is components within one or more selected subsystems, component contracts, inputs, outputs, state ownership, and local failure behavior
+  = must: derive components from the settled subsystem flowchart
+  = must: identify component contracts before code-level flowcharting
+  = must: identify component-level operator contracts, input_shape, output_shape, precondition, postcondition, and error surfaces
+  - never: assign Programmer slices before component boundaries are stable
+
+& [CodeLayer] is the program-level code flowchart layer
+  + [scope] is files, public functions, classes, data structures, control flow, tests, fixtures, and exact implementation slices
+  = must: derive code flow from settled component flowcharts
+  = must: produce enough detail for Programmers to implement without expanding scope
+  = must: include test and verification flow
+  = must: produce manager-reviewable work slices
+  = must: produce data-derived module boundaries, service boundaries, storage shapes, query shapes, and implementation slices
+
+## SJS And Data Design Negotiation
+
+& [LayerNegotiationPackage] is the durable output package for one negotiated flowchart layer
+  + [layer] is application, subsystem, component, or code
+  + [parent_package_ref] is the preceding broader layer package when one exists
+  + [flowchart] is the settled Markdown or SOP flowchart for the active layer
+  + [sjs_ledger] is [SJSLedger]
+  + [data_design_ledger] is [DataDesignLedger]
+  + [justification_graph] is [LayerJustificationGraph]
+  + [open_questions] is unresolved material preserved for manager decision or future negotiation
+  + [failure_ledger] is [FailureModeLedger]
+  + [shaliach_notes] is [ShaliachNoteSet]
+  + [quality_gate] is the manager acceptance check for the layer
+  + [lineage] is the relation from objective or parent_package_ref to this package
+
+  = must: preserve lineage from parent package and objective
+  = must: keep flowchart, sjs_ledger, data_design_ledger, justification_graph, and failure_ledger inspectably separate
+  = must: include Shaliach notes or an explicit no-finding Shaliach note
+  = must: treat open_questions as blocking when they affect correctness, data identity, or implementation authority
+  = must: allow non-blocking open_questions only when manager records why they do not block descent
+
+& [SJSNegotiationProtocol] is the use of Specification-Justification-Solution during agent negotiation
+  + [active_subject] is the layer, subsystem, component, slice, failure, or code path being negotiated
+  + [requirements] is the atomic obligation set extracted from the objective and parent layer
+  + [constraints] is the surviving limits, invariants, prohibitions, and environmental boundaries
+  + [interfaces] is neighboring exchange surfaces and dependencies
+  + [dependencies] is upstream, downstream, tooling, data, environment, or sequencing relations
+  + [assumptions] is provisional claim set used before full support exists
+  + [non_goals] is adjacent material excluded from the active subject
+  + [risks] is plausible failure, ambiguity, cost, consequence, or coordination concern
+  + [failure_modes] is ways the specification, layer transition, work slice, or implementation can break
+  + [roles] is Shaliach, Manager, Director, Programmer, user, system, provider, or external actor role relevant to the subject
+  + [variants] is legitimate alternate operating forms or implementation modes
+  + [acceptance_criteria] is concrete standard qualifying completion
+  + [verification_plan] is proof path for acceptance criteria
+  + [tradeoffs] is preserved tension between valid choices
+  + [decision_trace] is the stepwise record of claims, support, revisions, and reroutes
+
+  ? [use_when: any layer output may guide implementation, work slicing, provider setup, model routing, or acceptance]
+    = must: activate [SJSNegotiationProtocol]
+
+  = must: extract requirements, constraints, interfaces, dependencies, assumptions, non_goals, risks, failure_modes, roles, variants, acceptance_criteria, verification_plan, and tradeoffs for each layer package
+  = must: preserve decision_trace for Director disagreement, Manager approval, rejection, or reroute
+  = must: connect Manager decisions to claims and support through [LayerJustificationGraph]
+  = must: record dead_end and retry_condition when a negotiation path is rejected
+  = must: route unstable layer material to rework instead of letting it silently shape implementation
+  - never: let a flowchart node stand in for a requirement unless its obligation and acceptance check are explicit
+  - never: approve a layer based only on consensus wording without justification support
+  - never: hide assumptions inside requirements
+
+& [SJSLedger] is the structured SJS output for a layer, slice, or solution state
+  + [requirement] is one atomic obligation
+  + [constraint] is one invariant, limit, or prohibition
+  + [condition] is an activation, branch, precondition, postcondition, acceptance, invalidation, or retry condition
+  + [assumption] is one provisional claim
+  + [risk] is one plausible concern
+  + [failure_mode] is one named break path
+  + [interface] is one exchange surface
+  + [dependency] is one blocking or required relation
+  + [acceptance_criterion] is one concrete done condition
+  + [verification_step] is one proof action
+
+  = must: give each durable item a stable local identifier within the package
+  = must: preserve source or parent lineage for every durable item
+  = must: classify each item as accepted, deferred, rejected, open, or blocked
+
+& [DataDrivenNegotiationProtocol] is the use of Data-Driven Design during agent negotiation
+  + [data_subject] is domain entity, relation, event, state, transform, artifact, provider, model, prompt, flowchart, work_slice, run_log, or solution record being modeled
+  + [natural_key] is a domain-meaningful identity for a data subject
+  + [surrogate_key] is generated technical identity used when natural identity is insufficient
+  + [conceptual_model] is semantic model of subjects, relationships, roles, events, and invariants
+  + [logical_model] is formal data model of keys, relations, constraints, derivations, and queryable shapes
+  + [physical_model] is storage, index, cache, file layout, server, or runtime representation
+  + [essential_state] is durable domain state required for the system to remain itself
+  + [essential_logic] is declarative derivation, validation, invariant, and rule material over essential_state
+  + [accidental_state_control] is replaceable machinery for scheduling, cache, UI convenience, batching, or provider runtime
+  + [data_hierarchy] is parent-child, containment, or decomposition structure
+  + [data_relation] is reference, dependency, lineage, ordering, derivation, routing, or constraint relation
+  + [transform] is named conversion from one shape, state, or relation set into another
+  + [operator] is reusable bounded action over data subjects or relations
+  + [projection] is derived data shape created for query, UI, export, analysis, or performance
+  + [transition_model] is valid event, action, state, and lifecycle movement
+  + [provenance_record] is source, authorship, derivation, version, quality, and trust evidence
+  + [decision_surface] is code, UI, workflow, validation, and persistence choices implied by the data design
+
+  ? [use_when: negotiation touches objective structure, conditions, failures, forms, state, persistence, logs, provider routing, model tiers, work slices, transforms, or implementation boundaries]
+    = must: activate [DataDrivenNegotiationProtocol]
+
+  = must: identify natural identity before technical identifiers
+  = must: separate conceptual_model, logical_model, and physical_model before implementation decisions harden
+  = must: separate essential_state, essential_logic, and accidental_state_control for agent runs, flowcharts, work slices, and solution records
+  = must: define data_subjects before assigning operations
+  = must: define transforms and operators as named concepts before coding them
+  = must: preserve provenance_record for generated flowcharts, work slices, Programmer outputs, reviews, Shaliach notes, and accepted solutions
+  = must: derive module_boundary and service_boundary from stable data and transform boundaries
+  - never: choose storage, file layout, or module structure before data identity and relations are understood
+  - never: hide domain transforms inside unnamed procedural code
+  - never: treat model output as authoritative data without provenance and review state
+
+& [DataDesignLedger] is the structured DataDrivenDesign output for a layer, slice, or solution state
+  + [data_subject_record] is one data subject with identity and authority
+  + [identity_record] is candidate key, natural key, surrogate key, namespace, stability, and authority
+  + [relation_record] is containment, reference, dependency, ordering, lineage, or derivation relation
+  + [state_record] is essential state, lifecycle state, transition, guard, and effect
+  + [transform_record] is input_shape, output_shape, precondition, postcondition, transform_order, and trace requirement
+  + [operator_record] is callable action contract over data subjects
+  + [projection_record] is derived view, freshness_rule, recompute_rule, and lineage_rule
+  + [decision_surface_record] is implementation, storage, UI, workflow, validation, or provider decision implied by the ledger
+
+  = must: give each durable data design item a stable local identifier within the package
+  = must: preserve lineage to objective, parent package, source document, Shaliach note, or Programmer output
+  = must: mark unresolved identity, relation, transform, or lifecycle as open or blocked
+
+& [LayerJustificationGraph] is the support graph for negotiated claims and manager decisions
+  + [claim] is a requirement, data design item, layer transition, work slice, implementation choice, or acceptance decision
+  + [support] is source text, parent package, Director proposal, counterargument, test result, observed behavior, Shaliach note, or Manager judgment
+  + [support_type] is observation, deduction, induction, abduction, test, constraint, contradiction, or tradeoff
+  + [confidence] is accepted, high, moderate, low, uncertain, contradicted, or blocked
+  + [invalidation_condition] is the condition that forces revision
+
+  = must: connect consequential claims to support
+  = must: preserve counterargument when a decision has surviving alternatives
+  = must: identify invalidation_condition for layer approvals, work slices, and accepted implementations
+
+& [ShaliachNoteSet] is the structured output from Shaliach advisory/control passes
+  + [shaliach_note] is one advisory, warning, pause signal, escalation recommendation, or no-finding record
+  + [observed_subject] is Manager decision, Director proposal, Programmer output, layer package, work slice, failure record, or acceptance decision
+  + [protocol_scope] is SOP, SJS, DataDrivenDesign, lineage, uncertainty, artifact_form, boundary, failure, or provenance
+  + [severity] is info, advisory, warning, pause, or blocking
+  + [finding] is the exact observation
+  + [required_response] is accept, justify_override, rework, escalate, defer, or none
+
+  = must: attach Shaliach notes to each layer package
+  = must: attach Shaliach notes to each Manager layer approval or rejection
+  = must: attach Shaliach notes to Programmer output before Manager acceptance
+  = must: preserve no-finding notes when the Shaliach checked a gate and found no issue
+  - never: treat missing Shaliach notes as equivalent to no findings
+
+& [FailureModeLedger] is the named failure and recovery model for negotiated work
+  + [failure_mode] is one way the objective, layer, data model, transform, operator, provider, Programmer, or implementation can fail
+  + [fault] is the observed contradiction, infeasibility, instability, or mismatch
+  + [detection_signal] is how the failure becomes visible
+  + [recovery_operator] is the action that repairs, reroutes, retries, rejects, or records the failure
+  + [retry_condition] is the changed condition that permits a failed path to be revisited
+
+  = must: record failure modes before Programmer implementation when failures affect correctness or recoverability
+  = must: preserve dead_end paths when repeated failure risk exists
+  = must: define recovery_operator for Programmer blockers, failed tests, provider failures, malformed outputs, and layer rejection
+
+& [FormNegotiation] is the protocol for deciding durable artifact shapes before implementation
+  + [form] is flowchart, sjs_ledger, data_design_ledger, work_slice, provider_config, prompt_template, run_log, programmer_report, shaliach_note, manager_review, solution_record, or dead_end_record
+  + [form_purpose] is why the artifact exists
+  + [reader] is Shaliach, Manager, Director, Programmer, user, test harness, future run, or external tool
+  + [minimum_fields] is required fields for the artifact to be useful and auditable
+  + [serialization] is sop, json, jsonl, markdown, toml, yaml, or generated source file
+
+  = must: define form_purpose, reader, minimum_fields, and serialization before generating durable artifacts
+  = must: prefer `.sop` for SOP-style documentation and structured specification artifacts
+  = must: prefer `jsonl` for append-only event logs
+  = must: prefer JSON or TOML for machine-loaded configuration when hand editing matters
+  - never: make Programmers parse broad prose when a smaller structured form can carry the needed authority
+
+## Run Phases
+
+& [RunPhaseLifecycle] is the high-level control flow for one agent run
+  + [phase] is intake, source_preservation, manager_orientation, sjs_extraction, data_design_extraction, layer_negotiation, layer_review, work_slicing, implementation, solution_recording, integration_review, repair, or acceptance
+  + [run_state] is active record of objective, layer outputs, assignments, decisions, and evidence
+
+  = must: start with objective intake
+  = must: activate Shaliach at run start and keep Shaliach present through every phase
+  = must: preserve objective source when the objective defines a build or durable system behavior
+  = must: let Manager orient the objective before Director negotiation
+  = must: run sjs_extraction and data_design_extraction before or during each layer_negotiation
+  = must: repeat layer_negotiation and layer_review for each flowchart layer using [LayerNegotiationPackage]
+  = must: enter work_slicing only after code-level layer approval
+  = must: assign slices to Programmers
+  = must: record Programmer output through [SolutionRecording] shape before Manager acceptance
+  = must: integrate Programmer outputs through Manager review
+  = must: route failed slices to repair with preserved evidence
+  = must: emit acceptance only when implementation satisfies the code flowchart and verification checks
+
+/ [objective] -(LayeredNegotiation)> [application_flowchart], [subsystem_flowchart], [component_flowchart], [code_flowchart], [open_questions]
+* [code_flowchart], [work_slices], [programmer_outputs], [test_evidence] -(ManagerReview)> [accepted_implementation]
+/ [LayerNegotiationPackage] -(SJSAndDataDesignExtraction)> [SJSLedger], [DataDesignLedger], [LayerJustificationGraph], [FailureModeLedger], [OpenQuestions]
+* [SJSLedger], [DataDesignLedger], [flowchart], [LayerJustificationGraph] -(LayerApproval)> [approved_layer_package]
+
+## Model Hosting
+
+& [LocalModelHosting] is the local inference backend strategy
+  + [primary_target] is WSL2 Ubuntu running vLLM OpenAI-compatible server on the RTX 5090 workstation
+  + [fallback_target] is Ollama local HTTP API for lower-friction development and model experimentation
+  + [storage_constraint] is one terabyte local drive
+  + [model_cache_policy] is avoid duplicate large model caches where practical
+
+  = must: keep provider access behind a provider interface
+  = must: support multiple providers and endpoints in configuration
+  = must: allow different agent tiers to use different models or providers
+  = must: allow sequential model use when simultaneous GPU residency is impractical
+  = must: preserve Ollama fallback while developing vLLM support
+  = should: prefer vLLM for high-throughput swarm serving when WSL2 and CUDA support are stable
+  = should: avoid loading more simultaneous models than VRAM and disk budgets can support
+
+## Configuration Requirements
+
+& [AgentConfiguration] is the configurable representation of Shaliach, Manager, Directors, and Programmers
+  + [shaliach] is one [ShaliachTier] agent configuration
+  + [manager] is one [ManagerTier] agent configuration
+  + [director] is one [DirectorTier] agent configuration
+  + [programmer] is one [ProgrammerTier] agent configuration
+  + [provider] is ollama, vllm, openai_compatible, lm_studio, llama_cpp, or dry_run
+  + [model] is the local model identifier for one provider
+  + [tier] is strong, medium, or light
+  + [role] is the responsibility prompt for the agent
+  + [concurrency_limit] is the maximum simultaneous calls for that tier or provider
+
+  = must: replace the current flat agents/arbiter/coder config shape with hierarchical shaliach/manager/directors/programmers config
+  = must: allow each agent to specify provider, base_url, model, temperature, and concurrency_limit
+  = must: preserve dry_run mode for deterministic pipeline testing
+  = must: validate that one Shaliach, one Manager, two Directors, and one Programmer are configured before a full run
+  = must: include artifact form settings for layer_package, sjs_ledger, data_design_ledger, run_log, work_slice, programmer_report, shaliach_note, manager_review, and solution_record
+
+## Implementation Requirements
+
+& [ImplementationRequirements] is the first build frontier for this specification
+  + [existing_scaffold] is current NegotiatedCodingAgent Python package
+  + [next_change] is hierarchical orchestration and provider routing
+  + [compatibility_requirement] is existing dry-run command remains usable or receives a clear replacement
+
+  = must: add a provider abstraction that can route to Ollama and OpenAI-compatible vLLM endpoints
+  = must: add hierarchical config parsing for Shaliach, Manager, Directors, and Programmers
+  = must: add Manager approval gates for each flowchart layer
+  = must: add [LayerNegotiationPackage] generation for each flowchart layer
+  = must: add [SJSLedger] and [DataDesignLedger] extraction prompts and dry-run fixtures
+  = must: add [LayerJustificationGraph] records for Manager approvals, rejections, and reroutes
+  = must: add [FailureModeLedger] records for malformed outputs, failed layer approval, Programmer blockers, failed tests, and provider failures
+  = must: add artifact writers for structured `.sop` layer packages and append-only `jsonl` run events
+  = must: add work slice creation from settled code-level flowchart
+  = must: add Programmer execution records, Shaliach notes, and Manager review records to the run log
+  = must: keep generated implementation writes contained inside the run directory until a separate workspace-write policy exists
+  = should: add unit tests for provider selection, hierarchical config validation, layer gating, and work-slice routing
+
+## Acceptance Criteria
+
+& [AcceptanceCriteria] is the minimum proof that the next architecture step is fit for purpose
+  = must: run in dry-run mode without external model servers
+  = must: produce application, subsystem, component, and code flowcharts
+  = must: produce a layer package for each flowchart layer
+  = must: produce SJS ledger and DataDrivenDesign ledger for each layer package
+  = must: show Shaliach notes or explicit no-finding records for each layer package
+  = must: preserve objective, condition, failure, form, data subject, transform, and operator records where applicable
+  = must: show Manager approval or rejection for each layer
+  = must: show at least two Director proposals for each layer
+  = must: produce at least one implementation slice from the code-level flowchart
+  = must: run at least one Programmer against a slice
+  = must: produce Manager review of Programmer output
+  = must: write auditable logs under runs/{timestamp}
+  = must: pass automated tests
+
+## Open Questions
+
+& [OpenQuestions] is the unresolved decision set
+  ? [model_inventory_unknown]
+    ~ [question] is which local models will be installed for strong, medium, and light tiers
+    = must: keep model names configurable
+
+  ? [vllm_wsl_setup_not_complete]
+    ~ [question] is whether vLLM on WSL2 with RTX 5090 is stable on this machine
+    = must: preserve Ollama fallback until vLLM path is verified
+
+  ? [parallelism_policy_unsettled]
+    ~ [question] is how many Programmers should run concurrently on one GPU without damaging throughput or stability
+    = must: start conservative and measure
+
+  ? [workspace_write_policy_unsettled]
+    ~ [question] is when generated code may be written directly into target project files instead of isolated run directories
+    = must: keep isolated run writes until manager-reviewed write policy exists
+
+  ? [sjs_signature_depth_unsettled]
+    ~ [question] is whether the first implementation should emit unsigned working packages only or a full SJS satisfaction signature workflow
+    = must: start with unsigned working packages unless user requests full signature processing
+
+  ? [ledger_serialization_unsettled]
+    ~ [question] is whether layer ledgers should be stored as separate `.sop` files, embedded in one package file, or both
+    = should: start with one `.sop` package per layer plus jsonl events for runtime trace
