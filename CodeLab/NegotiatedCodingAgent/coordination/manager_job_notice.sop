@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 44
+  + [job_notice_revision] is 45
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -62,7 +62,8 @@
     S37_openai_compatible_healthcheck |
     S38_openai_health_docs |
     S39_long_run_harness_healthcheck |
-    S40_long_run_checkpoint_final_frontier
+    S40_long_run_checkpoint_final_frontier |
+    S41_long_run_checkpoint_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -614,7 +615,7 @@
 
 & [WorkSliceDetail S40_long_run_checkpoint_final_frontier] is a long-run recovery slice
   + [slice_id] is S40_long_run_checkpoint_final_frontier
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is record both starting and ending conversation frontier in long-run checkpoints
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing checkpoint SOP includes start_current_frontier and end_current_frontier
@@ -622,3 +623,16 @@
   + [support_status] is prepared
   + [dependency_set] is S39_long_run_harness_healthcheck
   + [known_risks] is adding frontier noise instead of useful reentry context
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:00:00Z, proof_ref tests passed with 42 tests and coordination/long_run_checkpoint.sop includes start_current_frontier and end_current_frontier, result_summary long-run checkpoints now preserve both planned frontier and post-harness lifecycle frontier
+  + [completed_work_review] is support_delta verified checkpoint frontier is no longer stale after dry-run lifecycle updates; requirement_delta operator docs for interpreting checkpoint fields remain future work
+
+& [WorkSliceDetail S41_long_run_checkpoint_docs] is a long-run recovery slice
+  + [slice_id] is S41_long_run_checkpoint_docs
+  + [slice_status] is open
+  + [scope] is document long-run checkpoint fields including start/end frontier and non-gating healthcheck
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is future operator can interpret checkpoint readiness without reading long_run.py
+  + [support_status] is prepared
+  + [dependency_set] is S39_long_run_harness_healthcheck, S40_long_run_checkpoint_final_frontier
+  + [known_risks] is documenting checkpoint as stronger autonomy proof than it is

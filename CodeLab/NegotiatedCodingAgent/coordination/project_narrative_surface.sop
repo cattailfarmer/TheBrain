@@ -120,6 +120,7 @@
   + [implemented_slice] is S37_openai_compatible_healthcheck
   + [implemented_slice] is S38_openai_health_docs
   + [implemented_slice] is S39_long_run_harness_healthcheck
+  + [implemented_slice] is S40_long_run_checkpoint_final_frontier
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -169,6 +170,7 @@
   + [proof_result] is tests passed with 41 tests and coordination/openai_health.sop reports localhost:8000 unavailable
   + [proof_result] is tests passed with 41 tests after S38 OpenAI health docs
   + [proof_result] is long-run checkpoint passed tests suppressed dry-run model inventory and non-gating OpenAI healthcheck
+  + [proof_result] is long-run checkpoint records start_current_frontier and end_current_frontier
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -216,6 +218,7 @@
   + [ready_capability] is OpenAI-compatible endpoint availability can be checked through script and SOP report
   + [ready_capability] is local model serving docs sequence endpoint healthcheck, model inventory, and role model profile checks
   + [ready_capability] is long-run checkpoint records OpenAI-compatible endpoint health as non-gating environment state
+  + [ready_capability] is long-run checkpoint records both planned starting frontier and post-harness ending frontier
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -244,6 +247,7 @@
   + [next_recommended_slice] is S38_openai_health_docs
   + [next_recommended_slice] is S39_long_run_harness_healthcheck
   + [next_recommended_slice] is S40_long_run_checkpoint_final_frontier
+  + [next_recommended_slice] is S41_long_run_checkpoint_docs
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 
@@ -441,6 +445,15 @@
 
 & [RunNarrativeUpdate 20260529T143429Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T143429Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T143603Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T143603Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\README.generated.txt

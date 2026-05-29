@@ -585,6 +585,8 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertEqual(checkpoint.status, "ready_for_continuation")
         self.assertIn("LongRunCheckpoint", sop)
         self.assertIn("test-uuid", sop)
+        self.assertIn("start_current_frontier] is S16", sop)
+        self.assertIn("end_current_frontier] is S16", sop)
 
     def test_checkpoint_marks_failed_command(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
@@ -612,10 +614,13 @@ class LongRunHarnessTests(unittest.TestCase):
             test_result=ok,
             dry_run_result=ok,
             model_inventory_result=ok,
+            end_current_frontier="S40_end",
             openai_health_result=unavailable,
         )
         sop = checkpoint.to_sop()
         self.assertEqual(checkpoint.status, "ready_for_continuation")
+        self.assertIn("start_current_frontier] is S39", sop)
+        self.assertIn("end_current_frontier] is S40_end", sop)
         self.assertIn("openai_health_status] is failed", sop)
         self.assertIn("non_gating_environment_state", sop)
 

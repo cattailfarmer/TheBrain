@@ -29,6 +29,7 @@ class LongRunCheckpoint:
     test_result: CommandResult
     dry_run_result: CommandResult
     model_inventory_result: CommandResult
+    end_current_frontier: str = ""
     openai_health_result: CommandResult | None = None
 
     @property
@@ -41,7 +42,8 @@ class LongRunCheckpoint:
         return f"""& [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
   + [created_at] is {self.created_at}
   + [conversation_uuid] is {self.conversation_uuid}
-  + [current_frontier] is {self.current_frontier}
+  + [start_current_frontier] is {self.current_frontier}
+  + [end_current_frontier] is {self.end_current_frontier or self.current_frontier}
   + [git_clean_before] is {_bool(self.git_clean_before)}
   + [status] is {self.status}
   + [test_status] is {_status(self.test_result)}
@@ -75,6 +77,7 @@ class LongRunCheckpoint:
 
 def run_harness(project_root: Path) -> LongRunCheckpoint:
     surface = ConversationSurface.load_active(project_root)
+    start_frontier = surface.first("current_frontier", "unknown") or "unknown"
     git_clean = _git_clean(project_root.parents[1])
     test = _run("test", ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(project_root / "scripts" / "test.ps1")], project_root)
     dry = _run(
@@ -115,10 +118,12 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         ],
         project_root,
     )
+    end_surface = ConversationSurface.load_active(project_root)
     return LongRunCheckpoint(
         created_at=datetime.now(timezone.utc).isoformat(),
         conversation_uuid=surface.first("conversation_uuid", "unknown") or "unknown",
-        current_frontier=surface.first("current_frontier", "unknown") or "unknown",
+        current_frontier=start_frontier,
+        end_current_frontier=end_surface.first("current_frontier", start_frontier) or start_frontier,
         git_clean_before=git_clean,
         test_result=test,
         dry_run_result=dry,
