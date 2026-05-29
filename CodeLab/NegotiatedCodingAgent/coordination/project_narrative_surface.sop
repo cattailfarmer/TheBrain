@@ -2095,3 +2095,11 @@
   + [proof_ref] is coordination/shaliach_cross_artifact_inspection_design.sop
   + [current_frontier] is S245_shaliach_finding_field_parser
   + [narrative_role] is shaliach_arc and design_arc update
+
+
+& [LongRunNarrativeUpdate S245_shaliach_finding_field_parser] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S245_shaliach_finding_field_parser
+  + [implemented_capability] is ShaliachFindingFields parser and loader read subject finding severity action and self_negotiation_ref from finding SOP artifacts
+  + [proof_result] is tests passed with 226 tests
+  + [current_frontier] is S246_shaliach_cross_artifact_inspection_evaluator
+  + [narrative_role] is shaliach_arc and parser_tooling update

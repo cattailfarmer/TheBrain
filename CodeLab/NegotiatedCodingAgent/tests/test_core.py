@@ -138,7 +138,9 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationTension,
     build_shaliach_self_negotiation_record,
     build_shaliach_self_negotiation_from_finding,
+    load_shaliach_finding_fields,
     load_shaliach_self_negotiation,
+    parse_shaliach_finding_fields_sop,
     parse_shaliach_self_negotiation_sop,
     review_layer_negotiation,
 )
@@ -6100,6 +6102,45 @@ class ShaliachRuntimeTests(unittest.TestCase):
             path.write_text("& [ShaliachFinding application] is not the record", encoding="utf-8")
             with self.assertRaises(ValueError):
                 shaliach_self_negotiation_cli_main([str(path)])
+
+    def test_parse_shaliach_finding_fields_reads_cross_artifact_fields(self) -> None:
+        finding = ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason="ledger evidence is thin",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        fields = parse_shaliach_finding_fields_sop(finding.to_sop("application_layer_package"))
+        self.assertEqual(fields.subject, "application_layer_package")
+        self.assertEqual(fields.finding, "thin_ledger_evidence")
+        self.assertEqual(fields.severity, "warning")
+        self.assertEqual(fields.action, "request_rework")
+        self.assertEqual(fields.self_negotiation_ref, "ShaliachSelfNegotiationRecord application.shaliach_self_negotiation")
+
+    def test_load_shaliach_finding_fields_from_path(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "application.shaliach_finding.sop"
+            finding = ShaliachFinding(
+                finding="no_protocol_gap_detected",
+                severity="info",
+                target_role="Manager",
+                target_artifact="layer_package",
+                action="no_action",
+                confidence="accepted",
+                reason="protocol obligations present",
+            )
+            path.write_text(finding.to_sop("application_layer_package"), encoding="utf-8")
+            fields = load_shaliach_finding_fields(path)
+        self.assertEqual(fields.subject, "application_layer_package")
+        self.assertEqual(fields.self_negotiation_ref, "none")
+
+    def test_parse_shaliach_finding_fields_rejects_wrong_header(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_shaliach_finding_fields_sop("& [ShaliachSelfNegotiationRecord x] is not a finding")
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

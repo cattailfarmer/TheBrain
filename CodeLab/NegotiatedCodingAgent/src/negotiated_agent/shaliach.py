@@ -232,6 +232,32 @@ class ShaliachFinding:
   + [authority_boundary] is response_coordination_not_final_manager_approval"""
 
 
+@dataclass(frozen=True)
+class ShaliachFindingFields:
+    subject: str
+    finding: str
+    severity: str
+    action: str
+    self_negotiation_ref: str
+
+
+def parse_shaliach_finding_fields_sop(text: str) -> ShaliachFindingFields:
+    finding_match = re.search(r"& \[ShaliachFinding (?P<subject>[^\]]+)\]", text)
+    if not finding_match:
+        raise ValueError("ShaliachFinding header not found")
+    return ShaliachFindingFields(
+        subject=finding_match.group("subject"),
+        finding=_first_sop_field(text, "finding"),
+        severity=_first_sop_field(text, "severity"),
+        action=_first_sop_field(text, "action"),
+        self_negotiation_ref=_first_sop_field(text, "self_negotiation_ref"),
+    )
+
+
+def load_shaliach_finding_fields(path: Path) -> ShaliachFindingFields:
+    return parse_shaliach_finding_fields_sop(path.read_text(encoding="utf-8"))
+
+
 def build_shaliach_self_negotiation_from_finding(
     finding: ShaliachFinding,
     *,
