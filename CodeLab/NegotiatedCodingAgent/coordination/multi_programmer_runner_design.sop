@@ -1,0 +1,69 @@
+& [MultiProgrammerRunnerDesign] is the executable design contract for future multi-Programmer execution
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [assignment_plan_support] coordination/programmer_merge_review_protocol.sop
+  @ [created_at] 2026-05-29T21:20:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is runner_contract_not_parallel_execution_proof
+  + [purpose] is connect ProgrammerAssignmentPlan, planned WorkSlice records, per-Programmer outputs, Manager review, Shaliach review, and merge review without writing unreviewed patches to the target workspace
+
+  = must: execute only assignments derived from an approved code-layer package
+  = must: preserve one raw output and one ProgrammerReport per assignment
+  = must: write each Programmer output under a separate run-local implementation root before merge review
+  = must: keep rejected, blocked, and duplicate outputs visible
+  = must: require Manager review before an assignment can enter merge consideration
+  = must: require Shaliach review when an assignment output changes scope, authority, lineage, data shape, artifact form, or verification evidence
+  = must: produce merge-review inputs without applying merged patches to the target workspace
+
+  - never: overwrite one Programmer output with another
+  - never: treat a successful LLM response as accepted implementation
+  - never: mutate the project workspace from multi-Programmer output until target patch and rollback policy exists
+
+& [RunnerInputContract] is the required input set
+  + [input] is approved code.package.sop
+  + [input] is ProgrammerAssignmentPlan
+  + [input] is WorkSlice for each assignment
+  + [input] is configured Programmer role and model route
+  + [input] is approved layer package lineage
+  + [input] is merge review protocol surface
+
+& [AssignmentLifecycle] is the state machine for one Programmer assignment
+  + [state] is planned
+  + [state] is executing
+  + [state] is output_written
+  + [state] is manager_review_pending
+  + [state] is accepted_for_merge
+  + [state] is rework_requested
+  + [state] is rejected
+  + [state] is blocked
+  + [transition] is planned_to_executing when runner claims the assignment
+  + [transition] is executing_to_output_written when raw output and run-local files are written
+  + [transition] is output_written_to_manager_review_pending when ProgrammerReport exists
+  + [transition] is manager_review_pending_to_accepted_for_merge when ManagerReview accepts output
+  + [transition] is manager_review_pending_to_rework_requested when ManagerReview requests revision
+  + [transition] is any_to_blocked when output violates path, authority, or required artifact form
+
+& [RunnerOutputContract] is the artifact set created by the executable runner
+  + [artifact] is multi_programmer_execution_plan.sop
+  + [artifact] is <slice_id>.<programmer_name>.work_slice.sop
+  + [artifact] is <slice_id>.<programmer_name>.raw.md
+  + [artifact] is <slice_id>.<programmer_name>.programmer_report.sop
+  + [artifact] is <slice_id>.<programmer_name>.manager_review.sop
+  + [artifact] is <slice_id>.<programmer_name>.file_change_surface.sop
+  + [artifact] is multi_programmer_merge_review_input.sop
+  + [artifact] is merge_conflict_ledger.sop when overlap or conflict exists
+  + [artifact] is multi_programmer_runner_log.jsonl
+
+& [MergeReviewReadinessContract] is the condition for entering merge review
+  + [required] is every accepted assignment has raw output, ProgrammerReport, ManagerReview, and file change surface
+  + [required] is every rejected or rework assignment has visible reason and source artifact refs
+  + [required] is file paths are run-local and cannot escape the assignment output root
+  + [required] is overlap between accepted outputs is recorded before merge
+  + [required] is merged output remains run-local until target workspace writer policy is implemented
+
+& [ImplementationOrder] is the next safe build order
+  + [step_1] is add dataclasses for assignment execution records and merge review input records
+  + [step_2] is add pure functions that build runner plan and output artifact names from ProgrammerAssignmentPlan
+  + [step_3] is add tests for two Programmers producing separate run-local roots
+  + [step_4] is integrate runner after code package approval behind a config flag or conservative default
+  + [step_5] is add Manager and Shaliach review records before any merge consideration

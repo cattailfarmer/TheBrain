@@ -99,6 +99,8 @@ This scaffold is used to prove assignment planning across multiple configured Pr
 
 Before any future parallel execution, `coordination/programmer_merge_review_protocol.sop` defines the planned merge-review gates: separate Programmer reports, conflict visibility, Manager review, Shaliach review when scope or lineage changes, file-change lineage, and verification after merge.
 
+`coordination/multi_programmer_runner_design.sop` now connects that protocol to an executable runner contract. It defines runner inputs, assignment lifecycle states, per-Programmer artifact names, merge-review readiness, and the non-destructive boundary that keeps multi-Programmer output run-local until merge and rollback policy exist.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

@@ -94,7 +94,7 @@ The layer-specific files are emitted for each configured negotiation layer, curr
 
 The generated implementation is intentionally conservative: the coder writes files only inside the run folder unless you later add an explicit workspace writer.
 
-Programmer swarm support is currently staged. The runtime can represent multiple planned slices and write an assignment plan, but the orchestrator still executes one initial slice until merge review and parallel execution are implemented.
+Programmer swarm support is currently staged. The runtime can represent multiple planned slices and write an assignment plan, and `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer run-local outputs and merge-review readiness. The orchestrator still executes one initial slice until that contract is implemented.
 
 ## Design
 

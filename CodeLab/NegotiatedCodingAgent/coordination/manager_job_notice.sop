@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 64
+  + [job_notice_revision] is 65
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -82,7 +82,8 @@
     S57_director_multi_round_carry_forward |
     S58_director_multi_round_docs |
     S59_spec_audit_refresh_after_director_carry_forward |
-    S60_executable_multi_programmer_runner_design
+    S60_executable_multi_programmer_runner_design |
+    S61_multi_programmer_runner_records
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -894,7 +895,7 @@
 
 & [WorkSliceDetail S60_executable_multi_programmer_runner_design] is a Programmer swarm slice
   + [slice_id] is S60_executable_multi_programmer_runner_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design the executable multi-Programmer runner around existing assignment plans and merge review gates
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**
   + [proof_route] is design surface or tests define runner inputs, outputs, merge review states, and non-destructive workspace boundary
@@ -902,3 +903,16 @@
   + [support_status] is prepared
   + [dependency_set] is S51_multi_programmer_slice_assignment_plan, S53_multi_slice_planning_scaffold, S55_programmer_merge_review_protocol_surface
   + [known_risks] is implementing parallel execution before conflict and acceptance records are clear
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:20:00Z, proof_ref tests passed with 47 tests, result_summary wrote multi_programmer_runner_design.sop and docs pointers for runner contract
+  + [completed_work_review] is support_delta verified runner inputs outputs states and non-destructive boundary are explicit; requirement_delta runner records are not yet executable code
+
+& [WorkSliceDetail S61_multi_programmer_runner_records] is a Programmer swarm implementation slice
+  + [slice_id] is S61_multi_programmer_runner_records
+  + [slice_status] is open
+  + [scope] is add pure runtime record types for multi-Programmer assignment execution and merge-review input surfaces
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is unit tests for assignment execution records, artifact names, and merge review input SOP output
+  + [completion_criteria] is runner implementation can create deterministic records without calling LLMs or writing project workspace files
+  + [support_status] is prepared
+  + [dependency_set] is S60_executable_multi_programmer_runner_design
+  + [known_risks] is adding records that diverge from the design contract

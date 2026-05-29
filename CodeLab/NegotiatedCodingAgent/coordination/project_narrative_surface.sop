@@ -140,6 +140,7 @@
   + [implemented_slice] is S57_director_multi_round_carry_forward
   + [implemented_slice] is S58_director_multi_round_docs
   + [implemented_slice] is S59_spec_audit_refresh_after_director_carry_forward
+  + [implemented_slice] is S60_executable_multi_programmer_runner_design
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -209,6 +210,7 @@
   + [proof_result] is tests passed with 47 tests after S57 Director multi-round carry-forward
   + [proof_result] is tests passed with 47 tests after S58 Director multi-round docs
   + [proof_result] is tests passed with 47 tests after S59 spec audit refresh
+  + [proof_result] is tests passed with 47 tests after S60 multi-Programmer runner design
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -276,6 +278,7 @@
   + [ready_capability] is multi-round Director negotiation carries prior disagreement context into later rounds
   + [ready_capability] is Director multi-round docs distinguish prompt-context carry-forward from full deliberative memory
   + [ready_capability] is specification implementation status audit reflects Director multi-round carry-forward as bounded prompt-context support
+  + [ready_capability] is multi_programmer_runner_design.sop defines runner contracts, assignment lifecycle states, merge-review readiness, and non-destructive output boundaries
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -324,8 +327,9 @@
   + [next_recommended_slice] is S58_director_multi_round_docs
   + [next_recommended_slice] is S59_spec_audit_refresh_after_director_carry_forward
   + [next_recommended_slice] is S60_executable_multi_programmer_runner_design
-  + [next_reason] is executable multi-Programmer work needs explicit runner contracts before implementation can safely fan out
-  + [sleep_run_candidate] is continue S60 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S61_multi_programmer_runner_records
+  + [next_reason] is runner records are the smallest executable step after the design contract
+  + [sleep_run_candidate] is continue S61 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
