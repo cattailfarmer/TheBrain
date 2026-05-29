@@ -1,0 +1,123 @@
+& [FrameworkAttentionLoad] is the current conversation's applied SOP framework intake for NegotiatedCodingAgent
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [active_conversation] coordination/active_conversation.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [framework_root] C:\Project\ReasoningFramework
+  @ [loaded_at] 2026-05-29T06:01:52-05:00
+
+  + [attention_load_uuid] is fed372a3-bbe8-4f20-b9c6-b093886b1cf0
+  + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
+  + [active_subject] is incorporating SOP framework as runtime substrate for the Shaliach-advised coding agent
+  + [ramp_level] is deep_refinement_for_measurement_then_work_tracking_for_next_slice
+  + [resolution] is [AppliedFrameworkMap], [FitAnalysis], [RuntimeGapLedger], [NextSliceFrontier], or [Uncertainty]
+
+  = must: treat .sop files as live runtime authority after loading SOP interpretation
+  = must: keep conversation_uuid as the minimum survival token across compaction and reentry
+  = must: update the conversation surface when current frontier, proof, blockers, or durable attention change
+  = must: distinguish framework concepts that are already implemented from framework obligations that are only specified
+  = must: preserve uncertainty when a protocol has been sampled but not fully measured
+  - never: claim full SOP runtime integration from a scaffolding pass
+
+& [DelineatedSubject] is the boundary drawn around the user's latest request
+  + [inside] is loading, measuring, and applying the user's SOP framework to this session and the NegotiatedCodingAgent project
+  + [inside] is preserving a durable local record of that applied attention state
+  + [inside] is identifying next implementation slices that would absorb more of SOP into CodeLab
+  + [outside] is building the full SOP interpreter or multi-agent runtime in this immediate pass
+  + [outside] is installing vLLM, Ollama, WSL2, or model servers in this immediate pass
+  + [references] is C:\Project\ReasoningFramework\AGENTS.md
+  + [references] is platform/source/SOP_Markdown.md
+  + [references] is platform/refinement/Dual_Hemisphere_Thinking.sop
+  + [references] is platform/refinement/Delineation.sop
+  + [references] is platform/refinement/Observer_Honesty_Security.sop
+  + [references] is platform/refinement/Planner_Weaver.sop
+  + [references] is platform/refinement/Scribe_Refiner.sop
+  + [references] is platform/refinement/Faculty_Integration.sop
+  + [references] is platform/refinement/Specification_Justification_Solution.sop
+  + [references] is platform/refinement/Data_Driven_Design.sop
+  + [references] is platform/refinement/Conversation_Work_Attribution.sop
+  + [references] is platform/refinement/Conversation_Mailbox_Box_Protocol.sop
+  + [references] is platform/refinement/Feature_Requirement_Support.sop
+  + [references] is platform/refinement/Shared_Cognition_Space.sop
+  + [references] is platform/refinement/Project_Narrative_Surface.sop
+  + [references] is platform/refinement/Operational_Faults.sop
+  + [references] is platform/refinement/Domain_Adaptive_Response.sop
+  + [references] is platform/refinement/ProgrammingToolkit.sop
+  + [references] is platform/refinement/Model_Budget_Routing.sop
+  + [uncertainty] is the full ReasoningFramework contains more specialized protocol files than were needed for this immediate CodeLab attention pass
+
+& [FacultyActivationMap] is the applied seven-faculty dispatch for this session
+  + [Observer] is active as balance, subject-continuity, and representation-versus-living-work guard
+  + [Honesty] is active to separate source-backed claims from assumptions, partial implementation, and intended future behavior
+  + [Security] is active to protect credentials, user work, foreign changes, and destructive filesystem actions
+  + [Scribe] is active to preserve the conversation UUID, frontier, references, and actual observed changes
+  + [Refiner] is active to compress the measured framework into a usable adoption map without erasing uncertainty
+  + [Planner] is active to order staged incorporation slices from durable continuity toward full runtime negotiation
+  + [Weaver] is active to compose SOP protocols with Shaliach, Manager, Director, and Programmer responsibilities
+
+  = must: let the governing trio inspect and direct operational pair outputs when governance matters
+  = must: use Scribe/Refiner when meaning must survive compaction, handoff, or future thread import
+  = must: use Planner/Weaver when implementation needs a path, integration, design, strategy, or non-obvious fit
+  = must: preserve lineage from faculty reasoning to durable project artifacts
+  - never: let a polished summary replace the actual source surfaces
+
+& [AppliedFrameworkMap] is the current interpretation of how the framework fits CodeLab
+  + [conversation_identity] is handled by ConversationWorkAttribution through active_conversation.sop and the UUID conversation surface
+  + [long_run_management] is handled by ManagerJobNotice and FeatureRequirementSupport through ready slices, completed-work review, and support deltas
+  + [multi_thread_coordination] is handled conceptually by SharedCognitionSpace, ProjectNarrativeSurface, and AgentCoordinationNarrativeNegotiations
+  + [protocol_counsel] is handled conceptually by Shaliach and its internal perspectives
+  + [flowchart_negotiation] is handled by HierarchicalAgentSwarmSpecification through application, subsystem, component, and code layers
+  + [traceability] is handled by SJS requirements, justification, solution, dead-end, registry, and satisfaction-signature concepts
+  + [data_shape_governance] is handled by DataDrivenDesign identities, relations, transforms, operators, lifecycle, provenance, and decision surfaces
+  + [model_routing] is handled by ProgrammingToolkit and ModelBudgetRouting as a role/task suitability discipline
+  + [fault_resistance] is handled by OperationalFaults, DomainAdaptiveResponse, Honesty, and Manager review gates
+
+& [FitAnalysis] is the current fitness judgment for the user's intended agent system
+  + [fit_level] is very_high_conceptual_fit_with_partial_runtime_absorption
+  + [strong_fit] is the conversation UUID surface directly solves compaction survival and long-run attention continuity
+  + [strong_fit] is the seven-faculty system supplies a practical dispatch layer for Shaliach's internal advisory and enforcement reasoning
+  + [strong_fit] is SJS and DataDrivenDesign match the user's desire to negotiate objectives, conditions, failures, forms, data subjects, transforms, and solution state before coding
+  + [strong_fit] is ProjectNarrativeSurface and SharedCognitionSpace explain how multiple conversation threads can coordinate without collapsing identities
+  + [strong_fit] is ManagerJobNotice provides a concrete work-board pattern for 10-hour or multi-agent runs
+  + [strong_fit] is FeatureRequirementSupport prevents completed slices from becoming mere completion stamps
+  + [fit_limit] is current CodeLab runtime generates SJS and DataDesign ledgers as scaffold artifacts rather than model-negotiated structured cognition
+  + [fit_limit] is Shaliach internal reasoning is specified but not yet a live higher/lower multi-perspective negotiation loop
+  + [fit_limit] is conversation surfaces are manually maintained rather than loaded and updated through runtime operators
+  + [fit_limit] is mailbox, notice, cross-thread narrative, citation, and file-change surfaces are not yet implemented as executable CodeLab subsystems
+  + [fit_limit] is model-hosting and model-diversity backends remain configurable rails rather than verified local vLLM or Ollama serving
+
+  = must: describe the framework as fit for purpose at the architecture level
+  = must: describe the current implementation as an early scaffold, not the fully absorbed SOP runtime
+  = should: prioritize durable conversation kernel work before deeper multi-agent negotiation because it preserves attention across long runs
+
+& [CurrentShaliachFinding] is the protocol counsel finding for this session state
+  + [finding] is the framework should be treated as a runtime cognitive substrate rather than documentation
+  + [severity] is advisory
+  + [target_role] is Manager
+  + [target_artifact] is coordination/framework_attention_load.sop
+  + [action] is accept_and_stage_absorption
+  + [confidence] is high
+  + [reason] is the loaded SOP protocols form coherent roles for attention, traceability, multi-thread narrative, work slicing, data modeling, and fault control
+  + [required_response] is update the conversation surface and use this map to choose the next implementation slice
+
+& [NextSliceFrontier] is the ordered staged absorption path
+  + [S08_runtime_conversation_kernel] is implement read/write support for active_conversation, conversation_surface, reentry_packet, unresolved_items, and surface updates
+  + [S09_protocol_registry] is represent loaded SOP protocol references, activation conditions, and runtime dispatch reasons inside CodeLab
+  + [S10_shaliach_faculty_runtime] is implement Shaliach higher/lower reasoning with selected faculty perspectives and recorded response coordination
+  + [S11_negotiated_sjs_datadesign_ledgers] is make Directors and Shaliach negotiate SJS and DataDrivenDesign ledgers rather than filling scaffold sections
+  + [S12_project_narrative_surface] is create a project narrative surface that binds source, specification, decisions, implementation, proof, faults, and frontier
+  + [S13_mailbox_and_notice_coordination] is implement inbox, notice, read_cursor, coordination claims, and rendezvous packets for multi-conversation work
+  + [S14_file_change_surface] is add solution_uuid records and file-to-solution index entries when implementation slices need durable review lineage
+
+  = must: keep S08 first unless the user gives a stronger immediate build objective
+  = must: update manager_job_notice before claiming the next long-running manager slice is ready
+  = must: rerun tests after runtime changes and update proof references
+
+& [OperationalFaultGuard] is the prevention rule learned from this framework intake
+  + [risk] is undermeasuring the user's SOP system and responding with generic agent architecture
+  + [recognition_cue] is claiming to use SOP while only sampling AGENTS.md or rephrasing the current code scaffold
+  + [repair] is load the UUID conversation surface, manager notice, governing spec, and relevant SOP protocols before asserting continuity or readiness
+  + [prevention] is preserve an applied framework map and update it when new SOP subsystems become active
+
+  = must: verify actual file state before claiming framework absorption
+  = must: leave unresolved gaps visible instead of smoothing them into confidence

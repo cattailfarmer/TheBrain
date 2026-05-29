@@ -7,17 +7,17 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 7
+  + [job_notice_revision] is 8
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
-  + [ready_slice_count] is 6
-  + [ready_supported_slice_count] is 6
+  + [ready_slice_count] is 1
+  + [ready_supported_slice_count] is 1
   + [manager_execution_reserve_count] is 1
   + [unsliced_specification_remaining] is true
   + [fully_sliced_specification] is false
 
-  + [job_goal] is implement the next architecture slice: Shaliach, Manager, Directors, Programmers, provider routing, layer packages, manager gates, and programmer slices while preserving dry-run operation
+  + [job_goal] is absorb the user's SOP framework into NegotiatedCodingAgent in stages, starting with durable conversation-kernel operators before deeper protocol registry, Shaliach faculty runtime, negotiated SJS/DataDesign ledgers, narrative, mailbox, and file-change surfaces
 
   + [slice_summary] is (
     S01_commit_spec_rails |
@@ -26,7 +26,14 @@
     S04_layer_package_artifacts |
     S05_manager_gates |
     S06_programmer_slices |
-    S07_docs_and_acceptance_review
+    S07_docs_and_acceptance_review |
+    S08_runtime_conversation_kernel |
+    S09_protocol_registry |
+    S10_shaliach_faculty_runtime |
+    S11_negotiated_sjs_datadesign_ledgers |
+    S12_project_narrative_surface |
+    S13_mailbox_and_notice_coordination |
+    S14_file_change_surface
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -112,6 +119,83 @@
   + [known_risks] is documenting future vLLM behavior as implemented
   + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T10:46:08Z, proof_ref tests passed with 11 tests, result_summary README updated to describe Shaliach Manager Directors Programmers package and review artifacts
   + [completed_work_review] is support_delta verified docs and acceptance checks, requirement_delta none
+
+& [WorkSliceDetail S08_runtime_conversation_kernel] is a ready slice
+  + [slice_id] is S08_runtime_conversation_kernel
+  + [slice_status] is open
+  + [scope] is implement runtime support for active_conversation, conversation_surface, reentry_packet, unresolved_items, and bounded surface updates
+  + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
+  + [proof_route] is unit tests for loading active conversation pointer, resolving conversation surface, updating frontier fields, and preserving unresolved items
+  + [completion_criteria] is runtime can load the current conversation UUID surface and write a bounded update without hand-editing the SOP surface
+  + [support_status] is prepared
+  + [dependency_set] is framework_attention_load accepted
+  + [known_risks] is building a brittle string editor instead of a small structured surface operator
+
+& [WorkSliceDetail S09_protocol_registry] is a planned dependency slice
+  + [slice_id] is S09_protocol_registry
+  + [slice_status] is open
+  + [scope] is represent loaded SOP protocol references, activation conditions, dispatch reasons, and uncertainty in CodeLab runtime state
+  + [target_files] is src/negotiated_agent/**, agent.config.json, tests/**
+  + [proof_route] is tests for protocol registration, activation filtering, and run artifact references
+  + [completion_criteria] is a run can record which SOP protocols were active and why without claiming full interpretation
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel
+  + [known_risks] is confusing protocol references with executable SOP semantics
+
+& [WorkSliceDetail S10_shaliach_faculty_runtime] is a planned dependency slice
+  + [slice_id] is S10_shaliach_faculty_runtime
+  + [slice_status] is open
+  + [scope] is implement Shaliach higher/lower reasoning with selected seven-faculty and internal-perspective passes, recorded as response coordination artifacts
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests for advisory, warning, pause, rework, and no_finding Shaliach outputs
+  + [completion_criteria] is Shaliach findings are produced from explicit perspectives and attached to layer packages, work slices, programmer reports, and manager reviews
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel, S09_protocol_registry
+  + [known_risks] is overactivating every faculty and turning lightweight checks into ceremony
+
+& [WorkSliceDetail S11_negotiated_sjs_datadesign_ledgers] is a planned dependency slice
+  + [slice_id] is S11_negotiated_sjs_datadesign_ledgers
+  + [slice_status] is open
+  + [scope] is make Directors and Shaliach negotiate SJS and DataDrivenDesign ledgers instead of filling scaffold sections
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run and unit tests showing layer packages contain model-shaped requirements, conditions, failures, forms, data subjects, transforms, operators, lifecycle, and provenance
+  + [completion_criteria] is every layer package records negotiated SJS and DataDesign content traceable to Director proposals and Shaliach review
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10_shaliach_faculty_runtime
+  + [known_risks] is accepting shallow ledger prose as if it were structured negotiation
+
+& [WorkSliceDetail S12_project_narrative_surface] is a planned dependency slice
+  + [slice_id] is S12_project_narrative_surface
+  + [slice_status] is open
+  + [scope] is create a project narrative surface binding source, specification, decisions, implementation, proof, faults, readiness, and frontier
+  + [target_files] is coordination/**, specifications/**, src/negotiated_agent/**, tests/**
+  + [proof_route] is tests or dry-run proof that narrative nodes cite governing specs, proof outputs, unresolved items, and conversation surface refs
+  + [completion_criteria] is future conversations can reenter the project story through a narrative surface without collapsing it into a changelog
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel, S14_file_change_surface
+  + [known_risks] is writing prose summaries that do not preserve citation or authority boundaries
+
+& [WorkSliceDetail S13_mailbox_and_notice_coordination] is a planned dependency slice
+  + [slice_id] is S13_mailbox_and_notice_coordination
+  + [slice_status] is open
+  + [scope] is implement inbox, notice, read_cursor, coordination claim, conflict signal, and rendezvous packet surfaces for multi-conversation work
+  + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
+  + [proof_route] is tests for message creation, unread enumeration, read_cursor advancement, notice publication, and non-destructive message preservation
+  + [completion_criteria] is two conversation surfaces can coordinate work boundaries through durable SOP carrier files
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel, S12_project_narrative_surface
+  + [known_risks] is treating mailbox messages as authority rather than coordination carriers
+
+& [WorkSliceDetail S14_file_change_surface] is a planned dependency slice
+  + [slice_id] is S14_file_change_surface
+  + [slice_status] is open
+  + [scope] is add solution_uuid records and file-to-solution index entries for implementation slices needing durable review lineage
+  + [target_files] is coordination/**, src/negotiated_agent/**, tests/**
+  + [proof_route] is tests or generated artifacts showing file_path to solution_uuid to justification_ref lookup
+  + [completion_criteria] is manager review can answer why each durable implementation file changed by following a file-change surface
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel
+  + [known_risks] is over-indexing trivial changes before durable file-level review matters
 
 & [CompletedWorkReviewPolicy] is active
   = must: after each completed slice, inspect proof_ref, changed files, result_summary, and remaining concerns
