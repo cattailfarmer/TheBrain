@@ -2356,3 +2356,11 @@
   + [proof_ref] is coordination/model_serving_inventory.sop, coordination/openai_health.sop, coordination/live_route_config_draft.sop
   + [current_frontier] is S272_live_serving_recheck_audit_refresh
   + [narrative_role] is live_serving and environment_probe update
+
+
+& [LongRunNarrativeUpdate S272_live_serving_recheck_audit_refresh] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S272_live_serving_recheck_audit_refresh
+  + [implemented_capability] is spec audit reflects RTX 5090 readiness and unavailable WSL2 Docker Ollama and localhost OpenAI-compatible serving
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S273_prelive_manager_shaliach_review_design
+  + [narrative_role] is specification_audit and live_serving update

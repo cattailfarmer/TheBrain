@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-30T13:18:00Z
+  @ [updated_at] 2026-05-30T13:24:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -41,7 +41,7 @@
 
 & [ImplementedObligation] is a proof-backed specification capability
   + [obligation] is local model serving route is explicit before live setup
-  + [support] is model inventory, role-model profile, live route draft, vLLM WSL2 preflight, OpenAI-compatible healthcheck, local serving docs, and WSL2/vLLM operator guide are present
+  + [support] is model inventory, role-model profile, live route draft, vLLM WSL2 preflight, OpenAI-compatible healthcheck, local serving docs, and WSL2/vLLM operator guide are present; latest probe detects NVIDIA GeForce RTX 5090 with 32607 MiB VRAM and driver 596.49 but no WSL2 Docker Ollama or localhost OpenAI-compatible endpoint
   + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/live_route_config_draft.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop, docs/local_model_serving.md, docs/vllm_wsl2_operator_guide.md
 
 & [PartialObligation] is a specification capability with scaffold support
@@ -53,13 +53,13 @@
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is two or more LLMs negotiate around the objective
   + [support] is config supports distinct Manager, Directors, Programmers, Shaliach models and provider overrides, and the live route draft helper can propose OpenAI-compatible role assignments without mutating config
-  + [gap] is current proof path is dry-run and no local live multi-model server is installed or benchmarked
+  + [gap] is current proof path is dry-run and no local live multi-model server is installed or benchmarked; localhost:8000 is still unavailable and WSL2 is not installed
   + [next_candidate] is install WSL2/vLLM or Ollama and run live route comparison after endpoint health is available
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Directors preserve distinct perspectives and negotiate disagreements
   + [support] is multiple Director configs produce proposals, dry-run roles emit distinct stances, layer packages include DirectorDisagreementLedger, and multi-round runs carry prior Director disagreement into later proposal prompts
-  + [gap] is no live model-family diversity proof or full deliberative Director memory exists yet; carry-forward is bounded prompt context
+  + [gap] is no live model-family diversity proof or full deliberative Director memory exists yet; carry-forward is bounded prompt context and the OpenAI-compatible endpoint remains unavailable
   + [next_candidate] is run live multi-model Director comparison after local model serving is available
 
 & [PartialObligation] is a specification capability with scaffold support
@@ -82,12 +82,12 @@
 
 & [NotYetImplementedObligation] is a remaining specification gap
   + [obligation] is live local LLM swarm throughput
-  + [gap] is WSL2, vLLM, Ollama, and Docker are not installed or available in the current probe; route drafts are non-mutating and not throughput proof
+  + [gap] is WSL2, vLLM, Ollama, Docker, and localhost:8000 OpenAI-compatible serving are not installed or available in the current probe; route drafts are non-mutating and not throughput proof
   + [reason] is current work has stayed non-destructive and setup remains a manual operator step before live multi-model validation
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
   + [candidate_2] is add live Manager/Shaliach post-apply and narrative-append deliberation after endpoint health is available
-  + [candidate_3] is add live or model-negotiated Manager/Shaliach review for combined validation and post-apply evidence after endpoint health is available
+  + [candidate_3] is add deterministic pre-live design for model-negotiated Manager/Shaliach review prompts and records while endpoint setup remains manual
   + [candidate_4] is add automatic conflict resolution and richer swarm parallelism once live model diversity can be measured
   + [candidate_5] is install and verify local live model serving when operator is ready

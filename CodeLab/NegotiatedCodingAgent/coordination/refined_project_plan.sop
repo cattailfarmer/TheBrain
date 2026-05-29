@@ -378,7 +378,8 @@
   + [completed_slice] is S269_long_run_checkpoint_after_combined_validation_integration
   + [completed_slice] is S270_spec_audit_refresh_after_combined_checkpoint_integration
   + [completed_slice] is S271_live_serving_readiness_recheck_after_validation_arc
-  + [ready_slice] is S272_live_serving_recheck_audit_refresh
+  + [completed_slice] is S272_live_serving_recheck_audit_refresh
+  + [ready_slice] is S273_prelive_manager_shaliach_review_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
