@@ -1,0 +1,145 @@
+& [RefinedProjectPlan] is the post-ledger, post-narrative-update plan for NegotiatedCodingAgent
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [project_narrative_surface] coordination/project_narrative_surface.sop
+  @ [framework_attention_load] coordination/framework_attention_load.sop
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [created_at] 2026-05-29T11:42:00Z
+
+  + [plan_state] is active
+  + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
+  + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
+  + [current_frontier] is S10_shaliach_faculty_runtime
+  + [authority_boundary] is planning_surface_not_signed_specification
+  + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
+
+  = must: preserve proof-backed readiness separately from intended capability
+  = must: route Shaliach runtime before broader multi-agent concurrency
+  = must: use completed SJS/DataDesign and narrative updates as inputs to Shaliach rather than rebuilding them immediately
+  = must: keep local LLM serving and model inventory separate from core orchestration until runtime governance is stable
+  - never: treat narrative updates as full narrative coverage recomputation
+  - never: treat extracted ledgers as equivalent to deep Shaliach critique until S10 exists
+
+& [DelineationPass] is the boundary protocol applied to this plan refinement
+  @ [protocol] C:\Project\ReasoningFramework\platform\refinement\Delineation.sop
+  + [field] is the user's request to revisit and refine the project plan after negotiated ledgers and narrative runtime updates
+  + [subject] is the next useful plan for making NegotiatedCodingAgent long-turn ready
+  + [inside] is reordering the active manager queue from current proof-backed readiness
+  + [inside] is identifying the next governing implementation phase
+  + [inside] is separating readiness gates from intended future capability
+  + [inside] is preserving risks and unresolved items that affect long-turn cleanliness
+  + [outside] is implementing Shaliach runtime in this planning checkpoint
+  + [outside] is installing vLLM, Ollama models, WSL2, or Linux infrastructure in this planning checkpoint
+  + [outside] is rewriting the original governing specification in this planning checkpoint
+  + [references] is coordination/manager_job_notice.sop
+  + [references] is coordination/project_narrative_surface.sop
+  + [references] is coordination/framework_attention_load.sop
+  + [references] is specifications/Hierarchical_Agent_Swarm.sop
+  + [uncertainty] is exact model-serving order may change after local inventory and Shaliach governance are proven
+
+  = must: preserve inside, outside, references, and uncertainty as separate legs
+  = must: keep implementation slices bounded by the current subject
+  = must: re-run delineation when a future user request changes the active subject from planning to implementation or infrastructure
+  - never: absorb adjacent attractive work into the active slice merely because it is nearby
+
+& [PlanShift] is what changed after the latest work
+  + [previous_plan_shape] is build durable rails first, then fill missing SOP subsystems
+  + [new_plan_shape] is make existing rails govern agent execution, then add multi-agent coordination and model-hosting depth
+  + [completed_enabler] is S08_runtime_conversation_kernel
+  + [completed_enabler] is S09_protocol_registry
+  + [completed_enabler] is S11_negotiated_sjs_datadesign_ledgers
+  + [completed_enabler] is S12_project_narrative_surface_seed_and_runtime_update
+  + [result] is Shaliach can now be designed against real runtime artifacts: protocol activations, negotiated ledgers, manager reviews, programmer reports, conversation surface, and narrative updates
+
+& [RefinedPhasePlan] is the staged path from current readiness to stronger long-turn autonomy
+  + [Phase1] is ShaliachRuntimeCore
+  + [Phase2] is OrchestratorGovernanceIntegration
+  + [Phase3] is WorkProductTraceability
+  + [Phase4] is MultiConversationCoordination
+  + [Phase5] is LocalModelServingAndDiversity
+  + [Phase6] is LongRunHarnessAndRecovery
+
+& [Phase1 ShaliachRuntimeCore] is the next governing implementation phase
+  + [primary_slice] is S10_shaliach_faculty_runtime
+  + [objective] is implement Shaliach higher/lower reasoning with selected faculty and internal-perspective passes
+  + [input_surface] is negotiated LayerPackage ledgers
+  + [input_surface] is ProtocolActivationSet
+  + [input_surface] is ManagerReview
+  + [input_surface] is ProgrammerReport
+  + [input_surface] is ConversationSurfaceFile
+  + [output_surface] is ShaliachFinding
+  + [output_surface] is ShaliachResponseCoordination
+  + [required_actions] is advisory_note, warning, pause_signal, request_rework, no_finding
+  + [proof_route] is tests for severity selection, targeted artifact repair instructions, no-finding behavior, and pause/rework escalation
+  + [readiness_gate] is Shaliach can inspect negotiated ledgers and block or warn before Manager approval or implementation review
+
+& [Phase2 OrchestratorGovernanceIntegration] is the phase that makes the rails active during runs
+  + [objective] is emit protocol activation artifacts, Shaliach findings, conversation proof updates, and narrative updates as normal run events
+  + [work_slice] is integrate ProtocolRegistry output into run_root
+  + [work_slice] is attach Shaliach findings to layer packages before Manager gate
+  + [work_slice] is update active conversation surface at run start, layer approval, implementation write, and run completion
+  + [work_slice] is update narrative with structured run events beyond a single completion block
+  + [proof_route] is dry-run emits protocol_activation.sop, shaliach findings, updated package ledgers, and narrative run events
+
+& [Phase3 WorkProductTraceability] is the phase that answers why each file changed
+  + [primary_slice] is S14_file_change_surface
+  + [objective] is add solution_uuid records and file-to-solution index entries for implementation slices
+  + [input_surface] is WorkSlice
+  + [input_surface] is ProgrammerReport
+  + [input_surface] is ManagerReview
+  + [input_surface] is changed file list
+  + [output_surface] is FileChangeSurface
+  + [proof_route] is file path resolves to solution_uuid, justification_ref, proof_ref, and commit_ref when available
+
+& [Phase4 MultiConversationCoordination] is the phase for multiple active threads
+  + [primary_slice] is S13_mailbox_and_notice_coordination
+  + [objective] is implement inbox, notice, read_cursor, coordination claim, conflict signal, and rendezvous packets
+  + [dependency] is ShaliachRuntimeCore should exist first so coordination warnings have protocol teeth
+  + [proof_route] is two simulated conversation surfaces exchange boundary offer, acknowledgement, and rendezvous packet without deleting mailbox history
+
+& [Phase5 LocalModelServingAndDiversity] is the phase for real model swarm hosting
+  + [objective] is verify local model inventory and decide Ollama versus vLLM route from actual machine constraints
+  + [preferred_hardware_path] is WSL2 or Linux vLLM for RTX 5090 throughput when disk and setup constraints are acceptable
+  + [fallback_path] is Ollama or OpenAI-compatible server for simpler local operation
+  + [proof_route] is model health check, concurrent request test, role-to-model routing test, and dry-run/live-run comparison
+  + [risk] is spending setup effort before orchestration governance can use model diversity well
+
+& [Phase6 LongRunHarnessAndRecovery] is the phase that makes overnight work operational
+  + [objective] is run a bounded long-turn job with periodic surface updates, proof checkpoints, and reentry validation
+  + [input_surface] is manager_job_notice
+  + [input_surface] is project_narrative_surface
+  + [input_surface] is conversation_surface
+  + [operator] is load rails, take next ready slice, implement, test, update ledgers, commit, push, repeat until blocker or budget
+  + [proof_route] is interrupted/reentered run resumes from conversation_uuid and narrative frontier without losing completed proof or dirty-worktree attribution
+
+& [ManagerQueue] is the refined next-slice order
+  + [ready_slice] is S10_shaliach_faculty_runtime
+  + [next_slice] is S10A_orchestrator_protocol_activation_artifacts
+  + [next_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [next_slice] is S10C_conversation_surface_run_lifecycle_updates
+  + [next_slice] is S14_file_change_surface
+  + [next_slice] is S13_mailbox_and_notice_coordination
+  + [next_slice] is S15_model_inventory_and_serving_probe
+  + [next_slice] is S16_long_run_harness
+
+  = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
+  = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
+
+& [RiskLedger] is the current plan risk surface
+  + [risk] is Shaliach runtime could become ceremonial if it activates every faculty for every event
+  + [mitigation] is select perspectives by artifact and severity; default to no_finding for clean low-risk events
+  + [risk] is extracted ledgers may overfit keyword lines from weak model proposals
+  + [mitigation] is Shaliach should grade ledger support and request rework when evidence is too thin
+  + [risk] is narrative append-only updates can drift from coverage truth
+  + [mitigation] is future narrative runtime must recompute coverage and stale status, not only append summaries
+  + [risk] is local model setup can consume time before the agent loop is ready to use model diversity
+  + [mitigation] is defer vLLM/Ollama inventory work until Shaliach and orchestration governance can exploit diversity
+
+& [ReadinessGate] is the minimum condition before claiming stronger long-turn readiness
+  + [required] is Shaliach runtime emits findings from protocol activations and negotiated ledgers
+  + [required] is orchestrator writes Shaliach findings and protocol activation artifacts into run output
+  + [required] is active conversation surface updates during run lifecycle, not only at completion
+  + [required] is tests cover warning, pause/rework, and no-finding paths
+  + [required] is one dry-run proves run output, conversation surface, and narrative surface stay coherent
+
+  = must: claim long-turn readiness only with proof for the gate conditions

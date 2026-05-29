@@ -20,6 +20,7 @@
   + [manager_job_notice] is coordination/manager_job_notice.sop
   + [framework_attention_load] is coordination/framework_attention_load.sop
   + [project_narrative_surface] is coordination/project_narrative_surface.sop
+  + [refined_project_plan] is coordination/refined_project_plan.sop
   + [github_repository] is https://github.com/cattailfarmer/TheBrain
 
   + [completed_commit] is ea8acb9 Add hierarchical swarm specification rails
@@ -32,6 +33,7 @@
   + [last_proof] is tests passed with 15 tests after S09 protocol registry
   + [last_proof] is run narrative update written for runs\20260529T112648Z
   + [last_proof] is tests passed with 17 tests after negotiated SJS DataDesign ledgers and automatic narrative updates
+  + [last_proof] is planning checkpoint refined after negotiated ledgers and narrative updates
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -48,7 +50,7 @@
   + [completed_slice] is S12_project_narrative_surface_runtime_update
   + [completed_slice] is S12_project_narrative_surface_seed
 
-  + [current_frontier] is S10_shaliach_faculty_runtime after negotiated ledgers and automatic narrative updates
+  + [current_frontier] is S10_shaliach_faculty_runtime under refined project plan
   + [next_recommended_slice] is S10_shaliach_faculty_runtime from coordination/framework_attention_load.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
@@ -66,6 +68,7 @@
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
     + [then_load] is coordination/manager_job_notice.sop
     + [then_load] is coordination/project_narrative_surface.sop
+    + [then_load] is coordination/refined_project_plan.sop
     + [then_load] is coordination/framework_attention_load.sop
     + [then_load] is specifications/Hierarchical_Agent_Swarm.sop
     + [then_check] is git status at C:\Project\TheBrain

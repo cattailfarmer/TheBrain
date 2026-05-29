@@ -93,6 +93,7 @@
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
   + [current_runtime_limit] is narrative surfaces are hand-maintained SOP artifacts rather than executable runtime operators
+  + [planning_update] is coordination/refined_project_plan.sop reframes the next work from missing rails to active runtime governance
   + [citation_ref] is README.md
   + [citation_ref] is coordination/manager_job_notice.sop
   + [citation_ref] is coordination/framework_attention_load.sop
@@ -132,13 +133,16 @@
 & [FrontierArc] is the next useful work sequence
   + [next_recommended_slice] is S10_shaliach_faculty_runtime
   + [next_reason] is Shaliach should now use protocol registry, negotiated ledgers, and seven-faculty framing to produce explicit advisory, warning, pause, rework, and no-finding outputs
-  + [following_slice] is S11_negotiated_sjs_datadesign_ledgers
-  + [following_slice] is S12_project_narrative_surface_runtime
-  + [following_slice] is S13_mailbox_and_notice_coordination
+  + [following_slice] is S10A_orchestrator_protocol_activation_artifacts
+  + [following_slice] is S10B_attach_shaliach_findings_to_layer_packages
+  + [following_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [following_slice] is S14_file_change_surface
-  + [sleep_run_candidate] is S09_protocol_registry because it is bounded, testable, and directly prepares Shaliach faculty runtime
+  + [following_slice] is S13_mailbox_and_notice_coordination
+  + [following_slice] is S15_model_inventory_and_serving_probe
+  + [following_slice] is S16_long_run_harness
+  + [sleep_run_candidate] is S10_shaliach_faculty_runtime if higher reasoning is available; otherwise split into S10A/S10B/S10C
 
-  = must: prefer S09 before deeper Shaliach or Director negotiation work unless the user gives a newer objective
+  = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
 
 & [NarrativeWeave] is the cross-subject relation set
@@ -160,6 +164,7 @@
   + [narrative_gap] is current governing spec is unsigned and should not be misrepresented as SJS-satisfied canonical authority
   + [narrative_gap] is vLLM and local multi-model serving remain architecture choices, not verified runtime infrastructure
   + [narrative_gap] is long-run unattended work is plausible under SOP rails but still needs periodic proof and surface updates to avoid overclaim
+  + [narrative_gap] is Shaliach faculty runtime is now the primary readiness gate before claiming stronger long-turn autonomy
 
 & [CoverageMap] is the current artifact coverage inventory
   + [covered_artifact] is README.md
@@ -188,12 +193,13 @@
   + [load_first] is coordination/active_conversation.sop
   + [then_load] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
   + [then_load] is coordination/project_narrative_surface.sop
+  + [then_load] is coordination/refined_project_plan.sop
   + [then_load] is coordination/framework_attention_load.sop
   + [then_load] is coordination/manager_job_notice.sop
   + [then_load] is specifications/Hierarchical_Agent_Swarm.sop
   + [then_check] is git status at C:\Project\TheBrain
   + [then_run] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
-  + [resume_action] is continue S08_runtime_conversation_kernel unless user gives a newer objective
+  + [resume_action] is continue S10_shaliach_faculty_runtime unless user gives a newer objective
   + [trust_boundary_note] is narrative surface is continuity and readiness context, not stronger authority than direct specification, tests, user instruction, or file inspection
 
 & [OperationalFaultWatch] is the process-risk record for sleeping long-run work

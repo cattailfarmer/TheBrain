@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 12
+  + [job_notice_revision] is 13
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -17,7 +17,7 @@
   + [unsliced_specification_remaining] is true
   + [fully_sliced_specification] is false
 
-  + [job_goal] is absorb the user's SOP framework into NegotiatedCodingAgent in stages, starting with durable narrative and conversation-kernel rails before deeper protocol registry, Shaliach faculty runtime, negotiated SJS/DataDesign ledgers, mailbox, and file-change surfaces
+  + [job_goal] is make the existing SOP rails govern NegotiatedCodingAgent execution, starting with Shaliach faculty runtime over protocol activations, negotiated ledgers, manager reviews, programmer reports, conversation surfaces, and narrative updates
 
   + [slice_summary] is (
     S01_commit_spec_rails |
@@ -32,8 +32,13 @@
     S10_shaliach_faculty_runtime |
     S11_negotiated_sjs_datadesign_ledgers |
     S12_project_narrative_surface |
+    S10A_orchestrator_protocol_activation_artifacts |
+    S10B_attach_shaliach_findings_to_layer_packages |
+    S10C_conversation_surface_run_lifecycle_updates |
     S13_mailbox_and_notice_coordination |
-    S14_file_change_surface
+    S14_file_change_surface |
+    S15_model_inventory_and_serving_probe |
+    S16_long_run_harness
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -156,6 +161,40 @@
   + [support_status] is pending_dependency
   + [dependency_set] is S08_runtime_conversation_kernel, S09_protocol_registry
   + [known_risks] is overactivating every faculty and turning lightweight checks into ceremony
+  + [planning_update] is refined by coordination/refined_project_plan.sop as the next readiness gate before broader multi-agent coordination or model-serving work
+
+& [WorkSliceDetail S10A_orchestrator_protocol_activation_artifacts] is a planned child slice
+  + [slice_id] is S10A_orchestrator_protocol_activation_artifacts
+  + [slice_status] is open
+  + [scope] is emit protocol activation artifacts into each run using the existing SOP protocol registry
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is dry-run emits protocol_activation.sop with active protocols, reasons, and authority boundary
+  + [completion_criteria] is run output records which SOP protocols were active and why without claiming full interpretation
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10_shaliach_faculty_runtime or explicit manager split
+  + [known_risks] is protocol references becoming decorative instead of governing later Shaliach checks
+
+& [WorkSliceDetail S10B_attach_shaliach_findings_to_layer_packages] is a planned child slice
+  + [slice_id] is S10B_attach_shaliach_findings_to_layer_packages
+  + [slice_status] is open
+  + [scope] is attach Shaliach findings to layer packages before Manager gate using negotiated ledgers and protocol activations
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests for no_finding, advisory, warning, pause, and request_rework outputs
+  + [completion_criteria] is Manager review can see Shaliach finding severity and required response before approving descent
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10_shaliach_faculty_runtime
+  + [known_risks] is making Shaliach final authority instead of protocol counsel and controller
+
+& [WorkSliceDetail S10C_conversation_surface_run_lifecycle_updates] is a planned child slice
+  + [slice_id] is S10C_conversation_surface_run_lifecycle_updates
+  + [slice_status] is open
+  + [scope] is update the active conversation surface at run start, layer approval, implementation write, and run completion
+  + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
+  + [proof_route] is tests and dry-run show current_frontier, proof ledger, and unresolved items update during lifecycle events
+  + [completion_criteria] is long-run reentry can tell whether the run was starting, negotiating, implementing, reviewing, completed, or blocked
+  + [support_status] is pending_dependency
+  + [dependency_set] is S08_runtime_conversation_kernel, S10_shaliach_faculty_runtime
+  + [known_risks] is noisy surface churn that hides the useful frontier
 
 & [WorkSliceDetail S11_negotiated_sjs_datadesign_ledgers] is a planned dependency slice
   + [slice_id] is S11_negotiated_sjs_datadesign_ledgers
@@ -205,6 +244,28 @@
   + [support_status] is pending_dependency
   + [dependency_set] is S08_runtime_conversation_kernel
   + [known_risks] is over-indexing trivial changes before durable file-level review matters
+
+& [WorkSliceDetail S15_model_inventory_and_serving_probe] is a planned dependency slice
+  + [slice_id] is S15_model_inventory_and_serving_probe
+  + [slice_status] is open
+  + [scope] is verify local model inventory and decide Ollama versus vLLM route from actual machine constraints
+  + [target_files] is docs/**, scripts/**, agent.config.json, tests/**
+  + [proof_route] is model health check, concurrent request test, role-to-model routing test, and dry-run/live-run comparison
+  + [completion_criteria] is Manager, Director, Programmer, and Shaliach roles have verified local serving routes or explicit fallbacks
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10_shaliach_faculty_runtime unless user prioritizes infrastructure first
+  + [known_risks] is spending setup effort before orchestration governance can use model diversity well
+
+& [WorkSliceDetail S16_long_run_harness] is a planned dependency slice
+  + [slice_id] is S16_long_run_harness
+  + [slice_status] is open
+  + [scope] is run a bounded long-turn job with periodic surface updates, proof checkpoints, and reentry validation
+  + [target_files] is scripts/**, coordination/**, src/negotiated_agent/**, tests/**
+  + [proof_route] is interrupted or simulated-reentry run resumes from conversation_uuid and narrative frontier without losing proof or worktree attribution
+  + [completion_criteria] is system can take a ready slice, implement, test, update rails, commit, push, and resume after interruption
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10C_conversation_surface_run_lifecycle_updates, S14_file_change_surface
+  + [known_risks] is claiming unattended autonomy without enough reentry and fault evidence
 
 & [CompletedWorkReviewPolicy] is active
   = must: after each completed slice, inspect proof_ref, changed files, result_summary, and remaining concerns
