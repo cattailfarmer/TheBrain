@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 156
+  + [job_notice_revision] is 157
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3701,7 +3701,7 @@
 
 & [WorkSliceDetail S270_spec_audit_refresh_after_combined_checkpoint_integration] is a specification audit slice
   + [slice_id] is S270_spec_audit_refresh_after_combined_checkpoint_integration
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after combined validation checkpoint integration
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names checkpoint-integrated combined validation and latest long-run proof
@@ -3709,3 +3709,16 @@
   + [support_status] is prepared
   + [dependency_set] is S269_long_run_checkpoint_after_combined_validation_integration
   + [known_risks] is audit treating checkpoint readiness as acceptance of generated code
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:18:00Z, proof_ref spec_implementation_status.sop and tests passed with 268 tests, result_summary audit reflects checkpoint-integrated combined validation status
+  + [completed_work_review] is support_delta verified audit distinguishes checkpoint readiness from generated-code acceptance; requirement_delta next step is recheck live serving readiness after governance validation arc
+
+& [WorkSliceDetail S271_live_serving_readiness_recheck_after_validation_arc] is a live-serving readiness slice
+  + [slice_id] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [slice_status] is open
+  + [scope] is recheck local live-serving readiness after completing validation and checkpoint governance arc
+  + [target_files] is coordination/model_serving_inventory.sop, coordination/openai_health.sop, coordination/live_route_config_draft.sop, coordination/**
+  + [proof_route] is model inventory OpenAI-compatible healthcheck and live route draft refresh
+  + [completion_criteria] is readiness surfaces accurately state whether localhost OpenAI-compatible serving is available
+  + [support_status] is prepared
+  + [dependency_set] is S270_spec_audit_refresh_after_combined_checkpoint_integration
+  + [known_risks] is treating unavailable endpoint as a coding blocker when governance work can continue

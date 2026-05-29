@@ -2340,3 +2340,11 @@
   + [run_root] is runs\20260529T211357Z
   + [current_frontier] is S270_spec_audit_refresh_after_combined_checkpoint_integration
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S270_spec_audit_refresh_after_combined_checkpoint_integration] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S270_spec_audit_refresh_after_combined_checkpoint_integration
+  + [implemented_capability] is spec audit reflects checkpoint-integrated combined validation status and 268-test long-run proof
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [narrative_role] is specification_audit and proof_arc update
