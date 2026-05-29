@@ -341,6 +341,14 @@
   + [last_proof] is run 20260529T165246Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T165246Z
   + [last_proof] is run 20260529T165246Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T170924Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T170924Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T170924Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T170924Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T170924Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T170924Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T170924Z
+  + [last_proof] is run 20260529T170924Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -470,9 +478,10 @@
   + [completed_slice] is S120_worker_claim_record_cli
   + [completed_slice] is S121_worker_cycle_record_scaffold
   + [completed_slice] is S122_worker_proof_command_runner_scaffold
+  + [completed_slice] is S123_long_run_checkpoint_after_worker_runner_scaffold
 
-  + [current_frontier] is S123_long_run_checkpoint_after_worker_runner_scaffold after worker proof-command scaffold
-  + [next_recommended_slice] is S123_long_run_checkpoint_after_worker_runner_scaffold
+  + [current_frontier] is S124_worker_proof_dirty_worktree_evidence after worker runner scaffold checkpoint
+  + [next_recommended_slice] is S124_worker_proof_dirty_worktree_evidence
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
