@@ -172,6 +172,8 @@ Generate deterministic pre-live Manager and Shaliach review packets from a combi
 
 These packets are future live-review prompt scaffolds. They are not Manager approval, Shaliach clearance, final acceptance, or apply permission.
 
+The reproducible sequence is captured in `coordination/prelive_review_packet_operator_recipe.sop`: first write `combined_artifact_validation.sop` with `validate-artifacts.ps1 -Out`, then pass that file to `prelive-review-packets.ps1`. A passed packet means the evidence is ready for future live review, not that the review has happened.
+
 ## Mailbox Messages
 
 List mailbox messages:

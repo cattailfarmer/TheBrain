@@ -1,0 +1,31 @@
+& [PreliveReviewPacketOperatorRecipe] is the operator recipe for combined validation and deterministic review packet scaffolds
+  @ [created_at] 2026-05-30T13:54:00Z
+  @ [related_design] coordination/prelive_manager_shaliach_review_design.sop
+  @ [combined_validator] scripts/validate-artifacts.ps1
+  @ [packet_writer] scripts/prelive-review-packets.ps1
+
+  + [recipe_status] is ready_for_operator_use
+  + [authority_boundary] is recipe_not_final_acceptance_or_live_review
+  + [input] is runs/<timestamp>/run_manifest.sop
+  + [input] is coordination/long_run_checkpoint.sop
+  + [output] is combined_artifact_validation.sop
+  + [output] is manager_prelive_review.sop
+  + [output] is shaliach_prelive_review.sop
+
+& [CommandSequence] is the reproducible shell sequence
+  + [step_1] is scripts/validate-artifacts.ps1 -Manifest runs/<timestamp>/run_manifest.sop -Checkpoint coordination/long_run_checkpoint.sop -Out <work-dir>/combined_artifact_validation.sop
+  + [step_2] is scripts/prelive-review-packets.ps1 -CombinedValidation <work-dir>/combined_artifact_validation.sop -ManagerOut <work-dir>/manager_prelive_review.sop -ShaliachOut <work-dir>/shaliach_prelive_review.sop
+  + [authority_boundary] is read_only_validation_then_scaffold_packet_writes
+
+& [ExpectedProof] is the success vocabulary
+  + [combined_validation_status] is passed
+  + [manager_packet_readiness_status] is review_ready
+  + [shaliach_packet_recommended_response] is review_ready
+  + [non_goal] is Manager approval
+  + [non_goal] is Shaliach clearance
+  + [non_goal] is apply permission
+
+& [FailureHandling] is the blocked vocabulary
+  + [if_combined_validation_failed] is do not treat packets as approval; repair manifest or checkpoint evidence first
+  + [if_combined_validation_incomplete] is inspect dry-run root checkpoint probe and missing refs before proceeding
+  + [authority_boundary] is evidence_repair_not_acceptance_override

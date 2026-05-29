@@ -2396,3 +2396,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S277_prelive_review_packet_operator_recipe
   + [narrative_role] is specification_audit and review_runtime update
+
+
+& [LongRunNarrativeUpdate S277_prelive_review_packet_operator_recipe] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S277_prelive_review_packet_operator_recipe
+  + [implemented_capability] is prelive_review_packet_operator_recipe.sop documents combined validation then pre-live packet generation sequence
+  + [proof_result] is recipe proof produced combined validation passed Manager review_ready and Shaliach review_ready from latest run/checkpoint
+  + [current_frontier] is S278_long_run_checkpoint_after_prelive_review_recipe
+  + [narrative_role] is operator_recipe and review_runtime update
