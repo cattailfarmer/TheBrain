@@ -2079,3 +2079,11 @@
   + [run_root] is runs\20260529T202745Z
   + [current_frontier] is S243_spec_audit_refresh_after_shaliach_inspect_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S243_spec_audit_refresh_after_shaliach_inspect_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S243_spec_audit_refresh_after_shaliach_inspect_cli
+  + [implemented_capability] is spec audit now names Shaliach self-negotiation parser and inspection CLI as deterministic tooling while preserving live deliberation gap
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S244_shaliach_cross_artifact_inspection_design
+  + [narrative_role] is specification_audit and shaliach_arc update

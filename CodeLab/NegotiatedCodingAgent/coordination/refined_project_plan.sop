@@ -349,7 +349,8 @@
   + [completed_slice] is S240_shaliach_self_negotiation_parser
   + [completed_slice] is S241_shaliach_self_negotiation_inspect_cli
   + [completed_slice] is S242_long_run_checkpoint_after_shaliach_inspect_cli
-  + [ready_slice] is S243_spec_audit_refresh_after_shaliach_inspect_cli
+  + [completed_slice] is S243_spec_audit_refresh_after_shaliach_inspect_cli
+  + [ready_slice] is S244_shaliach_cross_artifact_inspection_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

@@ -3350,7 +3350,7 @@
 
 & [WorkSliceDetail S243_spec_audit_refresh_after_shaliach_inspect_cli] is a specification audit slice
   + [slice_id] is S243_spec_audit_refresh_after_shaliach_inspect_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after Shaliach self-negotiation parser and inspection CLI
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names parser and inspect CLI as deterministic tooling and preserves live deliberation gap
@@ -3358,3 +3358,16 @@
   + [support_status] is prepared
   + [dependency_set] is S242_long_run_checkpoint_after_shaliach_inspect_cli
   + [known_risks] is audit treating inspection summaries as semantic validation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T11:04:00Z, proof_ref spec_implementation_status.sop and tests passed with 223 tests, result_summary audit reflects Shaliach self-negotiation parser and inspection CLI while preserving live deliberation gap
+  + [completed_work_review] is support_delta verified audit treats inspection CLI as deterministic tooling not semantic validation; requirement_delta next step is add cross-artifact inspection gate between self-negotiation, finding, and response refs
+
+& [WorkSliceDetail S244_shaliach_cross_artifact_inspection_design] is a coordination runtime design slice
+  + [slice_id] is S244_shaliach_cross_artifact_inspection_design
+  + [slice_status] is open
+  + [scope] is design cross-artifact inspection gate for Shaliach self-negotiation, finding, and response refs
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is design names required inputs, blocked states, and deterministic-not-live boundary
+  + [completion_criteria] is future checker can validate refs and status consistency without claiming semantic approval
+  + [support_status] is prepared
+  + [dependency_set] is S243_spec_audit_refresh_after_shaliach_inspect_cli
+  + [known_risks] is gate becoming accidental Manager approval
