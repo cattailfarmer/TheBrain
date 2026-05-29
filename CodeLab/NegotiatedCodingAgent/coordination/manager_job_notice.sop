@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 103
+  + [job_notice_revision] is 104
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -121,7 +121,8 @@
     S96_operator_approved_apply_mutation_design |
     S97_apply_mutation_preflight_validator |
     S98_spec_audit_refresh_after_apply_preflight |
-    S99_long_run_checkpoint_after_apply_preflight
+    S99_long_run_checkpoint_after_apply_preflight |
+    S100_apply_snapshot_plan_writer
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1440,7 +1441,7 @@
 
 & [WorkSliceDetail S99_long_run_checkpoint_after_apply_preflight] is a long-run reentry slice
   + [slice_id] is S99_long_run_checkpoint_after_apply_preflight
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after apply mutation preflight implementation and audit
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 66-test suite and route draft proof
@@ -1448,3 +1449,16 @@
   + [support_status] is prepared
   + [dependency_set] is S98_spec_audit_refresh_after_apply_preflight
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:18:56Z, proof_ref long-run checkpoint passed 66 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after apply mutation preflight audit
+  + [completed_work_review] is support_delta verified long-run checkpoint captures apply preflight frontier; requirement_delta next safe apply step is snapshot plan/writer in temporary workspace tests
+
+& [WorkSliceDetail S100_apply_snapshot_plan_writer] is an apply pipeline implementation slice
+  + [slice_id] is S100_apply_snapshot_plan_writer
+  + [slice_status] is open
+  + [scope] is implement snapshot plan/materialization helpers for future apply mutation using temporary workspace tests only
+  + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
+  + [proof_route] is tests cover existing-file snapshot, create operation without snapshot, containment rejection, and no uncontrolled writes
+  + [completion_criteria] is snapshot helper can materialize rollback evidence under run root without applying source files to target paths
+  + [support_status] is prepared
+  + [dependency_set] is S99_long_run_checkpoint_after_apply_preflight
+  + [known_risks] is confusing snapshot writing with target patch application
