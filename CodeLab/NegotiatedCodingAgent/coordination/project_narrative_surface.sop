@@ -1315,3 +1315,11 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes run-local execution planner CLI and 123-test checkpoint as scaffold support
   + [current_frontier] is S164_run_local_execution_writer
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S164_run_local_execution_writer] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S164_run_local_execution_writer
+  + [implemented_capability] is execute_run_local_plan writes deterministic generated evidence and run_local_execution_result.sop only under the plan run-local root
+  + [proof_result] is tests passed with 125 tests
+  + [current_frontier] is S165_run_local_execution_writer_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

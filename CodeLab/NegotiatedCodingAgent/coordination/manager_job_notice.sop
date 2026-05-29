@@ -2323,7 +2323,7 @@
 
 & [WorkSliceDetail S164_run_local_execution_writer] is a coordination runtime implementation slice
   + [slice_id] is S164_run_local_execution_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add deterministic run-local implementation file writer from RunLocalExecutionPlan evidence
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**
   + [proof_route] is tests cover generated file under implementation root result record no target workspace writes and containment rejection
@@ -2331,3 +2331,16 @@
   + [support_status] is prepared
   + [dependency_set] is S163_spec_audit_refresh_after_run_local_plan_cli
   + [known_risks] is writer accidentally touching target workspace files
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:30:00Z, proof_ref tests passed with 125 tests, result_summary added deterministic run-local plan writer helper and result record persistence
+  + [completed_work_review] is support_delta verified writer stays under run-local worker execution root and writes result evidence; requirement_delta next step is explicit CLI for run-local writer
+
+& [WorkSliceDetail S165_run_local_execution_writer_cli] is a coordination runtime implementation slice
+  + [slice_id] is S165_run_local_execution_writer_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to execute RunLocalExecutionPlan into run-local generated evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover writer CLI creates generated evidence result record collision handling and no target workspace writes
+  + [completion_criteria] is operators can execute a run-local plan into generated evidence without target workspace mutation
+  + [support_status] is prepared
+  + [dependency_set] is S164_run_local_execution_writer
+  + [known_risks] is CLI being mistaken for apply mutation

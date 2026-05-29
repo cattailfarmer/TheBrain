@@ -76,7 +76,9 @@ from negotiated_agent.route_draft import build_live_route_draft
 from negotiated_agent.run_local_execution import (
     RunLocalExecutionResult,
     build_run_local_execution_plan,
+    execute_run_local_plan,
     ensure_run_local_path,
+    load_run_local_execution_plan,
 )
 from negotiated_agent.run_local_execution_cli import main as run_local_execution_cli_main
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
@@ -2777,6 +2779,79 @@ class MailboxCoordinationTests(unittest.TestCase):
             with contextlib.redirect_stdout(collision):
                 self.assertEqual(run_local_execution_cli_main(args), 1)
             self.assertIn("already exists", collision.getvalue())
+
+    def test_run_local_execution_writer_writes_only_under_worker_root(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            gate = ExecutionGateDecision(
+                gate_id="gate-run",
+                worker_uuid="worker-a",
+                gate_status="execution_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="execute_run_local_implementation",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-run",
+                cycle_status="ready_for_run_local_execution",
+                claim_refs=("lease.sop#claim",),
+                slice_ref="manager_job_notice.sop#S164",
+                proof_refs=("gate.sop",),
+                changed_files=(),
+            )
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            plan_record = build_run_local_execution_plan(
+                plan_id="plan-1",
+                worker_uuid="worker-a",
+                execution_gate=gate,
+                execution_gate_ref="gate.sop",
+                ready_cycle=cycle,
+                ready_cycle_ref="cycle.sop",
+                project_root=root,
+                run_id="run-1",
+                run_local_root=run_root,
+            )
+            result = execute_run_local_plan(
+                project_root=root,
+                plan=plan_record,
+                plan_ref="runs/run-1/worker_execution/cycle-run/run_local_execution_plan.sop",
+                result_id="result-1",
+                worker_cycle_ref="coordination/workers/worker-a/cycles/cycle-run.sop",
+                generated_text="Generated run-local evidence only.\n",
+            )
+            generated = root / result.generated_files[0]
+            self.assertTrue(generated.exists())
+            self.assertEqual(generated.read_text(encoding="utf-8"), "Generated run-local evidence only.\n")
+            self.assertTrue((run_root / "run_local_execution_result.sop").exists())
+            self.assertFalse((root / "README.generated.txt").exists())
+
+    def test_run_local_execution_plan_loader_round_trips(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            plan_path = root / "plan.sop"
+            plan_path.write_text(
+                "\n".join(
+                    [
+                        "& [RunLocalExecutionPlan plan-1] is plan",
+                        "  + [plan_id] is plan-1",
+                        "  + [worker_uuid] is worker-a",
+                        "  + [execution_gate_ref] is gate.sop",
+                        "  + [ready_cycle_ref] is cycle.sop",
+                        "  + [run_local_root] is runs/run-1/worker_execution/cycle-run",
+                        "  + [planned_action] is execute_run_local_implementation",
+                        "  + [proof_route] is scripts/test.ps1",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            loaded = load_run_local_execution_plan(plan_path)
+            self.assertEqual(loaded.plan_id, "plan-1")
+            self.assertEqual(loaded.run_local_root, "runs/run-1/worker_execution/cycle-run")
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

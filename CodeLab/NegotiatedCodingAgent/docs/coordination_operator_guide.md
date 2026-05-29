@@ -255,6 +255,8 @@ Write a dry-run run-local execution plan:
 
 The planner writes `run_local_execution_plan.sop` under `runs/<run-id>/worker_execution/<cycle-id>/`. It does not generate implementation files.
 
+The current writer helper can execute a plan into the same run-local root and write `run_local_execution_result.sop`; an operator CLI for that writer is the next boundary.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

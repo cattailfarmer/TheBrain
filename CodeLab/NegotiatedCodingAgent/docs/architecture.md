@@ -240,6 +240,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `RunLocalExecutionPlan`, `RunLocalExecutionResult`, and `scripts/run-local-execution-plan.ps1` provide the first dry-run planning step for that boundary. The planner writes only plan evidence under the selected run-local worker execution root and rejects proof-only gates.
 
+`negotiated_agent.run_local_execution.execute_run_local_plan` adds the deterministic writer helper for that same boundary. It writes generated evidence only beneath the plan's run-local worker execution root and writes `run_local_execution_result.sop`; target workspace application remains reserved for later merge/apply protocols.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

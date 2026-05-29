@@ -53,6 +53,46 @@ class RunLocalExecutionResult:
 """
 
 
+def execute_run_local_plan(
+    *,
+    project_root: Path,
+    plan: RunLocalExecutionPlan,
+    plan_ref: str,
+    result_id: str,
+    worker_cycle_ref: str,
+    generated_text: str,
+) -> RunLocalExecutionResult:
+    run_local_root = project_root / Path(plan.run_local_root)
+    implementation_file = ensure_run_local_path(run_local_root, run_local_root / "implementation" / "README.generated.txt")
+    implementation_file.parent.mkdir(parents=True, exist_ok=True)
+    implementation_file.write_text(generated_text, encoding="utf-8")
+    generated_ref = str(implementation_file.relative_to(project_root)).replace("\\", "/")
+    result = RunLocalExecutionResult(
+        result_id=result_id,
+        worker_uuid=plan.worker_uuid,
+        plan_ref=plan_ref,
+        execution_status="completed",
+        generated_files=(generated_ref,),
+        worker_cycle_ref=worker_cycle_ref,
+    )
+    result_path = ensure_run_local_path(run_local_root, run_local_root / "run_local_execution_result.sop")
+    result_path.write_text(result.to_sop(), encoding="utf-8")
+    return result
+
+
+def load_run_local_execution_plan(path: Path) -> RunLocalExecutionPlan:
+    fields = _read_fields(path)
+    return RunLocalExecutionPlan(
+        plan_id=fields["plan_id"],
+        worker_uuid=fields["worker_uuid"],
+        execution_gate_ref=fields["execution_gate_ref"],
+        ready_cycle_ref=fields["ready_cycle_ref"],
+        run_local_root=fields["run_local_root"],
+        planned_action=fields["planned_action"],
+        proof_route=fields["proof_route"],
+    )
+
+
 def build_run_local_execution_plan(
     *,
     plan_id: str,
@@ -96,3 +136,15 @@ def ensure_run_local_path(run_local_root: Path, candidate: Path) -> Path:
 
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
+
+
+def _read_fields(path: Path) -> dict[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing")
+    fields = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            fields[key] = value
+    return fields
