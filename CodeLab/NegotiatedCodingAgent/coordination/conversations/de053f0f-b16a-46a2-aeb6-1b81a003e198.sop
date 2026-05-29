@@ -150,6 +150,7 @@
   + [last_proof] is long-run checkpoint refreshed after S77 with tests dry-run model inventory and non-gating OpenAI healthcheck
   + [last_proof] is tests passed with 59 tests after S78 apply command dry-run CLI design
   + [last_proof] is tests passed with 61 tests after S79 dry-run apply CLI implementation
+  + [last_proof] is tests passed with 61 tests after S80 spec audit refresh
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -324,9 +325,10 @@
   + [completed_slice] is S77_long_run_checkpoint_refresh
   + [completed_slice] is S78_apply_command_dry_run_cli_design
   + [completed_slice] is S79_apply_command_dry_run_cli_implementation
+  + [completed_slice] is S80_spec_audit_refresh_after_apply_cli
 
-  + [current_frontier] is S80_spec_audit_refresh_after_apply_cli after dry-run apply CLI implementation
-  + [next_recommended_slice] is S80_spec_audit_refresh_after_apply_cli
+  + [current_frontier] is S81_long_run_checkpoint_after_apply_cli after spec audit refresh
+  + [next_recommended_slice] is S81_long_run_checkpoint_after_apply_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
