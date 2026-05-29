@@ -2635,7 +2635,7 @@
 
 & [WorkSliceDetail S188_frontier_application_plan_cli] is a coordination runtime implementation slice
   + [slice_id] is S188_frontier_application_plan_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write frontier_application_plan.sop
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover valid plan write stale frontier blocked advancement ref and no current_frontier mutation
@@ -2643,3 +2643,16 @@
   + [support_status] is prepared
   + [dependency_set] is S187_frontier_application_plan_records
   + [known_risks] is plan writer being mistaken for the future apply command
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:43:00Z, proof_ref tests passed with 148 tests, result_summary added frontier application plan CLI and wrapper
+  + [completed_work_review] is support_delta verified plan writer reads active conversation surface but does not mutate it; requirement_delta next step is design explicit frontier application apply command
+
+& [WorkSliceDetail S189_frontier_application_apply_design] is a coordination runtime design slice
+  + [slice_id] is S189_frontier_application_apply_design
+  + [slice_status] is open
+  + [scope] is design explicit command to apply frontier application plans to active conversation surfaces
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names exact previous frontier match proof append completed slice append narrative update and blocked stale result
+  + [completion_criteria] is design allows surface mutation only through explicit apply command and never target workspace mutation
+  + [support_status] is prepared
+  + [dependency_set] is S188_frontier_application_plan_cli
+  + [known_risks] is stale frontier plans overwriting newer work

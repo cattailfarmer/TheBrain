@@ -59,6 +59,15 @@ def build_frontier_application_plan(
     )
 
 
+def write_frontier_application_plan(output_dir: Path, plan: FrontierApplicationPlan) -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "frontier_application_plan.sop"
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.write_text(plan.to_sop(), encoding="utf-8")
+    return path
+
+
 def load_frontier_advancement_record(path: Path) -> FrontierAdvancementRecord:
     fields = _read_fields(path)
     return FrontierAdvancementRecord(

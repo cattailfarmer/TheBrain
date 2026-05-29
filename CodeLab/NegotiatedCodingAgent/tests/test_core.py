@@ -22,6 +22,7 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.frontier_application import build_frontier_application_plan, load_frontier_advancement_record
+from negotiated_agent.frontier_application_cli import main as frontier_application_cli_main
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.frontier_advancement import build_frontier_advancement_record
 from negotiated_agent.frontier_advancement_cli import main as frontier_advancement_cli_main
@@ -3802,6 +3803,99 @@ class MailboxCoordinationTests(unittest.TestCase):
                     conversation_surface_ref="coordination/conversations/convo-1.sop",
                     current_frontier="S999_other",
                 )
+
+    def test_frontier_application_cli_writes_plan_without_surface_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            advancement_dir = root / "coordination" / "frontier_advancements" / "advance-1"
+            conversation_dir.mkdir(parents=True)
+            advancement_dir.mkdir(parents=True)
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is pointer\n"
+                "  + [active_conversation_uuid] is convo-1\n"
+                "  + [conversation_surface_file] is coordination/conversations/convo-1.sop\n",
+                encoding="utf-8",
+            )
+            surface = conversation_dir / "convo-1.sop"
+            original_surface = (
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S188_frontier_application_plan_cli\n"
+            )
+            surface.write_text(original_surface, encoding="utf-8")
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S188_frontier_application_plan_cli",
+                previous_frontier="S188_frontier_application_plan_cli",
+                next_frontier="S189_frontier_application_apply_design",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="clear_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+                packet_refs=("runs/run-1/manual_merge_packet.sop",),
+                residual_risk_summary="none",
+            )
+            (advancement_dir / "frontier_advancement_record.sop").write_text(advancement.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_application_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--advancement-ref",
+                            "coordination/frontier_advancements/advance-1/frontier_advancement_record.sop",
+                            "--plan-id",
+                            "plan-1",
+                            "--completed-slice-ref",
+                            "S188_frontier_application_plan_cli",
+                        ]
+                    ),
+                    0,
+                )
+            plan = (advancement_dir / "frontier_application_plan.sop").read_text(encoding="utf-8")
+            self.assertIn("frontier_application_plan_not_surface_write", plan)
+            self.assertIn("frontier_application_plan_write_not_surface_mutation", out.getvalue())
+            self.assertEqual(surface.read_text(encoding="utf-8"), original_surface)
+
+    def test_frontier_application_cli_blocks_stale_surface(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            advancement_dir = root / "coordination" / "frontier_advancements" / "advance-1"
+            advancement_dir.mkdir(parents=True)
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S188_frontier_application_plan_cli",
+                previous_frontier="S188_frontier_application_plan_cli",
+                next_frontier="S189_frontier_application_apply_design",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="clear_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+            )
+            (advancement_dir / "frontier_advancement_record.sop").write_text(advancement.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    frontier_application_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--advancement-ref",
+                            "coordination/frontier_advancements/advance-1/frontier_advancement_record.sop",
+                            "--current-frontier",
+                            "S999_other",
+                            "--conversation-surface-ref",
+                            "coordination/conversations/convo-1.sop",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("active conversation frontier", out.getvalue())
+            self.assertFalse((advancement_dir / "frontier_application_plan.sop").exists())
 
 
 def _merge_draft(

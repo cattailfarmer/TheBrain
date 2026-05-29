@@ -655,9 +655,10 @@
   + [completed_slice] is S185_frontier_advancement_writer_cli
   + [completed_slice] is S186_frontier_application_plan_design
   + [completed_slice] is S187_frontier_application_plan_records
+  + [completed_slice] is S188_frontier_application_plan_cli
 
-  + [current_frontier] is S188_frontier_application_plan_cli after frontier application plan records
-  + [next_recommended_slice] is S188_frontier_application_plan_cli
+  + [current_frontier] is S189_frontier_application_apply_design after frontier application plan CLI
+  + [next_recommended_slice] is S189_frontier_application_apply_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

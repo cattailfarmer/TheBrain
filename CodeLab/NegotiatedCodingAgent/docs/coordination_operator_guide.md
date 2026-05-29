@@ -321,6 +321,17 @@ This writes `frontier_advancement_record.sop` under `coordination/frontier_advan
 
 `coordination/frontier_application_plan_design.sop` describes the next boundary. A future planner must verify the active conversation surface still has the record's previous frontier before any explicit surface mutation command can update `current_frontier`.
 
+Write a dry-run frontier application plan:
+
+```powershell
+.\scripts\frontier-application-plan.ps1 `
+  -AdvancementRef coordination/frontier_advancements/<id>/frontier_advancement_record.sop `
+  -PlanId <plan-id> `
+  -CompletedSliceRef <slice-id>
+```
+
+This writes `frontier_application_plan.sop` beside the advancement record. It does not mutate the active conversation surface.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
