@@ -1,0 +1,29 @@
+& [PreliveCheckpointIntegrationDecision] is the design decision for pre-live review packet placement
+  @ [created_at] 2026-05-30T14:04:00Z
+  @ [related_recipe] coordination/prelive_review_packet_operator_recipe.sop
+  @ [related_design] coordination/prelive_manager_shaliach_review_design.sop
+  @ [checkpoint_artifact] coordination/long_run_checkpoint.sop
+
+  + [decision_status] is decided
+  + [decision] is keep_prelive_review_packet_generation_operator_only_for_now
+  + [authority_boundary] is checkpoint_readiness_not_review_packet_generation
+  + [reason] is long-run checkpoint already reports combined artifact validation status and adding Manager/Shaliach packet generation inside the harness risks making deterministic packets look like approval
+  + [reason] is packet generation may be useful only for selected runs, while every checkpoint should remain a compact continuation proof
+  + [reason] is future live model serving should consume deterministic packets as prompt inputs and then write separate live review artifacts
+
+& [AllowedCheckpointReference] is the bounded integration allowed now
+  + [allowed] is checkpoint may cite prelive_review_packet_operator_recipe.sop as an operator follow-up recipe
+  + [allowed] is checkpoint may keep combined_artifact_validation_status as continuation evidence
+  + [not_allowed] is checkpoint auto-writing ManagerPreliveReviewPacket or ShaliachPreliveReviewPacket artifacts
+  + [not_allowed] is checkpoint treating review_ready packet status as Manager approval or Shaliach clearance
+  + [authority_boundary] is recipe_reference_not_packet_generation
+
+& [FutureReconsiderationTrigger] is when this decision should be revisited
+  + [trigger] is OpenAI-compatible endpoint becomes available and live Manager/Shaliach review artifacts can be written separately
+  + [trigger] is operator asks for checkpoint to emit a review packet bundle for a specific unattended workflow
+  + [trigger] is packet generation gains a dedicated output directory and status vocabulary that cannot be confused with approval
+
+& [NextImplementationDirection] is the next safe slice
+  + [next_slice] is add checkpoint recipe reference for pre-live review packet operator workflow
+  + [next_slice] is refresh docs so operators run packet generation explicitly after checkpoint proof
+  + [authority_boundary] is explicit_operator_action_not_automatic_approval

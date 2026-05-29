@@ -947,7 +947,9 @@
   + [last_proof] is long-run checkpoint passed 277 tests with combined validation passed and pre-live recipe proof review_ready
   + [completed_slice] is S279_spec_audit_refresh_after_prelive_checkpoint
   + [last_proof] is spec audit refreshed after 277-test pre-live review recipe checkpoint proof
-  + [next_recommended_slice] is S280_prelive_checkpoint_integration_decision_design
+  + [completed_slice] is S280_prelive_checkpoint_integration_decision_design
+  + [last_proof] is decided pre-live packet generation stays operator-only while checkpoints may cite the recipe
+  + [next_recommended_slice] is S281_checkpoint_prelive_recipe_reference
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

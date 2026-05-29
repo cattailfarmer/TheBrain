@@ -202,6 +202,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/prelive_manager_shaliach_review_design.sop` defines the next bridge while local serving remains unavailable: deterministic review-ready packets for Manager and Shaliach over combined validation, checkpoint, and post-apply evidence. These packets are prompt scaffolds and review inputs, not live Manager approval or Shaliach clearance.
 
+`coordination/prelive_checkpoint_integration_decision.sop` keeps those pre-live packets operator-triggered rather than generated automatically by the long-run checkpoint. The checkpoint may cite the recipe, but it should not write Manager/Shaliach packet artifacts or imply approval.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

@@ -2429,3 +2429,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S280_prelive_checkpoint_integration_decision_design
   + [narrative_role] is specification_audit and review_runtime update
+
+
+& [LongRunNarrativeUpdate S280_prelive_checkpoint_integration_decision_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S280_prelive_checkpoint_integration_decision_design
+  + [implemented_capability] is prelive_checkpoint_integration_decision.sop keeps pre-live review packet generation operator-only and allows checkpoint recipe references only
+  + [proof_ref] is coordination/prelive_checkpoint_integration_decision.sop
+  + [current_frontier] is S281_checkpoint_prelive_recipe_reference
+  + [narrative_role] is long_run_coordination and review_boundary update
