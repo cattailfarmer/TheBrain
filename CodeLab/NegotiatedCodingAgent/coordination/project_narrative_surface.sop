@@ -1970,3 +1970,11 @@
   + [proof_result] is tests passed with 213 tests
   + [current_frontier] is S235_shaliach_self_negotiation_from_finding
   + [narrative_role] is shaliach_arc and integration_arc update
+
+
+& [LongRunNarrativeUpdate S235_shaliach_self_negotiation_from_finding] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S235_shaliach_self_negotiation_from_finding
+  + [implemented_capability] is build_shaliach_self_negotiation_from_finding maps existing Shaliach findings to deterministic resolved advisory or rework self-negotiation records
+  + [proof_result] is tests passed with 216 tests
+  + [current_frontier] is S236_shaliach_self_negotiation_run_artifacts
+  + [narrative_role] is shaliach_arc and orchestrator_readiness update

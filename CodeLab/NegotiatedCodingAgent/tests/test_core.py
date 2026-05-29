@@ -137,6 +137,7 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationRecord,
     ShaliachSelfNegotiationTension,
     build_shaliach_self_negotiation_record,
+    build_shaliach_self_negotiation_from_finding,
     review_layer_negotiation,
 )
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -5950,6 +5951,51 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertIn("self_negotiation_ref] is ShaliachSelfNegotiationRecord builder-advisory", finding.to_sop("application"))
         response = finding.to_response_coordination_sop("application")
         self.assertIn("self_negotiation_ref] is ShaliachSelfNegotiationRecord builder-advisory", response)
+
+    def test_self_negotiation_from_info_finding_resolves(self) -> None:
+        finding = ShaliachFinding(
+            finding="no_protocol_gap_detected",
+            severity="info",
+            target_role="Manager",
+            target_artifact="layer_package",
+            action="no_action",
+            confidence="accepted",
+            reason="protocol obligations present",
+        )
+        record = build_shaliach_self_negotiation_from_finding(finding, subject_ref="application_layer_package")
+        self.assertEqual(record.status, "resolved")
+        self.assertEqual(record.unresolved_tension_set, ())
+        self.assertIn("no_protocol_gap_detected.self_negotiation", record.negotiation_id)
+
+    def test_self_negotiation_from_warning_finding_is_advisory(self) -> None:
+        finding = ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason="ledger evidence is thin",
+        )
+        record = build_shaliach_self_negotiation_from_finding(finding, subject_ref="application_layer_package")
+        self.assertEqual(record.status, "advisory")
+        self.assertEqual(record.unresolved_tension_set[0].severity, "advisory")
+        self.assertIn("ledger evidence is thin", record.to_sop())
+
+    def test_self_negotiation_from_pause_finding_requires_rework(self) -> None:
+        finding = ShaliachFinding(
+            finding="missing_parent_lineage",
+            severity="pause",
+            target_role="Manager",
+            target_artifact="layer_package",
+            action="pause",
+            confidence="high",
+            reason="parent lineage is missing",
+        )
+        record = build_shaliach_self_negotiation_from_finding(finding, subject_ref="subsystem_layer_package")
+        self.assertEqual(record.status, "rework_required")
+        self.assertEqual(record.unresolved_tension_set[0].severity, "blocking")
+        self.assertIn("pause_descent", record.proposed_response_set)
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

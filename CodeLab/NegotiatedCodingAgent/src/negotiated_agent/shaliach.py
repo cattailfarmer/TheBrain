@@ -207,6 +207,23 @@ class ShaliachFinding:
   + [authority_boundary] is response_coordination_not_final_manager_approval"""
 
 
+def build_shaliach_self_negotiation_from_finding(
+    finding: ShaliachFinding,
+    *,
+    subject_ref: str,
+    negotiation_id: str | None = None,
+    context_boundary: str | None = None,
+) -> ShaliachSelfNegotiationRecord:
+    return build_shaliach_self_negotiation_record(
+        negotiation_id=negotiation_id or f"{subject_ref}.{finding.finding}.self_negotiation",
+        subject_ref=subject_ref,
+        intention_statement=f"resolve Shaliach finding {finding.finding}",
+        purpose_statement=f"{finding.action} for {finding.target_role} on {finding.target_artifact}",
+        context_boundary=context_boundary or f"{subject_ref} response coordination",
+        unresolved_tension_set=_self_negotiation_tensions_from_finding(finding),
+    )
+
+
 def review_layer_negotiation(
     *,
     layer: str,
@@ -314,6 +331,19 @@ def _default_self_negotiation_responses(tensions: tuple[ShaliachSelfNegotiationT
     if tensions:
         return ("approve_with_advisory", "record_residual_tension")
     return ("approve",)
+
+
+def _self_negotiation_tensions_from_finding(finding: ShaliachFinding) -> tuple[ShaliachSelfNegotiationTension, ...]:
+    if finding.severity == "info":
+        return ()
+    severity = "blocking" if finding.blocks_progress else "advisory"
+    return (
+        ShaliachSelfNegotiationTension(
+            tension=finding.finding,
+            severity=severity,
+            reason=finding.reason,
+        ),
+    )
 
 
 def _resolved_self_negotiation_intention(

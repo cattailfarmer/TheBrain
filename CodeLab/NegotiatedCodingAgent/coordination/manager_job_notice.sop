@@ -3246,7 +3246,7 @@
 
 & [WorkSliceDetail S235_shaliach_self_negotiation_from_finding] is a coordination runtime integration slice
   + [slice_id] is S235_shaliach_self_negotiation_from_finding
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add helper that derives Shaliach self-negotiation records from existing Shaliach findings
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover info warning pause/blocking findings producing resolved advisory or rework record statuses
@@ -3254,3 +3254,16 @@
   + [support_status] is prepared
   + [dependency_set] is S234_shaliach_finding_self_negotiation_refs
   + [known_risks] is duplicating ShaliachFinding severity logic in a way that drifts from review outcomes
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:00:00Z, proof_ref tests passed with 216 tests, result_summary added helper that derives self-negotiation records from Shaliach findings
+  + [completed_work_review] is support_delta verified info warning and pause findings map to resolved advisory and rework statuses; requirement_delta next step is write self-negotiation artifacts during orchestrator layer review
+
+& [WorkSliceDetail S236_shaliach_self_negotiation_run_artifacts] is an orchestrator integration slice
+  + [slice_id] is S236_shaliach_self_negotiation_run_artifacts
+  + [slice_status] is open
+  + [scope] is write Shaliach self-negotiation SOP artifacts alongside layer Shaliach findings during dry-run orchestration
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover run output containing per-layer self-negotiation artifacts and finding refs
+  + [completion_criteria] is normal runs leave durable Shaliach self-negotiation evidence next to findings
+  + [support_status] is prepared
+  + [dependency_set] is S235_shaliach_self_negotiation_from_finding
+  + [known_risks] is increasing run artifact noise before live Shaliach model routes exist
