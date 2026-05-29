@@ -2947,7 +2947,7 @@
 
 & [WorkSliceDetail S212_long_run_checkpoint_after_quiet_cli_tests] is a long-run reentry slice
   + [slice_id] is S212_long_run_checkpoint_after_quiet_cli_tests
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after quieting narrative append CLI tests
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 190-test suite with readable stdout tail
@@ -2955,3 +2955,16 @@
   + [support_status] is prepared
   + [dependency_set] is S211_quiet_narrative_append_cli_tests
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:42:00Z, proof_ref long-run checkpoint passed 190 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after quiet CLI tests
+  + [completed_work_review] is support_delta verified checkpoint stdout tail is readable and ready_for_continuation remains true; requirement_delta next step is add narrative surface guard discovery mode
+
+& [WorkSliceDetail S213_narrative_append_guard_discovery_cli] is a coordination runtime implementation slice
+  + [slice_id] is S213_narrative_append_guard_discovery_cli
+  + [slice_status] is open
+  + [scope] is add narrative append CLI guard-discovery mode for current narrative surface guard
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover guard output and no narrative mutation
+  + [completion_criteria] is operators can discover the expected surface guard before plan or apply mode
+  + [support_status] is prepared
+  + [dependency_set] is S212_long_run_checkpoint_after_quiet_cli_tests
+  + [known_risks] is guard discovery being mistaken for approval to append

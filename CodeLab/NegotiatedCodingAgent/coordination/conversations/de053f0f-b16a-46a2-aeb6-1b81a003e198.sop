@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S212_long_run_checkpoint_after_quiet_cli_tests after quiet narrative append CLI tests
+  + [current_frontier] is S213_narrative_append_guard_discovery_cli after long-run checkpoint refreshed for quiet CLI tests
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -696,9 +696,19 @@
   + [completed_slice] is S208_reviewed_narrative_append_cli_apply
   + [completed_slice] is S209_long_run_checkpoint_after_narrative_append_cli
   + [last_proof] is long-run checkpoint passed 190 tests dry-run model inventory non-gating OpenAI healthcheck and route draft
+  + [last_proof] is run 20260529T194057Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T194057Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T194057Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T194057Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T194057Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T194057Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T194057Z
+  + [last_proof] is run 20260529T194057Z wrote run_manifest.sop
   + [completed_slice] is S210_spec_audit_refresh_after_narrative_append
   + [completed_slice] is S211_quiet_narrative_append_cli_tests
-  + [next_recommended_slice] is S212_long_run_checkpoint_after_quiet_cli_tests
+  + [completed_slice] is S212_long_run_checkpoint_after_quiet_cli_tests
+  + [last_proof] is long-run checkpoint passed 190 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after quiet CLI tests
+  + [next_recommended_slice] is S213_narrative_append_guard_discovery_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
