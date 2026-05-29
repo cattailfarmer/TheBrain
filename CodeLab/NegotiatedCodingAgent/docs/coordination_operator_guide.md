@@ -289,6 +289,8 @@ powershell -ExecutionPolicy Bypass -File scripts\run-local-merge-draft.ps1 `
 
 This writes `run_local_merge_draft_input.sop`. It does not create `manual_merge_packet.sop` and does not apply files to the target workspace.
 
+`coordination/merge_draft_to_packet_proposal_design.sop` describes the next boundary after draft input. A future writer may create `manual_merge_packet.sop` only from explicit Manager packet acceptance and Shaliach packet review evidence; draft input alone is insufficient.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

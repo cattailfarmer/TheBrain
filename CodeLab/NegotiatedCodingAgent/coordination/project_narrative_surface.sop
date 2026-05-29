@@ -1449,3 +1449,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes run-local merge draft input CLI and 136-test checkpoint as scaffold support
   + [current_frontier] is S178_merge_draft_to_packet_proposal_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S178_merge_draft_to_packet_proposal_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S178_merge_draft_to_packet_proposal_design
+  + [implemented_capability] is merge_draft_to_packet_proposal_design.sop defines Manager/Shaliach-gated conversion from run_local_merge_draft_input.sop to ManualMergePacket proposal evidence
+  + [current_frontier] is S179_packet_proposal_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

@@ -2505,7 +2505,7 @@
 
 & [WorkSliceDetail S178_merge_draft_to_packet_proposal_design] is a coordination runtime design slice
   + [slice_id] is S178_merge_draft_to_packet_proposal_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design non-mutating conversion from run-local merge draft input into manual merge packet proposal evidence
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names Manager acceptance Shaliach review rollback evidence verification and no apply mutation
@@ -2513,3 +2513,16 @@
   + [support_status] is prepared
   + [dependency_set] is S177_spec_audit_refresh_after_merge_draft_cli
   + [known_risks] is treating draft input as sufficient Manager acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T01:19:00Z, proof_ref merge_draft_to_packet_proposal_design.sop README architecture and operator guide updated, result_summary designed Manager/Shaliach-gated conversion from merge draft input to manual merge packet proposal
+  + [completed_work_review] is support_delta verified draft input remains insufficient without Manager acceptance and Shaliach review; requirement_delta next step is add packet proposal acceptance and review record types plus builder helper
+
+& [WorkSliceDetail S179_packet_proposal_records] is a coordination runtime implementation slice
+  + [slice_id] is S179_packet_proposal_records
+  + [slice_status] is open
+  + [scope] is add Manager packet proposal acceptance Shaliach packet proposal review and packet proposal builder helper
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover accepted proposal blocked Manager blocked Shaliach source containment target containment and no apply artifact creation
+  + [completion_criteria] is accepted draft input can produce ManualMergePacket proposal evidence without applying files
+  + [support_status] is prepared
+  + [dependency_set] is S178_merge_draft_to_packet_proposal_design
+  + [known_risks] is proposal builder being mistaken for apply authorization

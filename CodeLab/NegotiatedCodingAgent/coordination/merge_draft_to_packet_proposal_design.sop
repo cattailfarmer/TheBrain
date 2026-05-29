@@ -1,0 +1,72 @@
+& [MergeDraftToPacketProposalDesign] is the design contract for converting run-local merge draft input into manual merge packet proposal evidence
+  @ [draft_bridge] coordination/run_local_to_merge_packet_bridge_design.sop
+  @ [manual_merge_policy] coordination/manual_merge_packet_policy.sop
+  @ [draft_records] src/negotiated_agent/run_local_merge_draft.py
+  @ [merge_packet_records] src/negotiated_agent/merge_packet.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T01:19:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is packet_proposal_not_workspace_application
+  + [primary_goal] is convert reviewed run-local draft inputs into a ManualMergePacket proposal with explicit Manager and Shaliach acceptance refs
+  + [non_goal] is target workspace mutation
+  + [non_goal] is treating draft input as Manager acceptance
+  + [non_goal] is treating merge eligibility as Shaliach final review
+  + [non_goal] is advancing the Manager frontier
+
+& [ProposalInputs] is what the packet proposal builder must inspect
+  + [required_ref] is run_local_merge_draft_input.sop with authority_boundary draft_input_not_manual_merge_packet
+  + [required_ref] is Manager acceptance record for packet proposal construction
+  + [required_ref] is Shaliach review record for packet proposal construction
+  + [required_ref] is run_local_execution_result.sop or source_result_ref named by the draft input
+  + [required_arg] is verification command for future apply validation
+  + [authority_boundary] is packet_inputs_not_apply_authorization
+  = must: reject missing Manager acceptance
+  = must: reject Manager acceptance statuses other than accepted_for_packet_proposal
+  = must: reject Shaliach statuses that require pause, rework, or scope repair
+  = must: re-check every source_ref against source_run_root
+  = must: re-check every target_path against target_workspace_root
+
+& [ManagerPacketProposalAcceptance] is the Manager evidence required before proposal construction
+  + [field] is acceptance_id
+  + [field] is acceptance_status
+  + [field] is draft_input_ref
+  + [field] is accepted_entry_count
+  + [field] is frontier_at_acceptance
+  + [field] is risk_summary
+  + [authority_boundary] is manager_packet_acceptance_not_workspace_apply
+  = must: distinguish accepted_for_packet_proposal from accepted_for_workspace_application
+
+& [ShaliachPacketProposalReview] is the protocol counsel evidence required before proposal construction
+  + [field] is review_id
+  + [field] is review_status
+  + [field] is draft_input_ref
+  + [field] is checked_protocols
+  + [field] is finding_summary
+  + [field] is required_response
+  + [authority_boundary] is shaliach_packet_review_not_manager_acceptance
+  = must: distinguish clear_for_packet_proposal from no_scope_or_authority_blocker for final apply
+
+& [PacketProposalOutput] is the produced artifact
+  + [artifact_name] is manual_merge_packet.sop
+  + [packet_form] is ManualMergePacket
+  + [manager_acceptance_ref] is ManagerPacketProposalAcceptance ref
+  + [shaliach_review_ref] is ShaliachPacketProposalReview ref
+  + [rollback_plan] is generated from proposed target paths as pre-apply evidence
+  + [verification_command] is required
+  + [authority_boundary] is manual_merge_packet_not_workspace_application
+  = must: never write target workspace files
+  = must: never generate apply_plan.sop as part of this proposal conversion
+  = must: preserve rejected output refs as empty or explicit evidence, not by deleting run-local output
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is accepted Manager and clear Shaliach reviews produce ManualMergePacket proposal without applying files
+  + [test_case] is missing or blocked Manager acceptance rejects proposal creation
+  + [test_case] is Shaliach pause or rework rejects proposal creation
+  + [test_case] is source or target containment is rechecked from the draft input
+  + [test_case] is packet proposal artifact preserves not-workspace-application boundary
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add packet proposal acceptance and Shaliach review record types plus builder helper
+  + [slice_2] is add explicit CLI writer for manual_merge_packet.sop proposal creation
+  + [slice_3] is refresh audit and checkpoint before connecting proposal creation to apply dry-run validation
