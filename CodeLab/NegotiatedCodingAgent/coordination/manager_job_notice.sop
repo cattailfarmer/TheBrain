@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 55
+  + [job_notice_revision] is 56
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -73,7 +73,8 @@
     S48_director_disagreement_ledger |
     S49_dry_run_director_stance_diversity |
     S50_director_disagreement_docs |
-    S51_multi_programmer_slice_assignment_plan
+    S51_multi_programmer_slice_assignment_plan |
+    S52_programmer_assignment_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -768,7 +769,7 @@
 
 & [WorkSliceDetail S51_multi_programmer_slice_assignment_plan] is a Programmer swarm slice
   + [slice_id] is S51_multi_programmer_slice_assignment_plan
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a deterministic assignment plan for distributing approved code-layer work slices across configured Programmers
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing assignment plan maps work slices to all configured Programmers or records why only one is active
@@ -776,3 +777,16 @@
   + [support_status] is prepared
   + [dependency_set] is S44_specification_implementation_status_audit
   + [known_risks] is pretending multi-Programmer execution exists before assignment planning and merge review are designed
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:50:00Z, proof_ref tests passed with 45 tests and dry-run wrote programmer_assignment_plan.sop, result_summary added deterministic ProgrammerAssignmentPlan artifact before Programmer execution
+  + [completed_work_review] is support_delta verified assignment planning is explicit and bounded; requirement_delta parallel Programmer execution and merge review remain future work
+
+& [WorkSliceDetail S52_programmer_assignment_docs] is a Programmer swarm slice
+  + [slice_id] is S52_programmer_assignment_docs
+  + [slice_status] is open
+  + [scope] is document ProgrammerAssignmentPlan and its boundary from actual parallel execution
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is operators understand assignment plan as a pre-execution artifact
+  + [support_status] is prepared
+  + [dependency_set] is S51_multi_programmer_slice_assignment_plan
+  + [known_risks] is implying a multi-Programmer swarm exists before merge/review protocol exists

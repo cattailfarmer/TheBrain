@@ -37,7 +37,7 @@ from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
-from negotiated_agent.slices import create_initial_work_slice
+from negotiated_agent.slices import create_initial_work_slice, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.writer import write_implementation
 
@@ -268,6 +268,21 @@ class WorkSliceTests(unittest.TestCase):
         work_slice = create_initial_work_slice(Path("code.package.sop"), "build thing")
         self.assertEqual(work_slice.slice_id, "WS001_initial_implementation")
         self.assertIn("code.package.sop", work_slice.to_sop())
+
+    def test_programmer_assignment_plan_maps_slices_to_configured_programmers(self) -> None:
+        work_slice = create_initial_work_slice(Path("code.package.sop"), "build thing")
+        plan = create_programmer_assignment_plan(
+            [work_slice],
+            [
+                AgentConfig(name="ProgrammerA", model="m", temperature=0, role="first"),
+                AgentConfig(name="ProgrammerB", model="m", temperature=0, role="second"),
+            ],
+        )
+        sop = plan.to_sop()
+        self.assertEqual(plan.active_programmer_count, 1)
+        self.assertIn("ProgrammerAssignmentPlan", sop)
+        self.assertIn("ProgrammerA", sop)
+        self.assertIn("assignment_plan_not_parallel_execution_proof", sop)
 
 
 class FileChangeSurfaceTests(unittest.TestCase):
@@ -934,6 +949,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             file_change_surface = (run_root / "file_change_surface.sop").read_text(encoding="utf-8")
             file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
             run_manifest = (run_root / "run_manifest.sop").read_text(encoding="utf-8")
+            assignment_plan = (run_root / "programmer_assignment_plan.sop").read_text(encoding="utf-8")
             director_inbox = (
                 root / "coordination" / "mailbox" / "custom-director-pool" / "inbox.sop"
             ).read_text(encoding="utf-8")
@@ -956,6 +972,8 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("RunArtifactManifest", run_manifest)
             self.assertIn("lifecycle_status] is completed", run_manifest)
             self.assertIn("artifact_ref layer_package] is application.package.sop", run_manifest)
+            self.assertIn("ProgrammerAssignmentPlan", assignment_plan)
+            self.assertIn("Programmer", assignment_plan)
             self.assertIn("rework_notice", director_inbox)
             self.assertIn("application.shaliach_response.sop", director_inbox)
             self.assertIn("application.shaliach_finding.sop", log)

@@ -16,7 +16,7 @@ from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
 from .shaliach import review_layer_negotiation
-from .slices import create_initial_work_slice, manager_review, programmer_report
+from .slices import create_initial_work_slice, create_programmer_assignment_plan, manager_review, programmer_report
 from .writer import write_implementation, write_text
 
 
@@ -138,6 +138,8 @@ class NegotiatedCodingAgent:
 
         code_package_ref = run_root / "code.package.sop"
         work_slice = create_initial_work_slice(code_package_ref, objective)
+        assignment_plan = create_programmer_assignment_plan([work_slice], self.config.programmers)
+        write_text(run_root / "programmer_assignment_plan.sop", assignment_plan.to_sop())
         write_text(run_root / f"{work_slice.slice_id}.work_slice.sop", work_slice.to_sop())
         coder_output = self.client.complete(
             self.config.coder,
