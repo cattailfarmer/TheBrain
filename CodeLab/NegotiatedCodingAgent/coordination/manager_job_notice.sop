@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 182
+  + [job_notice_revision] is 183
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -4039,7 +4039,7 @@
 
 & [WorkSliceDetail S296_live_shaliach_prompt_packet_builder] is a live-model integration implementation slice
   + [slice_id] is S296_live_shaliach_prompt_packet_builder
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement a live Shaliach prompt/input packet builder from deterministic self-negotiation evidence
   + [target_files] is src/negotiated_agent/shaliach.py, tests/**
   + [proof_route] is tests cover packet fields hidden-reasoning exclusion protocol/proof refs and authority boundary
@@ -4047,3 +4047,16 @@
   + [support_status] is prepared
   + [dependency_set] is S295_live_shaliach_attempt_records
   + [known_risks] is prompt packet becoming a raw reasoning dump instead of bounded evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T17:28:00Z, proof_ref tests passed with 282 tests, result_summary added bounded live Shaliach prompt packet builder with protocol/proof refs and hidden-reasoning exclusion
+  + [completed_work_review] is support_delta verified prompt packet is evidence-shaped and not a private reasoning dump; requirement_delta next step is expose a live Shaliach attempt preview CLI with unavailable fallback
+
+& [WorkSliceDetail S297_live_shaliach_attempt_preview_cli] is a live-model integration implementation slice
+  + [slice_id] is S297_live_shaliach_attempt_preview_cli
+  + [slice_status] is open
+  + [scope] is add CLI preview for live Shaliach prompt packet plus unavailable attempt output
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests cover CLI packet output attempt output unavailable status and output files
+  + [completion_criteria] is operators can produce live-ready Shaliach attempt evidence even while endpoint health is unavailable
+  + [support_status] is prepared
+  + [dependency_set] is S296_live_shaliach_prompt_packet_builder
+  + [known_risks] is preview CLI being mistaken for actual live model deliberation

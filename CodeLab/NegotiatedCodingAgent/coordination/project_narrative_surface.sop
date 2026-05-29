@@ -2584,3 +2584,11 @@
   + [proof_result] is tests passed with 281 tests
   + [current_frontier] is S296_live_shaliach_prompt_packet_builder
   + [narrative_role] is live_model_gap and shaliach_runtime update
+
+
+& [LongRunNarrativeUpdate S296_live_shaliach_prompt_packet_builder] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S296_live_shaliach_prompt_packet_builder
+  + [implemented_capability] is live Shaliach prompt packet builder creates bounded prompt evidence with protocol and proof refs while excluding hidden reasoning dumps
+  + [proof_result] is tests passed with 282 tests
+  + [current_frontier] is S297_live_shaliach_attempt_preview_cli
+  + [narrative_role] is live_model_gap and shaliach_runtime update

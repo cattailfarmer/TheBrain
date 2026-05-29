@@ -402,7 +402,8 @@
   + [completed_slice] is S293_narrative_coverage_after_upsert_anchor_checkpoint
   + [completed_slice] is S294_live_shaliach_self_negotiation_boundary_design
   + [completed_slice] is S295_live_shaliach_attempt_records
-  + [ready_slice] is S296_live_shaliach_prompt_packet_builder
+  + [completed_slice] is S296_live_shaliach_prompt_packet_builder
+  + [ready_slice] is S297_live_shaliach_attempt_preview_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

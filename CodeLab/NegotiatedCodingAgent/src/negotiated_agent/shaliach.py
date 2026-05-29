@@ -152,6 +152,56 @@ class LiveShaliachSelfNegotiationAttempt:
   + [authority_boundary] is {self.authority_boundary}"""
 
 
+@dataclass(frozen=True)
+class LiveShaliachPromptPacket:
+    packet_id: str
+    subject_ref: str
+    baseline_self_negotiation_ref: str
+    context_boundary: str
+    deterministic_status: str
+    perspective_set: tuple[str, ...]
+    proposed_response_set: tuple[str, ...]
+    protocol_refs: tuple[str, ...] = ()
+    proof_refs: tuple[str, ...] = ()
+    instruction: str = "Return bounded Shaliach perspective responses and unresolved tensions only."
+    authority_boundary: str = "prompt_packet_not_private_reasoning_dump"
+
+    def to_sop(self) -> str:
+        return f"""& [LiveShaliachPromptPacket {self.packet_id}] is bounded prompt evidence for optional live Shaliach self-negotiation
+  + [subject_ref] is {self.subject_ref}
+  + [baseline_self_negotiation_ref] is {self.baseline_self_negotiation_ref}
+  + [context_boundary] is {self.context_boundary}
+  + [deterministic_status] is {self.deterministic_status}
+  + [perspective_set] is {", ".join(self.perspective_set)}
+  + [proposed_response_set] is {", ".join(self.proposed_response_set)}
+{_fields("protocol_ref", self.protocol_refs)}
+{_fields("proof_ref", self.proof_refs)}
+  + [instruction] is {self.instruction}
+  + [forbidden_content] is hidden_chain_of_thought, private_reasoning_dump, manager_approval_claim
+  + [authority_boundary] is {self.authority_boundary}"""
+
+
+def build_live_shaliach_prompt_packet(
+    *,
+    packet_id: str,
+    baseline: ShaliachSelfNegotiationRecord,
+    baseline_ref: str,
+    protocol_refs: tuple[str, ...] = (),
+    proof_refs: tuple[str, ...] = (),
+) -> LiveShaliachPromptPacket:
+    return LiveShaliachPromptPacket(
+        packet_id=packet_id,
+        subject_ref=baseline.subject_ref,
+        baseline_self_negotiation_ref=baseline_ref,
+        context_boundary=baseline.context_boundary,
+        deterministic_status=baseline.status,
+        perspective_set=baseline.perspective_set,
+        proposed_response_set=baseline.proposed_response_set,
+        protocol_refs=protocol_refs,
+        proof_refs=proof_refs,
+    )
+
+
 def build_shaliach_self_negotiation_record(
     *,
     negotiation_id: str,
@@ -603,6 +653,12 @@ def _all_sop_fields(text: str, field: str) -> tuple[str, ...]:
 
 def _drop_none_fields(values: tuple[str, ...]) -> tuple[str, ...]:
     return tuple(value for value in values if value and value != "none")
+
+
+def _fields(key: str, values: tuple[str, ...]) -> str:
+    if not values:
+        return f"  + [{key}] is none"
+    return "\n".join(f"  + [{key}] is {value}" for value in values)
 
 
 def _split_csv_field(value: str) -> tuple[str, ...]:

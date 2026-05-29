@@ -164,6 +164,7 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationTension,
     build_shaliach_self_negotiation_record,
     build_shaliach_self_negotiation_from_finding,
+    build_live_shaliach_prompt_packet,
     inspect_shaliach_cross_artifact_consistency,
     load_shaliach_finding_fields,
     load_shaliach_self_negotiation,
@@ -6803,6 +6804,38 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertEqual(parsed.perspective_response_set, attempt.perspective_response_set)
         self.assertEqual(parsed.unresolved_tension_set, attempt.unresolved_tension_set)
         self.assertEqual(parsed.resolved_intention_delta, "add rollback caveat")
+
+    def test_live_shaliach_prompt_packet_is_bounded_evidence_not_hidden_reasoning(self) -> None:
+        baseline = build_shaliach_self_negotiation_record(
+            negotiation_id="packet-baseline",
+            subject_ref="code_layer_package",
+            intention_statement="review code package",
+            purpose_statement="prepare live Shaliach overlay",
+            context_boundary="code review",
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="verification is deterministic",
+                    severity="advisory",
+                    reason="live endpoint unavailable",
+                ),
+            ),
+        )
+        packet = build_live_shaliach_prompt_packet(
+            packet_id="packet-1",
+            baseline=baseline,
+            baseline_ref="ShaliachSelfNegotiationRecord packet-baseline",
+            protocol_refs=("protocol_activation.sop",),
+            proof_refs=("coordination/long_run_checkpoint.sop",),
+        )
+        sop = packet.to_sop()
+
+        self.assertIn("LiveShaliachPromptPacket packet-1", sop)
+        self.assertIn("deterministic_status] is advisory", sop)
+        self.assertIn("protocol_ref] is protocol_activation.sop", sop)
+        self.assertIn("proof_ref] is coordination/long_run_checkpoint.sop", sop)
+        self.assertIn("prompt_packet_not_private_reasoning_dump", sop)
+        self.assertIn("hidden_chain_of_thought", sop)
+        self.assertNotIn("chain of thought:", sop.lower())
 
     def test_load_self_negotiation_sop_from_path(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
