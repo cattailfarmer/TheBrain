@@ -73,6 +73,7 @@ The generated implementation is intentionally conservative: the coder writes fil
 See `docs/architecture.md`.
 For long-running and multi-conversation operator helpers, see `docs/coordination_operator_guide.md`.
 For the RTX 5090 WSL2/vLLM serving path, see `docs/vllm_wsl2_operator_guide.md`.
+For a focused OpenAI-compatible endpoint check, run `.\scripts\openai-health.ps1`.
 
 ## Specification
 

@@ -61,6 +61,7 @@ http://localhost:8000/v1
 6. From Windows PowerShell, verify the route.
 
 ```powershell
+.\scripts\openai-health.ps1 -BaseUrl http://localhost:8000 -Out .\coordination\openai_health.sop
 .\scripts\model-inventory.ps1
 .\scripts\role-model-profile.ps1
 ```
@@ -77,4 +78,4 @@ Keep dry-run mode for governance tests:
 .\scripts\run-dry.ps1 -SuppressMailbox
 ```
 
-Use live serving only after `scripts\test.ps1`, `scripts\model-inventory.ps1`, and `scripts\role-model-profile.ps1` are coherent.
+Use live serving only after `scripts\test.ps1`, `scripts\openai-health.ps1`, `scripts\model-inventory.ps1`, and `scripts\role-model-profile.ps1` are coherent.

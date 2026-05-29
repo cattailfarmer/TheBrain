@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 42
+  + [job_notice_revision] is 43
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -60,7 +60,8 @@
     S35_vllm_wsl2_setup_preflight |
     S36_vllm_install_operator_guide |
     S37_openai_compatible_healthcheck |
-    S38_openai_health_docs
+    S38_openai_health_docs |
+    S39_long_run_harness_healthcheck
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -586,7 +587,7 @@
 
 & [WorkSliceDetail S38_openai_health_docs] is a local model serving slice
   + [slice_id] is S38_openai_health_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document OpenAI-compatible healthcheck use in local model serving and vLLM operator guide
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -594,3 +595,16 @@
   + [support_status] is prepared
   + [dependency_set] is S37_openai_compatible_healthcheck
   + [known_risks] is overstating unavailable healthcheck as failure when server simply is not running
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:40:00Z, proof_ref tests passed with 41 tests, result_summary docs now sequence openai-health, model inventory, and role-model profile for vLLM bring-up
+  + [completed_work_review] is support_delta verified healthcheck is documented as endpoint availability only; requirement_delta live vLLM remains uninstalled
+
+& [WorkSliceDetail S39_long_run_harness_healthcheck] is a long-run recovery slice
+  + [slice_id] is S39_long_run_harness_healthcheck
+  + [slice_status] is open
+  + [scope] is include OpenAI-compatible healthcheck status in long-run checkpoint output
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests showing checkpoint records healthcheck command result
+  + [completion_criteria] is unattended continuation checkpoint records whether local server is reachable
+  + [support_status] is prepared
+  + [dependency_set] is S16_long_run_harness, S37_openai_compatible_healthcheck
+  + [known_risks] is treating unavailable server as harness failure instead of environment state

@@ -26,3 +26,11 @@ powershell -ExecutionPolicy Bypass -File .\scripts\model-inventory.ps1 --out .\c
 The probe writes an SOP snapshot with GPU, WSL, Docker, Ollama, OpenAI-compatible server, model inventory, and a recommended route.
 
 For the manual RTX 5090 WSL2/vLLM path, see `docs/vllm_wsl2_operator_guide.md`.
+
+After starting any vLLM or OpenAI-compatible server, run the focused endpoint healthcheck:
+
+```powershell
+.\scripts\openai-health.ps1 -BaseUrl http://localhost:8000 -Out .\coordination\openai_health.sop
+```
+
+An unavailable healthcheck is expected when no server is running. An available healthcheck proves `/v1/models` responds; it does not prove model quality, role fit, or throughput.
