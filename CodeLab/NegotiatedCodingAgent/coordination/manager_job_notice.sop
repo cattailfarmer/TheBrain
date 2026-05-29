@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 111
+  + [job_notice_revision] is 112
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -129,7 +129,8 @@
     S104_operator_acknowledged_apply_writer |
     S105_rollback_command_design |
     S106_rollback_records_and_preview |
-    S107_rollback_preview_cli
+    S107_rollback_preview_cli |
+    S108_spec_audit_refresh_after_rollback_preview
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1552,7 +1553,7 @@
 
 & [WorkSliceDetail S107_rollback_preview_cli] is an apply pipeline implementation slice
   + [slice_id] is S107_rollback_preview_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a rollback preview CLI that reads apply_result.sop and snapshot_materialization.sop and writes rollback_preview.sop
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover CLI preview output and no target file mutation
@@ -1560,3 +1561,16 @@
   + [support_status] is prepared
   + [dependency_set] is S106_rollback_records_and_preview
   + [known_risks] is implying preview performs rollback
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:52:00Z, proof_ref tests passed with 70 tests, result_summary rollback-preview CLI reads apply_result and snapshot_materialization artifacts and writes rollback_preview.sop without target mutation
+  + [completed_work_review] is support_delta verified rollback preview is operator-accessible; requirement_delta spec audit should reflect rollback preview support
+
+& [WorkSliceDetail S108_spec_audit_refresh_after_rollback_preview] is a documentation and planning slice
+  + [slice_id] is S108_spec_audit_refresh_after_rollback_preview
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after rollback preview CLI support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit recognizes rollback preview while rollback mutation remains absent
+  + [support_status] is prepared
+  + [dependency_set] is S107_rollback_preview_cli
+  + [known_risks] is overstating rollback preview as rollback execution

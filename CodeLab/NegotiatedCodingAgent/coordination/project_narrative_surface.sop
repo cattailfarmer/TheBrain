@@ -377,6 +377,7 @@
   + [ready_capability] is explicit apply writer can copy accepted packet files to an operator-specified target workspace only after acknowledgement, preflight, snapshot materialization, and verification evidence
   + [ready_capability] is rollback command design pairs explicit apply with same-run evidence, snapshot restoration, create-new removal, verification, and rollback_result.sop
   + [ready_capability] is rollback preview records can distinguish restore snapshot remove created file and skipped rollback actions without target mutation
+  + [ready_capability] is rollback-preview CLI writes rollback_preview.sop from apply_result and snapshot_materialization artifacts without target mutation
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -451,9 +452,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S107_rollback_preview_cli
-  + [next_reason] is rollback preview records should be exposed through a CLI before rollback mutation
-  + [sleep_run_candidate] is continue S107 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S108_spec_audit_refresh_after_rollback_preview
+  + [next_reason] is rollback preview CLI support should be reflected in the spec audit
+  + [sleep_run_candidate] is continue S108 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

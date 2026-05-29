@@ -430,9 +430,10 @@
   + [completed_slice] is S104_operator_acknowledged_apply_writer
   + [completed_slice] is S105_rollback_command_design
   + [completed_slice] is S106_rollback_records_and_preview
+  + [completed_slice] is S107_rollback_preview_cli
 
-  + [current_frontier] is S107_rollback_preview_cli after rollback preview records
-  + [next_recommended_slice] is S107_rollback_preview_cli
+  + [current_frontier] is S108_spec_audit_refresh_after_rollback_preview after rollback preview CLI
+  + [next_recommended_slice] is S108_spec_audit_refresh_after_rollback_preview
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

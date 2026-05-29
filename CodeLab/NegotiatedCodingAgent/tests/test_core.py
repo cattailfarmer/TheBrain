@@ -60,6 +60,7 @@ from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
 from negotiated_agent.rollback import build_rollback_preview
+from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -831,6 +832,34 @@ class ApplyPlanTests(unittest.TestCase):
         self.assertIn("remove_created_file", sop)
         self.assertIn("skip_not_applied", sop)
         self.assertIn("rollback_preview_not_target_workspace_mutation", sop)
+
+    def test_rollback_preview_cli_writes_preview_from_apply_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp) / "run"
+            run_root.mkdir()
+            apply_result = ApplyResult(
+                apply_status="applied",
+                applied_files=("existing.py", "new.py"),
+                skipped_files=(),
+                snapshot_refs=("apply_snapshots/existing.py",),
+                rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+                verification_result_ref="verification_result.sop",
+            )
+            snapshots = SnapshotMaterializationResult(
+                entries=(
+                    SnapshotMaterializationEntry("existing.py", "apply_snapshots/existing.py", "created", "replace_existing"),
+                    SnapshotMaterializationEntry("new.py", "none", "not_needed", "create_new"),
+                ),
+                snapshot_root="apply_snapshots",
+            )
+            (run_root / "apply_result.sop").write_text(apply_result.to_sop(), encoding="utf-8")
+            (run_root / "snapshot_materialization.sop").write_text(snapshots.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(rollback_cli_main(["--run-root", str(run_root)]), 0)
+            preview = (run_root / "rollback_preview.sop").read_text(encoding="utf-8")
+            self.assertIn("restore_snapshot", preview)
+            self.assertIn("remove_created_file", preview)
 
 
 class MailboxCoordinationTests(unittest.TestCase):

@@ -48,6 +48,14 @@ The dry-run CLI rejects mutation acknowledgement flags by design. Treat `apply_r
 
 When the mutation acknowledgement flag is supplied, the command runs the preflight gate, writes `apply_mutation_preflight.sop`, writes `snapshot_materialization.sop` under the run root, applies accepted packet files to the explicit target workspace, runs verification, writes `verification_result.sop`, and writes `apply_result.sop`. Use this only with a deliberate target workspace and reviewed packet evidence.
 
+Before running any future rollback mutation, generate a preview:
+
+```powershell
+.\scripts\rollback-preview.ps1 -RunRoot .\runs\<timestamp>
+```
+
+This writes `rollback_preview.sop` from `apply_result.sop` and `snapshot_materialization.sop`. It does not restore or remove target files.
+
 Expected dry-run artifacts:
 
 - `apply_plan.sop`: target paths, snapshot plan, rollback reference, and verification command that would be used by a future apply command.
