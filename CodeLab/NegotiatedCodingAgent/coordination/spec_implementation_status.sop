@@ -1,0 +1,90 @@
+& [SpecificationImplementationStatusAudit] is the implementation status map for HierarchicalAgentSwarmSpecification
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [architecture_doc] docs/architecture.md
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T18:30:00Z
+
+  + [audit_status] is active_snapshot
+  + [authority_boundary] is implementation_audit_not_specification_signature
+  + [resolution] is implemented, partial, not_yet_implemented, or explicitly_out_of_scope
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is four flowchart layers before implementation
+  + [support] is orchestrator processes configured application, subsystem, component, and code layers before Programmer output
+  + [proof_ref] is tests/test_core.py and dry-run artifacts with four layer packages
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is Manager approves or rejects each layer transition
+  + [support] is Manager review gate writes per-layer manager_review.sop and blocked records on rejection
+  + [proof_ref] is tests for manager approval and rejection lifecycle
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is Shaliach observes layer packages and can warn, request rework, pause, or no-find
+  + [support] is Shaliach findings and response coordination artifacts are emitted per layer
+  + [proof_ref] is tests for Shaliach no_finding, warning, pause, thin ledger evidence, and response coordination
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is SJS and DataDrivenDesign ledgers are present in layer packages
+  + [support] is Director proposals are transformed into SJS and DataDesign ledger fields in LayerPackage artifacts
+  + [proof_ref] is tests for negotiated ledgers in package output
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is implementation happens through bounded work slices after code layer approval
+  + [support] is initial work slice, programmer report, manager review, and implementation directory are generated after code package
+  + [proof_ref] is dry-run artifacts and tests for work slice generation
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is long-run reentry preserves conversation UUID, frontier, proof, and narrative continuity
+  + [support] is active conversation surface, project narrative surface, long-run checkpoint, start/end frontier, and manager job notice are updated across slices
+  + [proof_ref] is coordination/long_run_checkpoint.sop and conversation surface proof ledger
+
+& [ImplementedObligation] is a proof-backed specification capability
+  + [obligation] is local model serving route is explicit before live setup
+  + [support] is model inventory, role-model profile, vLLM WSL2 preflight, OpenAI-compatible healthcheck, and docs are present
+  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop
+
+& [PartialObligation] is a specification capability with scaffold support
+  + [obligation] is Shaliach internal higher/lower reasoning and perspective negotiation
+  + [support] is Shaliach runtime has deterministic finding logic and scaffolded perspective concepts
+  + [gap] is no live model-negotiated higher/lower Shaliach internal debate exists yet
+  + [next_candidate] is implement explicit Shaliach internal perspective passes over layer packages and response severity
+
+& [PartialObligation] is a specification capability with scaffold support
+  + [obligation] is two or more LLMs negotiate around the objective
+  + [support] is config supports distinct Manager, Directors, Programmers, Shaliach models and provider overrides
+  + [gap] is current proof path is dry-run and no local live multi-model server is installed
+  + [next_candidate] is install WSL2/vLLM or Ollama and run live route comparison after endpoint health is available
+
+& [PartialObligation] is a specification capability with scaffold support
+  + [obligation] is Directors preserve distinct perspectives and negotiate disagreements
+  + [support] is multiple Director configs produce proposals and ledger evidence
+  + [gap] is no explicit multi-round disagreement memory or model-family diversity proof exists yet
+  + [next_candidate] is add Director stance profiles and disagreement ledger before Manager settlement
+
+& [PartialObligation] is a specification capability with scaffold support
+  + [obligation] is Programmers are a small swarm of lightweight implementers
+  + [support] is config supports programmer list and bounded work slice reports
+  + [gap] is orchestrator currently uses one configured Programmer for the initial implementation slice
+  + [next_candidate] is add multi-programmer slice assignment and merge/review protocol
+
+& [PartialObligation] is a specification capability with scaffold support
+  + [obligation] is multi-conversation coordination across active workers
+  + [support] is mailbox, claims, cursors, conflict signals, and rendezvous packet helpers exist
+  + [gap] is no autonomous worker scheduler or lifecycle runner exists
+  + [next_candidate] is build a worker runner that consumes mailbox claims under Manager and Shaliach constraints
+
+& [NotYetImplementedObligation] is a remaining specification gap
+  + [obligation] is final acceptance over real code patches in the target workspace
+  + [gap] is generated implementation remains inside run directories by design
+  + [reason] is workspace writer policy remains intentionally conservative until review and rollback are mature
+
+& [NotYetImplementedObligation] is a remaining specification gap
+  + [obligation] is live local LLM swarm throughput
+  + [gap] is WSL2, vLLM, Ollama, and Docker are not installed or available in the current probe
+  + [reason] is current work has stayed non-destructive and setup remains a manual operator step
+
+& [NextGapOrder] is the recommended next work based on this audit
+  + [candidate_1] is implement explicit Shaliach internal perspective passes
+  + [candidate_2] is add Director disagreement ledger and stance profiles
+  + [candidate_3] is add multi-Programmer slice assignment after Manager-approved code package
+  + [candidate_4] is install and verify local live model serving when operator is ready

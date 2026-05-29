@@ -114,6 +114,7 @@
   + [last_proof] is tests passed with 42 tests after S41 long-run checkpoint docs
   + [last_proof] is tests passed with 42 tests after S42 README output inventory refresh
   + [last_proof] is tests passed with 42 tests after S43 architecture doc refresh
+  + [last_proof] is tests passed with 42 tests after S44 specification implementation status audit
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -204,9 +205,10 @@
   + [completed_slice] is S41_long_run_checkpoint_docs
   + [completed_slice] is S42_readme_output_inventory_refresh
   + [completed_slice] is S43_architecture_doc_refresh
+  + [completed_slice] is S44_specification_implementation_status_audit
 
-  + [current_frontier] is S44_specification_implementation_status_audit after architecture doc refresh
-  + [next_recommended_slice] is S44_specification_implementation_status_audit
+  + [current_frontier] is S45_shaliach_internal_perspective_passes after specification implementation audit
+  + [next_recommended_slice] is S45_shaliach_internal_perspective_passes
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

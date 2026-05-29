@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 48
+  + [job_notice_revision] is 49
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -66,7 +66,8 @@
     S41_long_run_checkpoint_docs |
     S42_readme_output_inventory_refresh |
     S43_architecture_doc_refresh |
-    S44_specification_implementation_status_audit
+    S44_specification_implementation_status_audit |
+    S45_shaliach_internal_perspective_passes
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -670,7 +671,7 @@
 
 & [WorkSliceDetail S44_specification_implementation_status_audit] is a documentation and planning slice
   + [slice_id] is S44_specification_implementation_status_audit
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is create an audit surface mapping governing specification obligations to implemented, partial, and not-yet-implemented runtime support
   + [target_files] is coordination/**, docs/**
   + [proof_route] is audit surface written and tests remain passing
@@ -678,3 +679,16 @@
   + [support_status] is prepared
   + [dependency_set] is S43_architecture_doc_refresh
   + [known_risks] is overstating partial scaffold support as full specification satisfaction
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:40:00Z, proof_ref tests passed with 42 tests and coordination/spec_implementation_status.sop written, result_summary specification obligations mapped to implemented partial and not-yet-implemented support
+  + [completed_work_review] is support_delta verified next work can be selected from explicit spec gaps; requirement_delta Shaliach internal perspective passes are the top next gap
+
+& [WorkSliceDetail S45_shaliach_internal_perspective_passes] is a Shaliach depth slice
+  + [slice_id] is S45_shaliach_internal_perspective_passes
+  + [slice_status] is open
+  + [scope] is implement explicit Shaliach internal perspective pass records for ProtocolCounsel BoundaryMarshal EvidenceClerk FailureExaminer FormKeeper and ResponseCoordinator
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing findings include selected internal perspective records and least-intrusive response selection
+  + [completion_criteria] is Shaliach output records which internal perspectives participated before consequential response coordination
+  + [support_status] is prepared
+  + [dependency_set] is S10_shaliach_faculty_runtime, S44_specification_implementation_status_audit
+  + [known_risks] is adding ceremony without improving severity or repair selection
