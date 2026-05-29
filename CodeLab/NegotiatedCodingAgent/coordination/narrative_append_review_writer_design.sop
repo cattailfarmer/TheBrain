@@ -1,0 +1,67 @@
+& [NarrativeAppendReviewWriterDesign] is the design contract for writing reviewed narrative append evidence
+  @ [created_at] 2026-05-30T07:14:00Z
+  @ [append_cli_design] coordination/reviewed_narrative_append_cli_design.sop
+  @ [append_module] src/negotiated_agent/narrative_append.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is review_writer_not_append_apply
+  + [primary_goal] is persist Manager approval and Shaliach clearance artifacts for reviewed narrative append workflows
+  + [non_goal] is appending to project_narrative_surface.sop
+  + [non_goal] is generating narrative coverage update records
+  + [non_goal] is pretending deterministic review records are live model deliberation
+  + [non_goal] is advancing the active work frontier
+
+& [ManagerApprovalWriter] is the future operator writer for Manager narrative append approval
+  + [default_out] is coordination/manager_narrative_append_approval.sop
+  + [required_value] is approval_id
+  + [required_value] is update_record_ref
+  + [required_value] is approval_status
+  + [required_value] is approved_update_count
+  + [required_value] is frontier_at_approval
+  + [optional_value] is residual_risk repeated value
+  + [accepted_status] is approved_for_narrative_append
+  + [blocked_status] is blocked_pending_review
+  + [blocked_status] is rejected_for_narrative_append
+  + [authority_boundary] is manager_review_record_not_surface_mutation
+  = must: reject output collisions
+  = must: preserve residual risks as evidence fields
+  = must: not infer approved_update_count from update record unless an explicit later helper is designed
+
+& [ShaliachClearanceWriter] is the future operator writer for Shaliach narrative append clearance
+  + [default_out] is coordination/shaliach_narrative_append_clearance.sop
+  + [required_value] is clearance_id
+  + [required_value] is update_record_ref
+  + [required_value] is clearance_status
+  + [required_value] is checked_protocol repeated value
+  + [optional_value] is finding repeated value
+  + [optional_value] is required_rework repeated value
+  + [accepted_status] is clear_for_narrative_append
+  + [blocked_status] is blocked_pending_protocol_review
+  + [blocked_status] is rework_required_for_narrative_append
+  + [authority_boundary] is shaliach_review_record_not_surface_mutation
+  = must: reject output collisions
+  = must: preserve findings and required rework as evidence fields
+  = must: make required_rework block later append through existing parser/helper logic
+
+& [CliSurface] is how the future wrapper should expose the writers
+  + [command_mode] is manager_approval
+  + [command_mode] is shaliach_clearance
+  + [command_mode] is guard_discovery
+  + [command_mode] is plan
+  + [command_mode] is apply
+  + [authority_boundary] is review_writer_mode_not_apply_mode
+  = must: keep review writer modes separate from plan/apply modes
+  = must: require explicit mode flags
+  = must: keep update-record refs visible in every artifact
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is Manager writer writes approval artifact and rejects output collision
+  + [test_case] is Manager writer can write blocked status without append permission
+  + [test_case] is Shaliach writer writes clearance artifact and rejects output collision
+  + [test_case] is Shaliach writer preserves findings required rework and checked protocols
+  + [test_case] is review writer modes do not mutate project narrative surface
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add Manager approval writer mode
+  + [slice_2] is add Shaliach clearance writer mode
+  + [slice_3] is refresh checkpoint and audit after full reviewed narrative append workflow

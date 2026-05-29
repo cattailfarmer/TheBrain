@@ -1766,3 +1766,11 @@
   + [proof_result] is tests passed with 192 tests
   + [current_frontier] is S214_narrative_append_review_writer_design
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S214_narrative_append_review_writer_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S214_narrative_append_review_writer_design
+  + [implemented_capability] is narrative_append_review_writer_design.sop defines separate Manager approval and Shaliach clearance writer modes for reviewed narrative append evidence
+  + [proof_ref] is coordination/narrative_append_review_writer_design.sop
+  + [current_frontier] is S215_manager_narrative_append_approval_writer
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

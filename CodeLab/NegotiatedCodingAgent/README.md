@@ -204,6 +204,8 @@ The same wrapper supports `-Apply` for explicit reviewed append. Apply mode uses
 
 Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrative surface guard before plan or apply mode. Guard discovery is evidence only and does not approve append.
 
+`coordination/narrative_append_review_writer_design.sop` defines the next operator boundary: writer modes for Manager narrative append approval and Shaliach clearance artifacts, still separate from plan/apply modes.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

@@ -401,6 +401,8 @@ Apply reviewed narrative append evidence:
 
 Apply mode writes the same result artifact path. It appends only when the loaded evidence allows append and the surface guard matches; blocked outcomes preserve the narrative surface.
 
+Review artifact writer modes are designed in `coordination/narrative_append_review_writer_design.sop`; until implemented, Manager approval and Shaliach clearance artifacts must come from code-level helpers or hand-authored SOP with care.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

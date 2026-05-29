@@ -300,6 +300,8 @@ Apply mode is now explicit through `--apply` / `-Apply`. It reuses the loaded ar
 
 Guard discovery is also exposed through `--guard-discovery` / `-GuardDiscovery`. It prints the current narrative surface guard and carries the boundary `guard_discovery_not_append_approval`.
 
+`coordination/narrative_append_review_writer_design.sop` specifies future writer modes for Manager approval and Shaliach clearance artifacts. Those modes are evidence writers only and must remain separate from plan and apply mode.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

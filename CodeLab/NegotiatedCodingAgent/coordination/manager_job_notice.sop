@@ -2973,7 +2973,7 @@
 
 & [WorkSliceDetail S214_narrative_append_review_writer_design] is a coordination runtime design slice
   + [slice_id] is S214_narrative_append_review_writer_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design operator writers for Manager narrative append approval and Shaliach clearance artifacts
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design names accepted statuses blocked statuses update-record refs output paths and no append mutation
@@ -2981,3 +2981,16 @@
   + [support_status] is prepared
   + [dependency_set] is S213_narrative_append_guard_discovery_cli
   + [known_risks] is making review writers too permissive and ceremonial
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:14:00Z, proof_ref narrative_append_review_writer_design.sop docs updated, result_summary designed Manager approval and Shaliach clearance writer modes for narrative append
+  + [completed_work_review] is support_delta verified writer design keeps review artifact generation separate from plan/apply mutation; requirement_delta next step is add Manager narrative append approval writer mode
+
+& [WorkSliceDetail S215_manager_narrative_append_approval_writer] is a coordination runtime implementation slice
+  + [slice_id] is S215_manager_narrative_append_approval_writer
+  + [slice_status] is open
+  + [scope] is add narrative append CLI Manager approval writer mode
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover approval artifact write blocked status collision rejection and no narrative mutation
+  + [completion_criteria] is operators can persist Manager approval evidence for narrative append workflows without applying narrative updates
+  + [support_status] is prepared
+  + [dependency_set] is S214_narrative_append_review_writer_design
+  + [known_risks] is approval writer being treated as a substitute for real Manager deliberation
