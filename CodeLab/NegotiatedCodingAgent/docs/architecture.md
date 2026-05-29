@@ -262,6 +262,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `negotiated_agent.frontier_application_cli` and `scripts/frontier-application-plan.ps1` write `frontier_application_plan.sop` beside the advancement record. The command may read the active conversation surface to verify the current frontier, but it does not write that surface.
 
+`coordination/frontier_application_apply_design.sop` defines the future explicit surface mutation command. Applying a plan may replace the active conversation surface's `current_frontier` and append proof/completed-slice refs only after the exact previous frontier still matches. Stale plans should produce blocked result artifacts instead of overwriting newer work.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

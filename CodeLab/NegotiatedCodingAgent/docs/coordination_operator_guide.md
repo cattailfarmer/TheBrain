@@ -332,6 +332,8 @@ Write a dry-run frontier application plan:
 
 This writes `frontier_application_plan.sop` beside the advancement record. It does not mutate the active conversation surface.
 
+`coordination/frontier_application_apply_design.sop` describes the future explicit apply boundary. The apply command may mutate the active conversation surface only when the current frontier still equals the plan's previous frontier, and it must write a result artifact for both applied and blocked outcomes.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

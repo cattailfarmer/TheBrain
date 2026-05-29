@@ -1542,3 +1542,10 @@
   + [proof_result] is tests passed with 148 tests
   + [current_frontier] is S189_frontier_application_apply_design
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S189_frontier_application_apply_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S189_frontier_application_apply_design
+  + [implemented_capability] is frontier_application_apply_design.sop defines explicit surface mutation boundary with stale-plan blocked results and no target workspace mutation
+  + [current_frontier] is S190_frontier_application_result_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

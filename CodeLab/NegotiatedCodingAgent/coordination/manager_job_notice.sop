@@ -2648,7 +2648,7 @@
 
 & [WorkSliceDetail S189_frontier_application_apply_design] is a coordination runtime design slice
   + [slice_id] is S189_frontier_application_apply_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design explicit command to apply frontier application plans to active conversation surfaces
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names exact previous frontier match proof append completed slice append narrative update and blocked stale result
@@ -2656,3 +2656,16 @@
   + [support_status] is prepared
   + [dependency_set] is S188_frontier_application_plan_cli
   + [known_risks] is stale frontier plans overwriting newer work
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:51:00Z, proof_ref frontier_application_apply_design.sop README architecture and operator guide updated, result_summary designed explicit frontier application apply boundary with stale-blocked results
+  + [completed_work_review] is support_delta verified apply design mutates only conversation surface and not target workspace; requirement_delta next step is add FrontierApplicationResult record and plan loader
+
+& [WorkSliceDetail S190_frontier_application_result_records] is a coordination runtime implementation slice
+  + [slice_id] is S190_frontier_application_result_records
+  + [slice_status] is open
+  + [scope] is add FrontierApplicationResult record and frontier application plan loader
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover result serialization plan loading applied blocked stale and boundary text
+  + [completion_criteria] is frontier application outcomes can be represented before implementing surface mutation
+  + [support_status] is prepared
+  + [dependency_set] is S189_frontier_application_apply_design
+  + [known_risks] is result record being mistaken for actual surface update

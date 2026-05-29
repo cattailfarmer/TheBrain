@@ -166,6 +166,8 @@ The wrapper `scripts/frontier-advancement.ps1` writes `frontier_advancement_reco
 
 The wrapper `scripts/frontier-application-plan.ps1` writes `frontier_application_plan.sop` beside a frontier advancement record. It does not mutate the active conversation surface.
 
+`coordination/frontier_application_apply_design.sop` defines the next explicit mutation boundary: a future apply command may update the active conversation frontier only from a valid plan, and must write a result artifact for applied or stale-blocked outcomes.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

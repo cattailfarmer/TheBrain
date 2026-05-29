@@ -1,0 +1,62 @@
+& [FrontierApplicationApplyDesign] is the design contract for explicitly applying frontier application plans to active conversation surfaces
+  @ [conversation_kernel] src/negotiated_agent/conversation.py
+  @ [frontier_application_plan_design] coordination/frontier_application_plan_design.sop
+  @ [frontier_application_plan_cli] src/negotiated_agent/frontier_application_cli.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T02:51:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is frontier_application_apply_not_code_apply
+  + [primary_goal] is mutate only the active conversation surface after an explicit frontier application plan proves exact previous frontier match
+  + [non_goal] is applying code to the target workspace
+  + [non_goal] is creating or changing Manager approval
+  + [non_goal] is creating or changing Shaliach review
+  + [non_goal] is silently overwriting a newer frontier after compaction or another worker update
+
+& [ApplyInputs] is what the apply command must inspect
+  + [required_ref] is frontier_application_plan.sop
+  + [required_ref] is active_conversation.sop pointer
+  + [required_ref] is active conversation surface file
+  + [required_ref] is project_narrative_surface.sop when narrative_update_required is true
+  + [authority_boundary] is apply_inputs_not_manager_decision
+  = must: reject if active conversation current_frontier does not equal plan previous_frontier
+  = must: reject if plan authority_boundary is not frontier_application_plan_not_surface_write
+  = must: append plan proof refs to last_proof when applying
+  = must: append completed slice refs when provided
+  = must: write a result artifact for applied and blocked outcomes
+
+& [FrontierApplicationResult] is the future result artifact
+  + [field] is result_id
+  + [field] is plan_ref
+  + [field] is applied_status
+  + [field] is conversation_surface_ref
+  + [field] is previous_frontier
+  + [field] is next_frontier
+  + [field] is appended_proof_refs
+  + [field] is appended_completed_slice_refs
+  + [field] is narrative_update_ref
+  + [field] is block_reason
+  + [field] is authority_boundary
+  + [authority_boundary] is frontier_application_result_not_code_apply
+  = must: use applied_status applied, blocked_stale_frontier, blocked_invalid_plan, or blocked_missing_surface
+
+& [SurfaceMutationRules] is the exact allowed mutation set
+  + [allowed_mutation] is replace first current_frontier field in active conversation surface
+  + [allowed_mutation] is append missing last_proof refs
+  + [allowed_mutation] is append missing completed_slice refs
+  + [allowed_mutation] is append or reference narrative update proof when required
+  - never: edit target workspace source files
+  - never: alter Manager or Shaliach evidence
+  - never: delete prior proof, unresolved item, or completed slice entries
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is valid plan applies current_frontier and appends proof refs
+  + [test_case] is stale active frontier writes blocked result and preserves surface
+  + [test_case] is invalid plan boundary is rejected
+  + [test_case] is apply command does not touch target workspace files
+  + [test_case] is result artifact records applied or blocked status
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add FrontierApplicationResult record and pure plan loader
+  + [slice_2] is add explicit apply helper over ConversationSurface
+  + [slice_3] is add CLI wrapper that writes result artifacts for applied and blocked outcomes
