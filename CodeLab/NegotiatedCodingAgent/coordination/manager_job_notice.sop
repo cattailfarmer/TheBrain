@@ -2986,7 +2986,7 @@
 
 & [WorkSliceDetail S215_manager_narrative_append_approval_writer] is a coordination runtime implementation slice
   + [slice_id] is S215_manager_narrative_append_approval_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add narrative append CLI Manager approval writer mode
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover approval artifact write blocked status collision rejection and no narrative mutation
@@ -2994,3 +2994,16 @@
   + [support_status] is prepared
   + [dependency_set] is S214_narrative_append_review_writer_design
   + [known_risks] is approval writer being treated as a substitute for real Manager deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:27:00Z, proof_ref tests passed with 195 tests, result_summary added Manager narrative append approval writer mode
+  + [completed_work_review] is support_delta verified Manager approval writer supports approved/blocked statuses and collision rejection without narrative mutation; requirement_delta next step is add Shaliach narrative append clearance writer mode
+
+& [WorkSliceDetail S216_shaliach_narrative_append_clearance_writer] is a coordination runtime implementation slice
+  + [slice_id] is S216_shaliach_narrative_append_clearance_writer
+  + [slice_status] is open
+  + [scope] is add narrative append CLI Shaliach clearance writer mode
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover clearance artifact write required rework collision rejection and no narrative mutation
+  + [completion_criteria] is operators can persist Shaliach clearance evidence for narrative append workflows without applying narrative updates
+  + [support_status] is prepared
+  + [dependency_set] is S215_manager_narrative_append_approval_writer
+  + [known_risks] is clearance writer being treated as a substitute for live Shaliach deliberation

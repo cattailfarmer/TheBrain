@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from .narrative_append import (
+    ManagerNarrativeAppendApproval,
     apply_reviewed_narrative_append,
     build_narrative_append_result,
     narrative_surface_guard,
@@ -27,6 +28,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--result-id", default="narrative-append-result-1")
     parser.add_argument("--expected-surface-guard")
     parser.add_argument("--guard-discovery", action="store_true")
+    parser.add_argument("--manager-approval", action="store_true")
+    parser.add_argument("--approval-id", default="manager-narrative-append-approval-1")
+    parser.add_argument("--approval-status", default="approved_for_narrative_append")
+    parser.add_argument("--approved-update-count", type=int, default=1)
+    parser.add_argument("--frontier-at-approval", default="")
+    parser.add_argument("--residual-risk", action="append", default=[])
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--out", type=Path, default=Path("coordination/narrative_append_result.sop"))
     args = parser.parse_args(argv)
@@ -36,6 +43,24 @@ def main(argv: list[str] | None = None) -> int:
         narrative_surface = _resolve(project_root, args.narrative_surface_ref)
         guard = narrative_surface_guard(narrative_surface.read_text(encoding="utf-8"))
         print(f"& [NarrativeSurfaceGuard] is current narrative surface guard\n  + [narrative_surface_ref] is {_ref_text(args.narrative_surface_ref)}\n  + [surface_guard] is {guard}\n  + [authority_boundary] is guard_discovery_not_append_approval\n")
+        return 0
+    if args.manager_approval:
+        if args.out == Path("coordination/narrative_append_result.sop"):
+            args.out = Path("coordination/manager_narrative_append_approval.sop")
+        out = _resolve(project_root, args.out)
+        if out.exists():
+            raise FileExistsError(f"{out} already exists")
+        record = ManagerNarrativeAppendApproval(
+            approval_id=args.approval_id,
+            update_record_ref=_ref_text(args.update_record_ref),
+            approval_status=args.approval_status,
+            approved_update_count=args.approved_update_count,
+            frontier_at_approval=args.frontier_at_approval or "unknown",
+            residual_risks=tuple(args.residual_risk),
+        )
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(record.to_sop(), encoding="utf-8")
+        print(record.to_sop())
         return 0
     if not args.expected_surface_guard:
         raise ValueError("--expected-surface-guard is required unless --guard-discovery is used")

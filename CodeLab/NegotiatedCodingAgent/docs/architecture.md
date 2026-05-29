@@ -302,6 +302,8 @@ Guard discovery is also exposed through `--guard-discovery` / `-GuardDiscovery`.
 
 `coordination/narrative_append_review_writer_design.sop` specifies future writer modes for Manager approval and Shaliach clearance artifacts. Those modes are evidence writers only and must remain separate from plan and apply mode.
 
+The Manager approval writer mode is implemented as `--manager-approval` / `-ManagerApproval`. It writes `ManagerNarrativeAppendApproval` evidence with approval status, approved update count, frontier, and residual risks.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

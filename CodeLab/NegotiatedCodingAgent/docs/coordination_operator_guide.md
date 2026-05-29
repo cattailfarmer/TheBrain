@@ -403,6 +403,19 @@ Apply mode writes the same result artifact path. It appends only when the loaded
 
 Review artifact writer modes are designed in `coordination/narrative_append_review_writer_design.sop`; until implemented, Manager approval and Shaliach clearance artifacts must come from code-level helpers or hand-authored SOP with care.
 
+Write Manager narrative append approval evidence:
+
+```powershell
+.\scripts\narrative-append.ps1 `
+  -ManagerApproval `
+  -ApprovalId <approval-id> `
+  -ApprovalStatus approved_for_narrative_append `
+  -ApprovedUpdateCount <count> `
+  -FrontierAtApproval <frontier>
+```
+
+This writes `coordination/manager_narrative_append_approval.sop` and does not plan or apply append.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

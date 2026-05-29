@@ -6,6 +6,12 @@ param(
   [string]$ResultId = "narrative-append-result-1",
   [string]$ExpectedSurfaceGuard,
   [switch]$GuardDiscovery,
+  [switch]$ManagerApproval,
+  [string]$ApprovalId = "manager-narrative-append-approval-1",
+  [string]$ApprovalStatus = "approved_for_narrative_append",
+  [int]$ApprovedUpdateCount = 1,
+  [string]$FrontierAtApproval = "",
+  [string[]]$ResidualRisk = @(),
   [switch]$Apply,
   [string]$Out = ""
 )
@@ -16,11 +22,14 @@ $Python = "C:\Users\enjer\AppData\Local\Programs\Python\Python312\python.exe"
 if (-not (Test-Path $Python)) {
   $Python = "python"
 }
-if (-not $GuardDiscovery -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
+if (-not $GuardDiscovery -and -not $ManagerApproval -and [string]::IsNullOrWhiteSpace($ExpectedSurfaceGuard)) {
   throw "ExpectedSurfaceGuard is required for plan mode"
 }
 $env:PYTHONPATH = Join-Path $ProjectRoot "src"
 if ($Out -eq "") { $Out = Join-Path $ProjectRoot "coordination\narrative_append_result.sop" }
+if ($ManagerApproval -and $Out -eq (Join-Path $ProjectRoot "coordination\narrative_append_result.sop")) {
+  $Out = Join-Path $ProjectRoot "coordination\manager_narrative_append_approval.sop"
+}
 $argsList = @(
   "-m", "negotiated_agent.narrative_append_cli",
   "--project-root", $ProjectRoot,
@@ -33,6 +42,17 @@ $argsList = @(
 )
 if ($GuardDiscovery) {
   $argsList += @("--guard-discovery")
+} elseif ($ManagerApproval) {
+  $argsList += @(
+    "--manager-approval",
+    "--approval-id", $ApprovalId,
+    "--approval-status", $ApprovalStatus,
+    "--approved-update-count", "$ApprovedUpdateCount",
+    "--frontier-at-approval", $FrontierAtApproval
+  )
+  foreach ($risk in $ResidualRisk) {
+    $argsList += @("--residual-risk", $risk)
+  }
 } else {
   $argsList += @("--expected-surface-guard", $ExpectedSurfaceGuard)
 }

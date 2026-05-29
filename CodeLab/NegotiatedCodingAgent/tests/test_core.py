@@ -5236,6 +5236,92 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 narrative_append_cli_main(["--project-root", temp])
 
+    def test_narrative_append_cli_writes_manager_approval_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            out_path = coordination / "manager_narrative_append_approval.sop"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_append_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--manager-approval",
+                            "--approval-id",
+                            "manager-cli",
+                            "--update-record-ref",
+                            "coordination/narrative_coverage_update_record.sop",
+                            "--approval-status",
+                            "approved_for_narrative_append",
+                            "--approved-update-count",
+                            "2",
+                            "--frontier-at-approval",
+                            "S215",
+                            "--residual-risk",
+                            "deterministic review only",
+                            "--out",
+                            str(out_path),
+                        ]
+                    ),
+                    0,
+                )
+            written = out_path.read_text(encoding="utf-8")
+            self.assertIn("ManagerNarrativeAppendApproval manager-cli", written)
+            self.assertIn("approved_update_count] is 2", written)
+            self.assertIn("residual_risk] is deterministic review only", written)
+            self.assertIn("manager_approval_not_surface_mutation", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_writes_blocked_manager_approval(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            out_path = coordination / "manager_narrative_append_approval.sop"
+            with contextlib.redirect_stdout(io.StringIO()):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--manager-approval",
+                        "--approval-id",
+                        "manager-blocked",
+                        "--approval-status",
+                        "blocked_pending_review",
+                        "--approved-update-count",
+                        "0",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+            parsed = parse_manager_narrative_append_approval_sop(out_path.read_text(encoding="utf-8"))
+            self.assertFalse(parsed.allows_append)
+            self.assertEqual(parsed.approval_status, "blocked_pending_review")
+
+    def test_narrative_append_cli_manager_approval_rejects_output_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            out_path = coordination / "manager_narrative_append_approval.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--manager-approval",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",

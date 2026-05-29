@@ -206,6 +206,8 @@ Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrativ
 
 `coordination/narrative_append_review_writer_design.sop` defines the next operator boundary: writer modes for Manager narrative append approval and Shaliach clearance artifacts, still separate from plan/apply modes.
 
+`scripts/narrative-append.ps1 -ManagerApproval` writes `coordination/manager_narrative_append_approval.sop` review evidence. It can write approved or blocked statuses and does not mutate the narrative surface.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
