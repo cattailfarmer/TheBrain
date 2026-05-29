@@ -2421,3 +2421,11 @@
   + [run_root] is runs\20260529T212756Z
   + [current_frontier] is S279_spec_audit_refresh_after_prelive_checkpoint
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S279_spec_audit_refresh_after_prelive_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S279_spec_audit_refresh_after_prelive_checkpoint
+  + [implemented_capability] is spec audit reflects pre-live packet operator recipe and 277-test checkpoint proof
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S280_prelive_checkpoint_integration_decision_design
+  + [narrative_role] is specification_audit and review_runtime update
