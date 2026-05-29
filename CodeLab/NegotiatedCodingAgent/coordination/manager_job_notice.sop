@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 128
+  + [job_notice_revision] is 129
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -146,7 +146,8 @@
     S121_worker_cycle_record_scaffold |
     S122_worker_proof_command_runner_scaffold |
     S123_long_run_checkpoint_after_worker_runner_scaffold |
-    S124_worker_proof_dirty_worktree_evidence
+    S124_worker_proof_dirty_worktree_evidence |
+    S125_long_run_checkpoint_after_worker_proof_hardening
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1790,7 +1791,7 @@
 
 & [WorkSliceDetail S124_worker_proof_dirty_worktree_evidence] is a coordination runtime implementation slice
   + [slice_id] is S124_worker_proof_dirty_worktree_evidence
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is have worker proof failure records include actual git status summary when available
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover clean and dirty worktree summaries in failed proof records
@@ -1798,3 +1799,16 @@
   + [support_status] is prepared
   + [dependency_set] is S123_long_run_checkpoint_after_worker_runner_scaffold
   + [known_risks] is letting git-status probing fail the proof command path
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:52:00Z, proof_ref tests passed with 89 tests, result_summary failed worker proof records now include git dirty status or git_status_unavailable
+  + [completed_work_review] is support_delta verified failure records include resume-relevant dirty worktree evidence; requirement_delta next checkpoint should capture 89-test worker proof hardening state
+
+& [WorkSliceDetail S125_long_run_checkpoint_after_worker_proof_hardening] is a long-run reentry slice
+  + [slice_id] is S125_long_run_checkpoint_after_worker_proof_hardening
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after worker proof failure evidence hardening
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 89-test suite and route draft proof
+  + [completion_criteria] is checkpoint records 89-test suite and worker proof dirty-worktree frontier
+  + [support_status] is prepared
+  + [dependency_set] is S124_worker_proof_dirty_worktree_evidence
+  + [known_risks] is noisy generated dry-run artifacts

@@ -479,9 +479,10 @@
   + [completed_slice] is S121_worker_cycle_record_scaffold
   + [completed_slice] is S122_worker_proof_command_runner_scaffold
   + [completed_slice] is S123_long_run_checkpoint_after_worker_runner_scaffold
+  + [completed_slice] is S124_worker_proof_dirty_worktree_evidence
 
-  + [current_frontier] is S124_worker_proof_dirty_worktree_evidence after worker runner scaffold checkpoint
-  + [next_recommended_slice] is S124_worker_proof_dirty_worktree_evidence
+  + [current_frontier] is S125_long_run_checkpoint_after_worker_proof_hardening after worker proof dirty-worktree evidence
+  + [next_recommended_slice] is S125_long_run_checkpoint_after_worker_proof_hardening
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

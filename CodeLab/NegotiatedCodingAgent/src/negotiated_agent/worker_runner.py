@@ -150,7 +150,7 @@ def run_worker_proof_command(
             command_returncode=result.returncode,
             stdout_tail=_tail(result.stdout),
             stderr_tail=_tail(result.stderr),
-            dirty_worktree_summary="not_checked",
+            dirty_worktree_summary=_dirty_worktree_summary(project_root),
             safe_resume_action="inspect failure record and rerun proof command after repair",
             escalation_recipient="manager",
         )
@@ -229,3 +229,17 @@ def _write_failure(project_root: Path, failure: WorkerFailureRecord) -> Path:
 
 def _tail(text: str, limit: int = 240) -> str:
     return " ".join(text.replace("\x00", "").split())[:limit].rstrip() if text else "none"
+
+
+def _dirty_worktree_summary(project_root: Path) -> str:
+    result = subprocess.run(
+        ["C:\\Program Files\\Git\\cmd\\git.exe", "status", "--short"],
+        cwd=project_root,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=False,
+    )
+    if result.returncode != 0:
+        return "git_status_unavailable"
+    return _tail(result.stdout) if result.stdout.strip() else "clean"

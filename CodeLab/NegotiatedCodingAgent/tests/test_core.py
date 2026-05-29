@@ -2,6 +2,7 @@ from pathlib import Path
 import contextlib
 import io
 import json
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -1540,6 +1541,22 @@ class MailboxCoordinationTests(unittest.TestCase):
             failure_text = failure_path.read_text(encoding="utf-8")
             self.assertIn("command_returncode] is 7", failure_text)
             self.assertIn("proof-failed", failure_text)
+            self.assertIn("dirty_worktree_summary] is git_status_unavailable", failure_text)
+
+    def test_worker_proof_failure_records_dirty_git_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            subprocess.run(["C:\\Program Files\\Git\\cmd\\git.exe", "init"], cwd=root, check=True, capture_output=True, text=True)
+            (root / "dirty.txt").write_text("dirty\n", encoding="utf-8")
+            record = run_worker_proof_command(
+                root,
+                worker_uuid="worker-a",
+                command="cmd /c exit 5",
+                cycle_id="cycle-dirty",
+                slice_ref="manager_job_notice.sop#S124_worker_proof_dirty_worktree_evidence",
+            )
+            failure_text = (root / record.failure_ref).read_text(encoding="utf-8")
+            self.assertIn("dirty_worktree_summary] is ?? dirty.txt", failure_text)
 
     def test_worker_proof_command_cli_returns_nonzero_on_failed_proof(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

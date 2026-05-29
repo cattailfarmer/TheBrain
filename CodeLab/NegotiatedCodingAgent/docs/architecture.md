@@ -208,7 +208,7 @@ The same worker-runner CLI can now run explicit claim-record mode. That path cla
 
 Worker cycle-record mode writes `WorkerCycleRecord` artifacts under `coordination/workers/<worker_uuid>/cycles/` from explicit claim, slice, proof, file, Shaliach, commit, or failure refs. These records are Manager review input and preserve the `worker_cycle_record_not_manager_approval` boundary.
 
-The worker proof-command scaffold can run an explicit proof command and write success or failed-proof cycle evidence. Failed proofs also write `WorkerFailureRecord` artifacts with return code, output tails, dirty-worktree placeholder, and safe-resume guidance; the command does not approve work or move the frontier.
+The worker proof-command scaffold can run an explicit proof command and write success or failed-proof cycle evidence. Failed proofs also write `WorkerFailureRecord` artifacts with return code, output tails, dirty-worktree summary when git status is available, and safe-resume guidance; the command does not approve work or move the frontier.
 
 ## Director Disagreement Ledger
 
