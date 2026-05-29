@@ -469,6 +469,14 @@
   + [last_proof] is run 20260529T190511Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T190511Z
   + [last_proof] is run 20260529T190511Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T193634Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T193634Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T193634Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T193634Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T193634Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T193634Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T193634Z
+  + [last_proof] is run 20260529T193634Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -674,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S209_long_run_checkpoint_after_narrative_append_cli after reviewed narrative append CLI apply mode
+  + [current_frontier] is S210_spec_audit_refresh_after_narrative_append after long-run checkpoint refreshed for narrative append CLI
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -686,7 +694,9 @@
   + [completed_slice] is S206_narrative_append_artifact_parsers
   + [completed_slice] is S207_reviewed_narrative_append_cli_plan
   + [completed_slice] is S208_reviewed_narrative_append_cli_apply
-  + [next_recommended_slice] is S209_long_run_checkpoint_after_narrative_append_cli
+  + [completed_slice] is S209_long_run_checkpoint_after_narrative_append_cli
+  + [last_proof] is long-run checkpoint passed 190 tests dry-run model inventory non-gating OpenAI healthcheck and route draft
+  + [next_recommended_slice] is S210_spec_audit_refresh_after_narrative_append
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

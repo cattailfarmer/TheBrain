@@ -2908,7 +2908,7 @@
 
 & [WorkSliceDetail S209_long_run_checkpoint_after_narrative_append_cli] is a long-run reentry slice
   + [slice_id] is S209_long_run_checkpoint_after_narrative_append_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after reviewed narrative append plan and apply CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 190-test suite and reviewed append CLI frontier
@@ -2916,3 +2916,16 @@
   + [support_status] is prepared
   + [dependency_set] is S208_reviewed_narrative_append_cli_apply
   + [known_risks] is checkpoint run creating noisy non-gating endpoint health artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:36:00Z, proof_ref long-run checkpoint passed 190 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after reviewed narrative append CLI
+  + [completed_work_review] is support_delta verified checkpoint records S209 frontier and ready_for_continuation with OpenAI health non-gating; requirement_delta next step is refresh spec audit after narrative append support
+
+& [WorkSliceDetail S210_spec_audit_refresh_after_narrative_append] is a specification audit slice
+  + [slice_id] is S210_spec_audit_refresh_after_narrative_append
+  + [slice_status] is open
+  + [scope] is refresh implementation status after narrative stale-check update-record and reviewed append support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names narrative coverage and reviewed append support and chooses next gap
+  + [completion_criteria] is spec audit no longer treats narrative coverage stale-check and reviewed append CLI as future gaps
+  + [support_status] is prepared
+  + [dependency_set] is S209_long_run_checkpoint_after_narrative_append_cli
+  + [known_risks] is overstating reviewed narrative append as autonomous semantic memory governance

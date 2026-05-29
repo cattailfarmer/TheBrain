@@ -1,8 +1,8 @@
 & [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
-  + [created_at] is 2026-05-29T19:05:29.927238+00:00
+  + [created_at] is 2026-05-29T19:36:53.009033+00:00
   + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
-  + [start_current_frontier] is S193_long_run_checkpoint_after_frontier_apply_cli after frontier application apply CLI
-  + [end_current_frontier] is run 20260529T190511Z completed and narrative updated with artifact manifest
+  + [start_current_frontier] is S209_long_run_checkpoint_after_narrative_append_cli after reviewed narrative append CLI apply mode
+  + [end_current_frontier] is run 20260529T193634Z completed and narrative updated with artifact manifest
   + [git_clean_before] is true
   + [status] is ready_for_continuation
   + [test_status] is passed
@@ -14,12 +14,12 @@
 
   & [HarnessCommand test] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src'... Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src\\negotiated_agent'...
-    + [stderr_tail] is .......................................................................................................................................................... ---------------------------------------------------------------------- Ran 154 tests
+    + [stdout_tail] is dination/manager_narrative_append_approval.sop + [shaliach_clearance_ref] is coordination/shaliach_narrative_append_clearance.sop + [narrative_surface_ref] is coordination/project_narrative_surface.sop + [appended_update_count] is 0 + [bloc
+    + [stderr_tail] is .............................................................................................................................................................................................. -------------------------------------------------
 
   & [HarnessCommand dry_run] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T190511Z
+    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T193634Z
     + [stderr_tail] is none
 
   & [HarnessCommand model_inventory] is a command proof summary
