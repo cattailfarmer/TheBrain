@@ -147,6 +147,7 @@ from negotiated_agent.shaliach import (
     review_layer_negotiation,
 )
 from negotiated_agent.shaliach_self_negotiation_cli import main as shaliach_self_negotiation_cli_main
+from negotiated_agent.shaliach_cross_artifact_cli import main as shaliach_cross_artifact_cli_main
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import (
@@ -6267,6 +6268,82 @@ class ShaliachRuntimeTests(unittest.TestCase):
     def test_parse_shaliach_response_self_negotiation_ref_rejects_wrong_header(self) -> None:
         with self.assertRaises(ValueError):
             parse_shaliach_response_self_negotiation_ref_sop("& [ShaliachFinding x] is not response coordination")
+
+    def test_cross_artifact_cli_prints_consistent_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            finding = ShaliachFinding(
+                finding="thin_ledger_evidence",
+                severity="warning",
+                target_role="Director",
+                target_artifact="sjs_ledger",
+                action="request_rework",
+                confidence="moderate",
+                reason="ledger evidence is thin",
+                self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+            )
+            self_negotiation = build_shaliach_self_negotiation_from_finding(
+                finding,
+                subject_ref="application_layer_package",
+                negotiation_id="application.shaliach_self_negotiation",
+            )
+            self_path = root / "application.shaliach_self_negotiation.sop"
+            finding_path = root / "application.shaliach_finding.sop"
+            response_path = root / "application.shaliach_response.sop"
+            self_path.write_text(self_negotiation.to_sop(), encoding="utf-8")
+            finding_path.write_text(finding.to_sop("application_layer_package"), encoding="utf-8")
+            response_path.write_text(finding.to_response_coordination_sop("application_layer_package"), encoding="utf-8")
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                result = shaliach_cross_artifact_cli_main(
+                    [
+                        "--self-negotiation",
+                        str(self_path),
+                        "--finding",
+                        str(finding_path),
+                        "--response",
+                        str(response_path),
+                    ]
+                )
+        self.assertEqual(result, 0)
+        self.assertIn("inspection_status] is consistent", stdout.getvalue())
+
+    def test_cross_artifact_cli_returns_one_for_mismatch(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            finding = ShaliachFinding(
+                finding="thin_ledger_evidence",
+                severity="warning",
+                target_role="Director",
+                target_artifact="sjs_ledger",
+                action="request_rework",
+                confidence="moderate",
+                reason="ledger evidence is thin",
+                self_negotiation_ref="ShaliachSelfNegotiationRecord wrong",
+            )
+            self_negotiation = build_shaliach_self_negotiation_from_finding(
+                finding,
+                subject_ref="application_layer_package",
+                negotiation_id="application.shaliach_self_negotiation",
+            )
+            self_path = root / "application.shaliach_self_negotiation.sop"
+            finding_path = root / "application.shaliach_finding.sop"
+            self_path.write_text(self_negotiation.to_sop(), encoding="utf-8")
+            finding_path.write_text(finding.to_sop("application_layer_package"), encoding="utf-8")
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                result = shaliach_cross_artifact_cli_main(
+                    [
+                        "--self-negotiation",
+                        str(self_path),
+                        "--finding",
+                        str(finding_path),
+                        "--expected-self-negotiation-ref",
+                        "ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+                    ]
+                )
+        self.assertEqual(result, 1)
+        self.assertIn("inspection_status] is inconsistent", stdout.getvalue())
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

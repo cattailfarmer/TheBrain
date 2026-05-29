@@ -78,6 +78,7 @@ Runs are written under `runs/<timestamp>/`:
 The Shaliach self-negotiation artifact is deterministic review evidence. Its `status` can be `resolved`, `advisory`, or `rework_required`, and findings may cite it through `self_negotiation_ref`; it is not live Shaliach model deliberation or Manager approval.
 
 Use `scripts\shaliach-self-negotiation.ps1 -Artifact <path>` to print a concise inspection summary for one self-negotiation artifact.
+Use `scripts\shaliach-cross-inspect.ps1 -SelfNegotiation <path> -Finding <path> [-Response <path>]` to compare Shaliach self-negotiation, finding, and response refs structurally.
 - `WS001_core_implementation.<Programmer>.manager_review.sop`
 - `WS001_core_implementation.<Programmer>.execution_result.sop`
 - `coder.raw.md`

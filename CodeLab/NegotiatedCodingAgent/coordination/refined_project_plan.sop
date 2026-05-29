@@ -353,7 +353,8 @@
   + [completed_slice] is S244_shaliach_cross_artifact_inspection_design
   + [completed_slice] is S245_shaliach_finding_field_parser
   + [completed_slice] is S246_shaliach_cross_artifact_inspection_evaluator
-  + [ready_slice] is S247_shaliach_cross_artifact_inspection_cli
+  + [completed_slice] is S247_shaliach_cross_artifact_inspection_cli
+  + [ready_slice] is S248_long_run_checkpoint_after_cross_artifact_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

@@ -52,6 +52,17 @@ Inspect a self-negotiation artifact with:
 
 The command prints an inspection summary only. It does not rewrite the artifact, advance the frontier, or approve the layer.
 
+Inspect consistency across the self-negotiation, finding, and optional response artifacts with:
+
+```powershell
+.\scripts\shaliach-cross-inspect.ps1 `
+  -SelfNegotiation .\runs\<timestamp>\<layer>.shaliach_self_negotiation.sop `
+  -Finding .\runs\<timestamp>\<layer>.shaliach_finding.sop `
+  -Response .\runs\<timestamp>\<layer>.shaliach_response.sop
+```
+
+The command returns exit code `0` for structurally consistent artifacts and `1` for mismatches. It is a consistency check only, not semantic validation or Manager approval.
+
 ## Run Manifests
 
 Each completed or blocked run writes `run_manifest.sop`. Validate that listed artifact refs exist:

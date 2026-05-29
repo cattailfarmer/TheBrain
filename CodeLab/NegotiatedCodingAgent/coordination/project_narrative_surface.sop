@@ -2111,3 +2111,11 @@
   + [proof_result] is tests passed with 231 tests
   + [current_frontier] is S247_shaliach_cross_artifact_inspection_cli
   + [narrative_role] is shaliach_arc and consistency_gate update
+
+
+& [LongRunNarrativeUpdate S247_shaliach_cross_artifact_inspection_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S247_shaliach_cross_artifact_inspection_cli
+  + [implemented_capability] is scripts/shaliach-cross-inspect.ps1 compares Shaliach self-negotiation finding and optional response refs and exits nonzero on mismatches
+  + [proof_result] is tests passed with 233 tests
+  + [current_frontier] is S248_long_run_checkpoint_after_cross_artifact_cli
+  + [narrative_role] is shaliach_arc and operator_tooling update

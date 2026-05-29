@@ -3402,7 +3402,7 @@
 
 & [WorkSliceDetail S247_shaliach_cross_artifact_inspection_cli] is a coordination runtime CLI slice
   + [slice_id] is S247_shaliach_cross_artifact_inspection_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add CLI/wrapper for Shaliach cross-artifact consistency inspection
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests cover CLI consistent output mismatch output and optional response handling
@@ -3410,3 +3410,16 @@
   + [support_status] is prepared
   + [dependency_set] is S246_shaliach_cross_artifact_inspection_evaluator
   + [known_risks] is CLI status being interpreted as Manager approval
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T11:38:00Z, proof_ref tests passed with 233 tests, result_summary added Shaliach cross-artifact inspection CLI and PowerShell wrapper
+  + [completed_work_review] is support_delta verified CLI prints consistent/inconsistent inspection summaries and exits 1 for mismatches; requirement_delta next step is refresh checkpoint after cross-artifact inspection CLI
+
+& [WorkSliceDetail S248_long_run_checkpoint_after_cross_artifact_cli] is a long-run reentry slice
+  + [slice_id] is S248_long_run_checkpoint_after_cross_artifact_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after Shaliach cross-artifact inspection CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 233-test suite and cross-artifact CLI frontier
+  + [completion_criteria] is checkpoint captures cross-artifact inspection tooling
+  + [support_status] is prepared
+  + [dependency_set] is S247_shaliach_cross_artifact_inspection_cli
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
