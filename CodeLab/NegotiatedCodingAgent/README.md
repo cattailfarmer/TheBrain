@@ -31,6 +31,12 @@ From this folder:
 .\scripts\run-dry.ps1
 ```
 
+For an unattended-work checkpoint:
+
+```powershell
+.\scripts\long-run-harness.ps1
+```
+
 With Ollama running locally:
 
 ```powershell

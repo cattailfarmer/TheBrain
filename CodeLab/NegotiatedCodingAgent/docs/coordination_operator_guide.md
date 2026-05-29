@@ -28,6 +28,25 @@ Each completed or blocked run writes `run_manifest.sop`. Validate that listed ar
 
 This is a file-existence check, not semantic artifact validation.
 
+## Long-Run Checkpoint
+
+Write a checkpoint for unattended continuation:
+
+```powershell
+.\scripts\long-run-harness.ps1
+```
+
+The checkpoint is written to `coordination/long_run_checkpoint.sop`.
+
+Key fields:
+
+- `start_current_frontier`: the conversation frontier before the harness ran proof commands.
+- `end_current_frontier`: the conversation frontier after the harness ran proof commands.
+- `test_status`, `dry_run_status`, and `model_inventory_status`: gating checks for continuation.
+- `openai_health_status`: non-gating environment state for the local OpenAI-compatible server.
+
+An unavailable OpenAI-compatible server should not block continuation when the current work is governance, documentation, or dry-run proof. It only means live local serving is not ready yet.
+
 ## Mailbox Messages
 
 List mailbox messages:

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 45
+  + [job_notice_revision] is 46
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -63,7 +63,8 @@
     S38_openai_health_docs |
     S39_long_run_harness_healthcheck |
     S40_long_run_checkpoint_final_frontier |
-    S41_long_run_checkpoint_docs
+    S41_long_run_checkpoint_docs |
+    S42_readme_output_inventory_refresh
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -628,7 +629,7 @@
 
 & [WorkSliceDetail S41_long_run_checkpoint_docs] is a long-run recovery slice
   + [slice_id] is S41_long_run_checkpoint_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document long-run checkpoint fields including start/end frontier and non-gating healthcheck
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -636,3 +637,16 @@
   + [support_status] is prepared
   + [dependency_set] is S39_long_run_harness_healthcheck, S40_long_run_checkpoint_final_frontier
   + [known_risks] is documenting checkpoint as stronger autonomy proof than it is
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:10:00Z, proof_ref tests passed with 42 tests, result_summary documented long-run checkpoint fields and README harness command
+  + [completed_work_review] is support_delta verified checkpoint interpretation is documented; requirement_delta checkpoint remains proof aid not human approval
+
+& [WorkSliceDetail S42_readme_output_inventory_refresh] is a documentation and reentry slice
+  + [slice_id] is S42_readme_output_inventory_refresh
+  + [slice_status] is open
+  + [scope] is refresh README output inventory to include protocol activation, Shaliach artifacts, response coordination, manifests, file-change surfaces, and blocked-run artifacts
+  + [target_files] is README.md
+  + [proof_route] is README updated and tests remain passing
+  + [completion_criteria] is README no longer describes only the early scaffold output set
+  + [support_status] is prepared
+  + [dependency_set] is S26_run_artifact_manifest, S41_long_run_checkpoint_docs
+  + [known_risks] is over-listing every generated artifact rather than describing useful categories
