@@ -1856,3 +1856,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S223_review_artifact_synthesis_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S223_review_artifact_synthesis_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S223_review_artifact_synthesis_design
+  + [implemented_capability] is review_artifact_synthesis_design.sop defines deterministic Manager and Shaliach review draft policies from narrative update records
+  + [proof_ref] is coordination/review_artifact_synthesis_design.sop
+  + [current_frontier] is S224_review_artifact_synthesis_builders
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

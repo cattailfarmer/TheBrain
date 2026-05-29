@@ -3090,7 +3090,7 @@
 
 & [WorkSliceDetail S223_review_artifact_synthesis_design] is a coordination runtime design slice
   + [slice_id] is S223_review_artifact_synthesis_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design deterministic review artifact synthesis from narrative coverage update records
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design names approval count derivation review caution fields and separation from live deliberation
@@ -3098,3 +3098,16 @@
   + [support_status] is prepared
   + [dependency_set] is S222_spec_audit_refresh_after_e2e_fixture
   + [known_risks] is synthesizing review evidence too mechanically and erasing need for real deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:08:00Z, proof_ref review_artifact_synthesis_design.sop docs updated, result_summary designed deterministic review draft synthesis from narrative update records
+  + [completed_work_review] is support_delta verified synthesis design carries deterministic draft not live deliberation boundaries; requirement_delta next step is add pure review draft builders
+
+& [WorkSliceDetail S224_review_artifact_synthesis_builders] is a coordination runtime implementation slice
+  + [slice_id] is S224_review_artifact_synthesis_builders
+  + [slice_status] is open
+  + [scope] is add pure Manager and Shaliach review draft builders from NarrativeCoverageUpdateRecord
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover approval count derivation empty blocks deferred rework and boundary strings
+  + [completion_criteria] is deterministic review drafts can be built from update records without writing artifacts
+  + [support_status] is prepared
+  + [dependency_set] is S223_review_artifact_synthesis_design
+  + [known_risks] is generated drafts being mistaken for human or live model review

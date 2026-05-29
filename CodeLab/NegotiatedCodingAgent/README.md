@@ -214,6 +214,8 @@ Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrativ
 
 The reviewed narrative append e2e fixture now runs in `tests/test_core.py`, exercising guard discovery, review writers, plan mode, and guarded apply inside a temporary project root.
 
+`coordination/review_artifact_synthesis_design.sop` defines the next boundary: deterministic draft Manager/Shaliach review artifacts can be derived from update records, but they remain drafts and not live deliberation.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

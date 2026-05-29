@@ -1,0 +1,55 @@
+& [ReviewArtifactSynthesisDesign] is the design contract for deterministic review evidence drafts from update records
+  @ [created_at] 2026-05-30T09:08:00Z
+  @ [update_record] coordination/narrative_coverage_update_record.sop
+  @ [review_writer_design] coordination/narrative_append_review_writer_design.sop
+  @ [append_cli] scripts/narrative-append.ps1
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is deterministic_review_draft_not_live_deliberation
+  + [primary_goal] is reduce hand-authored review fields by deriving deterministic draft review artifacts from a NarrativeCoverageUpdateRecord
+  + [non_goal] is claiming Manager or Shaliach semantic approval
+  + [non_goal] is applying narrative updates
+  + [non_goal] is suppressing residual risks or required rework
+  + [non_goal] is replacing local model deliberation once serving is available
+
+& [SynthesisInputs] is the required evidence for deterministic drafts
+  + [required_ref] is NarrativeCoverageUpdateRecord artifact
+  + [required_value] is current_frontier
+  + [optional_value] is manager_residual_risk repeated value
+  + [optional_value] is shaliach_finding repeated value
+  + [optional_value] is checked_protocol repeated value
+  + [authority_boundary] is update_record_fields_not_semantic_review
+  = must: derive approved_update_count from appended_update_count
+  = must: choose blocked Manager approval when appended_update_count is zero
+  = must: include residual risk stating deterministic draft requires real review
+  = must: choose Shaliach rework_required when deferred updates exist
+  = must: include checked protocols in Shaliach draft
+
+& [ManagerDraftPolicy] is the deterministic Manager review draft rule
+  + [approved_status] is approved_for_narrative_append when appended_update_count is greater than zero
+  + [blocked_status] is blocked_pending_review when appended_update_count is zero
+  + [required_residual_risk] is deterministic_draft_requires_manager_review
+  + [authority_boundary] is manager_draft_not_manager_decision
+  = must: never approve more updates than the update record appends
+  = must: preserve update_record_ref
+
+& [ShaliachDraftPolicy] is the deterministic Shaliach review draft rule
+  + [clear_status] is clear_for_narrative_append when deferred_update_count is zero
+  + [rework_status] is rework_required_for_narrative_append when deferred_update_count is greater than zero
+  + [required_finding] is deterministic_draft_requires_shaliach_review
+  + [authority_boundary] is shaliach_draft_not_shaliach_clearance
+  = must: convert deferred updates into required_rework entries
+  = must: preserve checked protocols
+  = must: preserve update_record_ref
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is Manager draft approval count equals appended_update_count
+  + [test_case] is Manager draft blocks empty update records
+  + [test_case] is Shaliach draft clears when no deferred updates exist
+  + [test_case] is Shaliach draft requires rework when deferred updates exist
+  + [test_case] is generated drafts carry deterministic-review-not-live-deliberation boundaries
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add pure Manager and Shaliach review draft builders
+  + [slice_2] is add optional CLI synthesis mode that writes both artifacts under explicit output refs
+  + [slice_3] is refresh checkpoint and audit after synthesis support

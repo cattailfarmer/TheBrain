@@ -310,6 +310,8 @@ The Shaliach clearance writer mode is implemented as `--shaliach-clearance` / `-
 
 That e2e fixture is now implemented in the test suite. It proves the deterministic reviewed append workflow across CLI main functions while preserving the live workspace narrative surface.
 
+`coordination/review_artifact_synthesis_design.sop` defines deterministic review drafts from `NarrativeCoverageUpdateRecord` evidence. The draft policy can derive approval counts and required rework, but carries an explicit boundary that it is not live Manager or Shaliach deliberation.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
