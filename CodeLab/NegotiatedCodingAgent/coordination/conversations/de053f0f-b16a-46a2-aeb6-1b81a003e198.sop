@@ -961,7 +961,9 @@
   + [last_proof] is run 20260529T213450Z wrote run_manifest.sop
   + [completed_slice] is S282_long_run_checkpoint_after_prelive_recipe_reference
   + [last_proof] is long-run checkpoint passed 278 tests with combined validation passed and pre-live recipe reference operator_only
-  + [next_recommended_slice] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
+  + [completed_slice] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
+  + [last_proof] is spec audit refreshed after 278-test checkpoint recipe reference proof
+  + [next_recommended_slice] is S284_narrative_coverage_after_prelive_recipe_reference
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

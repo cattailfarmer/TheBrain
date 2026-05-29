@@ -2462,3 +2462,11 @@
   + [run_root] is runs\20260529T213450Z
   + [current_frontier] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
+  + [implemented_capability] is spec audit reflects 278-test checkpoint recipe reference and operator-only pre-live packet generation boundary
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S284_narrative_coverage_after_prelive_recipe_reference
+  + [narrative_role] is specification_audit and narrative_memory update

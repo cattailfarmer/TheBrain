@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 169
+  + [job_notice_revision] is 170
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3870,7 +3870,7 @@
 
 & [WorkSliceDetail S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint] is a specification audit slice
   + [slice_id] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after checkpoint recipe reference proof
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names 278-test checkpoint recipe reference and operator-only packet generation boundary
@@ -3878,3 +3878,16 @@
   + [support_status] is prepared
   + [dependency_set] is S282_long_run_checkpoint_after_prelive_recipe_reference
   + [known_risks] is audit overstating checkpoint recipe reference as completed Manager/Shaliach review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T14:42:00Z, proof_ref spec_implementation_status.sop and tests passed with 278 tests, result_summary audit reflects checkpoint recipe reference and operator-only pre-live packet generation boundary
+  + [completed_work_review] is support_delta verified audit no longer lists the old integration decision as an open next gap; requirement_delta next step is refresh narrative coverage/stale status for the latest proof surfaces
+
+& [WorkSliceDetail S284_narrative_coverage_after_prelive_recipe_reference] is a narrative memory validation slice
+  + [slice_id] is S284_narrative_coverage_after_prelive_recipe_reference
+  + [slice_status] is open
+  + [scope] is refresh narrative coverage and stale-check evidence after pre-live recipe reference checkpoint and audit
+  + [target_files] is coordination/**, scripts/**
+  + [proof_route] is narrative coverage command records current checkpoint, conversation, manager notice, refined plan, and spec audit surfaces
+  + [completion_criteria] is narrative memory surfaces can prove they are aware of the latest checkpoint and audit frontier
+  + [support_status] is prepared
+  + [dependency_set] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
+  + [known_risks] is append-only narrative coverage drifting from current proof references
