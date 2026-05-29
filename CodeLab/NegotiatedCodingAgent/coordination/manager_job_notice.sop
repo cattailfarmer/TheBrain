@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 13
+  + [job_notice_revision] is 14
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -153,15 +153,17 @@
 
 & [WorkSliceDetail S10_shaliach_faculty_runtime] is a planned dependency slice
   + [slice_id] is S10_shaliach_faculty_runtime
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement Shaliach higher/lower reasoning with selected seven-faculty and internal-perspective passes, recorded as response coordination artifacts
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests for advisory, warning, pause, rework, and no_finding Shaliach outputs
   + [completion_criteria] is Shaliach findings are produced from explicit perspectives and attached to layer packages, work slices, programmer reports, and manager reviews
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S08_runtime_conversation_kernel, S09_protocol_registry
   + [known_risks] is overactivating every faculty and turning lightweight checks into ceremony
   + [planning_update] is refined by coordination/refined_project_plan.sop as the next readiness gate before broader multi-agent coordination or model-serving work
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:47:00Z, proof_ref tests passed with 20 tests and dry-run wrote runs/20260529T113710Z, result_summary added negotiated_agent.shaliach ShaliachFinding and review_layer_negotiation with no_finding warning pause request_rework behavior, package attachment, and manager-layer log fields
+  + [completed_work_review] is support_delta verified Shaliach can inspect negotiated ledgers and parent lineage before Manager descent; requirement_delta protocol_activation.sop run artifact emission remains S10A
 
 & [WorkSliceDetail S10A_orchestrator_protocol_activation_artifacts] is a planned child slice
   + [slice_id] is S10A_orchestrator_protocol_activation_artifacts

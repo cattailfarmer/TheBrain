@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from .ledgers import NegotiatedLedgers, negotiate_ledgers
+from .shaliach import ShaliachFinding
 
 
 @dataclass(frozen=True)
@@ -13,6 +14,7 @@ class LayerPackage:
     parent_ref: str
     proposals: list[tuple[str, str]] | None = None
     ledgers: NegotiatedLedgers | None = None
+    shaliach_finding_record: ShaliachFinding | None = None
     manager_decision: str = "pending"
     shaliach_severity: str = "info"
     shaliach_finding: str = "no protocol findings in scaffold pass"
@@ -21,6 +23,15 @@ class LayerPackage:
         package_id = f"{self.layer}_layer_package"
         timestamp = datetime.now(timezone.utc).isoformat()
         ledgers = self.ledgers or negotiate_ledgers(self.layer, self.proposals or [], self.flowchart)
+        shaliach = self.shaliach_finding_record or ShaliachFinding(
+            finding=self.shaliach_finding,
+            severity=self.shaliach_severity,
+            target_role="Manager",
+            target_artifact="layer_package",
+            action="no_action",
+            confidence="accepted",
+            reason=self.shaliach_finding,
+        )
         return f"""& [LayerNegotiationPackage {package_id}] is the durable output package for the {self.layer} layer
   @ [created_at] {timestamp}
   @ [parent_package_ref] {self.parent_ref}
@@ -49,12 +60,9 @@ class LayerPackage:
     + [retry_condition] is package writer or prompt changes
 
   & [ShaliachNoteSet] is the structured output from Shaliach advisory/control passes
-    + [shaliach_note] is scaffold_no_finding
     + [observed_subject] is {package_id}
     + [protocol_scope] is SOP, SJS, DataDrivenDesign, lineage, artifact_form
-    + [severity] is {self.shaliach_severity}
-    + [finding] is {self.shaliach_finding}
-    + [required_response] is none
+{shaliach.to_sop(package_id)}
 """
 
 

@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S10_shaliach_faculty_runtime
+  + [current_frontier] is S10A_orchestrator_protocol_activation_artifacts
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -52,7 +52,7 @@
   + [result] is Shaliach can now be designed against real runtime artifacts: protocol activations, negotiated ledgers, manager reviews, programmer reports, conversation surface, and narrative updates
 
 & [RefinedPhasePlan] is the staged path from current readiness to stronger long-turn autonomy
-  + [Phase1] is ShaliachRuntimeCore
+  + [Phase1] is ShaliachRuntimeCore completed
   + [Phase2] is OrchestratorGovernanceIntegration
   + [Phase3] is WorkProductTraceability
   + [Phase4] is MultiConversationCoordination
@@ -61,6 +61,7 @@
 
 & [Phase1 ShaliachRuntimeCore] is the next governing implementation phase
   + [primary_slice] is S10_shaliach_faculty_runtime
+  + [phase_status] is completed
   + [objective] is implement Shaliach higher/lower reasoning with selected faculty and internal-perspective passes
   + [input_surface] is negotiated LayerPackage ledgers
   + [input_surface] is ProtocolActivationSet
@@ -72,6 +73,7 @@
   + [required_actions] is advisory_note, warning, pause_signal, request_rework, no_finding
   + [proof_route] is tests for severity selection, targeted artifact repair instructions, no-finding behavior, and pause/rework escalation
   + [readiness_gate] is Shaliach can inspect negotiated ledgers and block or warn before Manager approval or implementation review
+  + [completion_proof] is tests passed with 20 tests and dry-run wrote ShaliachFinding records in runs/20260529T113710Z
 
 & [Phase2 OrchestratorGovernanceIntegration] is the phase that makes the rails active during runs
   + [objective] is emit protocol activation artifacts, Shaliach findings, conversation proof updates, and narrative updates as normal run events
@@ -113,8 +115,8 @@
   + [proof_route] is interrupted/reentered run resumes from conversation_uuid and narrative frontier without losing completed proof or dirty-worktree attribution
 
 & [ManagerQueue] is the refined next-slice order
-  + [ready_slice] is S10_shaliach_faculty_runtime
-  + [next_slice] is S10A_orchestrator_protocol_activation_artifacts
+  + [completed_slice] is S10_shaliach_faculty_runtime
+  + [ready_slice] is S10A_orchestrator_protocol_activation_artifacts
   + [next_slice] is S10B_attach_shaliach_findings_to_layer_packages
   + [next_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [next_slice] is S14_file_change_surface

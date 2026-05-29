@@ -15,6 +15,7 @@ from negotiated_agent.manager import review_layer_package
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
+from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import create_initial_work_slice
 from negotiated_agent.writer import write_implementation
 
@@ -195,6 +196,7 @@ class LayerPackageTests(unittest.TestCase):
         self.assertIn("DirectorA: Must preserve conversation_uuid identity", package)
         self.assertIn("Risk: stale proof can mislead readiness", package)
         self.assertNotIn("scaffold requirement extraction pending", package)
+        self.assertIn("ShaliachFinding", package)
 
 
 class WorkSliceTests(unittest.TestCase):
@@ -284,6 +286,57 @@ class ProtocolRegistryTests(unittest.TestCase):
         self.assertIn("ProtocolActivationSet", sop)
         self.assertIn("protocol_reference_registry_not_full_sop_interpreter", sop)
         self.assertIn("Project_Narrative_Surface.sop", sop)
+
+
+class ShaliachRuntimeTests(unittest.TestCase):
+    def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
+        ledgers = negotiate_ledgers(
+            "application",
+            [
+                (
+                    "DirectorA",
+                    "\n".join(
+                        [
+                            "- Must preserve data subject identity",
+                            "- Boundary constraint: keep scope explicit",
+                            "- Condition: Manager approval before descent",
+                            "- Risk: stale proof",
+                            "- Form: package artifact",
+                            "- Relation: parent child lineage",
+                            "- Transform: source to package",
+                            "- Operator: review action",
+                            "- Lifecycle: pending state to approved status",
+                            "- Provenance: source evidence",
+                        ]
+                    ),
+                )
+            ],
+            "# Flowchart\n- Data: note record\n- N1 -> N2: transform source to package",
+        )
+        finding = review_layer_negotiation(
+            layer="application",
+            ledgers=ledgers,
+            protocol_activations=ProtocolRegistry.default().activate({"sjs": "traceability"}),
+        )
+        self.assertEqual(finding.finding, "no_protocol_gap_detected")
+        self.assertFalse(finding.blocks_progress)
+
+    def test_shaliach_warns_without_protocol_activations(self) -> None:
+        ledgers = negotiate_ledgers("application", [], "# Flowchart")
+        finding = review_layer_negotiation(layer="application", ledgers=ledgers, protocol_activations=[])
+        self.assertEqual(finding.severity, "warning")
+        self.assertEqual(finding.action, "request_rework")
+
+    def test_shaliach_pauses_without_parent_lineage(self) -> None:
+        ledgers = negotiate_ledgers("subsystem", [], "# Flowchart")
+        finding = review_layer_negotiation(
+            layer="subsystem",
+            ledgers=ledgers,
+            protocol_activations=ProtocolRegistry.default().activate({"sjs": "traceability"}),
+            package_has_parent=False,
+        )
+        self.assertEqual(finding.severity, "pause")
+        self.assertTrue(finding.blocks_progress)
 
 
 class NarrativeUpdateTests(unittest.TestCase):

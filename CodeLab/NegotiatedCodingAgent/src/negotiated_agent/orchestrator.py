@@ -12,6 +12,8 @@ from .llm import LlmClient
 from .manager import review_layer_package
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
+from .protocols import ProtocolRegistry
+from .shaliach import review_layer_negotiation
 from .slices import create_initial_work_slice, manager_review, programmer_report
 from .writer import write_implementation, write_text
 
@@ -33,12 +35,26 @@ class NegotiatedCodingAgent:
             flowcharts[layer] = settled
             write_text(run_root / f"{layer}.flowchart.md", settled)
             ledgers = negotiate_ledgers(layer, proposals, settled)
+            protocol_activations = ProtocolRegistry.default().activate(
+                {
+                    "sjs": f"{layer} layer package requires negotiated SJS traceability",
+                    "data_driven_design": f"{layer} layer package requires DataDrivenDesign ledger coverage",
+                    "faculty_integration": f"{layer} layer package requires Shaliach faculty review",
+                }
+            )
+            shaliach_finding = review_layer_negotiation(
+                layer=layer,
+                ledgers=ledgers,
+                protocol_activations=protocol_activations,
+                package_has_parent=bool(parent_package_ref),
+            )
             pending_package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
                 parent_ref=parent_package_ref,
                 proposals=proposals,
                 ledgers=ledgers,
+                shaliach_finding_record=shaliach_finding,
             )
             decision = review_layer_package(layer, pending_package.to_sop())
             package = LayerPackage(
@@ -47,6 +63,7 @@ class NegotiatedCodingAgent:
                 parent_ref=parent_package_ref,
                 proposals=proposals,
                 ledgers=ledgers,
+                shaliach_finding_record=shaliach_finding,
                 manager_decision=decision.status,
             )
             package_path = run_root / f"{layer}.package.sop"
@@ -59,8 +76,12 @@ class NegotiatedCodingAgent:
                     "layer": layer,
                     "decision": decision.status,
                     "reason": decision.reason,
+                    "shaliach_finding": shaliach_finding.finding,
+                    "shaliach_severity": shaliach_finding.severity,
                 },
             )
+            if shaliach_finding.blocks_progress:
+                raise RuntimeError(f"Shaliach paused {layer} layer: {shaliach_finding.reason}")
             if not decision.approved:
                 raise RuntimeError(f"Manager rejected {layer} layer: {decision.reason}")
             parent_flowchart = settled

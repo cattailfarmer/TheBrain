@@ -34,6 +34,8 @@
   + [last_proof] is run narrative update written for runs\20260529T112648Z
   + [last_proof] is tests passed with 17 tests after negotiated SJS DataDesign ledgers and automatic narrative updates
   + [last_proof] is planning checkpoint refined after negotiated ledgers and narrative updates
+  + [last_proof] is run narrative update written for runs\20260529T113710Z
+  + [last_proof] is tests passed with 20 tests after S10 Shaliach faculty runtime
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -46,12 +48,13 @@
   + [completed_slice] is S07_docs_and_acceptance_review
   + [completed_slice] is S08_runtime_conversation_kernel
   + [completed_slice] is S09_protocol_registry
+  + [completed_slice] is S10_shaliach_faculty_runtime
   + [completed_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [completed_slice] is S12_project_narrative_surface_runtime_update
   + [completed_slice] is S12_project_narrative_surface_seed
 
-  + [current_frontier] is S10_shaliach_faculty_runtime under refined project plan
-  + [next_recommended_slice] is S10_shaliach_faculty_runtime from coordination/framework_attention_load.sop
+  + [current_frontier] is S10A_orchestrator_protocol_activation_artifacts after Shaliach faculty runtime
+  + [next_recommended_slice] is S10A_orchestrator_protocol_activation_artifacts from coordination/refined_project_plan.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers
@@ -63,6 +66,7 @@
   + [unresolved_item] is protocol registry records SOP activation references and authority boundary, but run artifacts do not yet include protocol activation sets
   + [unresolved_item] is automatic narrative updates append completed run summaries, but narrative coverage and stale-check recomputation remain future work
   + [unresolved_item] is Shaliach faculty runtime remains the main missing readiness slice for stronger long-turn advisory and enforcement behavior
+  + [unresolved_item] is Shaliach runtime now reviews layer ledgers and lineage, but run_root protocol_activation.sop artifacts are not emitted yet
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
