@@ -138,9 +138,11 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationTension,
     build_shaliach_self_negotiation_record,
     build_shaliach_self_negotiation_from_finding,
+    inspect_shaliach_cross_artifact_consistency,
     load_shaliach_finding_fields,
     load_shaliach_self_negotiation,
     parse_shaliach_finding_fields_sop,
+    parse_shaliach_response_self_negotiation_ref_sop,
     parse_shaliach_self_negotiation_sop,
     review_layer_negotiation,
 )
@@ -6141,6 +6143,130 @@ class ShaliachRuntimeTests(unittest.TestCase):
     def test_parse_shaliach_finding_fields_rejects_wrong_header(self) -> None:
         with self.assertRaises(ValueError):
             parse_shaliach_finding_fields_sop("& [ShaliachSelfNegotiationRecord x] is not a finding")
+
+    def test_cross_artifact_inspection_reports_consistent_refs(self) -> None:
+        finding = ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason="ledger evidence is thin",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        self_negotiation = build_shaliach_self_negotiation_from_finding(
+            finding,
+            subject_ref="application_layer_package",
+            negotiation_id="application.shaliach_self_negotiation",
+        )
+        fields = parse_shaliach_finding_fields_sop(finding.to_sop("application_layer_package"))
+        result = inspect_shaliach_cross_artifact_consistency(
+            inspection_id="inspect-1",
+            self_negotiation=self_negotiation,
+            finding_fields=fields,
+            self_negotiation_ref="application.shaliach_self_negotiation.sop",
+            shaliach_finding_ref="application.shaliach_finding.sop",
+            shaliach_response_ref="application.shaliach_response.sop",
+            shaliach_response_text=finding.to_response_coordination_sop("application_layer_package"),
+            expected_subject_ref="application_layer_package",
+            expected_self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        self.assertTrue(result.consistent)
+        self.assertIn("inspection_status] is consistent", result.to_sop())
+
+    def test_cross_artifact_inspection_reports_ref_mismatch(self) -> None:
+        finding = ShaliachFinding(
+            finding="thin_ledger_evidence",
+            severity="warning",
+            target_role="Director",
+            target_artifact="sjs_ledger",
+            action="request_rework",
+            confidence="moderate",
+            reason="ledger evidence is thin",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord wrong",
+        )
+        self_negotiation = build_shaliach_self_negotiation_from_finding(
+            finding,
+            subject_ref="application_layer_package",
+            negotiation_id="application.shaliach_self_negotiation",
+        )
+        fields = parse_shaliach_finding_fields_sop(finding.to_sop("application_layer_package"))
+        result = inspect_shaliach_cross_artifact_consistency(
+            inspection_id="inspect-mismatch",
+            self_negotiation=self_negotiation,
+            finding_fields=fields,
+            self_negotiation_ref="application.shaliach_self_negotiation.sop",
+            shaliach_finding_ref="application.shaliach_finding.sop",
+            expected_subject_ref="application_layer_package",
+            expected_self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        self.assertFalse(result.consistent)
+        self.assertIn("finding_self_negotiation_ref_expected", result.to_sop())
+
+    def test_cross_artifact_inspection_allows_missing_response_for_no_action(self) -> None:
+        finding = ShaliachFinding(
+            finding="no_protocol_gap_detected",
+            severity="info",
+            target_role="Manager",
+            target_artifact="layer_package",
+            action="no_action",
+            confidence="accepted",
+            reason="protocol obligations present",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        self_negotiation = build_shaliach_self_negotiation_from_finding(
+            finding,
+            subject_ref="application_layer_package",
+            negotiation_id="application.shaliach_self_negotiation",
+        )
+        fields = parse_shaliach_finding_fields_sop(finding.to_sop("application_layer_package"))
+        result = inspect_shaliach_cross_artifact_consistency(
+            inspection_id="inspect-no-response",
+            self_negotiation=self_negotiation,
+            finding_fields=fields,
+            self_negotiation_ref="application.shaliach_self_negotiation.sop",
+            shaliach_finding_ref="application.shaliach_finding.sop",
+            expected_subject_ref="application_layer_package",
+            expected_self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+        )
+        self.assertTrue(result.consistent)
+        self.assertIn("shaliach_response_ref] is none", result.to_sop())
+
+    def test_cross_artifact_inspection_reports_status_mismatch(self) -> None:
+        finding = ShaliachFinding(
+            finding="missing_parent_lineage",
+            severity="pause",
+            target_role="Manager",
+            target_artifact="layer_package",
+            action="pause",
+            confidence="high",
+            reason="parent lineage is missing",
+            self_negotiation_ref="ShaliachSelfNegotiationRecord subsystem.shaliach_self_negotiation",
+        )
+        self_negotiation = build_shaliach_self_negotiation_record(
+            negotiation_id="subsystem.shaliach_self_negotiation",
+            subject_ref="subsystem_layer_package",
+            intention_statement="resolve finding",
+            purpose_statement="test mismatch",
+            context_boundary="subsystem review",
+        )
+        fields = parse_shaliach_finding_fields_sop(finding.to_sop("subsystem_layer_package"))
+        result = inspect_shaliach_cross_artifact_consistency(
+            inspection_id="inspect-status",
+            self_negotiation=self_negotiation,
+            finding_fields=fields,
+            self_negotiation_ref="subsystem.shaliach_self_negotiation.sop",
+            shaliach_finding_ref="subsystem.shaliach_finding.sop",
+            expected_subject_ref="subsystem_layer_package",
+            expected_self_negotiation_ref="ShaliachSelfNegotiationRecord subsystem.shaliach_self_negotiation",
+        )
+        self.assertFalse(result.consistent)
+        self.assertIn("status_expected_rework_required", result.to_sop())
+
+    def test_parse_shaliach_response_self_negotiation_ref_rejects_wrong_header(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_shaliach_response_self_negotiation_ref_sop("& [ShaliachFinding x] is not response coordination")
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

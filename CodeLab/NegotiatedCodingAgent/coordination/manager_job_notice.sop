@@ -3389,7 +3389,7 @@
 
 & [WorkSliceDetail S246_shaliach_cross_artifact_inspection_evaluator] is a coordination runtime implementation slice
   + [slice_id] is S246_shaliach_cross_artifact_inspection_evaluator
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure evaluator for Shaliach self-negotiation, finding, and response artifact consistency
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover consistent mismatched missing optional response and status-alignment cases
@@ -3397,3 +3397,16 @@
   + [support_status] is prepared
   + [dependency_set] is S245_shaliach_finding_field_parser
   + [known_risks] is evaluator becoming semantic approval instead of consistency evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T11:30:00Z, proof_ref tests passed with 231 tests, result_summary added pure Shaliach cross-artifact consistency evaluator and result record
+  + [completed_work_review] is support_delta verified evaluator checks refs optional response and status alignment without approval authority; requirement_delta next step is add CLI wrapper for real run artifacts
+
+& [WorkSliceDetail S247_shaliach_cross_artifact_inspection_cli] is a coordination runtime CLI slice
+  + [slice_id] is S247_shaliach_cross_artifact_inspection_cli
+  + [slice_status] is open
+  + [scope] is add CLI/wrapper for Shaliach cross-artifact consistency inspection
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests cover CLI consistent output mismatch output and optional response handling
+  + [completion_criteria] is operator can inspect consistency across run artifacts with one stable command
+  + [support_status] is prepared
+  + [dependency_set] is S246_shaliach_cross_artifact_inspection_evaluator
+  + [known_risks] is CLI status being interpreted as Manager approval

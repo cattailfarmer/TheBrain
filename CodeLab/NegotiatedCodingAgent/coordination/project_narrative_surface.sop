@@ -2103,3 +2103,11 @@
   + [proof_result] is tests passed with 226 tests
   + [current_frontier] is S246_shaliach_cross_artifact_inspection_evaluator
   + [narrative_role] is shaliach_arc and parser_tooling update
+
+
+& [LongRunNarrativeUpdate S246_shaliach_cross_artifact_inspection_evaluator] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S246_shaliach_cross_artifact_inspection_evaluator
+  + [implemented_capability] is ShaliachCrossArtifactInspectionResult and evaluator compare self-negotiation finding and optional response refs plus status alignment
+  + [proof_result] is tests passed with 231 tests
+  + [current_frontier] is S247_shaliach_cross_artifact_inspection_cli
+  + [narrative_role] is shaliach_arc and consistency_gate update

@@ -241,6 +241,33 @@ class ShaliachFindingFields:
     self_negotiation_ref: str
 
 
+@dataclass(frozen=True)
+class ShaliachCrossArtifactInspectionResult:
+    inspection_id: str
+    inspection_status: str
+    self_negotiation_ref: str
+    shaliach_finding_ref: str
+    shaliach_response_ref: str
+    mismatches: tuple[str, ...] = ()
+    authority_boundary: str = "consistency_inspection_not_manager_approval"
+
+    @property
+    def consistent(self) -> bool:
+        return self.inspection_status == "consistent"
+
+    def to_sop(self) -> str:
+        mismatch_lines = "\n".join(f"  + [mismatch] is {mismatch}" for mismatch in self.mismatches)
+        if not mismatch_lines:
+            mismatch_lines = "  + [mismatch_set] is none"
+        return f"""& [ShaliachCrossArtifactInspectionResult {self.inspection_id}] is deterministic Shaliach artifact consistency evidence
+  + [inspection_status] is {self.inspection_status}
+  + [self_negotiation_ref] is {self.self_negotiation_ref}
+  + [shaliach_finding_ref] is {self.shaliach_finding_ref}
+  + [shaliach_response_ref] is {self.shaliach_response_ref or "none"}
+{mismatch_lines}
+  + [authority_boundary] is {self.authority_boundary}"""
+
+
 def parse_shaliach_finding_fields_sop(text: str) -> ShaliachFindingFields:
     finding_match = re.search(r"& \[ShaliachFinding (?P<subject>[^\]]+)\]", text)
     if not finding_match:
@@ -256,6 +283,50 @@ def parse_shaliach_finding_fields_sop(text: str) -> ShaliachFindingFields:
 
 def load_shaliach_finding_fields(path: Path) -> ShaliachFindingFields:
     return parse_shaliach_finding_fields_sop(path.read_text(encoding="utf-8"))
+
+
+def inspect_shaliach_cross_artifact_consistency(
+    *,
+    inspection_id: str,
+    self_negotiation: ShaliachSelfNegotiationRecord,
+    finding_fields: ShaliachFindingFields,
+    self_negotiation_ref: str,
+    shaliach_finding_ref: str,
+    expected_subject_ref: str,
+    expected_self_negotiation_ref: str,
+    shaliach_response_ref: str = "",
+    shaliach_response_text: str = "",
+) -> ShaliachCrossArtifactInspectionResult:
+    mismatches: list[str] = []
+    if self_negotiation.subject_ref != expected_subject_ref:
+        mismatches.append(f"self_negotiation_subject_ref_expected_{expected_subject_ref}_found_{self_negotiation.subject_ref}")
+    if finding_fields.subject != expected_subject_ref:
+        mismatches.append(f"finding_subject_expected_{expected_subject_ref}_found_{finding_fields.subject}")
+    if finding_fields.self_negotiation_ref != expected_self_negotiation_ref:
+        mismatches.append(
+            f"finding_self_negotiation_ref_expected_{expected_self_negotiation_ref}_found_{finding_fields.self_negotiation_ref}"
+        )
+    if shaliach_response_text:
+        response_ref = parse_shaliach_response_self_negotiation_ref_sop(shaliach_response_text)
+        if response_ref != finding_fields.self_negotiation_ref:
+            mismatches.append(f"response_self_negotiation_ref_expected_{finding_fields.self_negotiation_ref}_found_{response_ref}")
+    expected_status = _expected_self_negotiation_status_for_finding(finding_fields.severity)
+    if self_negotiation.status != expected_status:
+        mismatches.append(f"status_expected_{expected_status}_from_finding_severity_{finding_fields.severity}_found_{self_negotiation.status}")
+    return ShaliachCrossArtifactInspectionResult(
+        inspection_id=inspection_id,
+        inspection_status="inconsistent" if mismatches else "consistent",
+        self_negotiation_ref=self_negotiation_ref,
+        shaliach_finding_ref=shaliach_finding_ref,
+        shaliach_response_ref=shaliach_response_ref,
+        mismatches=tuple(mismatches),
+    )
+
+
+def parse_shaliach_response_self_negotiation_ref_sop(text: str) -> str:
+    if not re.search(r"& \[ShaliachResponseCoordination (?P<subject>[^\]]+)\]", text):
+        raise ValueError("ShaliachResponseCoordination header not found")
+    return _first_sop_field(text, "self_negotiation_ref")
 
 
 def build_shaliach_self_negotiation_from_finding(
@@ -395,6 +466,14 @@ def _self_negotiation_tensions_from_finding(finding: ShaliachFinding) -> tuple[S
             reason=finding.reason,
         ),
     )
+
+
+def _expected_self_negotiation_status_for_finding(severity: str) -> str:
+    if severity == "info":
+        return "resolved"
+    if SEVERITY_RANK[severity] >= SEVERITY_RANK["pause"]:
+        return "rework_required"
+    return "advisory"
 
 
 def _resolved_self_negotiation_intention(
