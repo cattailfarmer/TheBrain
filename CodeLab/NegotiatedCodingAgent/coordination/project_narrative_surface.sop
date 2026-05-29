@@ -1489,3 +1489,10 @@
   + [run_root] is runs\20260529T184130Z
   + [current_frontier] is S182_spec_audit_refresh_after_packet_proposal_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S182_spec_audit_refresh_after_packet_proposal_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S182_spec_audit_refresh_after_packet_proposal_cli
+  + [implemented_capability] is spec_implementation_status.sop now recognizes packet proposal CLI and 140-test checkpoint as scaffold support
+  + [current_frontier] is S183_frontier_advancement_record_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

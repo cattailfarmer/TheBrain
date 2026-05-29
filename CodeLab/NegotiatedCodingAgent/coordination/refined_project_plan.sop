@@ -288,7 +288,8 @@
   + [completed_slice] is S179_packet_proposal_records
   + [completed_slice] is S180_packet_proposal_cli
   + [completed_slice] is S181_long_run_checkpoint_after_packet_proposal_cli
-  + [ready_slice] is S182_spec_audit_refresh_after_packet_proposal_cli
+  + [completed_slice] is S182_spec_audit_refresh_after_packet_proposal_cli
+  + [ready_slice] is S183_frontier_advancement_record_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

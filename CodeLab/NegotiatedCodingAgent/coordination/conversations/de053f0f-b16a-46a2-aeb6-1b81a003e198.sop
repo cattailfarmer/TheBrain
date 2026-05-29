@@ -649,9 +649,10 @@
   + [completed_slice] is S179_packet_proposal_records
   + [completed_slice] is S180_packet_proposal_cli
   + [completed_slice] is S181_long_run_checkpoint_after_packet_proposal_cli
+  + [completed_slice] is S182_spec_audit_refresh_after_packet_proposal_cli
 
-  + [current_frontier] is S182_spec_audit_refresh_after_packet_proposal_cli after long-run checkpoint for packet proposal CLI
-  + [next_recommended_slice] is S182_spec_audit_refresh_after_packet_proposal_cli
+  + [current_frontier] is S183_frontier_advancement_record_design after spec audit refresh for packet proposal CLI
+  + [next_recommended_slice] is S183_frontier_advancement_record_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
