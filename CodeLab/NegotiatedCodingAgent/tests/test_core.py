@@ -2232,6 +2232,113 @@ class MailboxCoordinationTests(unittest.TestCase):
         self.assertFalse(ok)
         self.assertEqual(reason, "proof_command_mismatch")
 
+    def test_worker_runner_cli_writes_manager_proof_handoff_without_running_command(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S151",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            ready_path = write_worker_cycle_record(root, ready_cycle)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--write-proof-handoff",
+                            "--ready-cycle-ref",
+                            ready_path.relative_to(root).as_posix(),
+                            "--execution-gate-ref",
+                            "coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                            "--handoff-id",
+                            "handoff-1",
+                            "--proof-command",
+                            "powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+                            "--proof-route",
+                            "scripts/test.ps1",
+                            "--current-frontier",
+                            "S151_manager_proof_handoff_writer_cli",
+                            "--expires-at",
+                            "2026-05-29T21:55:00Z",
+                        ]
+                    ),
+                    0,
+                )
+            handoff_path = root / "coordination" / "workers" / "worker-a" / "proof_handoffs" / "handoff-1.sop"
+            self.assertTrue(handoff_path.exists())
+            self.assertIn("ManagerProofHandoffWriteResult", out.getvalue())
+            self.assertIn("proof_handoff_write_not_command_execution", out.getvalue())
+            self.assertFalse((root / "coordination" / "workers" / "worker-a" / "failures").exists())
+
+    def test_worker_runner_cli_proof_handoff_rejects_non_ready_and_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-completed",
+                cycle_status="completed",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S151",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            cycle_path = write_worker_cycle_record(root, cycle)
+            args = [
+                "--project-root",
+                str(root),
+                "--worker",
+                "worker-a",
+                "--mailbox",
+                "director_pool",
+                "--write-proof-handoff",
+                "--ready-cycle-ref",
+                cycle_path.relative_to(root).as_posix(),
+                "--execution-gate-ref",
+                "coordination/workers/worker-a/execution_gates/gate-proof.sop",
+                "--handoff-id",
+                "handoff-1",
+                "--proof-command",
+                "powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+                "--proof-route",
+                "scripts/test.ps1",
+                "--current-frontier",
+                "S151_manager_proof_handoff_writer_cli",
+                "--expires-at",
+                "2026-05-29T21:55:00Z",
+            ]
+            first = io.StringIO()
+            with contextlib.redirect_stdout(first):
+                self.assertEqual(worker_runner_cli_main(args), 1)
+            self.assertIn("cycle_status_completed", first.getvalue())
+            ready_cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-proof",
+                cycle_status="ready_for_proof",
+                claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+                slice_ref="manager_job_notice.sop#S151",
+                proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+                changed_files=(),
+            )
+            ready_path = write_worker_cycle_record(root, ready_cycle)
+            args[args.index(cycle_path.relative_to(root).as_posix())] = ready_path.relative_to(root).as_posix()
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(worker_runner_cli_main(args), 0)
+            collision = io.StringIO()
+            with contextlib.redirect_stdout(collision):
+                self.assertEqual(worker_runner_cli_main(args), 1)
+            self.assertIn("already exists", collision.getvalue())
+
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(
         authorization_id="auth-1",

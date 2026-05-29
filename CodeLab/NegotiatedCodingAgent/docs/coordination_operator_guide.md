@@ -227,6 +227,14 @@ Gate-cycle bridge mode writes one `WorkerCycleRecord` from the existing gate ref
 
 The next planned proof handoff is `coordination/manager_reviewed_proof_handoff_design.sop`. A `ready_for_proof` cycle is review evidence only; a later Manager proof handoff must approve the exact proof command before the proof-command runner consumes it.
 
+Write a Manager proof handoff without running the command:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -WriteProofHandoff -ReadyCycleRef <cycle-ref> -ExecutionGateRef <gate-ref> -HandoffId <handoff-id> -ProofCommand "<command>" -ProofRoute "<route>" -CurrentFrontier <frontier> -ExpiresAt <timestamp>
+```
+
+The handoff writer validates that the source cycle is `ready_for_proof` and that the exact command matches the handoff evidence. It writes only the handoff artifact.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

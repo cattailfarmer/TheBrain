@@ -2154,7 +2154,7 @@
 
 & [WorkSliceDetail S151_manager_proof_handoff_writer_cli] is a coordination runtime implementation slice
   + [slice_id] is S151_manager_proof_handoff_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI mode and wrapper support to write ManagerProofHandoffRecord artifacts
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover approved handoff write non-ready cycle rejection command mismatch and no command execution
@@ -2162,3 +2162,16 @@
   + [support_status] is prepared
   + [dependency_set] is S150_manager_proof_handoff_records
   + [known_risks] is handoff writer appearing to execute proof commands
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:49:00Z, proof_ref tests passed with 113 tests, result_summary worker runner CLI and wrapper write ManagerProofHandoffRecord artifacts without running proof commands
+  + [completed_work_review] is support_delta verified handoff writer rejects non-ready cycles and output collisions; requirement_delta next checkpoint should capture 113-test proof handoff state
+
+& [WorkSliceDetail S152_long_run_checkpoint_after_proof_handoff_writer] is a long-run reentry slice
+  + [slice_id] is S152_long_run_checkpoint_after_proof_handoff_writer
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after Manager proof handoff writer CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 113-test suite and route draft proof
+  + [completion_criteria] is checkpoint records proof handoff writer frontier
+  + [support_status] is prepared
+  + [dependency_set] is S151_manager_proof_handoff_writer_cli
+  + [known_risks] is noisy generated dry-run artifacts

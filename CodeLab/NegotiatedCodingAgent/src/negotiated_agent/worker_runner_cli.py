@@ -5,7 +5,13 @@ from pathlib import Path
 from uuid import uuid4
 
 from .execution_gate import load_execution_gate_decision
-from .worker_lifecycle import WorkerCycleRecord
+from .worker_lifecycle import (
+    ManagerProofHandoffRecord,
+    WorkerCycleRecord,
+    load_worker_cycle_record,
+    validate_manager_proof_handoff,
+    write_manager_proof_handoff,
+)
 from .worker_runner import (
     build_worker_cycle_from_gate_decision,
     build_worker_runner_preview,
@@ -25,7 +31,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--claim-record", action="store_true", help="Claim unread messages and write WorkerLeaseRecord files.")
     parser.add_argument("--record-cycle", action="store_true", help="Write a WorkerCycleRecord from explicit outcome inputs.")
     parser.add_argument("--record-gate-cycle", action="store_true", help="Write a WorkerCycleRecord from a persisted ExecutionGateDecision.")
+    parser.add_argument("--write-proof-handoff", action="store_true", help="Write a ManagerProofHandoffRecord without running commands.")
     parser.add_argument("--execution-gate-ref", default=None)
+    parser.add_argument("--ready-cycle-ref", default=None)
+    parser.add_argument("--handoff-id", default=None)
+    parser.add_argument("--proof-command", default=None)
+    parser.add_argument("--proof-route", default=None)
+    parser.add_argument("--current-frontier", default=None)
+    parser.add_argument("--expires-at", default=None)
     parser.add_argument("--cycle-id", default=None)
     parser.add_argument("--cycle-status", default="completed")
     parser.add_argument("--claim-ref", action="append", default=[])
@@ -40,6 +53,39 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout-seconds", type=int, default=180)
     args = parser.parse_args(argv)
     try:
+        if args.write_proof_handoff:
+            if not args.ready_cycle_ref or not args.execution_gate_ref or not args.proof_command or not args.proof_route or not args.current_frontier or not args.expires_at:
+                raise ValueError("--ready-cycle-ref, --execution-gate-ref, --proof-command, --proof-route, --current-frontier, and --expires-at are required with --write-proof-handoff")
+            ready_cycle = load_worker_cycle_record(_resolve(args.project_root, args.ready_cycle_ref))
+            handoff = ManagerProofHandoffRecord(
+                handoff_id=args.handoff_id or str(uuid4()),
+                handoff_status="approved",
+                worker_uuid=args.worker,
+                ready_cycle_ref=args.ready_cycle_ref,
+                execution_gate_ref=args.execution_gate_ref,
+                proof_command=args.proof_command,
+                proof_route=args.proof_route,
+                frontier_at_handoff=args.current_frontier,
+                expires_at=args.expires_at,
+            )
+            ok, reason = validate_manager_proof_handoff(
+                handoff=handoff,
+                ready_cycle=ready_cycle,
+                requested_command=args.proof_command,
+                current_frontier=args.current_frontier,
+            )
+            if not ok:
+                raise ValueError(reason)
+            written = write_manager_proof_handoff(args.project_root, handoff)
+            print(
+                "& [ManagerProofHandoffWriteResult] is explicit proof handoff evidence persistence\n"
+                f"  + [handoff_id] is {handoff.handoff_id}\n"
+                f"  + [handoff_status] is {handoff.handoff_status}\n"
+                f"  + [artifact_ref] is {written.relative_to(args.project_root).as_posix()}\n"
+                "  + [authority_boundary] is proof_handoff_write_not_command_execution\n",
+                end="",
+            )
+            return 0
         if args.record_gate_cycle:
             if not args.execution_gate_ref:
                 raise ValueError("--execution-gate-ref is required with --record-gate-cycle")

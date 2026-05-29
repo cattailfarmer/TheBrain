@@ -8,7 +8,14 @@ param(
   [switch]$ClaimRecord,
   [switch]$RecordCycle,
   [switch]$RecordGateCycle,
+  [switch]$WriteProofHandoff,
   [string]$ExecutionGateRef = "",
+  [string]$ReadyCycleRef = "",
+  [string]$HandoffId = "",
+  [string]$ProofCommand = "",
+  [string]$ProofRoute = "",
+  [string]$CurrentFrontier = "",
+  [string]$ExpiresAt = "",
   [string]$CycleId = "",
   [string]$CycleStatus = "completed",
   [string[]]$ClaimRef = @(),
@@ -76,6 +83,30 @@ if ($RecordGateCycle) {
     $argsList += @("--slice-ref", $SliceRef)
   }
   $argsList += @("--failure-ref", $FailureRef)
+}
+if ($WriteProofHandoff) {
+  $argsList += "--write-proof-handoff"
+  if ($ExecutionGateRef -ne "") {
+    $argsList += @("--execution-gate-ref", $ExecutionGateRef)
+  }
+  if ($ReadyCycleRef -ne "") {
+    $argsList += @("--ready-cycle-ref", $ReadyCycleRef)
+  }
+  if ($HandoffId -ne "") {
+    $argsList += @("--handoff-id", $HandoffId)
+  }
+  if ($ProofCommand -ne "") {
+    $argsList += @("--proof-command", $ProofCommand)
+  }
+  if ($ProofRoute -ne "") {
+    $argsList += @("--proof-route", $ProofRoute)
+  }
+  if ($CurrentFrontier -ne "") {
+    $argsList += @("--current-frontier", $CurrentFrontier)
+  }
+  if ($ExpiresAt -ne "") {
+    $argsList += @("--expires-at", $ExpiresAt)
+  }
 }
 if ($RunProofCommand -ne "") {
   $argsList += @("--run-proof-command", $RunProofCommand, "--timeout-seconds", $TimeoutSeconds)

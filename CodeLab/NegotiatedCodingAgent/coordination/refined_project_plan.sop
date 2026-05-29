@@ -257,7 +257,8 @@
   + [completed_slice] is S148_spec_audit_refresh_after_gate_cycle_bridge
   + [completed_slice] is S149_manager_reviewed_proof_handoff_design
   + [completed_slice] is S150_manager_proof_handoff_records
-  + [ready_slice] is S151_manager_proof_handoff_writer_cli
+  + [completed_slice] is S151_manager_proof_handoff_writer_cli
+  + [ready_slice] is S152_long_run_checkpoint_after_proof_handoff_writer
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

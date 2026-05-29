@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 
 @dataclass(frozen=True)
@@ -137,9 +138,53 @@ def validate_manager_proof_handoff(
     return True, "approved"
 
 
+def write_manager_proof_handoff(project_root: Path, handoff: ManagerProofHandoffRecord) -> Path:
+    path = project_root / "coordination" / "workers" / handoff.worker_uuid / "proof_handoffs" / f"{handoff.handoff_id}.sop"
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(handoff.to_sop(), encoding="utf-8")
+    return path
+
+
+def load_worker_cycle_record(path: Path) -> WorkerCycleRecord:
+    fields = _read_fields(path)
+    return WorkerCycleRecord(
+        worker_uuid=fields["worker_uuid"],
+        cycle_id=fields["cycle_id"],
+        cycle_status=fields["cycle_status"],
+        claim_refs=_split_set(fields.get("claim_ref_set", "")),
+        slice_ref=fields["slice_ref"],
+        proof_refs=_split_set(fields.get("proof_ref_set", "")),
+        changed_files=_split_set(fields.get("changed_file_set", "")),
+        manager_frontier_request=fields.get("manager_frontier_request", "none"),
+        shaliach_finding_ref=fields.get("shaliach_finding_ref", "none"),
+        commit_ref=fields.get("commit_ref", "none"),
+        failure_ref=fields.get("failure_ref", "none"),
+    )
+
+
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
 
 
 def _field_value(value: str) -> str:
     return " ".join(value.replace("\x00", "").split())[:240].rstrip() if value else "none"
+
+
+def _read_fields(path: Path) -> dict[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing")
+    fields = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            fields[key] = value
+    return fields
+
+
+def _split_set(value: str) -> tuple[str, ...]:
+    if not value or value == "none":
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())

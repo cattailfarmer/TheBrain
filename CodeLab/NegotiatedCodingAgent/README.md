@@ -134,6 +134,8 @@ The worker runner wrapper can now record that bridge explicitly with `scripts/wo
 
 The next proof boundary is designed in `coordination/manager_reviewed_proof_handoff_design.sop`: proof-ready cycle evidence still needs an explicit Manager proof handoff before a command runner consumes it.
 
+The worker runner wrapper can now write that handoff evidence with `scripts/worker-runner-preview.ps1 -WriteProofHandoff`; command execution remains a separate step.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

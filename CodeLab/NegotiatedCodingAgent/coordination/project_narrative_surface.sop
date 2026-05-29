@@ -1189,3 +1189,11 @@
   + [proof_result] is tests passed with 111 tests
   + [current_frontier] is S151_manager_proof_handoff_writer_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S151_manager_proof_handoff_writer_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S151_manager_proof_handoff_writer_cli
+  + [implemented_capability] is worker runner CLI and wrapper write ManagerProofHandoffRecord artifacts without running proof commands
+  + [proof_result] is tests passed with 113 tests
+  + [current_frontier] is S152_long_run_checkpoint_after_proof_handoff_writer
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

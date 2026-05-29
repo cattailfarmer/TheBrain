@@ -230,6 +230,8 @@ The existing execution gate CLI now has explicit write mode for that boundary. I
 
 `coordination/manager_reviewed_proof_handoff_design.sop` defines the next proof boundary. A `ready_for_proof` cycle is not enough by itself to run a command; a future `ManagerProofHandoffRecord` must approve the exact proof command and preserve the boundary that proof result cycles do not advance frontiers or authorize implementation execution.
 
+`ManagerProofHandoffRecord` and the worker-runner CLI handoff writer implement the evidence side of that boundary. The writer validates a `ready_for_proof` cycle, exact proof command, execution gate ref, and current frontier, then writes a handoff artifact without running the command.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
