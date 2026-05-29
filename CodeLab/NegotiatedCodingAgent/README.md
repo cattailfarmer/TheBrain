@@ -96,11 +96,17 @@ The layer-specific files are emitted for each configured negotiation layer, curr
 - `code.flowchart.md`
 - `code.package.sop`
 - `code.manager_review.sop`
-- `WS001_initial_implementation.work_slice.sop`
-- `WS001_initial_implementation.programmer_report.sop`
-- `WS001_initial_implementation.manager_review.sop`
+- `WS001_core_implementation.<Programmer>.work_slice.sop`
+- `WS001_core_implementation.<Programmer>.programmer_report.sop`
+- `WS001_core_implementation.<Programmer>.manager_review.sop`
 
 The generated implementation is intentionally conservative: the coder writes files only inside the run folder unless you later add an explicit workspace writer.
+
+To validate a generated manual merge packet without applying it to the workspace:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\apply-merge-dry-run.ps1 -RunRoot runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain
+```
 
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 

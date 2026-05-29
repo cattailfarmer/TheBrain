@@ -159,6 +159,7 @@
   + [implemented_slice] is S76_spec_audit_refresh_after_apply_plan
   + [implemented_slice] is S77_long_run_checkpoint_refresh
   + [implemented_slice] is S78_apply_command_dry_run_cli_design
+  + [implemented_slice] is S79_apply_command_dry_run_cli_implementation
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -247,6 +248,7 @@
   + [proof_result] is tests passed with 59 tests after S76 spec audit refresh
   + [proof_result] is long-run checkpoint refreshed after S77 with tests dry-run model inventory and non-gating OpenAI healthcheck
   + [proof_result] is tests passed with 59 tests after S78 apply command dry-run CLI design
+  + [proof_result] is tests passed with 61 tests after S79 dry-run apply CLI implementation
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -333,6 +335,7 @@
   + [ready_capability] is specification implementation status audit reflects dry-run apply evidence while preserving no-mutation boundary
   + [ready_capability] is long_run_checkpoint.sop records post-S77 test dry-run model inventory and non-gating endpoint health state
   + [ready_capability] is apply_command_dry_run_cli_design.sop defines a dry-run-only apply command contract that rejects mutation behavior
+  + [ready_capability] is dry-run apply CLI writes apply_plan apply_result and apply_command_log while rejecting mutation acknowledgement flag
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -400,8 +403,9 @@
   + [next_recommended_slice] is S77_long_run_checkpoint_refresh
   + [next_recommended_slice] is S78_apply_command_dry_run_cli_design
   + [next_recommended_slice] is S79_apply_command_dry_run_cli_implementation
-  + [next_reason] is dry-run-only apply validation can be implemented without crossing the mutation boundary
-  + [sleep_run_candidate] is continue S79 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S80_spec_audit_refresh_after_apply_cli
+  + [next_reason] is audit should distinguish dry-run apply CLI validation from mutation mode
+  + [sleep_run_candidate] is continue S80 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

@@ -119,6 +119,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `coordination/apply_command_dry_run_cli_design.sop` defines the first future CLI step: validate a manual merge packet and write dry-run apply artifacts from explicit `--run-root` and `--target-workspace-root` arguments, while rejecting mutation behavior.
 
+`negotiated_agent.apply_cli` and `scripts/apply-merge-dry-run.ps1` implement that dry-run validation path. The CLI writes `apply_plan.sop`, `apply_result.sop`, and `apply_command_log.sop` under the run root; it rejects the mutation acknowledgement flag because mutation mode is not implemented.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

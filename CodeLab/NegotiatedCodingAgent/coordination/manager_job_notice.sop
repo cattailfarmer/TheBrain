@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 83
+  + [job_notice_revision] is 84
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -101,7 +101,8 @@
     S76_spec_audit_refresh_after_apply_plan |
     S77_long_run_checkpoint_refresh |
     S78_apply_command_dry_run_cli_design |
-    S79_apply_command_dry_run_cli_implementation
+    S79_apply_command_dry_run_cli_implementation |
+    S80_spec_audit_refresh_after_apply_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1160,7 +1161,7 @@
 
 & [WorkSliceDetail S79_apply_command_dry_run_cli_implementation] is a target workspace safety implementation slice
   + [slice_id] is S79_apply_command_dry_run_cli_implementation
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement a dry-run-only apply-manual-merge-packet CLI that writes apply plan/result artifacts without mutating the target workspace
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**
   + [proof_route] is tests showing CLI validates packet path constraints and writes dry-run artifacts while rejecting mutation flags
@@ -1168,3 +1169,16 @@
   + [support_status] is prepared
   + [dependency_set] is S78_apply_command_dry_run_cli_design
   + [known_risks] is accidentally allowing mutation mode before explicit approval and rollback snapshots are implemented
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:59:50Z, proof_ref tests passed with 61 tests, result_summary added dry-run apply CLI and PowerShell wrapper that write apply artifacts without mutation and reject mutation flag
+  + [completed_work_review] is support_delta verified dry-run apply validation can run explicitly; requirement_delta spec audit needs refresh after CLI support
+
+& [WorkSliceDetail S80_spec_audit_refresh_after_apply_cli] is a documentation and planning slice
+  + [slice_id] is S80_spec_audit_refresh_after_apply_cli
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after dry-run apply CLI implementation
+  + [target_files] is coordination/spec_implementation_status.sop
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is final acceptance gap distinguishes dry-run CLI validation from mutation mode
+  + [support_status] is prepared
+  + [dependency_set] is S79_apply_command_dry_run_cli_implementation
+  + [known_risks] is overstating dry-run CLI validation as target workspace patch application

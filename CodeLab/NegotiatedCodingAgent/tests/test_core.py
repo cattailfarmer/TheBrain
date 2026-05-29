@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
+from negotiated_agent.apply_cli import main as apply_cli_main
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -571,6 +572,62 @@ class ApplyPlanTests(unittest.TestCase):
         self.assertIn("app.py", plan.to_sop())
         self.assertEqual(result.apply_status, "dry_run")
         self.assertIn("not_run_in_dry_run", result.to_sop())
+
+    def test_apply_cli_writes_dry_run_artifacts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            run_root.mkdir()
+            target_root.mkdir()
+            packet = ManualMergePacket(
+                packet_id="MMP001",
+                source_run_root="run",
+                target_workspace_root=str(target_root),
+                accepted_files=(
+                    AcceptedFileMapEntry(
+                        source_ref="implementation/WS001.ProgrammerA/app.py",
+                        target_path="app.py",
+                        source_assignment_ref="WS001.ProgrammerA.execution_result.sop",
+                    ),
+                ),
+                rejected_output_refs=(),
+                conflict_resolution_refs=(),
+                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                manager_acceptance_ref="merge_review_decision.sop",
+                shaliach_review_ref="not_yet_run",
+                verification_command="test",
+            )
+            (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
+            self.assertEqual(
+                apply_cli_main(["--run-root", str(run_root), "--target-workspace-root", str(target_root)]),
+                0,
+            )
+            self.assertIn("ApplyPlan", (run_root / "apply_plan.sop").read_text(encoding="utf-8"))
+            self.assertIn("dry_run", (run_root / "apply_result.sop").read_text(encoding="utf-8"))
+            self.assertIn("dry_run_completed", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+            self.assertFalse((target_root / "app.py").exists())
+
+    def test_apply_cli_rejects_mutation_flag(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            run_root.mkdir()
+            target_root.mkdir()
+            self.assertEqual(
+                apply_cli_main(
+                    [
+                        "--run-root",
+                        str(run_root),
+                        "--target-workspace-root",
+                        str(target_root),
+                        "--i-understand-this-mutates-workspace",
+                    ]
+                ),
+                2,
+            )
+            self.assertIn("mutation flag is not supported", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
 
 
 class MailboxCoordinationTests(unittest.TestCase):
