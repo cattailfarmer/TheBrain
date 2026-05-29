@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 144
+  + [job_notice_revision] is 145
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3545,7 +3545,7 @@
 
 & [WorkSliceDetail S258_checkpoint_probe_evidence_validator] is a manifest validation implementation slice
   + [slice_id] is S258_checkpoint_probe_evidence_validator
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is validate parsed checkpoint Shaliach probe evidence as passed incomplete or failed
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover passed not_run missing command failed probe and non-gating openai health behavior
@@ -3553,3 +3553,16 @@
   + [support_status] is prepared
   + [dependency_set] is S257_checkpoint_probe_evidence_parser
   + [known_risks] is treating ready_for_continuation as semantic correctness instead of proof-status evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:55:00Z, proof_ref tests passed with 251 tests, result_summary added pure checkpoint probe evidence validator
+  + [completed_work_review] is support_delta verified passed incomplete failed and non-gating OpenAI health behavior; requirement_delta next step is expose checkpoint probe validation through an operator CLI
+
+& [WorkSliceDetail S259_checkpoint_probe_validation_cli] is a manifest validation implementation slice
+  + [slice_id] is S259_checkpoint_probe_validation_cli
+  + [slice_status] is open
+  + [scope] is expose checkpoint Shaliach probe evidence validation through a CLI and PowerShell wrapper
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests cover CLI passed incomplete failed output and exit codes
+  + [completion_criteria] is operators can validate long_run_checkpoint.sop probe evidence without writing Python
+  + [support_status] is prepared
+  + [dependency_set] is S258_checkpoint_probe_evidence_validator
+  + [known_risks] is CLI wording implying Shaliach semantic approval

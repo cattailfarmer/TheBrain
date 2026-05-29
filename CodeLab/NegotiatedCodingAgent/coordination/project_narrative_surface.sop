@@ -2217,3 +2217,11 @@
   + [proof_result] is tests passed with 246 tests
   + [current_frontier] is S258_checkpoint_probe_evidence_validator
   + [narrative_role] is manifest_validation and proof_parser update
+
+
+& [LongRunNarrativeUpdate S258_checkpoint_probe_evidence_validator] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S258_checkpoint_probe_evidence_validator
+  + [implemented_capability] is checkpoint_probe validator reports passed incomplete or failed Shaliach probe evidence while preserving OpenAI health as non-gating
+  + [proof_result] is tests passed with 251 tests
+  + [current_frontier] is S259_checkpoint_probe_validation_cli
+  + [narrative_role] is manifest_validation and proof_validation update

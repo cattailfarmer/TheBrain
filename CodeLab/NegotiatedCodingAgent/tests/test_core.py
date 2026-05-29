@@ -19,6 +19,7 @@ from negotiated_agent.apply_preflight import (
 from negotiated_agent.checkpoint_probe import (
     load_checkpoint_probe_evidence,
     parse_checkpoint_probe_evidence_sop,
+    validate_checkpoint_probe_evidence,
 )
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
@@ -4765,6 +4766,59 @@ class CheckpointProbeEvidenceTests(unittest.TestCase):
             path.write_text(self._checkpoint_sop(), encoding="utf-8")
             evidence = load_checkpoint_probe_evidence(path)
         self.assertEqual(evidence.probe_authority_boundary, "consistency_probe_not_manager_approval")
+
+    def test_validates_passed_checkpoint_probe_evidence(self) -> None:
+        validation = validate_checkpoint_probe_evidence(parse_checkpoint_probe_evidence_sop(self._checkpoint_sop()))
+        self.assertTrue(validation.ok)
+        self.assertEqual(validation.status, "passed")
+        self.assertEqual(validation.reason, "shaliach_cross_artifact_probe_passed")
+        self.assertIn("openai_health_gating] is non_gating_environment_state", validation.to_sop())
+
+    def test_validation_treats_not_run_probe_as_incomplete(self) -> None:
+        validation = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(
+                self._checkpoint_sop(
+                    probe_status="not_run",
+                    probe_returncode="2",
+                    probe_stdout="dry_run_root_not_found",
+                )
+            )
+        )
+        self.assertFalse(validation.ok)
+        self.assertEqual(validation.status, "incomplete")
+        self.assertEqual(validation.reason, "shaliach_cross_artifact_probe_not_run")
+
+    def test_validation_rejects_failed_probe_evidence(self) -> None:
+        validation = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(
+                self._checkpoint_sop(
+                    checkpoint_status="needs_attention",
+                    probe_status="failed",
+                    probe_returncode="1",
+                    probe_stdout="application:inconsistent",
+                )
+            )
+        )
+        self.assertFalse(validation.ok)
+        self.assertEqual(validation.status, "failed")
+        self.assertEqual(validation.reason, "shaliach_cross_artifact_probe_failed")
+
+    def test_validation_reports_missing_probe_command_as_incomplete(self) -> None:
+        validation = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(self._checkpoint_sop(include_probe_command=False))
+        )
+        self.assertEqual(validation.status, "incomplete")
+        self.assertEqual(validation.reason, "missing_probe_evidence_fields")
+        self.assertIn("probe_returncode", validation.missing_fields)
+        self.assertIn("missing_field] is probe_returncode", validation.to_sop())
+
+    def test_validation_keeps_failed_openai_health_non_gating(self) -> None:
+        validation = validate_checkpoint_probe_evidence(
+            parse_checkpoint_probe_evidence_sop(self._checkpoint_sop(openai_health_status="failed"))
+        )
+        self.assertEqual(validation.status, "passed")
+        self.assertEqual(validation.openai_health_status, "failed")
+        self.assertIn("openai_health_gating] is non_gating_environment_state", validation.to_sop())
 
 
 class NarrativeCoverageTests(unittest.TestCase):
