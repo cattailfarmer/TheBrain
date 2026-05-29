@@ -142,6 +142,7 @@
   + [implemented_slice] is S59_spec_audit_refresh_after_director_carry_forward
   + [implemented_slice] is S60_executable_multi_programmer_runner_design
   + [implemented_slice] is S61_multi_programmer_runner_records
+  + [implemented_slice] is S62_orchestrator_multi_programmer_plan_artifacts
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -213,6 +214,7 @@
   + [proof_result] is tests passed with 47 tests after S59 spec audit refresh
   + [proof_result] is tests passed with 47 tests after S60 multi-Programmer runner design
   + [proof_result] is tests passed with 49 tests after S61 multi-Programmer runner records
+  + [proof_result] is tests passed with 49 tests after S62 orchestrator multi-Programmer plan artifacts
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -282,6 +284,7 @@
   + [ready_capability] is specification implementation status audit reflects Director multi-round carry-forward as bounded prompt-context support
   + [ready_capability] is multi_programmer_runner_design.sop defines runner contracts, assignment lifecycle states, merge-review readiness, and non-destructive output boundaries
   + [ready_capability] is multi_programmer runtime records can emit execution-plan and merge-review input SOP from ProgrammerAssignmentPlan without LLM calls
+  + [ready_capability] is orchestrator writes multi_programmer_execution_plan.sop and multi_programmer_merge_review_input.sop during normal runs
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -332,8 +335,9 @@
   + [next_recommended_slice] is S60_executable_multi_programmer_runner_design
   + [next_recommended_slice] is S61_multi_programmer_runner_records
   + [next_recommended_slice] is S62_orchestrator_multi_programmer_plan_artifacts
-  + [next_reason] is orchestrator should expose the new runner records during normal dry-runs before actual parallel execution
-  + [sleep_run_candidate] is continue S62 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S63_multi_programmer_runner_execution_scaffold
+  + [next_reason] is isolated one-assignment execution is the next safe step before fan-out
+  + [sleep_run_candidate] is continue S63 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

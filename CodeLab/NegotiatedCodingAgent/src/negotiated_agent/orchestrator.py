@@ -12,11 +12,12 @@ from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
 from .mailbox import publish_message
+from .multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
 from .shaliach import review_layer_negotiation
-from .slices import create_initial_work_slice, create_programmer_assignment_plan, manager_review, programmer_report
+from .slices import create_planned_work_slices, create_programmer_assignment_plan, manager_review, programmer_report
 from .writer import write_implementation, write_text
 
 
@@ -137,10 +138,16 @@ class NegotiatedCodingAgent:
             parent_package_ref = f"{layer}.package.sop"
 
         code_package_ref = run_root / "code.package.sop"
-        work_slice = create_initial_work_slice(code_package_ref, objective)
-        assignment_plan = create_programmer_assignment_plan([work_slice], self.config.programmers)
+        planned_work_slices = create_planned_work_slices(code_package_ref, objective)
+        work_slice = planned_work_slices[0]
+        assignment_plan = create_programmer_assignment_plan(planned_work_slices, self.config.programmers)
+        execution_plan = build_multi_programmer_execution_plan(assignment_plan)
+        merge_review_input = build_merge_review_input(execution_plan)
         write_text(run_root / "programmer_assignment_plan.sop", assignment_plan.to_sop())
-        write_text(run_root / f"{work_slice.slice_id}.work_slice.sop", work_slice.to_sop())
+        write_text(run_root / "multi_programmer_execution_plan.sop", execution_plan.to_sop())
+        write_text(run_root / "multi_programmer_merge_review_input.sop", merge_review_input.to_sop())
+        for planned_work_slice in planned_work_slices:
+            write_text(run_root / f"{planned_work_slice.slice_id}.work_slice.sop", planned_work_slice.to_sop())
         coder_output = self.client.complete(
             self.config.coder,
             coder_prompt(self.config.coder.role, objective, flowcharts),
@@ -172,6 +179,9 @@ class NegotiatedCodingAgent:
             run_root,
             {
                 "event": "implementation_written",
+                "executed_slice": work_slice.slice_id,
+                "multi_programmer_execution_plan_ref": "multi_programmer_execution_plan.sop",
+                "multi_programmer_merge_review_input_ref": "multi_programmer_merge_review_input.sop",
                 "files": [str(path.relative_to(run_root)) for path in written],
                 "file_change_surface_ref": "file_change_surface.sop",
                 "file_change_index_ref": "file_change_index.sop",
@@ -478,6 +488,10 @@ def _artifact_role(name: str) -> str:
         return "file_change_surface"
     if name == "file_change_index.sop":
         return "file_change_index"
+    if name == "multi_programmer_execution_plan.sop":
+        return "multi_programmer_execution_plan"
+    if name == "multi_programmer_merge_review_input.sop":
+        return "multi_programmer_merge_review_input"
     if name.endswith(".flowchart.md"):
         return "flowchart"
     if name.endswith(".package.sop"):

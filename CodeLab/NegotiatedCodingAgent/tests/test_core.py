@@ -1039,6 +1039,8 @@ class NarrativeUpdateTests(unittest.TestCase):
             file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
             run_manifest = (run_root / "run_manifest.sop").read_text(encoding="utf-8")
             assignment_plan = (run_root / "programmer_assignment_plan.sop").read_text(encoding="utf-8")
+            execution_plan = (run_root / "multi_programmer_execution_plan.sop").read_text(encoding="utf-8")
+            merge_review_input = (run_root / "multi_programmer_merge_review_input.sop").read_text(encoding="utf-8")
             director_inbox = (
                 root / "coordination" / "mailbox" / "custom-director-pool" / "inbox.sop"
             ).read_text(encoding="utf-8")
@@ -1061,8 +1063,13 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("RunArtifactManifest", run_manifest)
             self.assertIn("lifecycle_status] is completed", run_manifest)
             self.assertIn("artifact_ref layer_package] is application.package.sop", run_manifest)
+            self.assertIn("artifact_ref multi_programmer_execution_plan] is multi_programmer_execution_plan.sop", run_manifest)
+            self.assertIn("artifact_ref multi_programmer_merge_review_input] is multi_programmer_merge_review_input.sop", run_manifest)
             self.assertIn("ProgrammerAssignmentPlan", assignment_plan)
             self.assertIn("Programmer", assignment_plan)
+            self.assertIn("MultiProgrammerExecutionPlan", execution_plan)
+            self.assertIn("WS001_core_implementation", execution_plan)
+            self.assertIn("MultiProgrammerMergeReviewInput", merge_review_input)
             self.assertIn("rework_notice", director_inbox)
             self.assertIn("application.shaliach_response.sop", director_inbox)
             self.assertIn("application.shaliach_finding.sop", log)
@@ -1070,6 +1077,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("mailbox_rework_notice_published", log)
             self.assertIn("custom-director-pool", log)
             self.assertIn("file_change_surface.sop", log)
+            self.assertIn("multi_programmer_execution_plan.sop", log)
             self.assertIn("run_manifest_written", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:
