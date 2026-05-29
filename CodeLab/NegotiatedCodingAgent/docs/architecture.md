@@ -129,6 +129,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `negotiated_agent.rollback` provides rollback preview records and explicit-acknowledgement rollback execution. The preview can distinguish snapshot restoration, created-file removal, and skipped files. The rollback writer restores snapshot-backed files and removes create-new files only when the operator supplies the target workspace and acknowledgement flag.
 
+`coordination/post_apply_acceptance_design.sop` defines the next governance boundary: apply and rollback filesystem evidence are not final acceptance. A future `PostApplyAcceptanceRecord` must reference apply, verification, rollback when present, Manager decision, Shaliach decision, accepted files, and remaining risks.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

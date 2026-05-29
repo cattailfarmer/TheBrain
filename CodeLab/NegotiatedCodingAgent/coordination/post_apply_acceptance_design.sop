@@ -1,0 +1,51 @@
+& [PostApplyAcceptanceDesign] is the design contract for accepting applied workspace changes
+  @ [apply_mutation_design] coordination/operator_approved_apply_mutation_design.sop
+  @ [rollback_design] coordination/rollback_command_design.sop
+  @ [created_at] 2026-05-29T17:08:00Z
+
+  + [design_status] is ready_for_later_implementation
+  + [authority_boundary] is acceptance_design_not_acceptance_runtime
+  + [purpose] is prevent apply_result success from being mistaken for Manager/Shaliach final acceptance
+
+  = must: require apply_result.sop
+  = must: require verification_result.sop
+  = must: require snapshot_materialization.sop
+  = must: include rollback_result.sop when rollback occurred
+  = must: require Manager final acceptance after apply verification passes
+  = must: require Shaliach review when protocol scope, lineage, target paths, verification failure, rollback, or manual conflict resolution is present
+  = must: mark acceptance blocked when verification fails
+  = must: mark acceptance blocked when rollback_status is failed
+  = must: record accepted_file_set and remaining_risk_set
+
+  - never: treat apply_status applied as final acceptance by itself
+  - never: hide rollback evidence from acceptance review
+  - never: accept changes when Shaliach requires rework or pause
+
+& [PostApplyAcceptanceRecord] is the future Manager-facing final acceptance artifact
+  + [field] is acceptance_status
+  + [field] is apply_result_ref
+  + [field] is verification_result_ref
+  + [field] is rollback_result_ref
+  + [field] is manager_decision
+  + [field] is shaliach_decision
+  + [field] is accepted_file_set
+  + [field] is remaining_risk_set
+  + [field] is authority_boundary
+
+& [ShaliachPostApplyReview] is the future protocol review gate
+  + [trigger] is target paths expand beyond accepted packet scope
+  + [trigger] is verification fails or is missing
+  + [trigger] is rollback occurred
+  + [trigger] is apply_result has partial writes or skipped files
+  + [trigger] is Manager requests protocol counsel
+  + [allowed_decision] is no_finding
+  + [allowed_decision] is warning
+  + [allowed_decision] is rework_required
+  + [allowed_decision] is pause_required
+
+& [ImplementationOrder] is the safe acceptance implementation path
+  + [slice_1] is add PostApplyAcceptanceRecord and deterministic decision synthesis
+  + [slice_2] is write acceptance record from apply_result and verification_result
+  + [slice_3] is add Shaliach post-apply review conditions
+  + [slice_4] is document operator workflow from apply through rollback through acceptance
+  + [slice_5] is refresh spec audit and checkpoint
