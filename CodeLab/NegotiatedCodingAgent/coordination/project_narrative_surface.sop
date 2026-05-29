@@ -2600,3 +2600,11 @@
   + [proof_result] is tests passed with 283 tests and wrapper proof exited 2 with live_status unavailable
   + [current_frontier] is S298_spec_audit_refresh_after_live_shaliach_preview
   + [narrative_role] is live_model_gap and shaliach_runtime update
+
+
+& [LongRunNarrativeUpdate S298_spec_audit_refresh_after_live_shaliach_preview] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S298_spec_audit_refresh_after_live_shaliach_preview
+  + [implemented_capability] is spec audit reflects live Shaliach overlay records prompt packets preview CLI and unavailable fallback without claiming live deliberation
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S299_long_run_checkpoint_after_live_shaliach_preview
+  + [narrative_role] is specification_audit and live_model_gap update

@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-30T16:54:00Z
+  @ [updated_at] 2026-05-30T17:42:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -46,9 +46,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Shaliach internal higher/lower reasoning and perspective negotiation
-  + [support] is ShaliachFinding and ShaliachResponseCoordination include deterministic internal perspective records, optional self_negotiation_ref fields, ShaliachSelfNegotiationRecord serializes perspective intentions, proposed responses, resolved intention, unresolved tensions, orchestrator dry-runs write per-layer self-negotiation artifacts, parser/loader functions read those artifacts structurally, scripts/shaliach-self-negotiation.ps1 prints bounded inspection summaries, scripts/shaliach-cross-inspect.ps1 checks structural consistency across self-negotiation, finding, and optional response artifacts, the long-run harness records shaliach_cross_artifact_status and combined_artifact_validation_status from same-run dry-run artifacts, scripts/validate-checkpoint-probe.ps1 validates recorded checkpoint probe evidence, and scripts/validate-artifacts.ps1 validates run manifest refs plus optional checkpoint Shaliach proof without semantic approval
-  + [gap] is no live model-negotiated higher/lower Shaliach internal debate exists yet; the current implementation is deterministic evidence scaffolding with explicit authority boundaries and pre-live review packets only prepare future prompt inputs
-  + [next_candidate] is add live Shaliach self-negotiation once local model serving is available
+  + [support] is ShaliachFinding and ShaliachResponseCoordination include deterministic internal perspective records, optional self_negotiation_ref fields, ShaliachSelfNegotiationRecord serializes perspective intentions, proposed responses, resolved intention, unresolved tensions, orchestrator dry-runs write per-layer self-negotiation artifacts, parser/loader functions read those artifacts structurally, scripts/shaliach-self-negotiation.ps1 prints bounded inspection summaries, scripts/shaliach-cross-inspect.ps1 checks structural consistency across self-negotiation, finding, and optional response artifacts, the long-run harness records shaliach_cross_artifact_status and combined_artifact_validation_status from same-run dry-run artifacts, scripts/validate-checkpoint-probe.ps1 validates recorded checkpoint probe evidence, scripts/validate-artifacts.ps1 validates run manifest refs plus optional checkpoint Shaliach proof without semantic approval, LiveShaliachSelfNegotiationAttempt records live overlay status, LiveShaliachPromptPacket builds bounded prompt evidence, and scripts/live-shaliach-preview.ps1 writes unavailable live-attempt evidence while serving is offline
+  + [gap] is no live model-negotiated higher/lower Shaliach internal debate has executed yet; current live Shaliach support is live-ready overlay evidence with unavailable fallback and explicit non-approval boundaries
+  + [next_candidate] is connect live Shaliach preview to endpoint health and model invocation once local model serving is available
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is two or more LLMs negotiate around the objective
@@ -86,7 +86,7 @@
   + [reason] is current work has stayed non-destructive and setup remains a manual operator step before live multi-model validation
 
 & [NextGapOrder] is the recommended next work based on this audit
-  + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
+  + [candidate_1] is connect live Shaliach attempt execution to endpoint health and model invocation once local model serving is available
   + [candidate_2] is add live Manager/Shaliach post-apply and narrative-append deliberation after endpoint health is available
   + [candidate_3] is keep pre-live packet generation operator-only while using checkpoint recipe references as continuation guidance until live serving is available
   + [candidate_4] is add automatic conflict resolution and richer swarm parallelism once live model diversity can be measured

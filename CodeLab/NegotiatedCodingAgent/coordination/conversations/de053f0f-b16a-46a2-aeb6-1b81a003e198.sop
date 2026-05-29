@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S298_spec_audit_refresh_after_live_shaliach_preview
+  + [current_frontier] is S299_long_run_checkpoint_after_live_shaliach_preview
   + [run_lifecycle_frontier] is run 20260529T214903Z completed and narrative updated with artifact manifest
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
@@ -1008,7 +1008,9 @@
   + [last_proof] is tests passed with 282 tests after live Shaliach prompt packet builder
   + [completed_slice] is S297_live_shaliach_attempt_preview_cli
   + [last_proof] is tests passed with 283 tests and live-shaliach-preview wrapper wrote unavailable attempt evidence with exit code 2
-  + [next_recommended_slice] is S298_spec_audit_refresh_after_live_shaliach_preview
+  + [completed_slice] is S298_spec_audit_refresh_after_live_shaliach_preview
+  + [last_proof] is spec audit refreshed after live Shaliach prompt packet and preview CLI tooling
+  + [next_recommended_slice] is S299_long_run_checkpoint_after_live_shaliach_preview
   + [next_recommended_slice] is S291_long_run_checkpoint_after_upsert_anchor_fields
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
