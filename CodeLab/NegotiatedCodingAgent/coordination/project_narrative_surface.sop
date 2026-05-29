@@ -147,6 +147,7 @@
   + [implemented_slice] is S64_orchestrator_assignment_executor_path
   + [implemented_slice] is S65_sequential_multi_assignment_execution_loop
   + [implemented_slice] is S66_merge_conflict_ledger_scaffold
+  + [implemented_slice] is S67_merge_review_decision_surface
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -223,6 +224,7 @@
   + [proof_result] is tests passed with 50 tests after S64 orchestrator assignment executor path
   + [proof_result] is tests passed with 51 tests after S65 sequential multi-assignment execution loop
   + [proof_result] is tests passed with 52 tests after S66 merge conflict ledger scaffold
+  + [proof_result] is tests passed with 52 tests after S67 merge review decision surface
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -297,6 +299,7 @@
   + [ready_capability] is orchestrator single executed Programmer path now uses the assignment executor and per-assignment artifact refs
   + [ready_capability] is orchestrator executes planned Programmer assignments sequentially with separate run-local outputs, reports, reviews, and pending merge status
   + [ready_capability] is merge_conflict_ledger.sop records same-file overlaps across isolated Programmer outputs before any merge resolution
+  + [ready_capability] is merge_review_decision.sop records blocked_by_conflict or ready_for_manual_merge_review without applying merged output
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -352,8 +355,9 @@
   + [next_recommended_slice] is S65_sequential_multi_assignment_execution_loop
   + [next_recommended_slice] is S66_merge_conflict_ledger_scaffold
   + [next_recommended_slice] is S67_merge_review_decision_surface
-  + [next_reason] is conflict evidence should feed an explicit merge review decision artifact
-  + [sleep_run_candidate] is continue S67 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S68_spec_audit_refresh_after_programmer_execution
+  + [next_reason] is implementation audit must stop understating Programmer swarm support after sequential execution
+  + [sleep_run_candidate] is continue S68 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

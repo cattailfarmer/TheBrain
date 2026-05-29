@@ -33,6 +33,7 @@ from negotiated_agent.multi_programmer import (
     build_merge_conflict_ledger,
     build_merge_review_input,
     build_multi_programmer_execution_plan,
+    decide_merge_review,
     execute_assignment_output,
 )
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
@@ -405,10 +406,13 @@ class WorkSliceTests(unittest.TestCase):
             ledger = build_merge_conflict_ledger(run_root, [first, second])
             self.assertEqual(len(ledger.conflicts), 1)
             self.assertEqual(ledger.conflicts[0].conflict_type, "same_file_overlap")
+            decision = decide_merge_review(ledger)
+            self.assertEqual(decision.decision, "blocked_by_conflict")
             sop = ledger.to_sop()
             self.assertIn("MergeConflictLedger", sop)
             self.assertIn("app.py", sop)
             self.assertIn("ProgrammerA, ProgrammerB", sop)
+            self.assertIn("merge_review_decision_not_merge_application", decision.to_sop())
 
 
 class FileChangeSurfaceTests(unittest.TestCase):
@@ -1109,6 +1113,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             execution_plan = (run_root / "multi_programmer_execution_plan.sop").read_text(encoding="utf-8")
             merge_review_input = (run_root / "multi_programmer_merge_review_input.sop").read_text(encoding="utf-8")
             merge_conflict_ledger = (run_root / "merge_conflict_ledger.sop").read_text(encoding="utf-8")
+            merge_review_decision = (run_root / "merge_review_decision.sop").read_text(encoding="utf-8")
             execution_result = (run_root / "WS001_core_implementation.Programmer.execution_result.sop").read_text(
                 encoding="utf-8"
             )
@@ -1137,6 +1142,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("artifact_ref multi_programmer_execution_plan] is multi_programmer_execution_plan.sop", run_manifest)
             self.assertIn("artifact_ref multi_programmer_merge_review_input] is multi_programmer_merge_review_input.sop", run_manifest)
             self.assertIn("artifact_ref merge_conflict_ledger] is merge_conflict_ledger.sop", run_manifest)
+            self.assertIn("artifact_ref merge_review_decision] is merge_review_decision.sop", run_manifest)
             self.assertIn("artifact_ref assignment_execution_result] is WS001_core_implementation.Programmer.execution_result.sop", run_manifest)
             self.assertIn("ProgrammerAssignmentPlan", assignment_plan)
             self.assertIn("Programmer", assignment_plan)
@@ -1145,6 +1151,8 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("MultiProgrammerMergeReviewInput", merge_review_input)
             self.assertIn("MergeConflictLedger", merge_conflict_ledger)
             self.assertIn("conflict_count] is 1", merge_conflict_ledger)
+            self.assertIn("blocked_by_conflict", merge_review_decision)
+            self.assertIn("merge_review_decision_not_merge_application", merge_review_decision)
             self.assertIn("run_local_output_not_workspace_patch", execution_result)
             self.assertIn("rework_notice", director_inbox)
             self.assertIn("application.shaliach_response.sop", director_inbox)
@@ -1155,6 +1163,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("file_change_surface.sop", log)
             self.assertIn("multi_programmer_execution_plan.sop", log)
             self.assertIn("merge_conflict_ledger.sop", log)
+            self.assertIn("merge_review_decision.sop", log)
             self.assertIn("run_manifest_written", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:

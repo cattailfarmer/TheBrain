@@ -123,6 +123,23 @@ class MergeConflictLedger:
 
 
 @dataclass(frozen=True)
+class MergeReviewDecision:
+    decision: str
+    reason: str
+    conflict_count: int
+    required_action: str
+
+    def to_sop(self) -> str:
+        return f"""& [MergeReviewDecision] is the Manager-facing decision surface for multi-Programmer outputs
+  + [decision] is {self.decision}
+  + [reason] is {self.reason}
+  + [conflict_count] is {self.conflict_count}
+  + [required_action] is {self.required_action}
+  + [authority_boundary] is merge_review_decision_not_merge_application
+"""
+
+
+@dataclass(frozen=True)
 class MultiProgrammerExecutionPlan:
     records: tuple[AssignmentExecutionRecord, ...]
 
@@ -236,3 +253,19 @@ def build_merge_conflict_ledger(run_root: Path, results: list[AssignmentExecutio
             )
         )
     return MergeConflictLedger(conflicts=tuple(conflicts))
+
+
+def decide_merge_review(ledger: MergeConflictLedger) -> MergeReviewDecision:
+    if ledger.conflicts:
+        return MergeReviewDecision(
+            decision="blocked_by_conflict",
+            reason="one or more assignment outputs wrote the same relative path",
+            conflict_count=len(ledger.conflicts),
+            required_action="inspect merge_conflict_ledger.sop and choose rework, accept_one, or manual combine",
+        )
+    return MergeReviewDecision(
+        decision="ready_for_manual_merge_review",
+        reason="no same-file overlaps were detected across assignment outputs",
+        conflict_count=0,
+        required_action="perform Manager and Shaliach review before any target workspace application",
+    )

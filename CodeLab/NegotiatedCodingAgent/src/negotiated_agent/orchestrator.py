@@ -16,6 +16,7 @@ from .multi_programmer import (
     build_merge_conflict_ledger,
     build_merge_review_input,
     build_multi_programmer_execution_plan,
+    decide_merge_review,
     execute_assignment_output,
 )
 from .package import LayerPackage
@@ -208,7 +209,9 @@ class NegotiatedCodingAgent:
                 },
             )
         merge_conflict_ledger = build_merge_conflict_ledger(run_root, execution_results)
+        merge_review_decision = decide_merge_review(merge_conflict_ledger)
         write_text(run_root / "merge_conflict_ledger.sop", merge_conflict_ledger.to_sop())
+        write_text(run_root / "merge_review_decision.sop", merge_review_decision.to_sop())
         write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
         write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
@@ -219,7 +222,9 @@ class NegotiatedCodingAgent:
                 "multi_programmer_execution_plan_ref": "multi_programmer_execution_plan.sop",
                 "multi_programmer_merge_review_input_ref": "multi_programmer_merge_review_input.sop",
                 "merge_conflict_ledger_ref": "merge_conflict_ledger.sop",
+                "merge_review_decision_ref": "merge_review_decision.sop",
                 "merge_conflict_count": len(merge_conflict_ledger.conflicts),
+                "merge_decision": merge_review_decision.decision,
                 "files": [str(path.relative_to(run_root)) for path in written],
                 "file_change_surface_ref": "file_change_surface.sop",
                 "file_change_index_ref": "file_change_index.sop",
@@ -532,6 +537,8 @@ def _artifact_role(name: str) -> str:
         return "multi_programmer_merge_review_input"
     if name == "merge_conflict_ledger.sop":
         return "merge_conflict_ledger"
+    if name == "merge_review_decision.sop":
+        return "merge_review_decision"
     if name.endswith(".flowchart.md"):
         return "flowchart"
     if name.endswith(".package.sop"):
