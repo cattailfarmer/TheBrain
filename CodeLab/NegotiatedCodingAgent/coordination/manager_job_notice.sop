@@ -2921,7 +2921,7 @@
 
 & [WorkSliceDetail S210_spec_audit_refresh_after_narrative_append] is a specification audit slice
   + [slice_id] is S210_spec_audit_refresh_after_narrative_append
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after narrative stale-check update-record and reviewed append support
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names narrative coverage and reviewed append support and chooses next gap
@@ -2929,3 +2929,16 @@
   + [support_status] is prepared
   + [dependency_set] is S209_long_run_checkpoint_after_narrative_append_cli
   + [known_risks] is overstating reviewed narrative append as autonomous semantic memory governance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:44:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats narrative coverage stale-check update records and reviewed append CLI as deterministic support
+  + [completed_work_review] is support_delta verified audit keeps live model-negotiated semantic review as a remaining gap; requirement_delta next step is reduce CLI test output noise before further checkpointing
+
+& [WorkSliceDetail S211_quiet_narrative_append_cli_tests] is a quality slice
+  + [slice_id] is S211_quiet_narrative_append_cli_tests
+  + [slice_status] is open
+  + [scope] is quiet narrative append CLI tests by capturing stdout around apply and blocked plan calls
+  + [target_files] is tests/test_core.py
+  + [proof_route] is tests still pass with no narrative append SOP noise in harness stdout
+  + [completion_criteria] is long-run harness test output is easier to read and checkpoint tails remain informative
+  + [support_status] is prepared
+  + [dependency_set] is S210_spec_audit_refresh_after_narrative_append
+  + [known_risks] is spending too much time on test ergonomics instead of core runtime features

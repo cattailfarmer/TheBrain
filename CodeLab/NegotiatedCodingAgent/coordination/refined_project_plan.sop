@@ -316,7 +316,8 @@
   + [completed_slice] is S207_reviewed_narrative_append_cli_plan
   + [completed_slice] is S208_reviewed_narrative_append_cli_apply
   + [completed_slice] is S209_long_run_checkpoint_after_narrative_append_cli
-  + [ready_slice] is S210_spec_audit_refresh_after_narrative_append
+  + [completed_slice] is S210_spec_audit_refresh_after_narrative_append
+  + [ready_slice] is S211_quiet_narrative_append_cli_tests
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

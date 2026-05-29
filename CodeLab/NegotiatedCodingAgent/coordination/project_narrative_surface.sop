@@ -1725,3 +1725,11 @@
   + [run_root] is runs\20260529T193634Z
   + [current_frontier] is S210_spec_audit_refresh_after_narrative_append
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S210_spec_audit_refresh_after_narrative_append] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S210_spec_audit_refresh_after_narrative_append
+  + [implemented_capability] is spec_implementation_status.sop recognizes narrative stale-check update-record and reviewed append CLI support while preserving live semantic review gaps
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S211_quiet_narrative_append_cli_tests
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
