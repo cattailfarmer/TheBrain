@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 118
+  + [job_notice_revision] is 119
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -136,7 +136,8 @@
     S111_spec_audit_refresh_after_rollback_writer |
     S112_long_run_checkpoint_after_apply_rollback_writer |
     S113_post_apply_acceptance_design |
-    S114_post_apply_acceptance_records
+    S114_post_apply_acceptance_records |
+    S115_post_apply_acceptance_cli_integration
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1650,7 +1651,7 @@
 
 & [WorkSliceDetail S114_post_apply_acceptance_records] is an apply pipeline implementation slice
   + [slice_id] is S114_post_apply_acceptance_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add PostApplyAcceptanceRecord data model and deterministic decision synthesis
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover accepted blocked_by_verification blocked_by_rollback and Shaliach escalation states
@@ -1658,3 +1659,16 @@
   + [support_status] is prepared
   + [dependency_set] is S113_post_apply_acceptance_design
   + [known_risks] is collapsing verification success into acceptance without Manager/Shaliach fields
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:48:00Z, proof_ref tests passed with 75 tests, result_summary added negotiated_agent.post_apply PostApplyAcceptanceRecord with accepted verification-blocked rollback and Shaliach-blocked synthesis
+  + [completed_work_review] is support_delta verified acceptance record preserves non-filesystem boundary; requirement_delta apply and rollback CLIs should write post_apply_acceptance.sop from actual run evidence
+
+& [WorkSliceDetail S115_post_apply_acceptance_cli_integration] is an apply pipeline implementation slice
+  + [slice_id] is S115_post_apply_acceptance_cli_integration
+  + [slice_status] is open
+  + [scope] is write post_apply_acceptance.sop from apply and rollback command outputs
+  + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is tests cover apply success acceptance, apply verification failure rejection, and rollback acknowledgement acceptance
+  + [completion_criteria] is operator commands leave a final acceptance artifact that cites apply_result.sop, verification_result.sop, rollback_result.sop when present, Manager decision, Shaliach decision, accepted files, and remaining risks
+  + [support_status] is prepared
+  + [dependency_set] is S114_post_apply_acceptance_records
+  + [known_risks] is implying human Manager acceptance when the current implementation is deterministic scaffold synthesis

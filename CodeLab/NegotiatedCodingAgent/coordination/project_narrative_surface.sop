@@ -823,3 +823,11 @@
   + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
   + [proof_status] is run_completed
   + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S114_post_apply_acceptance_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S114_post_apply_acceptance_records
+  + [proof_result] is tests passed with 75 tests
+  + [implemented_capability] is negotiated_agent.post_apply PostApplyAcceptanceRecord for accepted, verification-blocked, rollback, and Shaliach-blocked post-apply acceptance states
+  + [current_frontier] is S115_post_apply_acceptance_cli_integration
+  + [narrative_role] is implementation_arc and proof_arc update

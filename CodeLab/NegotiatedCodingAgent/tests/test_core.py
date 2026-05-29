@@ -56,10 +56,11 @@ from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
+from negotiated_agent.post_apply import build_post_apply_acceptance_record
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
-from negotiated_agent.rollback import build_rollback_preview
+from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
@@ -909,6 +910,75 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("rollback_status] is rolled_back", result)
             self.assertIn("restored_file_set] is existing.py", result)
             self.assertIn("removed_file_set] is new.py", result)
+
+    def test_post_apply_acceptance_accepts_verified_apply(self) -> None:
+        apply_result = ApplyResult(
+            apply_status="applied",
+            applied_files=("src/app.py",),
+            skipped_files=(),
+            snapshot_refs=("apply_snapshots/src/app.py",),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        record = build_post_apply_acceptance_record(apply_result, verification_returncode=0)
+        sop = record.to_sop()
+        self.assertEqual(record.acceptance_status, "accepted")
+        self.assertEqual(record.manager_decision, "accept")
+        self.assertEqual(record.accepted_files, ("src/app.py",))
+        self.assertIn("acceptance_record_not_filesystem_operation", sop)
+
+    def test_post_apply_acceptance_blocks_failed_verification(self) -> None:
+        apply_result = ApplyResult(
+            apply_status="applied",
+            applied_files=("src/app.py",),
+            skipped_files=(),
+            snapshot_refs=(),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        record = build_post_apply_acceptance_record(apply_result, verification_returncode=1)
+        self.assertEqual(record.acceptance_status, "blocked_by_verification")
+        self.assertEqual(record.manager_decision, "reject")
+        self.assertIn("verification_failed", record.remaining_risks)
+
+    def test_post_apply_acceptance_records_rolled_back_result(self) -> None:
+        apply_result = ApplyResult(
+            apply_status="applied",
+            applied_files=("src/app.py",),
+            skipped_files=(),
+            snapshot_refs=(),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        rollback_result = RollbackExecutionResult(
+            rollback_status="rolled_back",
+            restored_files=("src/app.py",),
+            removed_files=(),
+            skipped_files=(),
+        )
+        record = build_post_apply_acceptance_record(apply_result, 1, rollback_result)
+        self.assertEqual(record.acceptance_status, "rolled_back")
+        self.assertEqual(record.manager_decision, "rollback_acknowledged")
+        self.assertEqual(record.accepted_files, ())
+        self.assertEqual(record.rollback_result_ref, "rollback_result.sop")
+
+    def test_post_apply_acceptance_honors_shaliach_block(self) -> None:
+        apply_result = ApplyResult(
+            apply_status="applied",
+            applied_files=("src/app.py",),
+            skipped_files=(),
+            snapshot_refs=(),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        record = build_post_apply_acceptance_record(
+            apply_result,
+            verification_returncode=0,
+            shaliach_decision="rework_required",
+        )
+        self.assertEqual(record.acceptance_status, "blocked_by_shaliach_rework_required")
+        self.assertEqual(record.manager_decision, "reject")
+        self.assertIn("shaliach_rework_required", record.remaining_risks)
 
 
 class MailboxCoordinationTests(unittest.TestCase):

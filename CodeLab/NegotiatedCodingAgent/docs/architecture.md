@@ -131,6 +131,8 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `coordination/post_apply_acceptance_design.sop` defines the next governance boundary: apply and rollback filesystem evidence are not final acceptance. A future `PostApplyAcceptanceRecord` must reference apply, verification, rollback when present, Manager decision, Shaliach decision, accepted files, and remaining risks.
 
+`negotiated_agent.post_apply` provides that pure acceptance record model. It can synthesize accepted, verification-blocked, rollback-acknowledged, rollback-blocked, and Shaliach-blocked outcomes while preserving the boundary that acceptance records do not perform filesystem operations.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

@@ -453,9 +453,10 @@
   + [completed_slice] is S111_spec_audit_refresh_after_rollback_writer
   + [completed_slice] is S112_long_run_checkpoint_after_apply_rollback_writer
   + [completed_slice] is S113_post_apply_acceptance_design
+  + [completed_slice] is S114_post_apply_acceptance_records
 
-  + [current_frontier] is S114_post_apply_acceptance_records after post-apply acceptance design
-  + [next_recommended_slice] is S114_post_apply_acceptance_records
+  + [current_frontier] is S115_post_apply_acceptance_cli_integration after post-apply acceptance record support
+  + [next_recommended_slice] is S115_post_apply_acceptance_cli_integration
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
@@ -471,7 +472,7 @@
   + [unresolved_item] is live local serving remains blocked because WSL2, Docker, Ollama, and localhost:8000 OpenAI-compatible serving are unavailable from this shell
   + [unresolved_item] is serving bootstrap remains manual operator work; the project documents verification gates but has not installed WSL2 or vLLM
   + [unresolved_item] is live route draft can propose role routes, but endpoint availability and operator config mutation remain future work
-  + [unresolved_item] is apply mutation preflight can validate gates, but target workspace writing and rollback execution remain future work
+  + [unresolved_item] is apply and rollback writers exist behind explicit acknowledgement, but post-apply acceptance still needs CLI integration
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
