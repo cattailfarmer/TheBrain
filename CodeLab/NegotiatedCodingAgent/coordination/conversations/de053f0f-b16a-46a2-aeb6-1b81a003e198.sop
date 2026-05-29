@@ -903,7 +903,9 @@
   + [last_proof] is run 20260529T210700Z wrote run_manifest.sop
   + [completed_slice] is S265_long_run_checkpoint_after_combined_validation_cli
   + [last_proof] is long-run checkpoint passed 264 tests and validate-artifacts reported passed on run 20260529T210700Z plus checkpoint proof
-  + [next_recommended_slice] is S266_spec_audit_refresh_after_combined_validation_cli
+  + [completed_slice] is S266_spec_audit_refresh_after_combined_validation_cli
+  + [last_proof] is spec audit refreshed after combined artifact validation CLI and checkpoint proof
+  + [next_recommended_slice] is S267_combined_validation_checkpoint_integration_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

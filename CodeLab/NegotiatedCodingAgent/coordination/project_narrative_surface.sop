@@ -2299,3 +2299,11 @@
   + [run_root] is runs\20260529T210700Z
   + [current_frontier] is S266_spec_audit_refresh_after_combined_validation_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S266_spec_audit_refresh_after_combined_validation_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S266_spec_audit_refresh_after_combined_validation_cli
+  + [implemented_capability] is spec audit reflects combined artifact validation result CLI and latest 264-test checkpoint proof
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S267_combined_validation_checkpoint_integration_design
+  + [narrative_role] is specification_audit and validation_runtime update
