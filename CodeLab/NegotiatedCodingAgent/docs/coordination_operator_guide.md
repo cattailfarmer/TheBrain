@@ -372,6 +372,8 @@ The Manager and Shaliach review record types now exist in `negotiated_agent.narr
 
 `NarrativeAppendResult` can now be produced in code as a non-mutating plan/result object. The operator-facing append command remains pending and should preserve the same stale surface guard.
 
+The guarded append helper exists in code, but no shell wrapper loads review artifacts yet. Use it only through tests or a later CLI that validates Manager and Shaliach refs.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

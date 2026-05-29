@@ -288,6 +288,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `NarrativeAppendResult` and `build_narrative_append_result` add that validation as a pure planning step. The result records ready and blocked outcomes, including stale surface guards, without appending to `project_narrative_surface.sop`.
 
+`apply_reviewed_narrative_append` is the first append-capable helper. It requires a ready result and an exact surface guard, appends only to the end of the narrative surface, and returns an applied or blocked `NarrativeAppendResult`.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

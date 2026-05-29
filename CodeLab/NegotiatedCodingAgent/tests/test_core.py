@@ -87,7 +87,9 @@ from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_c
 from negotiated_agent.narrative_append import (
     ManagerNarrativeAppendApproval,
     ShaliachNarrativeAppendClearance,
+    apply_reviewed_narrative_append,
     build_narrative_append_result,
+    narrative_surface_guard,
 )
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -4903,6 +4905,64 @@ class NarrativeAppendReviewTests(unittest.TestCase):
         self.assertIn("shaliach_update_record_ref_mismatch", result.blocked_reasons)
         self.assertIn("update_record_has_no_appended_updates", result.blocked_reasons)
         self.assertIn("blocked_reason_count] is 3", result.to_sop())
+
+    def test_reviewed_append_helper_appends_to_end_when_result_ready(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            narrative = Path(temp) / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            result = build_narrative_append_result(
+                self._update_record(("append LongRunNarrativeUpdate for S204",)),
+                self._manager_approval(),
+                self._shaliach_clearance(),
+                result_id="append-result-ready",
+                expected_surface_guard=narrative_surface_guard(original),
+                current_surface_guard=narrative_surface_guard(original),
+            )
+            applied = apply_reviewed_narrative_append(narrative, result)
+            self.assertEqual(applied.append_status, "applied")
+            self.assertEqual(applied.pre_append_guard, narrative_surface_guard(original))
+            self.assertNotEqual(applied.post_append_guard, applied.pre_append_guard)
+            updated = narrative.read_text(encoding="utf-8")
+            self.assertTrue(updated.startswith(original.rstrip()))
+            self.assertIn("NarrativeAppliedUpdate append-result-ready-1", updated)
+            self.assertIn("source_update_record_ref] is coordination/narrative_coverage_update_record.sop", updated)
+
+    def test_reviewed_append_helper_blocks_stale_surface_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            narrative = Path(temp) / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            result = build_narrative_append_result(
+                self._update_record(("append LongRunNarrativeUpdate for S204",)),
+                self._manager_approval(),
+                self._shaliach_clearance(),
+                result_id="append-result-stale",
+                expected_surface_guard="size:1",
+                current_surface_guard="size:1",
+            )
+            blocked = apply_reviewed_narrative_append(narrative, result)
+            self.assertEqual(blocked.append_status, "blocked")
+            self.assertIn("narrative_surface_guard_mismatch", blocked.blocked_reasons)
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_reviewed_append_helper_preserves_file_when_result_not_ready(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            narrative = Path(temp) / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            blocked_plan = build_narrative_append_result(
+                self._update_record(()),
+                self._manager_approval(),
+                self._shaliach_clearance(),
+                result_id="append-result-blocked",
+                expected_surface_guard=narrative_surface_guard(original),
+                current_surface_guard=narrative_surface_guard(original),
+            )
+            blocked = apply_reviewed_narrative_append(narrative, blocked_plan)
+            self.assertEqual(blocked.append_status, "blocked")
+            self.assertIn("append_result_not_ready", blocked.blocked_reasons)
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
 
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(

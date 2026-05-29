@@ -2843,7 +2843,7 @@
 
 & [WorkSliceDetail S204_reviewed_narrative_append_helper] is a coordination runtime implementation slice
   + [slice_id] is S204_reviewed_narrative_append_helper
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add helper that appends reviewed updates to narrative surface only after ready result and matching guard
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover append-to-end ready result stale blocked preservation and result post-guard
@@ -2851,3 +2851,16 @@
   + [support_status] is prepared
   + [dependency_set] is S203_narrative_append_result_plan
   + [known_risks] is helper becoming a CLI without explicit operator review artifact loading
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T05:33:00Z, proof_ref tests passed with 177 tests, result_summary added guarded reviewed narrative append helper
+  + [completed_work_review] is support_delta verified helper appends only ready results at end of file and preserves stale or blocked cases; requirement_delta next step is design or add reviewed narrative append CLI artifact loader
+
+& [WorkSliceDetail S205_reviewed_narrative_append_cli_design] is a coordination runtime design slice
+  + [slice_id] is S205_reviewed_narrative_append_cli_design
+  + [slice_status] is open
+  + [scope] is design operator CLI for reviewed narrative append artifact loading and guarded apply
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design names update record loader Manager approval loader Shaliach clearance loader surface guard result artifact and collision rules
+  + [completion_criteria] is reviewed append CLI can be implemented without hidden review assumptions
+  + [support_status] is prepared
+  + [dependency_set] is S204_reviewed_narrative_append_helper
+  + [known_risks] is CLI taking freeform statuses instead of loading signed evidence records

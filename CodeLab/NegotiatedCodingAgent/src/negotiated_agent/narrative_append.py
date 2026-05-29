@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 
 from .narrative_coverage import NarrativeCoverageUpdateRecord
 
@@ -133,6 +134,66 @@ def build_narrative_append_result(
         pre_append_guard=current_surface_guard,
         post_append_guard="not_appended",
     )
+
+
+def narrative_surface_guard(text: str) -> str:
+    return f"size:{len(text)}"
+
+
+def apply_reviewed_narrative_append(narrative_surface_path: Path, result: NarrativeAppendResult) -> NarrativeAppendResult:
+    text = narrative_surface_path.read_text(encoding="utf-8")
+    current_guard = narrative_surface_guard(text)
+    blocked_reasons = list(result.blocked_reasons)
+    if not result.ready_for_append:
+        blocked_reasons.append("append_result_not_ready")
+    if result.pre_append_guard != current_guard:
+        blocked_reasons.append("narrative_surface_guard_mismatch")
+    if blocked_reasons:
+        return NarrativeAppendResult(
+            result_id=result.result_id,
+            append_status="blocked",
+            update_record_ref=result.update_record_ref,
+            manager_approval_ref=result.manager_approval_ref,
+            shaliach_clearance_ref=result.shaliach_clearance_ref,
+            narrative_surface_ref=result.narrative_surface_ref,
+            appended_updates=(),
+            blocked_reasons=tuple(dict.fromkeys(blocked_reasons)),
+            pre_append_guard=current_guard,
+            post_append_guard=current_guard,
+        )
+    append_text = _append_text(result)
+    new_text = text.rstrip() + "\n\n" + append_text
+    narrative_surface_path.write_text(new_text, encoding="utf-8")
+    return NarrativeAppendResult(
+        result_id=result.result_id,
+        append_status="applied",
+        update_record_ref=result.update_record_ref,
+        manager_approval_ref=result.manager_approval_ref,
+        shaliach_clearance_ref=result.shaliach_clearance_ref,
+        narrative_surface_ref=result.narrative_surface_ref,
+        appended_updates=result.appended_updates,
+        blocked_reasons=(),
+        pre_append_guard=current_guard,
+        post_append_guard=narrative_surface_guard(new_text),
+    )
+
+
+def _append_text(result: NarrativeAppendResult) -> str:
+    sections = []
+    for index, update in enumerate(result.appended_updates, start=1):
+        sections.append(
+            "\n".join(
+                [
+                    f"& [NarrativeAppliedUpdate {result.result_id}-{index}] is reviewed narrative append entry",
+                    f"  + [source_update_record_ref] is {result.update_record_ref}",
+                    f"  + [manager_approval_ref] is {result.manager_approval_ref}",
+                    f"  + [shaliach_clearance_ref] is {result.shaliach_clearance_ref}",
+                    f"  + [appended_update] is {update}",
+                    "  + [narrative_role] is reviewed_append_update",
+                ]
+            )
+        )
+    return "\n\n".join(sections) + "\n"
 
 
 def _fields(key: str, values: tuple[str, ...]) -> str:

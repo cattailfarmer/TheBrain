@@ -1668,3 +1668,11 @@
   + [proof_result] is tests passed with 174 tests
   + [current_frontier] is S204_reviewed_narrative_append_helper
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S204_reviewed_narrative_append_helper] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S204_reviewed_narrative_append_helper
+  + [implemented_capability] is apply_reviewed_narrative_append appends reviewed update entries only when result is ready and narrative surface guard matches
+  + [proof_result] is tests passed with 177 tests
+  + [current_frontier] is S205_reviewed_narrative_append_cli_design
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
