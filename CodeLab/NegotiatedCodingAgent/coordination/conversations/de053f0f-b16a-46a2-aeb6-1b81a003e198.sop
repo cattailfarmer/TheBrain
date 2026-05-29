@@ -109,6 +109,7 @@
   + [last_proof] is tests passed with 39 tests after S36 vLLM install operator guide
   + [last_proof] is tests passed with 41 tests and coordination/openai_health.sop reports localhost:8000 unavailable
   + [last_proof] is tests passed with 41 tests after S38 OpenAI health docs
+  + [last_proof] is long-run checkpoint passed tests suppressed dry-run model inventory and non-gating OpenAI healthcheck
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -125,6 +126,22 @@
   + [last_proof] is run 20260529T141949Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T141949Z
   + [last_proof] is run 20260529T141949Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T143331Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T143331Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T143331Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T143331Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T143331Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T143331Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T143331Z
+  + [last_proof] is run 20260529T143331Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T143429Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T143429Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T143429Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T143429Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T143429Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T143429Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T143429Z
+  + [last_proof] is run 20260529T143429Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -170,9 +187,10 @@
   + [completed_slice] is S36_vllm_install_operator_guide
   + [completed_slice] is S37_openai_compatible_healthcheck
   + [completed_slice] is S38_openai_health_docs
+  + [completed_slice] is S39_long_run_harness_healthcheck
 
-  + [current_frontier] is S39_long_run_harness_healthcheck after OpenAI health docs
-  + [next_recommended_slice] is S39_long_run_harness_healthcheck
+  + [current_frontier] is S40_long_run_checkpoint_final_frontier after harness healthcheck
+  + [next_recommended_slice] is S40_long_run_checkpoint_final_frontier
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

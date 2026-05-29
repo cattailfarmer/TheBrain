@@ -601,6 +601,24 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertEqual(checkpoint.status, "needs_attention")
         self.assertIn("dry_run_status] is failed", checkpoint.to_sop())
 
+    def test_checkpoint_records_openai_health_without_gating_continuation(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        unavailable = CommandResult("openai_health", 1, "status] is unavailable", "")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S39",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            openai_health_result=unavailable,
+        )
+        sop = checkpoint.to_sop()
+        self.assertEqual(checkpoint.status, "ready_for_continuation")
+        self.assertIn("openai_health_status] is failed", sop)
+        self.assertIn("non_gating_environment_state", sop)
+
 
 class NarrativeCoverageTests(unittest.TestCase):
     def test_computes_missing_and_stale_risk_from_files(self) -> None:

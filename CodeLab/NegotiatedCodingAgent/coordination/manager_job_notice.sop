@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 43
+  + [job_notice_revision] is 44
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -61,7 +61,8 @@
     S36_vllm_install_operator_guide |
     S37_openai_compatible_healthcheck |
     S38_openai_health_docs |
-    S39_long_run_harness_healthcheck
+    S39_long_run_harness_healthcheck |
+    S40_long_run_checkpoint_final_frontier
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -600,7 +601,7 @@
 
 & [WorkSliceDetail S39_long_run_harness_healthcheck] is a long-run recovery slice
   + [slice_id] is S39_long_run_harness_healthcheck
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is include OpenAI-compatible healthcheck status in long-run checkpoint output
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests showing checkpoint records healthcheck command result
@@ -608,3 +609,16 @@
   + [support_status] is prepared
   + [dependency_set] is S16_long_run_harness, S37_openai_compatible_healthcheck
   + [known_risks] is treating unavailable server as harness failure instead of environment state
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:50:00Z, proof_ref tests passed with 42 tests and coordination/long_run_checkpoint.sop records non-gating failed openai_health_status, result_summary long-run harness now runs suppressed dry-run, model inventory, and OpenAI healthcheck
+  + [completed_work_review] is support_delta verified unattended checkpoint records local server availability without failing continuation; requirement_delta checkpoint final frontier capture remains future work
+
+& [WorkSliceDetail S40_long_run_checkpoint_final_frontier] is a long-run recovery slice
+  + [slice_id] is S40_long_run_checkpoint_final_frontier
+  + [slice_status] is open
+  + [scope] is record both starting and ending conversation frontier in long-run checkpoints
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing checkpoint SOP includes start_current_frontier and end_current_frontier
+  + [completion_criteria] is dry-run lifecycle updates during harness do not make checkpoint frontier stale
+  + [support_status] is prepared
+  + [dependency_set] is S39_long_run_harness_healthcheck
+  + [known_risks] is adding frontier noise instead of useful reentry context

@@ -29,6 +29,7 @@ class LongRunCheckpoint:
     test_result: CommandResult
     dry_run_result: CommandResult
     model_inventory_result: CommandResult
+    openai_health_result: CommandResult | None = None
 
     @property
     def status(self) -> str:
@@ -46,6 +47,7 @@ class LongRunCheckpoint:
   + [test_status] is {_status(self.test_result)}
   + [dry_run_status] is {_status(self.dry_run_result)}
   + [model_inventory_status] is {_status(self.model_inventory_result)}
+  + [openai_health_status] is {_status(self.openai_health_result) if self.openai_health_result else "not_run"}
   + [authority_boundary] is harness_checkpoint_not_human_approval
 
   & [HarnessCommand test] is a command proof summary
@@ -62,6 +64,12 @@ class LongRunCheckpoint:
     + [returncode] is {self.model_inventory_result.returncode}
     + [stdout_tail] is {_field_value(self.model_inventory_result.stdout_tail)}
     + [stderr_tail] is {_field_value(self.model_inventory_result.stderr_tail)}
+
+  & [HarnessCommand openai_health] is an environment-state summary
+    + [returncode] is {self.openai_health_result.returncode if self.openai_health_result else "not_run"}
+    + [stdout_tail] is {_field_value(self.openai_health_result.stdout_tail if self.openai_health_result else "")}
+    + [stderr_tail] is {_field_value(self.openai_health_result.stderr_tail if self.openai_health_result else "")}
+    + [gating_behavior] is non_gating_environment_state
 """
 
 
@@ -69,7 +77,18 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
     surface = ConversationSurface.load_active(project_root)
     git_clean = _git_clean(project_root.parents[1])
     test = _run("test", ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(project_root / "scripts" / "test.ps1")], project_root)
-    dry = _run("dry_run", ["powershell", "-ExecutionPolicy", "Bypass", "-File", str(project_root / "scripts" / "run-dry.ps1")], project_root)
+    dry = _run(
+        "dry_run",
+        [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(project_root / "scripts" / "run-dry.ps1"),
+            "-SuppressMailbox",
+        ],
+        project_root,
+    )
     inventory = _run(
         "model_inventory",
         [
@@ -83,6 +102,19 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         ],
         project_root,
     )
+    openai_health = _run(
+        "openai_health",
+        [
+            "powershell",
+            "-ExecutionPolicy",
+            "Bypass",
+            "-File",
+            str(project_root / "scripts" / "openai-health.ps1"),
+            "-Out",
+            str(project_root / "coordination" / "openai_health.sop"),
+        ],
+        project_root,
+    )
     return LongRunCheckpoint(
         created_at=datetime.now(timezone.utc).isoformat(),
         conversation_uuid=surface.first("conversation_uuid", "unknown") or "unknown",
@@ -91,6 +123,7 @@ def run_harness(project_root: Path) -> LongRunCheckpoint:
         test_result=test,
         dry_run_result=dry,
         model_inventory_result=inventory,
+        openai_health_result=openai_health,
     )
 
 
