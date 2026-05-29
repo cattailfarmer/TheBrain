@@ -30,6 +30,7 @@ from negotiated_agent.mailbox import (
 from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.multi_programmer import (
+    build_merge_conflict_ledger,
     build_merge_review_input,
     build_multi_programmer_execution_plan,
     execute_assignment_output,
@@ -42,7 +43,7 @@ from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
-from negotiated_agent.slices import create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
+from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.writer import write_implementation
 
@@ -370,6 +371,44 @@ class WorkSliceTests(unittest.TestCase):
             sop = result.to_sop(run_root)
             self.assertIn("run_local_output_not_workspace_patch", sop)
             self.assertIn("implementation/WS001_core_implementation.ProgrammerA/app.py", sop)
+
+    def test_merge_conflict_ledger_detects_same_relative_paths(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            run_root = Path(temp)
+            work_slices = create_planned_work_slices(Path("code.package.sop"), "build thing", include_support_slices=False)
+            plan = create_programmer_assignment_plan(
+                work_slices,
+                [
+                    AgentConfig(name="ProgrammerA", model="m", temperature=0, role="core"),
+                    AgentConfig(name="ProgrammerB", model="m", temperature=0, role="core"),
+                ],
+            )
+            execution_plan = build_multi_programmer_execution_plan(plan)
+            first = execute_assignment_output(
+                run_root,
+                execution_plan.records[0],
+                "```text path=app.py\nprint('a')\n```",
+            )
+            second_record = execution_plan.records[0].__class__.from_assignment(
+                ProgrammerAssignment(
+                    slice_id="WS999_alt",
+                    programmer_name="ProgrammerB",
+                    assignment_status="planned",
+                    reason="test overlap",
+                )
+            )
+            second = execute_assignment_output(
+                run_root,
+                second_record,
+                "```text path=app.py\nprint('b')\n```",
+            )
+            ledger = build_merge_conflict_ledger(run_root, [first, second])
+            self.assertEqual(len(ledger.conflicts), 1)
+            self.assertEqual(ledger.conflicts[0].conflict_type, "same_file_overlap")
+            sop = ledger.to_sop()
+            self.assertIn("MergeConflictLedger", sop)
+            self.assertIn("app.py", sop)
+            self.assertIn("ProgrammerA, ProgrammerB", sop)
 
 
 class FileChangeSurfaceTests(unittest.TestCase):
@@ -1069,6 +1108,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             assignment_plan = (run_root / "programmer_assignment_plan.sop").read_text(encoding="utf-8")
             execution_plan = (run_root / "multi_programmer_execution_plan.sop").read_text(encoding="utf-8")
             merge_review_input = (run_root / "multi_programmer_merge_review_input.sop").read_text(encoding="utf-8")
+            merge_conflict_ledger = (run_root / "merge_conflict_ledger.sop").read_text(encoding="utf-8")
             execution_result = (run_root / "WS001_core_implementation.Programmer.execution_result.sop").read_text(
                 encoding="utf-8"
             )
@@ -1096,12 +1136,15 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("artifact_ref layer_package] is application.package.sop", run_manifest)
             self.assertIn("artifact_ref multi_programmer_execution_plan] is multi_programmer_execution_plan.sop", run_manifest)
             self.assertIn("artifact_ref multi_programmer_merge_review_input] is multi_programmer_merge_review_input.sop", run_manifest)
+            self.assertIn("artifact_ref merge_conflict_ledger] is merge_conflict_ledger.sop", run_manifest)
             self.assertIn("artifact_ref assignment_execution_result] is WS001_core_implementation.Programmer.execution_result.sop", run_manifest)
             self.assertIn("ProgrammerAssignmentPlan", assignment_plan)
             self.assertIn("Programmer", assignment_plan)
             self.assertIn("MultiProgrammerExecutionPlan", execution_plan)
             self.assertIn("WS001_core_implementation", execution_plan)
             self.assertIn("MultiProgrammerMergeReviewInput", merge_review_input)
+            self.assertIn("MergeConflictLedger", merge_conflict_ledger)
+            self.assertIn("conflict_count] is 1", merge_conflict_ledger)
             self.assertIn("run_local_output_not_workspace_patch", execution_result)
             self.assertIn("rework_notice", director_inbox)
             self.assertIn("application.shaliach_response.sop", director_inbox)
@@ -1111,6 +1154,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("custom-director-pool", log)
             self.assertIn("file_change_surface.sop", log)
             self.assertIn("multi_programmer_execution_plan.sop", log)
+            self.assertIn("merge_conflict_ledger.sop", log)
             self.assertIn("run_manifest_written", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:

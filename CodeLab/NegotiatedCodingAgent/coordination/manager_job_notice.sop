@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 70
+  + [job_notice_revision] is 71
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -88,7 +88,8 @@
     S63_multi_programmer_runner_execution_scaffold |
     S64_orchestrator_assignment_executor_path |
     S65_sequential_multi_assignment_execution_loop |
-    S66_merge_conflict_ledger_scaffold
+    S66_merge_conflict_ledger_scaffold |
+    S67_merge_review_decision_surface
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -978,7 +979,7 @@
 
 & [WorkSliceDetail S66_merge_conflict_ledger_scaffold] is a Programmer swarm implementation slice
   + [slice_id] is S66_merge_conflict_ledger_scaffold
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a deterministic merge conflict ledger for accepted assignment outputs before any merge application
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing same relative output paths across assignment roots produce same_file_overlap conflict records
@@ -986,3 +987,16 @@
   + [support_status] is prepared
   + [dependency_set] is S65_sequential_multi_assignment_execution_loop
   + [known_risks] is treating conflict detection as merge resolution
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:20:00Z, proof_ref tests passed with 52 tests, result_summary added merge conflict ledger for same-file overlaps across isolated Programmer outputs
+  + [completed_work_review] is support_delta verified conflict visibility before merge; requirement_delta merge review decision is not yet represented
+
+& [WorkSliceDetail S67_merge_review_decision_surface] is a Programmer swarm implementation slice
+  + [slice_id] is S67_merge_review_decision_surface
+  + [slice_status] is open
+  + [scope] is add a deterministic merge review decision surface that records pending, blocked_by_conflict, or ready_for_manual_merge status
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing merge conflicts block automatic merge readiness and no-conflict outputs remain manual-review pending
+  + [completion_criteria] is each run has an explicit merge review decision artifact without applying merged output
+  + [support_status] is prepared
+  + [dependency_set] is S66_merge_conflict_ledger_scaffold
+  + [known_risks] is making a decision surface look like actual merge application

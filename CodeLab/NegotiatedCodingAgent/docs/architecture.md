@@ -103,6 +103,8 @@ Before any future parallel execution, `coordination/programmer_merge_review_prot
 
 The current orchestrator uses the same assignment artifact contract for the executed Programmer path. It executes planned assignments sequentially, writes each output under a per-assignment run-local root, records assignment execution results, and keeps file-change lineage pointed at those isolated output paths. Merge remains a visible pending review step rather than a target-workspace mutation.
 
+Before merge, `merge_conflict_ledger.sop` records same-file overlaps across isolated assignment roots. This is conflict visibility only: it does not choose a winner, combine code, or write to the target workspace.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

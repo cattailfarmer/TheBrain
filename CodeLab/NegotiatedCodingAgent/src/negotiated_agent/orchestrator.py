@@ -12,7 +12,12 @@ from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
 from .mailbox import publish_message
-from .multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan, execute_assignment_output
+from .multi_programmer import (
+    build_merge_conflict_ledger,
+    build_merge_review_input,
+    build_multi_programmer_execution_plan,
+    execute_assignment_output,
+)
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
@@ -151,6 +156,7 @@ class NegotiatedCodingAgent:
         programmers_by_name = {programmer.name: programmer for programmer in self.config.programmers}
         written: list[Path] = []
         file_change_records = []
+        execution_results = []
         for index, record in enumerate(execution_plan.records):
             assigned_programmer = programmers_by_name.get(record.programmer_name, self.config.coder)
             assigned_work_slice = work_slices_by_id[record.slice_id]
@@ -166,6 +172,7 @@ class NegotiatedCodingAgent:
                 programmer_report(record.slice_id, record.programmer_name, coder_output),
             )
             execution_result = execute_assignment_output(run_root, record, coder_output)
+            execution_results.append(execution_result)
             assignment_written = list(execution_result.written_files)
             written.extend(assignment_written)
             write_text(
@@ -200,6 +207,8 @@ class NegotiatedCodingAgent:
                     "merge_status": "pending_merge_review",
                 },
             )
+        merge_conflict_ledger = build_merge_conflict_ledger(run_root, execution_results)
+        write_text(run_root / "merge_conflict_ledger.sop", merge_conflict_ledger.to_sop())
         write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
         write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
@@ -209,6 +218,8 @@ class NegotiatedCodingAgent:
                 "executed_assignment_count": len(execution_plan.records),
                 "multi_programmer_execution_plan_ref": "multi_programmer_execution_plan.sop",
                 "multi_programmer_merge_review_input_ref": "multi_programmer_merge_review_input.sop",
+                "merge_conflict_ledger_ref": "merge_conflict_ledger.sop",
+                "merge_conflict_count": len(merge_conflict_ledger.conflicts),
                 "files": [str(path.relative_to(run_root)) for path in written],
                 "file_change_surface_ref": "file_change_surface.sop",
                 "file_change_index_ref": "file_change_index.sop",
@@ -519,6 +530,8 @@ def _artifact_role(name: str) -> str:
         return "multi_programmer_execution_plan"
     if name == "multi_programmer_merge_review_input.sop":
         return "multi_programmer_merge_review_input"
+    if name == "merge_conflict_ledger.sop":
+        return "merge_conflict_ledger"
     if name.endswith(".flowchart.md"):
         return "flowchart"
     if name.endswith(".package.sop"):

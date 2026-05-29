@@ -88,6 +88,41 @@ class AssignmentExecutionResult:
 
 
 @dataclass(frozen=True)
+class MergeConflictRecord:
+    conflict_type: str
+    relative_output_path: str
+    source_programmers: tuple[str, ...]
+    source_slices: tuple[str, ...]
+    resolution: str = "pending_manager_review"
+
+    def to_sop(self) -> str:
+        return f"""  & [MergeConflict {self.relative_output_path}] is one pending merge conflict record
+    + [conflict_type] is {self.conflict_type}
+    + [relative_output_path] is {self.relative_output_path}
+    + [source_programmers] is {", ".join(self.source_programmers)}
+    + [source_slices] is {", ".join(self.source_slices)}
+    + [resolution] is {self.resolution}
+"""
+
+
+@dataclass(frozen=True)
+class MergeConflictLedger:
+    conflicts: tuple[MergeConflictRecord, ...]
+
+    def to_sop(self) -> str:
+        lines = [
+            "& [MergeConflictLedger] is the pre-merge overlap ledger for multi-Programmer outputs",
+            f"  + [conflict_count] is {len(self.conflicts)}",
+            "  + [authority_boundary] is conflict_detection_not_merge_resolution",
+        ]
+        if not self.conflicts:
+            lines.append("  + [status] is no_conflicts_detected")
+        for conflict in self.conflicts:
+            lines.append(conflict.to_sop().rstrip())
+        return "\n".join(lines) + "\n"
+
+
+@dataclass(frozen=True)
 class MultiProgrammerExecutionPlan:
     records: tuple[AssignmentExecutionRecord, ...]
 
@@ -178,3 +213,26 @@ def execute_assignment_output(
         raise ValueError(f"Refusing to write outside run root: {record.output_root}")
     written = write_implementation_to_root(output_root, coder_output)
     return AssignmentExecutionResult(record=record.with_state("output_written"), written_files=tuple(written))
+
+
+def build_merge_conflict_ledger(run_root: Path, results: list[AssignmentExecutionResult]) -> MergeConflictLedger:
+    by_relative_path: dict[str, list[AssignmentExecutionResult]] = {}
+    for result in results:
+        assignment_root = (run_root / result.record.output_root).resolve()
+        for path in result.written_files:
+            relative_path = str(path.resolve().relative_to(assignment_root)).replace("\\", "/")
+            by_relative_path.setdefault(relative_path, []).append(result)
+    conflicts = []
+    for relative_path, path_results in sorted(by_relative_path.items()):
+        source_keys = {(item.record.slice_id, item.record.programmer_name) for item in path_results}
+        if len(source_keys) < 2:
+            continue
+        conflicts.append(
+            MergeConflictRecord(
+                conflict_type="same_file_overlap",
+                relative_output_path=relative_path,
+                source_programmers=tuple(programmer for _, programmer in sorted(source_keys)),
+                source_slices=tuple(slice_id for slice_id, _ in sorted(source_keys)),
+            )
+        )
+    return MergeConflictLedger(conflicts=tuple(conflicts))
