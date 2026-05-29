@@ -16,6 +16,10 @@ from negotiated_agent.apply_preflight import (
     build_apply_mutation_preflight,
     materialize_snapshot_evidence,
 )
+from negotiated_agent.checkpoint_probe import (
+    load_checkpoint_probe_evidence,
+    parse_checkpoint_probe_evidence_sop,
+)
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -4676,6 +4680,91 @@ class LongRunHarnessTests(unittest.TestCase):
             },
         )
         self.assertEqual(checkpoint_start_frontier(surface), "S238_spec_audit_refresh_after_shaliach_self_negotiation")
+
+
+class CheckpointProbeEvidenceTests(unittest.TestCase):
+    def _checkpoint_sop(
+        self,
+        *,
+        checkpoint_status: str = "ready_for_continuation",
+        probe_status: str = "passed",
+        probe_returncode: str = "0",
+        probe_stdout: str = "application:consistent",
+        openai_health_status: str = "failed",
+        include_probe_command: bool = True,
+    ) -> str:
+        probe_command = ""
+        if include_probe_command:
+            probe_command = "\n".join(
+                [
+                    "  & [HarnessCommand shaliach_cross_artifact_probe] is a deterministic consistency proof summary",
+                    f"    + [returncode] is {probe_returncode}",
+                    f"    + [stdout_tail] is {probe_stdout}",
+                    "    + [stderr_tail] is none",
+                    "    + [authority_boundary] is consistency_probe_not_manager_approval",
+                    "",
+                ]
+            )
+        return "\n".join(
+            [
+                "& [LongRunCheckpoint] is a bounded unattended-work harness checkpoint",
+                f"  + [status] is {checkpoint_status}",
+                f"  + [shaliach_cross_artifact_status] is {probe_status}",
+                f"  + [openai_health_status] is {openai_health_status}",
+                "  + [authority_boundary] is harness_checkpoint_not_human_approval",
+                "",
+                probe_command,
+            ]
+        )
+
+    def test_parses_passed_checkpoint_probe_evidence(self) -> None:
+        evidence = parse_checkpoint_probe_evidence_sop(self._checkpoint_sop())
+        self.assertEqual(evidence.checkpoint_status, "ready_for_continuation")
+        self.assertEqual(evidence.shaliach_cross_artifact_status, "passed")
+        self.assertEqual(evidence.probe_returncode, "0")
+        self.assertEqual(evidence.openai_health_status, "failed")
+        self.assertEqual(evidence.missing_fields, ())
+
+    def test_parses_not_run_checkpoint_probe_evidence(self) -> None:
+        evidence = parse_checkpoint_probe_evidence_sop(
+            self._checkpoint_sop(
+                probe_status="not_run",
+                probe_returncode="2",
+                probe_stdout="dry_run_root_not_found",
+            )
+        )
+        self.assertEqual(evidence.shaliach_cross_artifact_status, "not_run")
+        self.assertEqual(evidence.probe_returncode, "2")
+        self.assertEqual(evidence.probe_stdout_tail, "dry_run_root_not_found")
+
+    def test_parses_failed_checkpoint_probe_evidence(self) -> None:
+        evidence = parse_checkpoint_probe_evidence_sop(
+            self._checkpoint_sop(
+                checkpoint_status="needs_attention",
+                probe_status="failed",
+                probe_returncode="1",
+                probe_stdout="application:inconsistent",
+            )
+        )
+        self.assertEqual(evidence.checkpoint_status, "needs_attention")
+        self.assertEqual(evidence.shaliach_cross_artifact_status, "failed")
+        self.assertEqual(evidence.probe_returncode, "1")
+
+    def test_reports_missing_probe_command_fields(self) -> None:
+        evidence = parse_checkpoint_probe_evidence_sop(self._checkpoint_sop(include_probe_command=False))
+        self.assertIn("probe_returncode", evidence.missing_fields)
+        self.assertIn("probe_authority_boundary", evidence.missing_fields)
+
+    def test_rejects_non_checkpoint_artifact(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_checkpoint_probe_evidence_sop("& [RunArtifactManifest] is not a checkpoint\n")
+
+    def test_loads_checkpoint_probe_evidence_from_path(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "long_run_checkpoint.sop"
+            path.write_text(self._checkpoint_sop(), encoding="utf-8")
+            evidence = load_checkpoint_probe_evidence(path)
+        self.assertEqual(evidence.probe_authority_boundary, "consistency_probe_not_manager_approval")
 
 
 class NarrativeCoverageTests(unittest.TestCase):

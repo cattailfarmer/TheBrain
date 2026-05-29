@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 143
+  + [job_notice_revision] is 144
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3532,7 +3532,7 @@
 
 & [WorkSliceDetail S257_checkpoint_probe_evidence_parser] is a manifest validation implementation slice
   + [slice_id] is S257_checkpoint_probe_evidence_parser
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is parse long-run checkpoint Shaliach cross-artifact probe evidence fields
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover parsing passed not_run failed and missing probe command fields
@@ -3540,3 +3540,16 @@
   + [support_status] is prepared
   + [dependency_set] is S256_manifest_checkpoint_probe_validation_design
   + [known_risks] is parser accepting malformed checkpoint evidence too loosely
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:48:00Z, proof_ref tests passed with 246 tests, result_summary added checkpoint probe evidence parser and loader
+  + [completed_work_review] is support_delta verified parser extracts checkpoint status Shaliach probe status returncode tails and authority boundary; requirement_delta next step is add pure validator for passed incomplete failed evidence status
+
+& [WorkSliceDetail S258_checkpoint_probe_evidence_validator] is a manifest validation implementation slice
+  + [slice_id] is S258_checkpoint_probe_evidence_validator
+  + [slice_status] is open
+  + [scope] is validate parsed checkpoint Shaliach probe evidence as passed incomplete or failed
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover passed not_run missing command failed probe and non-gating openai health behavior
+  + [completion_criteria] is checkpoint probe evidence validation reports status without re-running the harness or mutating artifacts
+  + [support_status] is prepared
+  + [dependency_set] is S257_checkpoint_probe_evidence_parser
+  + [known_risks] is treating ready_for_continuation as semantic correctness instead of proof-status evidence

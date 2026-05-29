@@ -363,7 +363,8 @@
   + [completed_slice] is S254_manifest_shaliach_probe_validation_design
   + [completed_slice] is S255_manifest_shaliach_self_negotiation_role_validation
   + [completed_slice] is S256_manifest_checkpoint_probe_validation_design
-  + [ready_slice] is S257_checkpoint_probe_evidence_parser
+  + [completed_slice] is S257_checkpoint_probe_evidence_parser
+  + [ready_slice] is S258_checkpoint_probe_evidence_validator
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

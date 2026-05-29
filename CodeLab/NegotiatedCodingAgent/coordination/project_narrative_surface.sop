@@ -2209,3 +2209,11 @@
   + [proof_ref] is coordination/manifest_checkpoint_probe_validation_design.sop
   + [current_frontier] is S257_checkpoint_probe_evidence_parser
   + [narrative_role] is manifest_validation and design_arc update
+
+
+& [LongRunNarrativeUpdate S257_checkpoint_probe_evidence_parser] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S257_checkpoint_probe_evidence_parser
+  + [implemented_capability] is checkpoint_probe parser loads long-run checkpoint Shaliach probe status returncode stdout stderr authority boundary and non-gating openai health status
+  + [proof_result] is tests passed with 246 tests
+  + [current_frontier] is S258_checkpoint_probe_evidence_validator
+  + [narrative_role] is manifest_validation and proof_parser update
