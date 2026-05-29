@@ -357,6 +357,7 @@
   + [ready_capability] is operator docs include dry-run apply expected artifacts and rerun example without implying mutation
   + [ready_capability] is specification implementation status audit recognizes operator docs for dry-run apply validation
   + [ready_capability] is long_run_checkpoint.sop records post-S86 61-test suite, dry-run, model inventory, and non-gating endpoint state
+  + [ready_capability] is model serving inventory, OpenAI-compatible healthcheck, and vLLM WSL2 preflight now reflect current RTX 5090 readiness without installation side effects
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -431,9 +432,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S87_live_model_serving_readiness_recheck
-  + [next_reason] is dry-run governance is mature enough to recheck live serving readiness without installation side effects
-  + [sleep_run_candidate] is continue S87 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S88_live_serving_bootstrap_operator_runbook
+  + [next_reason] is live serving is blocked before WSL2/vLLM installation and needs a clear operator bootstrap route
+  + [sleep_run_candidate] is continue S88 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

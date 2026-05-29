@@ -354,9 +354,10 @@
   + [completed_slice] is S84_apply_cli_validation_docs_and_examples
   + [completed_slice] is S85_spec_audit_refresh_after_apply_docs
   + [completed_slice] is S86_long_run_checkpoint_after_apply_docs
+  + [completed_slice] is S87_live_model_serving_readiness_recheck
 
-  + [current_frontier] is S87_live_model_serving_readiness_recheck after long-run checkpoint
-  + [next_recommended_slice] is S87_live_model_serving_readiness_recheck
+  + [current_frontier] is S88_live_serving_bootstrap_operator_runbook after non-destructive live serving readiness probe
+  + [next_recommended_slice] is S88_live_serving_bootstrap_operator_runbook
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
@@ -369,6 +370,7 @@
   + [unresolved_item] is automatic narrative updates append completed run summaries, but narrative coverage and stale-check recomputation remain future work
   + [unresolved_item] is Shaliach faculty runtime is active in scaffold form, but deeper model-negotiated internal perspectives remain future work
   + [unresolved_item] is conversation lifecycle updates now cover start, layer approval, implementation, completion, and blocked Manager or Shaliach exits
+  + [unresolved_item] is live local serving remains blocked because WSL2, Docker, Ollama, and localhost:8000 OpenAI-compatible serving are unavailable from this shell
 
   & [ReentryPacket] is the compact recovery packet for context compaction or future continuation
     + [load_first] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop

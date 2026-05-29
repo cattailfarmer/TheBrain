@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 91
+  + [job_notice_revision] is 92
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -109,7 +109,8 @@
     S84_apply_cli_validation_docs_and_examples |
     S85_spec_audit_refresh_after_apply_docs |
     S86_long_run_checkpoint_after_apply_docs |
-    S87_live_model_serving_readiness_recheck
+    S87_live_model_serving_readiness_recheck |
+    S88_live_serving_bootstrap_operator_runbook
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1272,7 +1273,7 @@
 
 & [WorkSliceDetail S87_live_model_serving_readiness_recheck] is a local model serving slice
   + [slice_id] is S87_live_model_serving_readiness_recheck
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is recheck non-destructive local model serving readiness after core dry-run governance maturity
   + [target_files] is coordination/model_serving_inventory.sop, coordination/openai_health.sop, coordination/**
   + [proof_route] is model inventory and OpenAI-compatible healthcheck reports updated without installing or mutating system packages
@@ -1280,3 +1281,16 @@
   + [support_status] is prepared
   + [dependency_set] is S86_long_run_checkpoint_after_apply_docs
   + [known_risks] is attempting installation instead of non-destructive readiness probe
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:54:07Z, proof_ref model inventory, OpenAI-compatible healthcheck, and vLLM WSL2 preflight refreshed non-destructively, result_summary RTX 5090 detected with 32607 MiB VRAM while WSL2, Docker, Ollama, and localhost:8000 serving remain unavailable
+  + [completed_work_review] is support_delta verified live serving is blocked before WSL2/vLLM installation; requirement_delta operator bootstrap runbook should make the next human machine setup step explicit
+
+& [WorkSliceDetail S88_live_serving_bootstrap_operator_runbook] is a local model serving documentation slice
+  + [slice_id] is S88_live_serving_bootstrap_operator_runbook
+  + [slice_status] is open
+  + [scope] is consolidate current machine readiness findings into a cautious operator runbook for WSL2 plus vLLM bootstrap
+  + [target_files] is docs/**, README.md, coordination/**
+  + [proof_route] is docs updated, readiness boundaries preserved, and tests remain passing
+  + [completion_criteria] is operator can see current blockers, ordered setup steps, verification commands, and rollback/non-goals for live serving
+  + [support_status] is prepared
+  + [dependency_set] is S87_live_model_serving_readiness_recheck
+  + [known_risks] is presenting installation commands as already executed or implying native Windows vLLM support
