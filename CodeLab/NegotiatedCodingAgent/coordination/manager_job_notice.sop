@@ -2804,7 +2804,7 @@
 
 & [WorkSliceDetail S201_reviewed_narrative_append_design] is a coordination runtime design slice
   + [slice_id] is S201_reviewed_narrative_append_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design reviewed append command from update records to project narrative surface
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design names Manager approval Shaliach clearance update-record refs stale frontier guard and append-only mutation result
@@ -2812,3 +2812,16 @@
   + [support_status] is prepared
   + [dependency_set] is S200_narrative_coverage_update_record_cli
   + [known_risks] is appending narrative text without fresh review or stale surface guard
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T04:52:00Z, proof_ref reviewed_narrative_append_design.sop docs updated, result_summary designed reviewed narrative append boundary with Manager approval Shaliach clearance and surface guard
+  + [completed_work_review] is support_delta verified append mutation is gated behind explicit review and result records; requirement_delta next step is add Manager and Shaliach narrative append review records
+
+& [WorkSliceDetail S202_narrative_append_review_records] is a coordination runtime implementation slice
+  + [slice_id] is S202_narrative_append_review_records
+  + [slice_status] is open
+  + [scope] is add ManagerNarrativeAppendApproval and ShaliachNarrativeAppendClearance records
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover approval clearance allowed blocked finding rework statuses and SOP boundaries
+  + [completion_criteria] is narrative append review evidence can be represented before any append result or mutation helper exists
+  + [support_status] is prepared
+  + [dependency_set] is S201_reviewed_narrative_append_design
+  + [known_risks] is review records becoming ceremonial without status checks in later append helper

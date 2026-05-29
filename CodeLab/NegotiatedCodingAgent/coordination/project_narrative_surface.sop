@@ -1644,3 +1644,11 @@
   + [proof_result] is tests passed with 164 tests
   + [current_frontier] is S201_reviewed_narrative_append_design
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S201_reviewed_narrative_append_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S201_reviewed_narrative_append_design
+  + [implemented_capability] is reviewed_narrative_append_design.sop defines Manager approval Shaliach clearance stale surface guard and append result boundaries
+  + [proof_ref] is coordination/reviewed_narrative_append_design.sop
+  + [current_frontier] is S202_narrative_append_review_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

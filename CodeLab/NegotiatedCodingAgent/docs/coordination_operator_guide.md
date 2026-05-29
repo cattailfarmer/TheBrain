@@ -366,6 +366,8 @@ Write narrative coverage update-record evidence from a stale-check artifact:
 
 This writes `coordination/narrative_coverage_update_record.sop` and does not mutate `project_narrative_surface.sop`.
 
+Do not append update-record text to the narrative surface manually during automated runs. The reviewed append boundary is specified in `coordination/reviewed_narrative_append_design.sop`; implementation is intentionally split into later record, result, and CLI slices.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

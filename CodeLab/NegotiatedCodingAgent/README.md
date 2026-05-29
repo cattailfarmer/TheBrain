@@ -186,6 +186,8 @@ The wrapper `scripts/narrative-coverage.ps1 -StaleCheck` writes `coordination/na
 
 The wrapper `scripts/narrative-coverage.ps1 -UpdateRecord` writes `coordination/narrative_coverage_update_record.sop` from an existing stale-check artifact. It rejects output collisions and still does not append to the narrative surface.
 
+`coordination/reviewed_narrative_append_design.sop` defines the future mutation boundary: narrative append requires Manager approval, Shaliach clearance, an update-record ref, and a stale surface guard before any append-only write is allowed.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

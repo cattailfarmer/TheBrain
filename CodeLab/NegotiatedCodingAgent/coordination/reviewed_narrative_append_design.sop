@@ -1,0 +1,84 @@
+& [ReviewedNarrativeAppendDesign] is the design contract for reviewed append-only narrative surface mutation
+  @ [created_at] 2026-05-30T04:52:00Z
+  @ [update_record_design] coordination/narrative_coverage_update_record_design.sop
+  @ [update_record_writer] scripts/narrative-coverage.ps1 -UpdateRecord
+  @ [narrative_surface] coordination/project_narrative_surface.sop
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is reviewed_narrative_append_not_history_rewrite
+  + [primary_goal] is append reviewed narrative updates from update-record evidence while preserving existing narrative history
+  + [non_goal] is deleting stale claims
+  + [non_goal] is reordering narrative arcs
+  + [non_goal] is treating an update record as sufficient review
+  + [non_goal] is advancing Manager work frontier
+  + [non_goal] is mutating target workspace code
+
+& [AppendInputs] is the evidence required before a narrative append command may run
+  + [required_ref] is coordination/narrative_coverage_update_record.sop or explicit NarrativeCoverageUpdateRecord artifact
+  + [required_ref] is Manager narrative append approval artifact
+  + [required_ref] is Shaliach narrative append clearance artifact
+  + [required_ref] is coordination/project_narrative_surface.sop
+  + [required_ref] is expected narrative surface hash or size guard
+  + [optional_ref] is stale-check artifact referenced by the update record
+  + [authority_boundary] is review_evidence_not_implicit_append
+  = must: reject append when Manager approval status is not approved_for_narrative_append
+  = must: reject append when Shaliach clearance status is not clear_for_narrative_append
+  = must: reject append when the narrative surface guard does not match
+  = must: reject append when update record has no appended_update entries
+  = must: preserve deferred updates as evidence rather than forcing them into narrative text
+
+& [ManagerNarrativeAppendApproval] is the future Manager review artifact
+  + [field] is approval_id
+  + [field] is update_record_ref
+  + [field] is approval_status
+  + [field] is approved_update_count
+  + [field] is frontier_at_approval
+  + [field] is residual_risk_set
+  + [authority_boundary] is manager_approval_not_surface_mutation
+
+& [ShaliachNarrativeAppendClearance] is the future Shaliach review artifact
+  + [field] is clearance_id
+  + [field] is update_record_ref
+  + [field] is clearance_status
+  + [field] is checked_protocol_set
+  + [field] is finding_set
+  + [field] is required_rework_set
+  + [authority_boundary] is shaliach_clearance_not_surface_mutation
+
+& [NarrativeAppendResult] is the future mutation result artifact
+  + [field] is result_id
+  + [field] is append_status
+  + [field] is update_record_ref
+  + [field] is manager_approval_ref
+  + [field] is shaliach_clearance_ref
+  + [field] is narrative_surface_ref
+  + [field] is appended_update_set
+  + [field] is blocked_reason_set
+  + [field] is pre_append_guard
+  + [field] is post_append_guard
+  + [authority_boundary] is append_result_not_frontier_advancement
+  = must: write applied and blocked outcomes
+  = must: append after the existing narrative text only
+  = must: never edit old narrative lines
+  = must: keep Manager and Shaliach refs visible in the result
+
+& [AppendTextForm] is how update candidates should become narrative entries
+  + [entry_type] is LongRunNarrativeUpdate when update text names a current frontier or completed slice
+  + [entry_type] is RunNarrativeUpdate when update text names a run root
+  + [entry_type] is NarrativeArcRefresh when update text names a missing or refreshed arc
+  + [authority_boundary] is generated_append_text_not_semantic_truth
+  = must: prefer explicit evidence refs over polished prose
+  = must: include source update record ref in every appended entry
+  = must: include created_at and narrative_role fields
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is Manager approval record serializes approved and blocked statuses
+  + [test_case] is Shaliach clearance record serializes clear and rework statuses
+  + [test_case] is append result records stale surface guard as blocked without mutation
+  + [test_case] is append helper only appends to end of narrative surface
+  + [test_case] is append command rejects missing Manager or Shaliach evidence
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add ManagerNarrativeAppendApproval and ShaliachNarrativeAppendClearance records
+  + [slice_2] is add NarrativeAppendResult and pure append-plan helper
+  + [slice_3] is add explicit reviewed append CLI with stale surface guard
