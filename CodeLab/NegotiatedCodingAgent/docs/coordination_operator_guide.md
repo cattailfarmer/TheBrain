@@ -163,6 +163,14 @@ Preview unread work without claiming it:
 
 This prints a `WorkerRunnerPreview` with proposed `WorkerLeaseRecord` entries. It does not write `claims.sop`, advance read cursors, or create worker cycle files.
 
+Claim bounded unread work and write lease evidence:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -MaxClaims 1 -ClaimRecord
+```
+
+Claim-record mode writes mailbox claim evidence and `coordination/workers/<worker-uuid>/leases/<claim-id>.sop`. It still does not execute the work, advance read cursors, or update the Manager frontier.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

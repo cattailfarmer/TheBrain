@@ -67,7 +67,7 @@ from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
-from negotiated_agent.worker_runner import build_worker_runner_preview
+from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases
 from negotiated_agent.worker_runner_cli import main as worker_runner_cli_main
 from negotiated_agent.writer import write_implementation
 
@@ -1375,6 +1375,78 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("WorkerRunnerPreview", out.getvalue())
             self.assertIn(message.message_id, out.getvalue())
             self.assertFalse((root / "coordination" / "mailbox" / "director_pool" / "claims.sop").exists())
+
+    def test_worker_claim_record_claims_and_writes_lease_without_advancing_cursor(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            conversation_dir.mkdir(parents=True)
+            (conversation_dir / "active.sop").write_text(
+                "& [ConversationSurface] is test\n"
+                "  + [conversation_uuid] is active\n"
+                "  + [current_frontier] is S120_worker_claim_record_cli\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is test\n"
+                "  + [active_conversation_uuid] is active\n"
+                "  + [conversation_surface_file] is coordination/conversations/active.sop\n",
+                encoding="utf-8",
+            )
+            message = publish_message(root, sender_uuid="manager", recipient_uuid="director_pool", kind="notice", subject="Claim", body="Claim body.")
+            result = claim_and_record_worker_leases(root, worker_uuid="worker-a", mailbox_uuid="director_pool", max_claims=1)
+            sop = result.to_sop()
+            self.assertIn("WorkerClaimRecordResult", sop)
+            self.assertIn("result_status] is claims_recorded", sop)
+            self.assertIn("lease_status] is claimed", sop)
+            self.assertIn("worker_claim_record_not_execution_or_frontier_update", sop)
+            claims = list_claims(root, "director_pool")
+            self.assertEqual(len(claims), 1)
+            lease_path = root / "coordination" / "workers" / "worker-a" / "leases" / f"{claims[0].claim_id}.sop"
+            self.assertTrue(lease_path.exists())
+            self.assertIn(message.message_id, lease_path.read_text(encoding="utf-8"))
+            self.assertEqual([item.message_id for item in list_unread(root, "director_pool")], [message.message_id])
+
+    def test_worker_claim_record_cli_records_conflict_lease(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            conversation_dir.mkdir(parents=True)
+            (conversation_dir / "active.sop").write_text(
+                "& [ConversationSurface] is test\n"
+                "  + [conversation_uuid] is active\n"
+                "  + [current_frontier] is S120_worker_claim_record_cli\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is test\n"
+                "  + [active_conversation_uuid] is active\n"
+                "  + [conversation_surface_file] is coordination/conversations/active.sop\n",
+                encoding="utf-8",
+            )
+            message = publish_message(root, sender_uuid="manager", recipient_uuid="director_pool", kind="notice", subject="Claim", body="Claim body.")
+            first = claim_message(root, mailbox_uuid="director_pool", message_id=message.message_id, claimant_uuid="worker-a")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-b",
+                            "--mailbox",
+                            "director_pool",
+                            "--claim-record",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("lease_status] is conflict", out.getvalue())
+            self.assertIn(first.claim_id, out.getvalue())
+            conflict_claim = [claim for claim in list_claims(root, "director_pool") if claim.claimant_uuid == "worker-b"][0]
+            lease_path = root / "coordination" / "workers" / "worker-b" / "leases" / f"{conflict_claim.claim_id}.sop"
+            self.assertTrue(lease_path.exists())
 
 
 class ModelInventoryTests(unittest.TestCase):

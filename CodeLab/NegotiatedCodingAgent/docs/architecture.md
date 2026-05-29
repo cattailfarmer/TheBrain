@@ -204,6 +204,8 @@ Operator commands for these helpers are documented in `docs/coordination_operato
 
 `negotiated_agent.worker_runner` and `scripts/worker-runner-preview.ps1` add the first non-mutating runner preview. The preview reads unread mailbox messages, drafts proposed lease records against the active frontier, and writes only to stdout, leaving claims and cursors untouched.
 
+The same worker-runner CLI can now run explicit claim-record mode. That path claims bounded unread messages and writes `WorkerLeaseRecord` files under `coordination/workers/<worker_uuid>/leases/`, but still does not execute work, advance read cursors, or update Manager frontier state.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

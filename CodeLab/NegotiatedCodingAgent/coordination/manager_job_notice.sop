@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 124
+  + [job_notice_revision] is 125
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -142,7 +142,8 @@
     S117_worker_runner_design |
     S118_worker_lifecycle_records |
     S119_worker_runner_preview_cli |
-    S120_worker_claim_record_cli
+    S120_worker_claim_record_cli |
+    S121_worker_cycle_record_scaffold
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1734,7 +1735,7 @@
 
 & [WorkSliceDetail S120_worker_claim_record_cli] is a coordination runtime implementation slice
   + [slice_id] is S120_worker_claim_record_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit worker claim-and-record CLI that claims selected mailbox messages and writes WorkerLeaseRecord evidence
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests cover successful claim lease writing, conflict status lease writing, max claim bound, and no read cursor advancement
@@ -1742,3 +1743,16 @@
   + [support_status] is prepared
   + [dependency_set] is S119_worker_runner_preview_cli
   + [known_risks] is treating claim-and-record as permission to execute or advance Manager frontier
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:30:00Z, proof_ref tests passed with 83 tests, result_summary worker runner claim-record mode claims bounded unread messages and writes worker lease evidence without cursor or frontier updates
+  + [completed_work_review] is support_delta verified claim-record mode is explicit and bounded; requirement_delta next step is WorkerCycleRecord scaffold for execution/proof outcomes
+
+& [WorkSliceDetail S121_worker_cycle_record_scaffold] is a coordination runtime implementation slice
+  + [slice_id] is S121_worker_cycle_record_scaffold
+  + [slice_status] is open
+  + [scope] is add worker cycle record command that writes completed blocked paused or failed proof outcome records from explicit inputs
+  + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is tests cover completed blocked paused_by_shaliach failed_proof cycle outputs and no Manager frontier mutation
+  + [completion_criteria] is worker can record cycle outcome evidence after manual or future automated work without claiming Manager approval
+  + [support_status] is prepared
+  + [dependency_set] is S120_worker_claim_record_cli
+  + [known_risks] is treating cycle record as completion approval instead of Manager review input
