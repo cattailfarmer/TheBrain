@@ -30,6 +30,7 @@ from negotiated_agent.execution_gate import (
     load_manager_authorization,
     load_shaliach_clearance,
     load_worker_lease,
+    write_execution_gate_decision,
 )
 from negotiated_agent.execution_gate_cli import main as execution_gate_cli_main
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
@@ -1795,6 +1796,58 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("ExecutionGatePreviewError", out.getvalue())
             self.assertIn("preview_error_not_gate_decision", out.getvalue())
+
+    def test_execution_gate_decision_writer_persists_allowed_and_blocked_decisions(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            allowed = evaluate_execution_gate(
+                gate_id="gate-allowed",
+                manager_authorization=_manager_auth("run_proof_only"),
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance=_shaliach_clearance("clear"),
+                shaliach_clearance_ref="clearance.sop",
+                lease=_worker_lease("claimed"),
+                lease_ref="lease.sop",
+                current_frontier="S131_worker_execution_gate_evaluator",
+            )
+            blocked = evaluate_execution_gate(
+                gate_id="gate-blocked",
+                manager_authorization=_manager_auth("run_proof_only", authorization_status="denied"),
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance=_shaliach_clearance("clear"),
+                shaliach_clearance_ref="clearance.sop",
+                lease=_worker_lease("claimed"),
+                lease_ref="lease.sop",
+                current_frontier="S131_worker_execution_gate_evaluator",
+            )
+            allowed_path = write_execution_gate_decision(project_root=root, decision=allowed)
+            blocked_path = write_execution_gate_decision(project_root=root, decision=blocked)
+            self.assertEqual(
+                allowed_path.relative_to(root).as_posix(),
+                "coordination/workers/worker-a/execution_gates/gate-allowed.sop",
+            )
+            self.assertIn("gate_status] is proof_only_allowed", allowed_path.read_text(encoding="utf-8"))
+            self.assertIn("gate_status] is blocked_by_manager", blocked_path.read_text(encoding="utf-8"))
+            self.assertFalse((root / "coordination" / "workers" / "worker-a" / "cycles").exists())
+
+    def test_execution_gate_decision_writer_rejects_overwrite_and_bad_output_dir(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            decision = evaluate_execution_gate(
+                gate_id="gate-1",
+                manager_authorization=_manager_auth("run_proof_only"),
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance=_shaliach_clearance("clear"),
+                shaliach_clearance_ref="clearance.sop",
+                lease=_worker_lease("claimed"),
+                lease_ref="lease.sop",
+                current_frontier="S131_worker_execution_gate_evaluator",
+            )
+            write_execution_gate_decision(project_root=root, decision=decision)
+            with self.assertRaises(FileExistsError):
+                write_execution_gate_decision(project_root=root, decision=decision)
+            with self.assertRaisesRegex(ValueError, "worker execution_gates directory"):
+                write_execution_gate_decision(project_root=root, decision=decision, output_dir=root / "coordination")
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

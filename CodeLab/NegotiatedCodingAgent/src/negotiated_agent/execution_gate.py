@@ -132,6 +132,26 @@ def evaluate_execution_gate(
     )
 
 
+def write_execution_gate_decision(
+    *,
+    project_root: Path,
+    decision: ExecutionGateDecision,
+    output_dir: Path | None = None,
+) -> Path:
+    base_dir = project_root / "coordination" / "workers" / decision.worker_uuid / "execution_gates"
+    target_dir = output_dir if output_dir is not None else base_dir
+    resolved_base = base_dir.resolve()
+    resolved_dir = target_dir.resolve()
+    if resolved_base != resolved_dir and resolved_base not in resolved_dir.parents:
+        raise ValueError("execution gate decision output must stay under the worker execution_gates directory")
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target_path = target_dir / f"{decision.gate_id}.sop"
+    if target_path.exists():
+        raise FileExistsError(f"{target_path} already exists")
+    target_path.write_text(decision.to_sop(), encoding="utf-8")
+    return target_path
+
+
 def load_manager_authorization(path: Path) -> ManagerAuthorizationRecord:
     fields = _read_fields(path)
     return ManagerAuthorizationRecord(

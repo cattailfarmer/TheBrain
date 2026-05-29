@@ -1087,3 +1087,11 @@
   + [implemented_capability] is execution_gate_decision_writer_design.sop defines explicit persistence of ExecutionGateDecision review evidence without worker execution or frontier mutation
   + [current_frontier] is S140_execution_gate_decision_writer_helper
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S140_execution_gate_decision_writer_helper] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S140_execution_gate_decision_writer_helper
+  + [implemented_capability] is write_execution_gate_decision persists allowed and blocked ExecutionGateDecision artifacts under worker execution_gates with containment and no-overwrite guards
+  + [proof_result] is tests passed with 101 tests
+  + [current_frontier] is S141_execution_gate_decision_writer_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

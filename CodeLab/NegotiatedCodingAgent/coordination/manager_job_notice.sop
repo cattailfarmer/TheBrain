@@ -2011,7 +2011,7 @@
 
 & [WorkSliceDetail S140_execution_gate_decision_writer_helper] is a coordination runtime implementation slice
   + [slice_id] is S140_execution_gate_decision_writer_helper
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure helper to persist ExecutionGateDecision artifacts under worker execution_gates directory from existing refs
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover allowed write blocked write no-overwrite and output containment
@@ -2019,3 +2019,16 @@
   + [support_status] is prepared
   + [dependency_set] is S139_execution_gate_decision_writer_design
   + [known_risks] is helper accidentally writing outside worker gate evidence directory
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:22:00Z, proof_ref tests passed with 101 tests, result_summary write_execution_gate_decision persists allowed and blocked gate records with no-overwrite and containment checks
+  + [completed_work_review] is support_delta verified helper writes only gate decision evidence; requirement_delta next step is CLI write mode and PowerShell wrapper
+
+& [WorkSliceDetail S141_execution_gate_decision_writer_cli] is a coordination runtime implementation slice
+  + [slice_id] is S141_execution_gate_decision_writer_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI write mode and wrapper for persisting ExecutionGateDecision artifacts
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover write CLI writes one gate artifact, blocked decisions exit zero, and existing output collisions return nonzero
+  + [completion_criteria] is operators can persist a gate decision from existing refs without launching worker implementation
+  + [support_status] is prepared
+  + [dependency_set] is S140_execution_gate_decision_writer_helper
+  + [known_risks] is making write mode appear as authorization creation or execution launch
