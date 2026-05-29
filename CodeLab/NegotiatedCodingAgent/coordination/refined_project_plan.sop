@@ -381,7 +381,8 @@
   + [completed_slice] is S272_live_serving_recheck_audit_refresh
   + [completed_slice] is S273_prelive_manager_shaliach_review_design
   + [completed_slice] is S274_prelive_review_packet_records
-  + [ready_slice] is S275_prelive_review_packet_cli
+  + [completed_slice] is S275_prelive_review_packet_cli
+  + [ready_slice] is S276_spec_audit_refresh_after_prelive_review_packets
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

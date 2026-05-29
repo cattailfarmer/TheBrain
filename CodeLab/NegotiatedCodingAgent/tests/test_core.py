@@ -16,7 +16,12 @@ from negotiated_agent.apply_preflight import (
     build_apply_mutation_preflight,
     materialize_snapshot_evidence,
 )
-from negotiated_agent.artifact_validation import CombinedArtifactValidation, combine_artifact_validation
+from negotiated_agent.artifact_validation import (
+    CombinedArtifactValidation,
+    combine_artifact_validation,
+    load_combined_artifact_validation,
+    parse_combined_artifact_validation_sop,
+)
 from negotiated_agent.artifact_validation_cli import main as artifact_validation_cli_main
 from negotiated_agent.checkpoint_probe import (
     load_checkpoint_probe_evidence,
@@ -127,6 +132,7 @@ from negotiated_agent.prelive_review import (
     build_manager_prelive_review_packet,
     build_shaliach_prelive_review_packet,
 )
+from negotiated_agent.prelive_review_cli import main as prelive_review_cli_main
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
@@ -6366,6 +6372,61 @@ class PreliveReviewPacketTests(unittest.TestCase):
         self.assertEqual(packet.recommended_response, "block_for_evidence_repair")
         self.assertIn("combined_validation_status_failed", packet.evidence_gaps)
         self.assertIn("continuation_without_passed_combined_validation", packet.boundary_risks)
+
+    def test_parse_combined_artifact_validation_sop(self) -> None:
+        parsed = parse_combined_artifact_validation_sop(self._combined().to_sop())
+        self.assertEqual(parsed.status, "passed")
+        self.assertEqual(parsed.manifest_status, "valid")
+        self.assertEqual(parsed.checkpoint_probe_status, "passed")
+
+    def test_load_combined_artifact_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "combined_artifact_validation.sop"
+            path.write_text(self._combined().to_sop(), encoding="utf-8")
+            parsed = load_combined_artifact_validation(path)
+        self.assertEqual(parsed.status, "passed")
+
+    def test_prelive_review_cli_prints_packets(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "combined_artifact_validation.sop"
+            path.write_text(self._combined().to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = prelive_review_cli_main(["--combined-validation", str(path)])
+        self.assertEqual(exit_code, 0)
+        self.assertIn("ManagerPreliveReviewPacket", out.getvalue())
+        self.assertIn("ShaliachPreliveReviewPacket", out.getvalue())
+
+    def test_prelive_review_cli_returns_two_for_blocked_packets(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "combined_artifact_validation.sop"
+            path.write_text(self._combined("failed").to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = prelive_review_cli_main(["--combined-validation", str(path)])
+        self.assertEqual(exit_code, 2)
+        self.assertIn("blocked_by_combined_validation", out.getvalue())
+
+    def test_prelive_review_cli_writes_packet_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            combined_path = root / "combined_artifact_validation.sop"
+            manager_path = root / "manager_prelive_review.sop"
+            shaliach_path = root / "shaliach_prelive_review.sop"
+            combined_path.write_text(self._combined().to_sop(), encoding="utf-8")
+            exit_code = prelive_review_cli_main(
+                [
+                    "--combined-validation",
+                    str(combined_path),
+                    "--manager-out",
+                    str(manager_path),
+                    "--shaliach-out",
+                    str(shaliach_path),
+                ]
+            )
+            self.assertEqual(exit_code, 0)
+            self.assertIn("manager_review_packet_not_manager_approval", manager_path.read_text(encoding="utf-8"))
+            self.assertIn("shaliach_review_packet_not_shaliach_clearance", shaliach_path.read_text(encoding="utf-8"))
 
 
 class ConversationKernelTests(unittest.TestCase):

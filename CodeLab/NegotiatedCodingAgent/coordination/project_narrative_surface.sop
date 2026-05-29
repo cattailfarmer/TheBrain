@@ -2380,3 +2380,11 @@
   + [proof_result] is tests passed with 272 tests
   + [current_frontier] is S275_prelive_review_packet_cli
   + [narrative_role] is review_runtime and live_serving_bridge update
+
+
+& [LongRunNarrativeUpdate S275_prelive_review_packet_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S275_prelive_review_packet_cli
+  + [implemented_capability] is prelive-review-packets wrapper writes deterministic Manager and Shaliach packet scaffolds from CombinedArtifactValidation
+  + [proof_result] is tests passed with 277 tests and wrapper wrote packet files from latest combined validation proof
+  + [current_frontier] is S276_spec_audit_refresh_after_prelive_review_packets
+  + [narrative_role] is review_runtime and live_serving_bridge update

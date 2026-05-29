@@ -161,6 +161,17 @@ To validate both a run manifest and checkpoint proof evidence in one read-only s
 
 This combined validator uses the same exit-code vocabulary: `0` passed, `2` incomplete, and `1` failed. It checks artifact refs and recorded proof status only; it is not final code acceptance or apply permission.
 
+Generate deterministic pre-live Manager and Shaliach review packets from a combined validation artifact:
+
+```powershell
+.\scripts\prelive-review-packets.ps1 `
+  -CombinedValidation .\combined_artifact_validation.sop `
+  -ManagerOut .\manager_prelive_review.sop `
+  -ShaliachOut .\shaliach_prelive_review.sop
+```
+
+These packets are future live-review prompt scaffolds. They are not Manager approval, Shaliach clearance, final acceptance, or apply permission.
+
 ## Mailbox Messages
 
 List mailbox messages:

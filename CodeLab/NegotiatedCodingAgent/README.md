@@ -81,6 +81,7 @@ Use `scripts\shaliach-self-negotiation.ps1 -Artifact <path>` to print a concise 
 Use `scripts\shaliach-cross-inspect.ps1 -SelfNegotiation <path> -Finding <path> [-Response <path>]` to compare Shaliach self-negotiation, finding, and response refs structurally.
 Use `scripts\validate-checkpoint-probe.ps1 -Checkpoint coordination\long_run_checkpoint.sop` to validate recorded Shaliach checkpoint probe evidence; exit code `0` means passed, `2` means incomplete, and `1` means failed.
 Use `scripts\validate-artifacts.ps1 -Manifest runs\<timestamp>\run_manifest.sop [-Checkpoint coordination\long_run_checkpoint.sop]` for one read-only validation summary over run artifact refs and checkpoint Shaliach proof evidence.
+Use `scripts\prelive-review-packets.ps1 -CombinedValidation <combined_artifact_validation.sop>` to draft deterministic Manager/Shaliach review packet scaffolds for future live review.
 - `WS001_core_implementation.<Programmer>.manager_review.sop`
 - `WS001_core_implementation.<Programmer>.execution_result.sop`
 - `coder.raw.md`
