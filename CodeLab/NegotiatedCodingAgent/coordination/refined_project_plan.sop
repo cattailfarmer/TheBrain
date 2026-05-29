@@ -366,7 +366,8 @@
   + [completed_slice] is S257_checkpoint_probe_evidence_parser
   + [completed_slice] is S258_checkpoint_probe_evidence_validator
   + [completed_slice] is S259_checkpoint_probe_validation_cli
-  + [ready_slice] is S260_long_run_checkpoint_after_checkpoint_probe_cli
+  + [completed_slice] is S260_long_run_checkpoint_after_checkpoint_probe_cli
+  + [ready_slice] is S261_spec_audit_refresh_after_checkpoint_probe_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

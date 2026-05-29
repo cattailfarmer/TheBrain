@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 146
+  + [job_notice_revision] is 147
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3571,7 +3571,7 @@
 
 & [WorkSliceDetail S260_long_run_checkpoint_after_checkpoint_probe_cli] is a long-run reentry slice
   + [slice_id] is S260_long_run_checkpoint_after_checkpoint_probe_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after checkpoint probe validation CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current test suite and Shaliach cross-artifact probe; validate-checkpoint-probe confirms checkpoint evidence
@@ -3579,3 +3579,16 @@
   + [support_status] is prepared
   + [dependency_set] is S259_checkpoint_probe_validation_cli
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:00:00Z, proof_ref long-run checkpoint passed 255 tests and validate-checkpoint-probe reported passed, result_summary refreshed checkpoint after checkpoint probe validation CLI
+  + [completed_work_review] is support_delta verified checkpoint start frontier S260 git_clean_before true Shaliach probe passed and checkpoint probe validation passed; requirement_delta next step is refresh spec audit after checkpoint probe validation tooling
+
+& [WorkSliceDetail S261_spec_audit_refresh_after_checkpoint_probe_cli] is a specification audit slice
+  + [slice_id] is S261_spec_audit_refresh_after_checkpoint_probe_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after checkpoint probe parser validator CLI and checkpoint proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names checkpoint probe evidence parser validator CLI and long-run proof
+  + [completion_criteria] is audit reflects checkpoint proof validation progress and remaining live-serving gap accurately
+  + [support_status] is prepared
+  + [dependency_set] is S260_long_run_checkpoint_after_checkpoint_probe_cli
+  + [known_risks] is audit overstating checkpoint probe validation as semantic Shaliach correctness
