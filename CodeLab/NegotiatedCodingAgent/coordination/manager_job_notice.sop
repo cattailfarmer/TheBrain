@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 37
+  + [job_notice_revision] is 38
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -55,7 +55,8 @@
     S30_mailbox_claim_cli |
     S31_mailbox_unread_cursor_cli |
     S32_mailbox_claim_listing_cli |
-    S33_rendezvous_packet_cli
+    S33_rendezvous_packet_cli |
+    S34_coordination_operator_guide
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -516,7 +517,7 @@
 
 & [WorkSliceDetail S33_rendezvous_packet_cli] is a post-S16 governance expansion slice
   + [slice_id] is S33_rendezvous_packet_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add CLI and script helper for writing rendezvous packets between worker conversations
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests showing rendezvous packet file is written with source target subject and boundary
@@ -524,3 +525,16 @@
   + [support_status] is prepared
   + [dependency_set] is S13_mailbox_and_notice_coordination
   + [known_risks] is treating rendezvous packets as command authority rather than coordination handoff
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:50:00Z, proof_ref tests passed with 38 tests, result_summary mailbox CLI and script can write rendezvous packet handoffs
+  + [completed_work_review] is support_delta verified durable handoff packet creation from operator tools; requirement_delta rendezvous packets remain coordination carriers not instruction authority
+
+& [WorkSliceDetail S34_coordination_operator_guide] is a post-S16 governance expansion slice
+  + [slice_id] is S34_coordination_operator_guide
+  + [slice_status] is open
+  + [scope] is document mailbox, claim, cursor, rendezvous, manifest validation, and proof-run suppression operator workflows
+  + [target_files] is docs/**, README.md
+  + [proof_route] is docs updated and tests remain passing
+  + [completion_criteria] is future conversations can use coordination helpers without reading source code
+  + [support_status] is prepared
+  + [dependency_set] is S28_run_manifest_validation_cli, S33_rendezvous_packet_cli
+  + [known_risks] is documenting intended scheduler behavior beyond current helpers

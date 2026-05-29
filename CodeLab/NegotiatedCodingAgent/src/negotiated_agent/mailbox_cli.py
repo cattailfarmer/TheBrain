@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .mailbox import advance_read_cursor, claim_message, list_claims, list_messages, list_unread
+from .mailbox import advance_read_cursor, claim_message, list_claims, list_messages, list_unread, write_rendezvous_packet
 
 
 def main() -> int:
@@ -30,6 +30,13 @@ def main() -> int:
     claims_parser.add_argument("--project-root", type=Path, default=Path.cwd())
     claims_parser.add_argument("--mailbox", required=True, help="Mailbox UUID whose claims should be listed.")
 
+    rendezvous_parser = subparsers.add_parser("rendezvous", help="Write a rendezvous handoff packet.")
+    rendezvous_parser.add_argument("--project-root", type=Path, default=Path.cwd())
+    rendezvous_parser.add_argument("--source", required=True, help="Source conversation UUID.")
+    rendezvous_parser.add_argument("--target", required=True, help="Target conversation UUID.")
+    rendezvous_parser.add_argument("--subject", required=True)
+    rendezvous_parser.add_argument("--boundary", required=True)
+
     args = parser.parse_args()
     if args.command == "list":
         messages = list_unread(args.project_root, args.mailbox) if args.unread else list_messages(args.project_root, args.mailbox)
@@ -52,6 +59,16 @@ def main() -> int:
     if args.command == "claims":
         for claim in list_claims(args.project_root, args.mailbox):
             print(f"{claim.claim_id}\t{claim.message_id}\t{claim.claimant_uuid}\t{claim.status}\t{claim.conflict_with or 'none'}")
+        return 0
+    if args.command == "rendezvous":
+        path = write_rendezvous_packet(
+            args.project_root,
+            source_uuid=args.source,
+            target_uuid=args.target,
+            subject=args.subject,
+            boundary=args.boundary,
+        )
+        print(path)
         return 0
     return 1
 

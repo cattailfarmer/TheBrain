@@ -443,6 +443,35 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("worker-b", claims_out.getvalue())
             self.assertIn("conflict", claims_out.getvalue())
 
+    def test_mailbox_cli_writes_rendezvous_packet(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "rendezvous",
+                    "--project-root",
+                    str(root),
+                    "--source",
+                    "worker-a",
+                    "--target",
+                    "worker-b",
+                    "--subject",
+                    "handoff",
+                    "--boundary",
+                    "worker-a finished S30; worker-b takes S31",
+                ],
+            ), contextlib.redirect_stdout(out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            packet_path = Path(out.getvalue().strip())
+            packet = packet_path.read_text(encoding="utf-8")
+            self.assertIn("RendezvousPacket", packet)
+            self.assertIn("worker-a", packet)
+            self.assertIn("worker-b", packet)
+            self.assertIn("worker-a finished S30", packet)
+
 
 class ModelInventoryTests(unittest.TestCase):
     def test_recommends_wsl_vllm_for_large_gpu_when_wsl_available(self) -> None:
