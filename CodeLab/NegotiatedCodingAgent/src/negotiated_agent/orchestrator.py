@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ from .multi_programmer import (
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
-from .shaliach import review_layer_negotiation
+from .shaliach import build_shaliach_self_negotiation_from_finding, review_layer_negotiation
 from .slices import create_planned_work_slices, create_programmer_assignment_plan, manager_review, programmer_report
 from .writer import write_text
 
@@ -84,6 +85,18 @@ class NegotiatedCodingAgent:
                 package_has_parent=bool(parent_package_ref),
             )
             shaliach_finding_ref = f"{layer}.shaliach_finding.sop"
+            shaliach_self_negotiation_ref = f"{layer}.shaliach_self_negotiation.sop"
+            shaliach_self_negotiation = build_shaliach_self_negotiation_from_finding(
+                shaliach_finding,
+                subject_ref=f"{layer}_layer_package",
+                negotiation_id=f"{layer}.shaliach_self_negotiation",
+                context_boundary=f"{layer} layer Shaliach review",
+            )
+            write_text(run_root / shaliach_self_negotiation_ref, shaliach_self_negotiation.to_sop())
+            shaliach_finding = replace(
+                shaliach_finding,
+                self_negotiation_ref=f"ShaliachSelfNegotiationRecord {layer}.shaliach_self_negotiation",
+            )
             write_text(
                 run_root / shaliach_finding_ref,
                 shaliach_finding.to_sop(f"{layer}_layer_package"),
@@ -127,6 +140,7 @@ class NegotiatedCodingAgent:
                     "shaliach_finding": shaliach_finding.finding,
                     "shaliach_severity": shaliach_finding.severity,
                     "shaliach_finding_ref": shaliach_finding_ref,
+                    "shaliach_self_negotiation_ref": shaliach_self_negotiation_ref,
                     "shaliach_response_ref": shaliach_response_ref,
                     "protocol_activation_ref": "protocol_activation.sop",
                 },
@@ -571,6 +585,8 @@ def _artifact_role(name: str) -> str:
         return "manager_review"
     if name.endswith(".shaliach_finding.sop"):
         return "shaliach_finding"
+    if name.endswith(".shaliach_self_negotiation.sop"):
+        return "shaliach_self_negotiation"
     if name.endswith(".shaliach_response.sop"):
         return "shaliach_response"
     if name.endswith(".work_slice.sop"):

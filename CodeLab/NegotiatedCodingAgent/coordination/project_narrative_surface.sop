@@ -1978,3 +1978,11 @@
   + [proof_result] is tests passed with 216 tests
   + [current_frontier] is S236_shaliach_self_negotiation_run_artifacts
   + [narrative_role] is shaliach_arc and orchestrator_readiness update
+
+
+& [LongRunNarrativeUpdate S236_shaliach_self_negotiation_run_artifacts] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S236_shaliach_self_negotiation_run_artifacts
+  + [implemented_capability] is NegotiatedCodingAgent writes per-layer Shaliach self-negotiation SOP artifacts and cites them from findings and response coordination records
+  + [proof_result] is tests passed with 216 tests
+  + [current_frontier] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [narrative_role] is shaliach_arc and run_artifact_arc update

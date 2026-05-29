@@ -3259,7 +3259,7 @@
 
 & [WorkSliceDetail S236_shaliach_self_negotiation_run_artifacts] is an orchestrator integration slice
   + [slice_id] is S236_shaliach_self_negotiation_run_artifacts
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is write Shaliach self-negotiation SOP artifacts alongside layer Shaliach findings during dry-run orchestration
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover run output containing per-layer self-negotiation artifacts and finding refs
@@ -3267,3 +3267,16 @@
   + [support_status] is prepared
   + [dependency_set] is S235_shaliach_self_negotiation_from_finding
   + [known_risks] is increasing run artifact noise before live Shaliach model routes exist
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:09:00Z, proof_ref tests passed with 216 tests, result_summary orchestrator writes per-layer Shaliach self-negotiation artifacts and finding/response refs
+  + [completed_work_review] is support_delta verified run manifest and log include shaliach_self_negotiation artifacts; requirement_delta next step is refresh long-run checkpoint after Shaliach run artifacts
+
+& [WorkSliceDetail S237_long_run_checkpoint_after_shaliach_self_negotiation] is a long-run reentry slice
+  + [slice_id] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after Shaliach self-negotiation records and run artifacts
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 216-test suite and self-negotiation artifact support
+  + [completion_criteria] is checkpoint captures Shaliach self-negotiation frontier and ready continuation
+  + [support_status] is prepared
+  + [dependency_set] is S236_shaliach_self_negotiation_run_artifacts
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
