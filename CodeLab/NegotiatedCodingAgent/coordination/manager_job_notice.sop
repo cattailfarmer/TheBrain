@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 181
+  + [job_notice_revision] is 182
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -4026,7 +4026,7 @@
 
 & [WorkSliceDetail S295_live_shaliach_attempt_records] is a live-model integration implementation slice
   + [slice_id] is S295_live_shaliach_attempt_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement LiveShaliachSelfNegotiationAttempt records and parser
   + [target_files] is src/negotiated_agent/shaliach.py, tests/**
   + [proof_route] is tests cover unavailable failed available statuses authority boundary and parser roundtrip
@@ -4034,3 +4034,16 @@
   + [support_status] is prepared
   + [dependency_set] is S294_live_shaliach_self_negotiation_boundary_design
   + [known_risks] is live attempt record being mistaken for actual Shaliach clearance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T17:20:00Z, proof_ref tests passed with 281 tests, result_summary added LiveShaliachSelfNegotiationAttempt record and parser with unavailable and available roundtrip coverage
+  + [completed_work_review] is support_delta verified live attempts carry authority boundary and do not change deterministic self-negotiation semantics; requirement_delta next step is add live Shaliach prompt packet builder
+
+& [WorkSliceDetail S296_live_shaliach_prompt_packet_builder] is a live-model integration implementation slice
+  + [slice_id] is S296_live_shaliach_prompt_packet_builder
+  + [slice_status] is open
+  + [scope] is implement a live Shaliach prompt/input packet builder from deterministic self-negotiation evidence
+  + [target_files] is src/negotiated_agent/shaliach.py, tests/**
+  + [proof_route] is tests cover packet fields hidden-reasoning exclusion protocol/proof refs and authority boundary
+  + [completion_criteria] is live attempts have a bounded prompt packet source that does not expose hidden chain-of-thought
+  + [support_status] is prepared
+  + [dependency_set] is S295_live_shaliach_attempt_records
+  + [known_risks] is prompt packet becoming a raw reasoning dump instead of bounded evidence

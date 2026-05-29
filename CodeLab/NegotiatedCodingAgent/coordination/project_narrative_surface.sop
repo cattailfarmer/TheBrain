@@ -2576,3 +2576,11 @@
   + [proof_ref] is coordination/live_shaliach_self_negotiation_boundary_design.sop
   + [current_frontier] is S295_live_shaliach_attempt_records
   + [narrative_role] is live_model_gap and shaliach_runtime update
+
+
+& [LongRunNarrativeUpdate S295_live_shaliach_attempt_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S295_live_shaliach_attempt_records
+  + [implemented_capability] is LiveShaliachSelfNegotiationAttempt records unavailable and available live Shaliach overlay status without claiming Manager approval or Shaliach clearance
+  + [proof_result] is tests passed with 281 tests
+  + [current_frontier] is S296_live_shaliach_prompt_packet_builder
+  + [narrative_role] is live_model_gap and shaliach_runtime update

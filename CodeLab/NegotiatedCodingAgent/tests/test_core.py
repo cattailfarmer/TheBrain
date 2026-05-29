@@ -157,6 +157,7 @@ from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_pr
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import (
+    LiveShaliachSelfNegotiationAttempt,
     ShaliachFinding,
     ShaliachSelfNegotiationPerspective,
     ShaliachSelfNegotiationRecord,
@@ -167,6 +168,7 @@ from negotiated_agent.shaliach import (
     load_shaliach_finding_fields,
     load_shaliach_self_negotiation,
     parse_shaliach_finding_fields_sop,
+    parse_live_shaliach_self_negotiation_attempt_sop,
     parse_shaliach_response_self_negotiation_ref_sop,
     parse_shaliach_self_negotiation_sop,
     review_layer_negotiation,
@@ -6763,6 +6765,44 @@ class ShaliachRuntimeTests(unittest.TestCase):
         self.assertEqual(loaded.resolved_intention, original.resolved_intention)
         self.assertEqual(loaded.perspective_records[0].perspective, "legal_counsel")
         self.assertEqual(loaded.unresolved_tension_set[0].reason, "director support is weak")
+
+    def test_live_shaliach_attempt_records_unavailable_without_approval_claim(self) -> None:
+        attempt = LiveShaliachSelfNegotiationAttempt(
+            attempt_id="live-attempt-1",
+            subject_ref="application_layer_package",
+            baseline_self_negotiation_ref="ShaliachSelfNegotiationRecord application.shaliach_self_negotiation",
+            live_status="unavailable",
+            provider="openai_compatible",
+            model_ref="llama3.1:8b",
+            failure_reason="endpoint unavailable",
+        )
+        sop = attempt.to_sop()
+        parsed = parse_live_shaliach_self_negotiation_attempt_sop(sop)
+
+        self.assertFalse(attempt.available)
+        self.assertEqual(parsed.live_status, "unavailable")
+        self.assertEqual(parsed.perspective_response_set, ())
+        self.assertIn("live_shaliach_review_not_manager_approval", sop)
+        self.assertNotIn("approval", parsed.live_status)
+
+    def test_live_shaliach_attempt_round_trips_available_fields(self) -> None:
+        attempt = LiveShaliachSelfNegotiationAttempt(
+            attempt_id="live-attempt-2",
+            subject_ref="code_layer_package",
+            baseline_self_negotiation_ref="ShaliachSelfNegotiationRecord code.shaliach_self_negotiation",
+            live_status="available",
+            provider="openai_compatible",
+            model_ref="qwen-coder",
+            perspective_response_set=("legal_counsel: proceed with caveat", "failure_advocate: monitor rollback"),
+            resolved_intention_delta="add rollback caveat",
+            unresolved_tension_set=("verification is deterministic only",),
+        )
+        parsed = parse_live_shaliach_self_negotiation_attempt_sop(attempt.to_sop())
+
+        self.assertTrue(parsed.available)
+        self.assertEqual(parsed.perspective_response_set, attempt.perspective_response_set)
+        self.assertEqual(parsed.unresolved_tension_set, attempt.unresolved_tension_set)
+        self.assertEqual(parsed.resolved_intention_delta, "add rollback caveat")
 
     def test_load_self_negotiation_sop_from_path(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

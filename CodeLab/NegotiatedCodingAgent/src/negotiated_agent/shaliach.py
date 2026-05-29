@@ -114,6 +114,44 @@ class ShaliachSelfNegotiationRecord:
   + [authority_boundary] is {self.authority_boundary}"""
 
 
+@dataclass(frozen=True)
+class LiveShaliachSelfNegotiationAttempt:
+    attempt_id: str
+    subject_ref: str
+    baseline_self_negotiation_ref: str
+    live_status: str
+    provider: str
+    model_ref: str
+    perspective_response_set: tuple[str, ...] = ()
+    resolved_intention_delta: str = "none"
+    unresolved_tension_set: tuple[str, ...] = ()
+    failure_reason: str = "none"
+    authority_boundary: str = "live_shaliach_review_not_manager_approval"
+
+    @property
+    def available(self) -> bool:
+        return self.live_status == "available"
+
+    def to_sop(self) -> str:
+        responses = "\n".join(f"  + [perspective_response] is {response}" for response in self.perspective_response_set)
+        tensions = "\n".join(f"  + [unresolved_tension] is {tension}" for tension in self.unresolved_tension_set)
+        if not responses:
+            responses = "  + [perspective_response] is none"
+        if not tensions:
+            tensions = "  + [unresolved_tension] is none"
+        return f"""& [LiveShaliachSelfNegotiationAttempt {self.attempt_id}] is optional live-model Shaliach self-negotiation evidence
+  + [subject_ref] is {self.subject_ref}
+  + [baseline_self_negotiation_ref] is {self.baseline_self_negotiation_ref}
+  + [live_status] is {self.live_status}
+  + [provider] is {self.provider}
+  + [model_ref] is {self.model_ref}
+{responses}
+  + [resolved_intention_delta] is {self.resolved_intention_delta}
+{tensions}
+  + [failure_reason] is {self.failure_reason}
+  + [authority_boundary] is {self.authority_boundary}"""
+
+
 def build_shaliach_self_negotiation_record(
     *,
     negotiation_id: str,
@@ -165,6 +203,25 @@ def parse_shaliach_self_negotiation_sop(text: str) -> ShaliachSelfNegotiationRec
         resolved_intention=_first_sop_field(text, "resolved_intention"),
         perspective_records=_parse_self_negotiation_perspectives(text),
         unresolved_tension_set=_parse_self_negotiation_tensions(text),
+        authority_boundary=_first_sop_field(text, "authority_boundary"),
+    )
+
+
+def parse_live_shaliach_self_negotiation_attempt_sop(text: str) -> LiveShaliachSelfNegotiationAttempt:
+    record_match = re.search(r"& \[LiveShaliachSelfNegotiationAttempt (?P<id>[^\]]+)\]", text)
+    if not record_match:
+        raise ValueError("LiveShaliachSelfNegotiationAttempt header not found")
+    return LiveShaliachSelfNegotiationAttempt(
+        attempt_id=record_match.group("id"),
+        subject_ref=_first_sop_field(text, "subject_ref"),
+        baseline_self_negotiation_ref=_first_sop_field(text, "baseline_self_negotiation_ref"),
+        live_status=_first_sop_field(text, "live_status"),
+        provider=_first_sop_field(text, "provider"),
+        model_ref=_first_sop_field(text, "model_ref"),
+        perspective_response_set=_drop_none_fields(_all_sop_fields(text, "perspective_response")),
+        resolved_intention_delta=_first_sop_field(text, "resolved_intention_delta"),
+        unresolved_tension_set=_drop_none_fields(_all_sop_fields(text, "unresolved_tension")),
+        failure_reason=_first_sop_field(text, "failure_reason"),
         authority_boundary=_first_sop_field(text, "authority_boundary"),
     )
 
@@ -535,6 +592,17 @@ def _first_sop_field(text: str, field: str) -> str:
     if not match:
         raise ValueError(f"{field} field not found")
     return match.group("value")
+
+
+def _all_sop_fields(text: str, field: str) -> tuple[str, ...]:
+    return tuple(
+        match.group("value")
+        for match in re.finditer(rf"^\s*\+ \[{re.escape(field)}\] is (?P<value>.*)$", text, flags=re.MULTILINE)
+    )
+
+
+def _drop_none_fields(values: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(value for value in values if value and value != "none")
 
 
 def _split_csv_field(value: str) -> tuple[str, ...]:
