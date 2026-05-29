@@ -2427,7 +2427,7 @@
 
 & [WorkSliceDetail S172_spec_audit_refresh_after_run_local_review] is a specification audit slice
   + [slice_id] is S172_spec_audit_refresh_after_run_local_review
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after run-local output review CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names run-local output review support and chooses next gap
@@ -2435,3 +2435,16 @@
   + [support_status] is prepared
   + [dependency_set] is S171_long_run_checkpoint_after_run_local_review_cli
   + [known_risks] is overstating merge eligibility as manual merge packet generation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T00:28:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats run-local review and merge eligibility as support and recommends manual merge draft bridge design
+  + [completed_work_review] is support_delta verified eligibility support remains non-mutating; requirement_delta next step is bridge eligible run-local outputs to manual merge packet draft inputs
+
+& [WorkSliceDetail S173_run_local_to_merge_packet_bridge_design] is a coordination runtime design slice
+  + [slice_id] is S173_run_local_to_merge_packet_bridge_design
+  + [slice_status] is open
+  + [scope] is design non-mutating bridge from eligible run-local outputs into manual merge packet draft inputs
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names eligibility inputs accepted file map draft boundary and no apply mutation
+  + [completion_criteria] is design distinguishes merge packet draft inputs from manual merge packet issuance and apply mutation
+  + [support_status] is prepared
+  + [dependency_set] is S172_spec_audit_refresh_after_run_local_review
+  + [known_risks] is bridge being mistaken for target workspace application

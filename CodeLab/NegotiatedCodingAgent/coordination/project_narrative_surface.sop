@@ -1395,3 +1395,10 @@
   + [run_root] is runs\20260529T182207Z
   + [current_frontier] is S172_spec_audit_refresh_after_run_local_review
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S172_spec_audit_refresh_after_run_local_review] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S172_spec_audit_refresh_after_run_local_review
+  + [implemented_capability] is spec_implementation_status.sop now recognizes run-local output review CLI and 131-test checkpoint as scaffold support
+  + [current_frontier] is S173_run_local_to_merge_packet_bridge_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
