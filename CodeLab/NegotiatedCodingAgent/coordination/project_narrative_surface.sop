@@ -2568,3 +2568,11 @@
   + [proof_ref] is coordination/narrative_coverage_report.sop, coordination/narrative_stale_check.sop, coordination/narrative_coverage_update_record.sop
   + [current_frontier] is S294_live_shaliach_self_negotiation_boundary_design
   + [narrative_role] is narrative_memory and live_model_gap_transition update
+
+
+& [LongRunNarrativeUpdate S294_live_shaliach_self_negotiation_boundary_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S294_live_shaliach_self_negotiation_boundary_design
+  + [implemented_capability] is live_shaliach_self_negotiation_boundary_design.sop defines optional live Shaliach overlay attempts with unavailable fallback while deterministic self-negotiation remains baseline
+  + [proof_ref] is coordination/live_shaliach_self_negotiation_boundary_design.sop
+  + [current_frontier] is S295_live_shaliach_attempt_records
+  + [narrative_role] is live_model_gap and shaliach_runtime update

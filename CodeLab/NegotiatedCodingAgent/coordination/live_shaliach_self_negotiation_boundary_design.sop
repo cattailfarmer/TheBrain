@@ -1,0 +1,59 @@
+& [LiveShaliachSelfNegotiationBoundaryDesign] is the design boundary for live-model Shaliach internal negotiation
+  @ [created_at] 2026-05-30T17:12:00Z
+  @ [triggering_slice] S294_live_shaliach_self_negotiation_boundary_design
+  @ [related_spec] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_code] src/negotiated_agent/shaliach.py
+  @ [related_code] src/negotiated_agent/llm.py
+  @ [related_probe] coordination/openai_health.sop
+  @ [related_route] coordination/live_route_config_draft.sop
+
+  + [problem] is Shaliach self-negotiation is currently deterministic scaffold evidence rather than live model-negotiated counsel
+  + [problem] is local serving remains unavailable so live Shaliach integration must not block dry-run proof or pretend live deliberation occurred
+  + [decision] is add live-ready Shaliach self-negotiation as an optional overlay on top of deterministic scaffold records
+  + [decision] is deterministic ShaliachSelfNegotiationRecord remains the required baseline artifact for every layer
+  + [decision] is live Shaliach perspective records may be added only when endpoint health is available and route config names a Shaliach provider/model
+  + [decision] is live failures degrade to deterministic scaffold status with explicit live_status blocked_or_unavailable
+  + [authority_boundary] is live_ready_boundary_not_live_deliberation_proof
+
+& [LiveInputPacket] is the minimum prompt evidence for live Shaliach internal negotiation
+  + [input] is subject_ref
+  + [input] is context_boundary
+  + [input] is ShaliachFinding fields and severity/action/confidence
+  + [input] is deterministic perspective_set and proposed_response_set
+  + [input] is protocol activation refs where available
+  + [input] is combined validation or checkpoint proof ref when the subject is a continuation decision
+  + [non_input] is raw hidden chain-of-thought
+  + [authority_boundary] is prompt_packet_not_private_reasoning_dump
+
+& [LiveOutputBoundary] is the required shape of live Shaliach responses
+  + [output] is live_status available, unavailable, failed, or skipped_by_policy
+  + [output] is model_ref
+  + [output] is perspective_response legal_counsel
+  + [output] is perspective_response protocol_officer
+  + [output] is perspective_response failure_advocate
+  + [output] is perspective_response purpose_guardian
+  + [output] is resolved_intention_delta
+  + [output] is unresolved_tension_set
+  + [output] is authority_boundary live_shaliach_review_not_manager_approval
+  + [non_output] is final code acceptance
+
+& [FallbackPolicy] is the blocked-safe behavior while local serving is unavailable
+  + [condition] is OpenAI-compatible health unavailable or Ollama unavailable
+  + [behavior] is emit deterministic ShaliachSelfNegotiationRecord exactly as today
+  + [behavior] is optionally emit LiveShaliachSelfNegotiationAttempt with live_status unavailable
+  + [behavior] is do not change ShaliachFinding severity based on missing live serving
+  + [behavior] is keep long-run checkpoint ready_for_continuation when all deterministic proof gates pass
+  + [authority_boundary] is missing_live_serving_not_protocol_failure
+
+& [ImplementationPlan] is the next staged build path
+  + [slice_1] is add LiveShaliachSelfNegotiationAttempt record type and parser with unavailable/failed/available statuses
+  + [slice_2] is add pure prompt packet builder from ShaliachSelfNegotiationRecord and ShaliachFinding fields
+  + [slice_3] is add CLI preview that writes unavailable attempt when endpoint health is not available
+  + [slice_4] is add optional orchestrator hook gated by config and endpoint health
+  + [slice_5] is later replace deterministic perspective responses with live model responses only when local serving is verified
+
+& [AcceptanceCriteria] is the proof required before claiming live Shaliach readiness
+  + [criterion] is tests prove unavailable endpoint writes unavailable attempt and preserves deterministic self-negotiation record
+  + [criterion] is tests prove live-ready prompt packet excludes hidden reasoning and includes protocol/proof refs
+  + [criterion] is tests prove live attempt status cannot be confused with Manager approval or Shaliach clearance
+  + [criterion] is live health unavailable remains non-gating for deterministic long-run checkpoint proof

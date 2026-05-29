@@ -206,6 +206,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/conversation_frontier_lifecycle_boundary_design.sop` separates active work frontier from transient run lifecycle state. `current_frontier` should remain the slice or explicit frontier a future worker resumes from; dry-run milestones should move to a lifecycle field so narrative stale checks do not mistake a run completion sentence for the active work frontier.
 
+`coordination/live_shaliach_self_negotiation_boundary_design.sop` defines the next live-model bridge for Shaliach. Deterministic self-negotiation records remain the baseline evidence while endpoint health is unavailable; live Shaliach attempts must be explicit overlay artifacts with unavailable/failed/available status and must not imply Manager approval, final acceptance, or hidden chain-of-thought capture.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:
