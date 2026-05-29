@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 74
+  + [job_notice_revision] is 75
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -92,7 +92,8 @@
     S67_merge_review_decision_surface |
     S68_spec_audit_refresh_after_programmer_execution |
     S69_manual_merge_packet_policy |
-    S70_manual_merge_packet_records
+    S70_manual_merge_packet_records |
+    S71_manual_merge_packet_dry_run_generation
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1034,7 +1035,7 @@
 
 & [WorkSliceDetail S70_manual_merge_packet_records] is a Programmer swarm implementation slice
   + [slice_id] is S70_manual_merge_packet_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure ManualMergePacket and RollbackPlan record types with SOP emitters and path checks
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing packet SOP preserves source refs, accepted file map, rollback plan, and authority boundary
@@ -1042,3 +1043,16 @@
   + [support_status] is prepared
   + [dependency_set] is S69_manual_merge_packet_policy
   + [known_risks] is accidentally implementing file writes before approval policy is executable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:00:00Z, proof_ref tests passed with 54 tests, result_summary added ManualMergePacket RollbackPlan records and target path containment checks
+  + [completed_work_review] is support_delta verified merge packet can be represented without workspace mutation; requirement_delta orchestrator does not yet emit a dry-run packet
+
+& [WorkSliceDetail S71_manual_merge_packet_dry_run_generation] is a Programmer swarm implementation slice
+  + [slice_id] is S71_manual_merge_packet_dry_run_generation
+  + [slice_status] is open
+  + [scope] is generate a non-applying manual merge packet artifact from no-conflict run-local outputs when merge review is ready
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing blocked conflicts suppress packet generation and no-conflict runs can emit manual_merge_packet.sop
+  + [completion_criteria] is packet generation remains non-mutating and records rollback requirements
+  + [support_status] is prepared
+  + [dependency_set] is S70_manual_merge_packet_records
+  + [known_risks] is generating packets too eagerly before conflict resolution exists

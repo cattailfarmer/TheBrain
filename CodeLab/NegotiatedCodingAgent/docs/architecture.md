@@ -107,6 +107,8 @@ Before merge, `merge_conflict_ledger.sop` records same-file overlaps across isol
 
 `coordination/manual_merge_packet_policy.sop` defines the next boundary before target-workspace mutation: a future merge packet must carry source assignment refs, accepted file maps, rejected output refs, rollback instructions, Manager acceptance, Shaliach review, and verification evidence.
 
+`negotiated_agent.merge_packet` provides the pure record forms for that packet and rollback plan, plus target-path containment checks. These records still do not apply changes; they make a future apply command prove its evidence first.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

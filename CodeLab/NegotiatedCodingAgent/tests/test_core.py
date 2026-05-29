@@ -29,6 +29,13 @@ from negotiated_agent.mailbox import (
 )
 from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
+from negotiated_agent.merge_packet import (
+    AcceptedFileMapEntry,
+    ManualMergePacket,
+    RollbackPlan,
+    RollbackPlanEntry,
+    ensure_target_path_within_workspace,
+)
 from negotiated_agent.multi_programmer import (
     build_merge_conflict_ledger,
     build_merge_review_input,
@@ -436,6 +443,50 @@ class FileChangeSurfaceTests(unittest.TestCase):
             self.assertIn("implementation/app.py", surface)
             self.assertIn("code.package.sop", surface)
             self.assertIn(records[0].solution_uuid, index)
+
+
+class ManualMergePacketTests(unittest.TestCase):
+    def test_manual_merge_packet_preserves_refs_and_boundary(self) -> None:
+        packet = ManualMergePacket(
+            packet_id="MMP001",
+            source_run_root="runs/20260529T000000Z",
+            target_workspace_root="C:/Project/TheBrain",
+            accepted_files=(
+                AcceptedFileMapEntry(
+                    source_ref="implementation/WS001.ProgrammerA/app.py",
+                    target_path="app.py",
+                    source_assignment_ref="WS001.ProgrammerA.execution_result.sop",
+                ),
+            ),
+            rejected_output_refs=("WS002.ProgrammerB.execution_result.sop",),
+            conflict_resolution_refs=("merge_conflict_ledger.sop#app.py",),
+            rollback_plan=RollbackPlan(
+                entries=(
+                    RollbackPlanEntry(
+                        target_path="app.py",
+                        reverse_operation="restore_snapshot",
+                        pre_application_snapshot_ref="snapshots/app.py.before",
+                    ),
+                ),
+                verification_command="powershell -File scripts/test.ps1",
+            ),
+            manager_acceptance_ref="merge.manager_review.sop",
+            shaliach_review_ref="merge.shaliach_review.sop",
+            verification_command="powershell -File scripts/test.ps1",
+        )
+        sop = packet.to_sop()
+        self.assertIn("ManualMergePacket MMP001", sop)
+        self.assertIn("manual_merge_packet_not_workspace_application", sop)
+        self.assertIn("AcceptedFileMapEntry app.py", sop)
+        self.assertIn("RollbackPlanEntry app.py", sop)
+        self.assertIn("WS002.ProgrammerB.execution_result.sop", sop)
+
+    def test_target_path_check_rejects_workspace_escape(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.assertEqual(ensure_target_path_within_workspace(root, "app.py"), root / "app.py")
+            with self.assertRaisesRegex(ValueError, "escapes workspace"):
+                ensure_target_path_within_workspace(root, "../outside.py")
 
 
 class MailboxCoordinationTests(unittest.TestCase):
