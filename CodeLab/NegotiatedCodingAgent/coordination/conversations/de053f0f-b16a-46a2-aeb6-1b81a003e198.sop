@@ -845,7 +845,9 @@
   + [last_proof] is run 20260529T203809Z wrote run_manifest.sop
   + [completed_slice] is S248_long_run_checkpoint_after_cross_artifact_cli
   + [last_proof] is long-run checkpoint passed 233 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after cross-artifact CLI
-  + [next_recommended_slice] is S249_spec_audit_refresh_after_cross_artifact_cli
+  + [completed_slice] is S249_spec_audit_refresh_after_cross_artifact_cli
+  + [last_proof] is spec audit refreshed after Shaliach cross-artifact inspection CLI and checkpoint
+  + [next_recommended_slice] is S250_cross_artifact_checkpoint_probe_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

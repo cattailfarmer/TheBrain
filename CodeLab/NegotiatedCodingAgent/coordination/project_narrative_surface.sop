@@ -2136,3 +2136,11 @@
   + [run_root] is runs\20260529T203809Z
   + [current_frontier] is S249_spec_audit_refresh_after_cross_artifact_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S249_spec_audit_refresh_after_cross_artifact_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S249_spec_audit_refresh_after_cross_artifact_cli
+  + [implemented_capability] is spec audit now names Shaliach cross-artifact consistency CLI and preserves deterministic-not-semantic-validation boundary
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S250_cross_artifact_checkpoint_probe_design
+  + [narrative_role] is specification_audit and proof_planning update
