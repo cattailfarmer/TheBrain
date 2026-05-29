@@ -373,6 +373,7 @@
   + [ready_capability] is snapshot materialization helper writes rollback evidence under run root for existing targets and records create-new operations without applying generated code
   + [ready_capability] is mutation preflight CLI writes snapshot_materialization.sop after ready gates while preserving no target patch application
   + [ready_capability] is specification implementation status audit recognizes snapshot materialization support without claiming target patch application
+  + [ready_capability] is long_run_checkpoint.sop records post-S103 68-test suite, dry-run, model inventory, non-gating endpoint health, and route draft status
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -447,9 +448,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S103_long_run_checkpoint_after_snapshot_preflight
-  + [next_reason] is snapshot preflight support and audit should be captured in a fresh checkpoint
-  + [sleep_run_candidate] is continue S103 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S104_operator_acknowledged_apply_writer
+  + [next_reason] is snapshot evidence and preflight gates are ready enough to implement explicit-acknowledgement target writes in temp-workspace tests
+  + [sleep_run_candidate] is continue S104 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -780,6 +781,15 @@
 
 & [RunNarrativeUpdate 20260529T161838Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T161838Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T162459Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T162459Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
