@@ -3207,7 +3207,7 @@
 
 & [WorkSliceDetail S232_shaliach_self_negotiation_records] is a coordination runtime implementation slice
   + [slice_id] is S232_shaliach_self_negotiation_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ShaliachSelfNegotiationRecord and perspective/tension records
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover perspective serialization resolved advisory/rework statuses tensions and authority boundary
@@ -3215,3 +3215,16 @@
   + [support_status] is prepared
   + [dependency_set] is S231_shaliach_self_negotiation_record_design
   + [known_risks] is records being treated as real model self-negotiation rather than scaffold
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:35:00Z, proof_ref tests passed with 209 tests, result_summary added ShaliachSelfNegotiationRecord perspective and tension records with deterministic status rules
+  + [completed_work_review] is support_delta verified records serialize perspectives proposed responses unresolved tensions and authority boundary; requirement_delta next step is add deterministic builder for Shaliach self-negotiation records
+
+& [WorkSliceDetail S233_shaliach_self_negotiation_builder] is a coordination runtime implementation slice
+  + [slice_id] is S233_shaliach_self_negotiation_builder
+  + [slice_status] is open
+  + [scope] is add deterministic builder for Shaliach self-negotiation records from finding context and perspective inputs
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover default perspective roster advisory and blocking tension synthesis and SOP output
+  + [completion_criteria] is runtime code can create Shaliach self-negotiation evidence without hand-assembling records
+  + [support_status] is prepared
+  + [dependency_set] is S232_shaliach_self_negotiation_records
+  + [known_risks] is builder appearing to simulate real internal deliberation rather than deterministic review scaffolding

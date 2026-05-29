@@ -27,6 +27,83 @@ class ShaliachPerspectiveRecord:
 
 
 @dataclass(frozen=True)
+class ShaliachSelfNegotiationPerspective:
+    perspective: str
+    intention: str
+    purpose: str
+    proposed_response: str
+
+    def to_sop_lines(self) -> list[str]:
+        return [
+            f"    + [perspective {self.perspective}] is active",
+            f"      + [intention] is {self.intention}",
+            f"      + [purpose] is {self.purpose}",
+            f"      + [proposed_response] is {self.proposed_response}",
+        ]
+
+
+@dataclass(frozen=True)
+class ShaliachSelfNegotiationTension:
+    tension: str
+    severity: str
+    reason: str
+
+    @property
+    def blocks_resolution(self) -> bool:
+        return self.severity == "blocking"
+
+    def to_sop_line(self) -> str:
+        return f"    + [unresolved_tension {self.severity}] is {self.tension}: {self.reason}"
+
+
+@dataclass(frozen=True)
+class ShaliachSelfNegotiationRecord:
+    negotiation_id: str
+    subject_ref: str
+    intention_statement: str
+    purpose_statement: str
+    context_boundary: str
+    perspective_set: tuple[str, ...]
+    proposed_response_set: tuple[str, ...]
+    resolved_intention: str
+    perspective_records: tuple[ShaliachSelfNegotiationPerspective, ...] = ()
+    unresolved_tension_set: tuple[ShaliachSelfNegotiationTension, ...] = ()
+    authority_boundary: str = "deterministic_scaffold_not_live_internal_deliberation"
+
+    @property
+    def status(self) -> str:
+        if any(tension.blocks_resolution for tension in self.unresolved_tension_set):
+            return "rework_required"
+        if self.unresolved_tension_set:
+            return "advisory"
+        return "resolved"
+
+    def to_sop(self) -> str:
+        perspectives = ", ".join(self.perspective_set)
+        responses = ", ".join(self.proposed_response_set)
+        perspective_lines = _join_record_lines(record.to_sop_lines() for record in self.perspective_records)
+        tension_lines = "\n".join(tension.to_sop_line() for tension in self.unresolved_tension_set)
+        if not perspective_lines:
+            perspective_lines = "    + [perspective_records] is none"
+        if not tension_lines:
+            tension_lines = "    + [unresolved_tension_set] is none"
+        return f"""& [ShaliachSelfNegotiationRecord {self.negotiation_id}] is deterministic Shaliach intention refinement evidence
+  + [subject_ref] is {self.subject_ref}
+  + [status] is {self.status}
+  + [intention_statement] is {self.intention_statement}
+  + [purpose_statement] is {self.purpose_statement}
+  + [context_boundary] is {self.context_boundary}
+  + [perspective_set] is {perspectives}
+  + [proposed_response_set] is {responses}
+  + [resolved_intention] is {self.resolved_intention}
+  + [perspective_count] is {len(self.perspective_records)}
+  + [tension_count] is {len(self.unresolved_tension_set)}
+{perspective_lines}
+{tension_lines}
+  + [authority_boundary] is {self.authority_boundary}"""
+
+
+@dataclass(frozen=True)
 class ShaliachFinding:
     finding: str
     severity: str
@@ -179,6 +256,13 @@ def _thin_evidence_fields(ledgers: NegotiatedLedgers) -> list[str]:
 def _has_director_evidence(values: list[str]) -> bool:
     default_prefixes = ("package_writer:", "manager_settlement:", "manager_gate:", "negotiation_log:")
     return any(":" in value and not value.startswith(default_prefixes) for value in values)
+
+
+def _join_record_lines(lines_groups) -> str:
+    lines: list[str] = []
+    for group in lines_groups:
+        lines.extend(group)
+    return "\n".join(lines)
 
 
 def _perspective_records(finding: ShaliachFinding) -> tuple[ShaliachPerspectiveRecord, ...]:

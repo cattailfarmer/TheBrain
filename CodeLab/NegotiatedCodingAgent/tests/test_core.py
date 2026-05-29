@@ -131,7 +131,12 @@ from negotiated_agent.run_local_merge_draft_cli import main as run_local_merge_d
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
-from negotiated_agent.shaliach import review_layer_negotiation
+from negotiated_agent.shaliach import (
+    ShaliachSelfNegotiationPerspective,
+    ShaliachSelfNegotiationRecord,
+    ShaliachSelfNegotiationTension,
+    review_layer_negotiation,
+)
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import (
@@ -5801,6 +5806,77 @@ class ProtocolRegistryTests(unittest.TestCase):
 
 
 class ShaliachRuntimeTests(unittest.TestCase):
+    def test_self_negotiation_record_serializes_perspectives_and_tensions(self) -> None:
+        record = ShaliachSelfNegotiationRecord(
+            negotiation_id="shaliach-001",
+            subject_ref="application_layer_package",
+            intention_statement="preserve objective integrity",
+            purpose_statement="advise and enforce SOP obligations",
+            context_boundary="application negotiation",
+            perspective_set=("legal_counsel", "protocol_officer", "failure_advocate", "purpose_guardian"),
+            proposed_response_set=("approve", "request rework"),
+            resolved_intention="request focused ledger repair before approval",
+            perspective_records=(
+                ShaliachSelfNegotiationPerspective(
+                    perspective="legal_counsel",
+                    intention="preserve duty of care",
+                    purpose="check obligation fit",
+                    proposed_response="request rework",
+                ),
+            ),
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="ledger evidence is present but thin",
+                    severity="advisory",
+                    reason="evidence can improve without blocking the slice",
+                ),
+            ),
+        )
+        sop = record.to_sop()
+        self.assertEqual(record.status, "advisory")
+        self.assertIn("ShaliachSelfNegotiationRecord shaliach-001", sop)
+        self.assertIn("perspective legal_counsel", sop)
+        self.assertIn("proposed_response] is request rework", sop)
+        self.assertIn("unresolved_tension advisory", sop)
+        self.assertIn("deterministic_scaffold_not_live_internal_deliberation", sop)
+
+    def test_self_negotiation_record_requires_rework_for_blocking_tension(self) -> None:
+        record = ShaliachSelfNegotiationRecord(
+            negotiation_id="shaliach-blocking",
+            subject_ref="code_layer_package",
+            intention_statement="protect execution boundary",
+            purpose_statement="prevent unapproved mutation",
+            context_boundary="code negotiation",
+            perspective_set=("protocol_officer", "failure_advocate"),
+            proposed_response_set=("pause",),
+            resolved_intention="pause until approval exists",
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="missing Manager approval",
+                    severity="blocking",
+                    reason="mutation cannot proceed without authority",
+                ),
+            ),
+        )
+        self.assertEqual(record.status, "rework_required")
+        self.assertIn("status] is rework_required", record.to_sop())
+
+    def test_self_negotiation_record_resolves_without_tensions(self) -> None:
+        record = ShaliachSelfNegotiationRecord(
+            negotiation_id="shaliach-resolved",
+            subject_ref="subsystem_layer_package",
+            intention_statement="confirm lineage continuity",
+            purpose_statement="support descent",
+            context_boundary="subsystem negotiation",
+            perspective_set=("purpose_guardian",),
+            proposed_response_set=("approve",),
+            resolved_intention="approve descent",
+        )
+        self.assertEqual(record.status, "resolved")
+        sop = record.to_sop()
+        self.assertIn("unresolved_tension_set] is none", sop)
+        self.assertIn("perspective_records] is none", sop)
+
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(
             "application",
