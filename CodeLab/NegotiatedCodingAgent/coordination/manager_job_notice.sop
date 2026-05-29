@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 105
+  + [job_notice_revision] is 106
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -123,7 +123,8 @@
     S98_spec_audit_refresh_after_apply_preflight |
     S99_long_run_checkpoint_after_apply_preflight |
     S100_apply_snapshot_plan_writer |
-    S101_apply_cli_snapshot_preflight_artifact
+    S101_apply_cli_snapshot_preflight_artifact |
+    S102_spec_audit_refresh_after_snapshot_preflight
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1468,7 +1469,7 @@
 
 & [WorkSliceDetail S101_apply_cli_snapshot_preflight_artifact] is an apply pipeline implementation slice
   + [slice_id] is S101_apply_cli_snapshot_preflight_artifact
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is have mutation preflight command materialize snapshot evidence after successful gates while still refusing target patch application
   + [target_files] is src/negotiated_agent/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover apply CLI writes snapshot evidence for existing target files and still does not write accepted source files
@@ -1476,3 +1477,16 @@
   + [support_status] is prepared
   + [dependency_set] is S100_apply_snapshot_plan_writer
   + [known_risks] is materializing snapshots before preflight gates pass
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:31:00Z, proof_ref tests passed with 68 tests, result_summary apply mutation acknowledgement writes snapshot_materialization.sop after ready preflight while still performing no target patch application
+  + [completed_work_review] is support_delta verified snapshot evidence is integrated behind preflight gates; requirement_delta spec audit should reflect snapshot materialization support and remaining writer/rollback gaps
+
+& [WorkSliceDetail S102_spec_audit_refresh_after_snapshot_preflight] is a documentation and planning slice
+  + [slice_id] is S102_spec_audit_refresh_after_snapshot_preflight
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after snapshot materialization support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit recognizes snapshot evidence support while target patch writer and rollback executor remain absent
+  + [support_status] is prepared
+  + [dependency_set] is S101_apply_cli_snapshot_preflight_artifact
+  + [known_risks] is treating snapshots as proof that source files were applied

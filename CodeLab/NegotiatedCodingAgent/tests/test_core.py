@@ -744,7 +744,9 @@ class ApplyPlanTests(unittest.TestCase):
                 2,
             )
             self.assertIn("ApplyMutationPreflight", (run_root / "apply_mutation_preflight.sop").read_text(encoding="utf-8"))
+            self.assertIn("SnapshotMaterializationResult", (run_root / "snapshot_materialization.sop").read_text(encoding="utf-8"))
             self.assertIn("mutation_performed] is false", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+            self.assertIn("snapshot_materialization] is written", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
             self.assertFalse((target_root / "app.py").exists())
 
     def test_snapshot_materialization_copies_existing_targets_only(self) -> None:

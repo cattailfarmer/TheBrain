@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .apply_preflight import build_apply_mutation_preflight
+from .apply_preflight import build_apply_mutation_preflight, materialize_snapshot_evidence
 from .apply_plan import build_dry_run_apply_artifacts
 from .merge_packet import AcceptedFileMapEntry, ManualMergePacket, RollbackPlan, ensure_target_path_within_workspace
 from .writer import write_text
@@ -78,11 +78,15 @@ def main(argv: list[str] | None = None) -> int:
             packet = load_manual_merge_packet(run_root / "manual_merge_packet.sop", target_workspace_root)
             preflight = build_apply_mutation_preflight(run_root, target_workspace_root, packet)
             write_text(run_root / "apply_mutation_preflight.sop", preflight.to_sop())
+            if preflight.status == "ready_for_mutation_implementation":
+                snapshots = materialize_snapshot_evidence(run_root, target_workspace_root, packet)
+                write_text(run_root / "snapshot_materialization.sop", snapshots.to_sop())
             write_text(
                 run_root / "apply_command_log.sop",
                 "& [ApplyCommandLog] is a mutation preflight command log\n"
                 f"  + [status] is {preflight.status}\n"
                 f"  + [reason] is {preflight.reason}\n"
+                f"  + [snapshot_materialization] is {'written' if preflight.status == 'ready_for_mutation_implementation' else 'not_run'}\n"
                 "  + [mutation_performed] is false\n"
                 "  + [authority_boundary] is mutation_preflight_not_mutation_command\n",
             )
