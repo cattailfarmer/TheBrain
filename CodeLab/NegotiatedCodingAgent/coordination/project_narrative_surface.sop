@@ -2519,3 +2519,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
   + [narrative_role] is specification_audit and narrative_memory update
+
+
+& [LongRunNarrativeUpdate S289_narrative_coverage_after_lifecycle_frontier_checkpoint] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
+  + [proof_result] is narrative coverage report covered stale-check current and update record deferred because no stale claims remain
+  + [proof_ref] is coordination/narrative_coverage_report.sop, coordination/narrative_stale_check.sop, coordination/narrative_coverage_update_record.sop
+  + [current_frontier] is S290_conversation_upsert_anchor_fields
+  + [narrative_role] is narrative_memory and conversation_surface update
