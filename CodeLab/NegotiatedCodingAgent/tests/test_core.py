@@ -94,6 +94,7 @@ from negotiated_agent.narrative_append import (
     parse_manager_narrative_append_approval_sop,
     parse_shaliach_narrative_append_clearance_sop,
 )
+from negotiated_agent.narrative_append_cli import main as narrative_append_cli_main
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
@@ -5024,6 +5025,105 @@ class NarrativeAppendReviewTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_shaliach_narrative_append_clearance_sop("& [WrongRecord] is no\n")
 
+    def test_narrative_append_cli_plan_writes_ready_result_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S207",))
+            out_path = coordination / "narrative_append_result.sop"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_append_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--result-id",
+                            "result-cli",
+                            "--expected-surface-guard",
+                            narrative_surface_guard(original),
+                            "--out",
+                            str(out_path),
+                        ]
+                    ),
+                    0,
+                )
+            written = out_path.read_text(encoding="utf-8")
+            self.assertIn("NarrativeAppendResult result-cli", written)
+            self.assertIn("append_status] is ready_for_append", written)
+            self.assertIn("append_result_not_frontier_advancement", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_plan_writes_blocked_result_for_stale_guard(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S207",))
+            out_path = coordination / "narrative_append_result.sop"
+            narrative_append_cli_main(
+                [
+                    "--project-root",
+                    str(root),
+                    "--expected-surface-guard",
+                    "size:1",
+                    "--out",
+                    str(out_path),
+                ]
+            )
+            written = out_path.read_text(encoding="utf-8")
+            self.assertIn("append_status] is blocked", written)
+            self.assertIn("blocked_reason] is narrative_surface_guard_mismatch", written)
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_plan_rejects_output_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            original = "& [OriginArc] is origin\n"
+            (coordination / "project_narrative_surface.sop").write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S207",))
+            out_path = coordination / "narrative_append_result.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--expected-surface-guard",
+                        narrative_surface_guard(original),
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+
+    def test_narrative_append_cli_plan_rejects_malformed_review_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            original = "& [OriginArc] is origin\n"
+            (coordination / "project_narrative_surface.sop").write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S207",))
+            (coordination / "manager_narrative_append_approval.sop").write_text("& [WrongRecord] is no\n", encoding="utf-8")
+            with self.assertRaises(ValueError):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--expected-surface-guard",
+                        narrative_surface_guard(original),
+                    ]
+                )
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",
@@ -5061,6 +5161,20 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             clearance_status=status,
             checked_protocols=("SOP",),
             required_rework=required_rework,
+        )
+
+    def _write_append_cli_artifacts(self, coordination: Path, appended_updates: tuple[str, ...]) -> None:
+        (coordination / "narrative_coverage_update_record.sop").write_text(
+            self._update_record(appended_updates).to_sop(),
+            encoding="utf-8",
+        )
+        (coordination / "manager_narrative_append_approval.sop").write_text(
+            self._manager_approval().to_sop(),
+            encoding="utf-8",
+        )
+        (coordination / "shaliach_narrative_append_clearance.sop").write_text(
+            self._shaliach_clearance().to_sop(),
+            encoding="utf-8",
         )
 
 

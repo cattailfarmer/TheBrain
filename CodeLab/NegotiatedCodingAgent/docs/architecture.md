@@ -294,6 +294,8 @@ The frontier application helper now performs that surface write under exact prev
 
 The parser layer for that wrapper is implemented now. It extracts fields from `NarrativeCoverageUpdateRecord`, `ManagerNarrativeAppendApproval`, and `ShaliachNarrativeAppendClearance` SOP artifacts, and deliberately limits itself to field extraction plus header rejection.
 
+`negotiated_agent.narrative_append_cli` and `scripts/narrative-append.ps1` implement plan mode. They persist a `NarrativeAppendResult` from loaded artifacts and the supplied surface guard, while leaving apply mode as a later explicit boundary.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

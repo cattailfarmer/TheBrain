@@ -1692,3 +1692,11 @@
   + [proof_result] is tests passed with 183 tests
   + [current_frontier] is S207_reviewed_narrative_append_cli_plan
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S207_reviewed_narrative_append_cli_plan] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S207_reviewed_narrative_append_cli_plan
+  + [implemented_capability] is scripts/narrative-append.ps1 writes reviewed narrative append result evidence from loaded artifacts without narrative mutation
+  + [proof_result] is tests passed with 187 tests
+  + [current_frontier] is S208_reviewed_narrative_append_cli_apply
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

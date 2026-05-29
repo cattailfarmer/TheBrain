@@ -378,6 +378,16 @@ The reviewed append CLI is designed in `coordination/reviewed_narrative_append_c
 
 The parser slice has landed, but the shell wrapper has not. Narrative append still requires code-level orchestration or the later CLI slice.
 
+Write reviewed narrative append plan evidence:
+
+```powershell
+.\scripts\narrative-append.ps1 `
+  -ExpectedSurfaceGuard <guard> `
+  -ResultId <result-id>
+```
+
+This writes `coordination/narrative_append_result.sop` from existing update, Manager approval, and Shaliach clearance artifacts. It does not append to the narrative surface.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

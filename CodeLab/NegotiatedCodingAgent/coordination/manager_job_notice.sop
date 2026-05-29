@@ -2882,7 +2882,7 @@
 
 & [WorkSliceDetail S207_reviewed_narrative_append_cli_plan] is a coordination runtime implementation slice
   + [slice_id] is S207_reviewed_narrative_append_cli_plan
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add reviewed narrative append CLI plan mode that writes result evidence without mutation
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover artifact loading ready result blocked result output collision and no narrative mutation
@@ -2890,3 +2890,16 @@
   + [support_status] is prepared
   + [dependency_set] is S206_narrative_append_artifact_parsers
   + [known_risks] is plan mode being mistaken for applied narrative update
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:14:00Z, proof_ref tests passed with 187 tests, result_summary added reviewed narrative append CLI plan mode and wrapper
+  + [completed_work_review] is support_delta verified plan mode writes ready or blocked result evidence from loaded artifacts without mutating narrative; requirement_delta next step is add explicit reviewed append CLI apply mode
+
+& [WorkSliceDetail S208_reviewed_narrative_append_cli_apply] is a coordination runtime implementation slice
+  + [slice_id] is S208_reviewed_narrative_append_cli_apply
+  + [slice_status] is open
+  + [scope] is add reviewed narrative append CLI apply mode that appends only ready result evidence under guard
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover apply appends reviewed entries stale guard blocks output collision and result artifact captures post guard
+  + [completion_criteria] is operators can explicitly apply reviewed narrative append evidence through guarded CLI
+  + [support_status] is prepared
+  + [dependency_set] is S207_reviewed_narrative_append_cli_plan
+  + [known_risks] is apply mode being run on the live narrative surface without fresh guard

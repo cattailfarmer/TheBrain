@@ -198,6 +198,8 @@ The same module now includes `NarrativeAppendResult` and a pure `build_narrative
 
 The required artifact parsers now exist for `NarrativeCoverageUpdateRecord`, `ManagerNarrativeAppendApproval`, and `ShaliachNarrativeAppendClearance`, giving the future CLI an explicit SOP-loading boundary.
 
+`scripts/narrative-append.ps1` now exposes plan mode. It loads the update record, Manager approval, and Shaliach clearance artifacts, writes `coordination/narrative_append_result.sop`, and does not mutate the narrative surface.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
