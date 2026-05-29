@@ -76,7 +76,7 @@ from negotiated_agent.multi_programmer import (
     decide_merge_review,
     execute_assignment_output,
 )
-from negotiated_agent.narrative_coverage import compute_narrative_coverage
+from negotiated_agent.narrative_coverage import compute_narrative_coverage, compute_narrative_stale_check
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
@@ -4014,6 +4014,77 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("applied_status] is blocked_stale_frontier", result)
             self.assertEqual(surface_path.read_text(encoding="utf-8"), original)
             self.assertIn("blocked_stale_frontier", out.getvalue())
+
+    def test_narrative_stale_check_detects_latest_run_and_frontier_gaps(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            conversation_dir = coordination / "conversations"
+            runs = root / "runs" / "20260529T190511Z"
+            conversation_dir.mkdir(parents=True)
+            runs.mkdir(parents=True)
+            (coordination / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is pointer\n"
+                "  + [active_conversation_uuid] is convo-1\n"
+                "  + [conversation_surface_file] is coordination/conversations/convo-1.sop\n",
+                encoding="utf-8",
+            )
+            (conversation_dir / "convo-1.sop").write_text(
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S196_narrative_stale_check_records\n",
+                encoding="utf-8",
+            )
+            (coordination / "project_narrative_surface.sop").write_text(
+                "& [OriginArc] is origin\n"
+                "& [SpecificationArc] is spec\n"
+                "& [DecisionArc] is decision\n",
+                encoding="utf-8",
+            )
+            record = compute_narrative_stale_check(root, check_id="check-1")
+            sop = record.to_sop()
+            self.assertEqual(record.status, "stale_updates_recommended")
+            self.assertIn("latest run 20260529T190511Z", sop)
+            self.assertIn("current frontier S196_narrative_stale_check_records", sop)
+            self.assertIn("missing_arc] is ImplementationArc", sop)
+            self.assertIn("stale_check_record_not_narrative_rewrite", sop)
+
+    def test_narrative_stale_check_reports_current_when_references_exist(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            conversation_dir = coordination / "conversations"
+            runs = root / "runs" / "20260529T190511Z"
+            conversation_dir.mkdir(parents=True)
+            runs.mkdir(parents=True)
+            (coordination / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is pointer\n"
+                "  + [active_conversation_uuid] is convo-1\n"
+                "  + [conversation_surface_file] is coordination/conversations/convo-1.sop\n",
+                encoding="utf-8",
+            )
+            (conversation_dir / "convo-1.sop").write_text(
+                "& [ConversationSurface convo-1] is surface\n"
+                "  + [conversation_uuid] is convo-1\n"
+                "  + [current_frontier] is S196_narrative_stale_check_records\n",
+                encoding="utf-8",
+            )
+            (coordination / "project_narrative_surface.sop").write_text(
+                "& [OriginArc] is origin\n"
+                "& [SpecificationArc] is spec\n"
+                "& [DecisionArc] is decision\n"
+                "& [ImplementationArc] is implementation\n"
+                "& [ProofArc] is proof\n"
+                "& [FrontierArc] is frontier\n"
+                "& [NarrativeGapReport] is gaps\n"
+                "  + [run_root] is runs\\20260529T190511Z\n"
+                "  + [current_frontier] is S196_narrative_stale_check_records\n",
+                encoding="utf-8",
+            )
+            record = compute_narrative_stale_check(root, check_id="check-1")
+            self.assertEqual(record.status, "current")
+            self.assertEqual(record.missing_arcs, ())
+            self.assertEqual(record.stale_claims, ())
 
     def test_frontier_application_result_serializes_applied_and_blocked_outcomes(self) -> None:
         advancement = build_frontier_advancement_record(

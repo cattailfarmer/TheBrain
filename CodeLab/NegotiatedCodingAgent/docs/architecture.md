@@ -272,6 +272,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `coordination/narrative_coverage_stale_check_design.sop` defines the next narrative-memory boundary. It extends the existing artifact-presence coverage check into explicit stale-check records over narrative surface, manager notice, refined plan, active conversation surface, long-run checkpoint, and latest run manifest refs. The design keeps updates append-only.
 
+`NarrativeStaleCheckRecord` now recomputes expected narrative arcs, latest-run references, and active-frontier references from current files. It reports stale claims and recommended updates without rewriting the narrative surface.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

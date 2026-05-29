@@ -2739,7 +2739,7 @@
 
 & [WorkSliceDetail S196_narrative_stale_check_records] is a coordination runtime implementation slice
   + [slice_id] is S196_narrative_stale_check_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add NarrativeStaleCheckRecord and recompute helper over current surfaces
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover latest run missing reference frontier mismatch stale count missing arcs and boundary text
@@ -2747,3 +2747,16 @@
   + [support_status] is prepared
   + [dependency_set] is S195_narrative_coverage_stale_check_design
   + [known_risks] is overclaiming semantic narrative correctness from string checks
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:45:00Z, proof_ref tests passed with 156 tests, result_summary added NarrativeStaleCheckRecord and recompute helper
+  + [completed_work_review] is support_delta verified stale checks report missing arcs latest run and frontier references without mutating narrative; requirement_delta next step is explicit stale-check CLI writer
+
+& [WorkSliceDetail S197_narrative_stale_check_cli] is a coordination runtime implementation slice
+  + [slice_id] is S197_narrative_stale_check_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to write narrative_stale_check.sop
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover CLI write stale findings current status output collision and no narrative mutation
+  + [completion_criteria] is operators can write recomputed stale-check evidence without changing project narrative surface
+  + [support_status] is prepared
+  + [dependency_set] is S196_narrative_stale_check_records
+  + [known_risks] is CLI being mistaken for append/update mode

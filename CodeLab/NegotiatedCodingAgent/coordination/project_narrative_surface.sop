@@ -1604,3 +1604,11 @@
   + [implemented_capability] is narrative_coverage_stale_check_design.sop defines recomputable stale-check records and append-only narrative update boundary
   + [current_frontier] is S196_narrative_stale_check_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S196_narrative_stale_check_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S196_narrative_stale_check_records
+  + [implemented_capability] is NarrativeStaleCheckRecord recomputes expected arcs latest run references and active-frontier references without narrative mutation
+  + [proof_result] is tests passed with 156 tests
+  + [current_frontier] is S197_narrative_stale_check_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
