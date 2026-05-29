@@ -67,6 +67,8 @@ from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
+from negotiated_agent.worker_runner import build_worker_runner_preview
+from negotiated_agent.worker_runner_cli import main as worker_runner_cli_main
 from negotiated_agent.writer import write_implementation
 
 
@@ -1304,6 +1306,75 @@ class MailboxCoordinationTests(unittest.TestCase):
         self.assertIn("command_returncode] is 1", sop)
         self.assertIn("safe_resume_action] is inspect failure record and rerun tests", sop)
         self.assertIn("worker_failure_record_not_automatic_repair", sop)
+
+    def test_worker_runner_preview_drafts_leases_without_claiming(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            conversation_dir.mkdir(parents=True)
+            conversation = conversation_dir / "active.sop"
+            conversation.write_text(
+                "& [ConversationSurface] is test\n"
+                "  + [conversation_uuid] is active\n"
+                "  + [current_frontier] is S119_worker_runner_preview_cli\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is test\n"
+                "  + [active_conversation_uuid] is active\n"
+                "  + [conversation_surface_file] is coordination/conversations/active.sop\n",
+                encoding="utf-8",
+            )
+            first = publish_message(root, sender_uuid="manager", recipient_uuid="director_pool", kind="notice", subject="First", body="First body.")
+            second = publish_message(root, sender_uuid="manager", recipient_uuid="director_pool", kind="notice", subject="Second", body="Second body.")
+            advance_read_cursor(root, "director_pool", [first.message_id])
+            preview = build_worker_runner_preview(root, worker_uuid="worker-a", mailbox_uuid="director_pool", max_claims=2)
+            sop = preview.to_sop()
+            self.assertEqual(len(preview.proposed_leases), 1)
+            self.assertIn(second.message_id, sop)
+            self.assertNotIn(first.message_id, sop)
+            self.assertIn("lease_status] is preview", sop)
+            self.assertIn("worker_runner_preview_not_claim_or_cursor_update", sop)
+            self.assertFalse((root / "coordination" / "mailbox" / "director_pool" / "claims.sop").exists())
+
+    def test_worker_runner_preview_cli_writes_preview_to_stdout(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            conversation_dir = root / "coordination" / "conversations"
+            conversation_dir.mkdir(parents=True)
+            (conversation_dir / "active.sop").write_text(
+                "& [ConversationSurface] is test\n"
+                "  + [conversation_uuid] is active\n"
+                "  + [current_frontier] is S119_worker_runner_preview_cli\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "& [ActiveConversationPointer] is test\n"
+                "  + [active_conversation_uuid] is active\n"
+                "  + [conversation_surface_file] is coordination/conversations/active.sop\n",
+                encoding="utf-8",
+            )
+            message = publish_message(root, sender_uuid="manager", recipient_uuid="director_pool", kind="notice", subject="Preview", body="Preview body.")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--max-claims",
+                            "1",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("WorkerRunnerPreview", out.getvalue())
+            self.assertIn(message.message_id, out.getvalue())
+            self.assertFalse((root / "coordination" / "mailbox" / "director_pool" / "claims.sop").exists())
 
 
 class ModelInventoryTests(unittest.TestCase):

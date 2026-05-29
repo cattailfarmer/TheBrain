@@ -155,6 +155,14 @@ A real worker cycle must leave more evidence than a claim:
 
 The runner must pause on Shaliach pause conditions, claim conflicts, stale frontiers, and unknown dirty work. A claim alone never authorizes code edits, target workspace mutation, or frontier advancement.
 
+Preview unread work without claiming it:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -MaxClaims 1
+```
+
+This prints a `WorkerRunnerPreview` with proposed `WorkerLeaseRecord` entries. It does not write `claims.sop`, advance read cursors, or create worker cycle files.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

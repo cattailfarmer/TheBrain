@@ -202,6 +202,8 @@ Operator commands for these helpers are documented in `docs/coordination_operato
 
 `negotiated_agent.worker_lifecycle` implements the first record types for that boundary: `WorkerLeaseRecord`, `WorkerCycleRecord`, and `WorkerFailureRecord`. They serialize the worker evidence needed for future automation without claiming to lock work, approve frontiers, or repair failures automatically.
 
+`negotiated_agent.worker_runner` and `scripts/worker-runner-preview.ps1` add the first non-mutating runner preview. The preview reads unread mailbox messages, drafts proposed lease records against the active frontier, and writes only to stdout, leaving claims and cursors untouched.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

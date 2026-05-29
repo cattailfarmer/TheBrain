@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 123
+  + [job_notice_revision] is 124
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -141,7 +141,8 @@
     S116_long_run_checkpoint_after_post_apply_acceptance |
     S117_worker_runner_design |
     S118_worker_lifecycle_records |
-    S119_worker_runner_preview_cli
+    S119_worker_runner_preview_cli |
+    S120_worker_claim_record_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1720,7 +1721,7 @@
 
 & [WorkSliceDetail S119_worker_runner_preview_cli] is a coordination runtime implementation slice
   + [slice_id] is S119_worker_runner_preview_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add non-mutating worker-runner preview CLI that lists unread mailbox work and drafts proposed lease evidence without claiming
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests cover unread mailbox preview, proposed lease serialization, no claim file writes, and stale frontier reporting
@@ -1728,3 +1729,16 @@
   + [support_status] is prepared
   + [dependency_set] is S118_worker_lifecycle_records
   + [known_risks] is preview accidentally marking mailbox messages claimed or read
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:20:00Z, proof_ref tests passed with 81 tests, result_summary added worker runner preview builder CLI and PowerShell wrapper that draft leases without mutating claims or cursors
+  + [completed_work_review] is support_delta verified preview path is non-mutating; requirement_delta next step is explicit claim-and-record lifecycle command
+
+& [WorkSliceDetail S120_worker_claim_record_cli] is a coordination runtime implementation slice
+  + [slice_id] is S120_worker_claim_record_cli
+  + [slice_status] is open
+  + [scope] is add explicit worker claim-and-record CLI that claims selected mailbox messages and writes WorkerLeaseRecord evidence
+  + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
+  + [proof_route] is tests cover successful claim lease writing, conflict status lease writing, max claim bound, and no read cursor advancement
+  + [completion_criteria] is worker can explicitly claim bounded work and write lease records without executing the work slice
+  + [support_status] is prepared
+  + [dependency_set] is S119_worker_runner_preview_cli
+  + [known_risks] is treating claim-and-record as permission to execute or advance Manager frontier
