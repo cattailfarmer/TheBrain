@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S13_mailbox_and_notice_coordination
+  + [current_frontier] is S15_model_inventory_and_serving_probe
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -120,8 +120,8 @@
   + [completed_slice] is S10B_attach_shaliach_findings_to_layer_packages
   + [completed_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [completed_slice] is S14_file_change_surface
-  + [ready_slice] is S13_mailbox_and_notice_coordination
-  + [next_slice] is S15_model_inventory_and_serving_probe
+  + [completed_slice] is S13_mailbox_and_notice_coordination
+  + [ready_slice] is S15_model_inventory_and_serving_probe
   + [next_slice] is S16_long_run_harness
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad

@@ -93,6 +93,7 @@
   + [implemented_slice] is S10C_conversation_surface_run_lifecycle_updates
   + [implemented_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [implemented_slice] is S12_project_narrative_surface_runtime_update
+  + [implemented_slice] is S13_mailbox_and_notice_coordination
   + [implemented_slice] is S14_file_change_surface
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
@@ -117,6 +118,7 @@
   + [proof_result] is dry-run wrote four layer Shaliach finding artifacts in runs/20260529T114243Z
   + [proof_result] is dry-run updated conversation surface lifecycle proofs for runs/20260529T114455Z
   + [proof_result] is dry-run wrote file_change_surface.sop and file_change_index.sop in runs/20260529T114754Z
+  + [proof_result] is tests passed with 23 tests after S13 mailbox coordination substrate
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -138,19 +140,19 @@
   + [ready_capability] is run emits separate Shaliach finding artifacts and manager log references for each layer
   + [ready_capability] is orchestrator-integrated conversation-kernel updates record run start, layer approval, implementation write, and completion
   + [ready_capability] is generated implementation files have file-to-solution lineage through FileChangeSurface and FileChangeIndex artifacts
+  + [ready_capability] is two conversation UUIDs can exchange mailbox messages, advance read cursors, enumerate unread messages, and write rendezvous packets
   + [not_ready_capability] is blocked/failure lifecycle recovery records during normal runs
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
-  + [not_ready_capability] is mailbox and notice coordination between multiple active conversations
+  + [not_ready_capability] is orchestrator-integrated multi-worker mailbox scheduling and conflict resolution
   + [not_ready_capability] is commit_ref attachment and richer multi-file diff semantics for file-change records
   + [not_ready_capability] is verified local vLLM or Ollama multi-model serving
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is S13_mailbox_and_notice_coordination
-  + [next_reason] is multiple active conversations need mailbox, notice, read cursor, and rendezvous surfaces now that single-run governance has traceability
-  + [following_slice] is S15_model_inventory_and_serving_probe
+  + [next_recommended_slice] is S15_model_inventory_and_serving_probe
+  + [next_reason] is governance substrate is now stable enough to inspect actual local model serving and model diversity options
   + [following_slice] is S16_long_run_harness
-  + [sleep_run_candidate] is S13_mailbox_and_notice_coordination because coordination is the next bounded governance slice
+  + [sleep_run_candidate] is S15_model_inventory_and_serving_probe because local model routing is the next bounded infrastructure slice
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 18
+  + [job_notice_revision] is 19
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -233,14 +233,16 @@
 
 & [WorkSliceDetail S13_mailbox_and_notice_coordination] is a planned dependency slice
   + [slice_id] is S13_mailbox_and_notice_coordination
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement inbox, notice, read_cursor, coordination claim, conflict signal, and rendezvous packet surfaces for multi-conversation work
   + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
   + [proof_route] is tests for message creation, unread enumeration, read_cursor advancement, notice publication, and non-destructive message preservation
   + [completion_criteria] is two conversation surfaces can coordinate work boundaries through durable SOP carrier files
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S08_runtime_conversation_kernel, S12_project_narrative_surface
   + [known_risks] is treating mailbox messages as authority rather than coordination carriers
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T12:10:00Z, proof_ref tests passed with 23 tests, result_summary added mailbox module with append-only inbox messages, read cursor advancement, unread enumeration, coordination message kinds, and rendezvous packet surfaces
+  + [completed_work_review] is support_delta verified two conversation UUIDs can exchange durable coordination carriers without deleting inbox history; requirement_delta mailbox is not yet integrated into orchestrator run assignment or multi-worker scheduling
 
 & [WorkSliceDetail S14_file_change_surface] is a planned dependency slice
   + [slice_id] is S14_file_change_surface

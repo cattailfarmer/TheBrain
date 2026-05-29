@@ -13,6 +13,7 @@ from negotiated_agent.file_change import build_file_change_records, records_to_i
 from negotiated_agent.ledgers import negotiate_ledgers
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
+from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
@@ -228,6 +229,48 @@ class FileChangeSurfaceTests(unittest.TestCase):
             self.assertIn("implementation/app.py", surface)
             self.assertIn("code.package.sop", surface)
             self.assertIn(records[0].solution_uuid, index)
+
+
+class MailboxCoordinationTests(unittest.TestCase):
+    def test_mailbox_preserves_messages_and_advances_cursor(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            first = publish_message(
+                root,
+                sender_uuid="conversation-a",
+                recipient_uuid="conversation-b",
+                kind="notice",
+                subject="Boundary offer",
+                body="I will work on S13 only.",
+            )
+            second = publish_message(
+                root,
+                sender_uuid="conversation-a",
+                recipient_uuid="conversation-b",
+                kind="coordination_claim",
+                subject="Claim S13",
+                body="Claiming mailbox coordination slice.",
+            )
+            self.assertEqual([message.message_id for message in list_messages(root, "conversation-b")], [first.message_id, second.message_id])
+            self.assertEqual(len(list_unread(root, "conversation-b")), 2)
+            advance_read_cursor(root, "conversation-b", [first.message_id])
+            self.assertEqual([message.message_id for message in list_unread(root, "conversation-b")], [second.message_id])
+            inbox = root / "coordination" / "mailbox" / "conversation-b" / "inbox.sop"
+            self.assertIn(first.message_id, inbox.read_text(encoding="utf-8"))
+            self.assertIn(second.message_id, inbox.read_text(encoding="utf-8"))
+
+    def test_rendezvous_packet_records_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = write_rendezvous_packet(
+                Path(temp),
+                source_uuid="conversation-a",
+                target_uuid="conversation-b",
+                subject="handoff",
+                boundary="conversation-a owns S13; conversation-b observes",
+            )
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("RendezvousPacket", text)
+            self.assertIn("conversation-a owns S13", text)
 
 
 class ConversationKernelTests(unittest.TestCase):

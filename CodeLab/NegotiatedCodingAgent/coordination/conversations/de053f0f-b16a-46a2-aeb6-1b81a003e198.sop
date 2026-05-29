@@ -56,6 +56,7 @@
   + [last_proof] is run 20260529T114754Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T114754Z
   + [last_proof] is dry-run wrote file_change_surface.sop and file_change_index.sop in runs\20260529T114754Z
+  + [last_proof] is tests passed with 23 tests after S13 mailbox coordination substrate
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -75,10 +76,11 @@
   + [completed_slice] is S11_negotiated_sjs_datadesign_ledgers
   + [completed_slice] is S12_project_narrative_surface_runtime_update
   + [completed_slice] is S12_project_narrative_surface_seed
+  + [completed_slice] is S13_mailbox_and_notice_coordination
   + [completed_slice] is S14_file_change_surface
 
-  + [current_frontier] is S13_mailbox_and_notice_coordination after file change surface traceability
-  + [next_recommended_slice] is S13_mailbox_and_notice_coordination from coordination/refined_project_plan.sop
+  + [current_frontier] is S15_model_inventory_and_serving_probe after mailbox coordination substrate
+  + [next_recommended_slice] is S15_model_inventory_and_serving_probe from coordination/refined_project_plan.sop
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers
