@@ -2778,7 +2778,7 @@
 
 & [WorkSliceDetail S199_narrative_coverage_update_records] is a coordination runtime implementation slice
   + [slice_id] is S199_narrative_coverage_update_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add NarrativeCoverageUpdateRecord and pure builder from NarrativeStaleCheckRecord
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover recommended updates current status deferred updates stale refs counts and no mutation
@@ -2786,3 +2786,16 @@
   + [support_status] is prepared
   + [dependency_set] is S198_narrative_coverage_update_record_design
   + [known_risks] is treating update records as authority to append narrative without Manager/Shaliach review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T04:22:00Z, proof_ref tests passed with 161 tests, result_summary added NarrativeCoverageUpdateRecord and pure builder from stale-check records
+  + [completed_work_review] is support_delta verified builder carries append candidates and deferred reasons without narrative mutation; requirement_delta next step is add explicit update-record CLI writer
+
+& [WorkSliceDetail S200_narrative_coverage_update_record_cli] is a coordination runtime implementation slice
+  + [slice_id] is S200_narrative_coverage_update_record_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper mode to write narrative coverage update record evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover CLI writes update record from stale-check evidence rejects collisions and preserves narrative surface
+  + [completion_criteria] is operators can persist update-record evidence without appending to project narrative
+  + [support_status] is prepared
+  + [dependency_set] is S199_narrative_coverage_update_records
+  + [known_risks] is users mistaking update-record writer for narrative append automation

@@ -355,6 +355,8 @@ This writes `coordination/narrative_stale_check.sop` and does not mutate `projec
 
 The next designed boundary is `coordination/narrative_coverage_update_record_design.sop`. It will produce update-record evidence from a stale-check record, but it is still not a narrative append command.
 
+The in-code builder for that boundary exists now. An operator-facing writer is still pending; until then, use `-StaleCheck` for persisted evidence and treat update records as an implementation primitive, not a shell command.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

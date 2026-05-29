@@ -76,7 +76,12 @@ from negotiated_agent.multi_programmer import (
     decide_merge_review,
     execute_assignment_output,
 )
-from negotiated_agent.narrative_coverage import compute_narrative_coverage, compute_narrative_stale_check
+from negotiated_agent.narrative_coverage import (
+    NarrativeStaleCheckRecord,
+    build_narrative_coverage_update_record,
+    compute_narrative_coverage,
+    compute_narrative_stale_check,
+)
 from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_cli_main
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -4606,6 +4611,75 @@ class NarrativeCoverageTests(unittest.TestCase):
                         str(out_path),
                     ]
                 )
+
+    def test_update_record_carries_stale_check_recommendations(self) -> None:
+        stale_check = NarrativeStaleCheckRecord(
+            check_id="check-1",
+            narrative_surface_ref="coordination/project_narrative_surface.sop",
+            latest_run_ref="runs/20260529T190511Z",
+            current_frontier_ref="S199",
+            covered_arcs=("OriginArc",),
+            missing_arcs=("ProofArc",),
+            stale_claims=("latest run 20260529T190511Z is missing",),
+            recommended_updates=("append RunNarrativeUpdate for 20260529T190511Z", "add or refresh ProofArc"),
+        )
+        record = build_narrative_coverage_update_record(
+            stale_check,
+            update_id="update-1",
+            stale_check_ref="coordination/narrative_stale_check.sop",
+        )
+        self.assertEqual(record.status, "append_candidates_ready")
+        self.assertEqual(
+            record.appended_updates,
+            ("append RunNarrativeUpdate for 20260529T190511Z", "add or refresh ProofArc"),
+        )
+        self.assertEqual(record.deferred_updates, ())
+        sop = record.to_sop()
+        self.assertIn("NarrativeCoverageUpdateRecord update-1", sop)
+        self.assertIn("stale_check_ref] is coordination/narrative_stale_check.sop", sop)
+        self.assertIn("appended_update_count] is 2", sop)
+        self.assertIn("stale_claim_ref_count] is 1", sop)
+        self.assertIn("narrative_update_record_not_history_rewrite", sop)
+
+    def test_update_record_defers_current_stale_check(self) -> None:
+        stale_check = NarrativeStaleCheckRecord(
+            check_id="check-current",
+            narrative_surface_ref="coordination/project_narrative_surface.sop",
+            latest_run_ref="",
+            current_frontier_ref="S199",
+            covered_arcs=("OriginArc", "ProofArc"),
+            missing_arcs=(),
+            stale_claims=(),
+            recommended_updates=(),
+        )
+        record = build_narrative_coverage_update_record(stale_check, update_id="update-current")
+        self.assertEqual(record.status, "updates_deferred")
+        self.assertEqual(record.appended_updates, ())
+        self.assertEqual(record.deferred_updates, ("stale_check_current",))
+        self.assertIn("deferred_update_count] is 1", record.to_sop())
+
+    def test_update_record_defers_duplicate_recommendations(self) -> None:
+        stale_check = NarrativeStaleCheckRecord(
+            check_id="check-duplicate",
+            narrative_surface_ref="coordination/project_narrative_surface.sop",
+            latest_run_ref="runs/20260529T190511Z",
+            current_frontier_ref="S199",
+            covered_arcs=("OriginArc",),
+            missing_arcs=(),
+            stale_claims=("current frontier S199 is not referenced",),
+            recommended_updates=("append LongRunNarrativeUpdate for S199",),
+        )
+        record = build_narrative_coverage_update_record(
+            stale_check,
+            update_id="update-duplicate",
+            narrative_surface_text="already done: append LongRunNarrativeUpdate for S199",
+        )
+        self.assertEqual(record.appended_updates, ())
+        self.assertEqual(
+            record.deferred_updates,
+            ("duplicate_update_already_represented: append LongRunNarrativeUpdate for S199",),
+        )
+        self.assertIn("deferred_update_count] is 1", record.to_sop())
 
 
 class RunManifestTests(unittest.TestCase):

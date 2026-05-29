@@ -94,6 +94,40 @@ class NarrativeStaleCheckRecord:
 """
 
 
+@dataclass(frozen=True)
+class NarrativeCoverageUpdateRecord:
+    update_id: str
+    stale_check_ref: str
+    narrative_surface_ref: str
+    appended_updates: tuple[str, ...]
+    deferred_updates: tuple[str, ...]
+    stale_claim_refs: tuple[str, ...]
+
+    @property
+    def status(self) -> str:
+        if self.appended_updates:
+            return "append_candidates_ready"
+        if self.deferred_updates:
+            return "updates_deferred"
+        return "no_updates_needed"
+
+    def to_sop(self) -> str:
+        return f"""& [NarrativeCoverageUpdateRecord {self.update_id}] is append-only narrative coverage update evidence
+  + [update_id] is {self.update_id}
+  + [status] is {self.status}
+  + [stale_check_ref] is {self.stale_check_ref or "missing"}
+  + [narrative_surface_ref] is {self.narrative_surface_ref}
+  + [appended_update_count] is {len(self.appended_updates)}
+  + [deferred_update_count] is {len(self.deferred_updates)}
+  + [stale_claim_ref_count] is {len(self.stale_claim_refs)}
+  + [authority_boundary] is narrative_update_record_not_history_rewrite
+
+{_fields("appended_update", self.appended_updates)}
+{_fields("deferred_update", self.deferred_updates)}
+{_fields("stale_claim_ref", self.stale_claim_refs)}
+"""
+
+
 def compute_narrative_coverage(project_root: Path) -> NarrativeCoverageReport:
     covered = []
     missing = []
@@ -150,6 +184,36 @@ def compute_narrative_stale_check(project_root: Path, check_id: str = "narrative
         missing_arcs=missing_arcs,
         stale_claims=tuple(stale_claims),
         recommended_updates=tuple(recommended_updates),
+    )
+
+
+def build_narrative_coverage_update_record(
+    stale_check: NarrativeStaleCheckRecord,
+    *,
+    update_id: str = "narrative-coverage-update-1",
+    stale_check_ref: str = "coordination/narrative_stale_check.sop",
+    narrative_surface_text: str = "",
+) -> NarrativeCoverageUpdateRecord:
+    appended_updates: list[str] = []
+    deferred_updates: list[str] = []
+    if not stale_check_ref:
+        deferred_updates.append("stale_check_ref_missing")
+    if stale_check.status == "current":
+        deferred_updates.append("stale_check_current")
+    for recommendation in stale_check.recommended_updates:
+        if recommendation in narrative_surface_text:
+            deferred_updates.append(f"duplicate_update_already_represented: {recommendation}")
+        elif recommendation.strip():
+            appended_updates.append(recommendation)
+        else:
+            deferred_updates.append("recommendation_lacks_append_form")
+    return NarrativeCoverageUpdateRecord(
+        update_id=update_id,
+        stale_check_ref=stale_check_ref,
+        narrative_surface_ref=stale_check.narrative_surface_ref,
+        appended_updates=tuple(appended_updates),
+        deferred_updates=tuple(deferred_updates),
+        stale_claim_refs=stale_check.stale_claims,
     )
 
 

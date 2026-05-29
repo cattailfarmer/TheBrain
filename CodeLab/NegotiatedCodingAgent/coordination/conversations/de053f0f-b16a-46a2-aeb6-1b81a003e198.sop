@@ -674,9 +674,10 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S199_narrative_coverage_update_records after narrative coverage update record design
+  + [current_frontier] is S200_narrative_coverage_update_record_cli after narrative coverage update records
   + [completed_slice] is S198_narrative_coverage_update_record_design
-  + [next_recommended_slice] is S199_narrative_coverage_update_records
+  + [completed_slice] is S199_narrative_coverage_update_records
+  + [next_recommended_slice] is S200_narrative_coverage_update_record_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

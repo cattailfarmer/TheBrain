@@ -1628,3 +1628,11 @@
   + [proof_ref] is coordination/narrative_coverage_update_record_design.sop
   + [current_frontier] is S199_narrative_coverage_update_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S199_narrative_coverage_update_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S199_narrative_coverage_update_records
+  + [implemented_capability] is NarrativeCoverageUpdateRecord and pure builder convert stale-check evidence into append candidates and deferred update reasons without narrative mutation
+  + [proof_result] is tests passed with 161 tests
+  + [current_frontier] is S200_narrative_coverage_update_record_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
