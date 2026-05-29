@@ -3025,7 +3025,7 @@
 
 & [WorkSliceDetail S218_spec_audit_refresh_after_review_writers] is a specification audit slice
   + [slice_id] is S218_spec_audit_refresh_after_review_writers
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after complete reviewed narrative append writer workflow
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names guard discovery Manager approval writer Shaliach clearance writer plan/apply CLI and next live-model gap
@@ -3033,3 +3033,16 @@
   + [support_status] is prepared
   + [dependency_set] is S217_long_run_checkpoint_after_review_writers
   + [known_risks] is audit overstating deterministic evidence writers as genuine deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:56:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now reflects complete deterministic reviewed narrative append workflow
+  + [completed_work_review] is support_delta verified audit keeps live deliberation and local serving as remaining gaps; requirement_delta next step is add isolated end-to-end reviewed narrative append fixture
+
+& [WorkSliceDetail S219_reviewed_narrative_append_e2e_fixture_design] is a coordination runtime design slice
+  + [slice_id] is S219_reviewed_narrative_append_e2e_fixture_design
+  + [slice_status] is open
+  + [scope] is design isolated end-to-end reviewed narrative append fixture over temp project surfaces
+  + [target_files] is coordination/**, docs/**, tests/**
+  + [proof_route] is design names fixture inputs outputs guard discovery review writers plan apply and expected artifacts
+  + [completion_criteria] is future e2e test can prove the reviewed append workflow without mutating live project narrative
+  + [support_status] is prepared
+  + [dependency_set] is S218_spec_audit_refresh_after_review_writers
+  + [known_risks] is fixture accidentally using live coordination surfaces

@@ -1807,3 +1807,11 @@
   + [run_root] is runs\20260529T194832Z
   + [current_frontier] is S218_spec_audit_refresh_after_review_writers
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S218_spec_audit_refresh_after_review_writers] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S218_spec_audit_refresh_after_review_writers
+  + [implemented_capability] is spec_implementation_status.sop recognizes complete deterministic reviewed narrative append writer workflow and keeps live deliberation gaps explicit
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S219_reviewed_narrative_append_e2e_fixture_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
