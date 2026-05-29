@@ -286,6 +286,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `ManagerNarrativeAppendApproval` and `ShaliachNarrativeAppendClearance` implement the review evidence side of that boundary. Their `allows_append` properties are deliberately local predicates; a later append result/helper must still validate refs, guards, and update entries.
 
+`NarrativeAppendResult` and `build_narrative_append_result` add that validation as a pure planning step. The result records ready and blocked outcomes, including stale surface guards, without appending to `project_narrative_surface.sop`.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

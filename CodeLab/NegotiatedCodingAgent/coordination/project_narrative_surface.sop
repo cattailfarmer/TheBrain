@@ -1660,3 +1660,11 @@
   + [proof_result] is tests passed with 170 tests
   + [current_frontier] is S203_narrative_append_result_plan
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S203_narrative_append_result_plan] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S203_narrative_append_result_plan
+  + [implemented_capability] is NarrativeAppendResult and build_narrative_append_result plan ready or blocked narrative append outcomes without file mutation
+  + [proof_result] is tests passed with 174 tests
+  + [current_frontier] is S204_reviewed_narrative_append_helper
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

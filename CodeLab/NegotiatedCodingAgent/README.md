@@ -190,6 +190,8 @@ The wrapper `scripts/narrative-coverage.ps1 -UpdateRecord` writes `coordination/
 
 `negotiated_agent.narrative_append` now includes `ManagerNarrativeAppendApproval` and `ShaliachNarrativeAppendClearance` records. They expose explicit `allows_append` gates but still do not write narrative files.
 
+The same module now includes `NarrativeAppendResult` and a pure `build_narrative_append_result` helper. It can mark append evidence ready or blocked from review records and a surface guard, but still performs no file mutation.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

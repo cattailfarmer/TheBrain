@@ -77,13 +77,18 @@ from negotiated_agent.multi_programmer import (
     execute_assignment_output,
 )
 from negotiated_agent.narrative_coverage import (
+    NarrativeCoverageUpdateRecord,
     NarrativeStaleCheckRecord,
     build_narrative_coverage_update_record,
     compute_narrative_coverage,
     compute_narrative_stale_check,
 )
 from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_cli_main
-from negotiated_agent.narrative_append import ManagerNarrativeAppendApproval, ShaliachNarrativeAppendClearance
+from negotiated_agent.narrative_append import (
+    ManagerNarrativeAppendApproval,
+    ShaliachNarrativeAppendClearance,
+    build_narrative_append_result,
+)
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
@@ -4840,6 +4845,103 @@ class NarrativeAppendReviewTests(unittest.TestCase):
         )
         self.assertFalse(clearance.allows_append)
         self.assertIn("allows_append] is false", clearance.to_sop())
+
+    def test_append_result_ready_when_review_and_guard_match(self) -> None:
+        update_record = self._update_record(("append LongRunNarrativeUpdate for S203",))
+        manager = self._manager_approval()
+        shaliach = self._shaliach_clearance()
+        result = build_narrative_append_result(
+            update_record,
+            manager,
+            shaliach,
+            result_id="append-result-1",
+            expected_surface_guard="size:123",
+            current_surface_guard="size:123",
+        )
+        self.assertTrue(result.ready_for_append)
+        self.assertEqual(result.appended_updates, ("append LongRunNarrativeUpdate for S203",))
+        self.assertEqual(result.blocked_reasons, ())
+        sop = result.to_sop()
+        self.assertIn("NarrativeAppendResult append-result-1", sop)
+        self.assertIn("append_status] is ready_for_append", sop)
+        self.assertIn("append_result_not_frontier_advancement", sop)
+
+    def test_append_result_blocks_stale_surface_guard(self) -> None:
+        result = build_narrative_append_result(
+            self._update_record(("append LongRunNarrativeUpdate for S203",)),
+            self._manager_approval(),
+            self._shaliach_clearance(),
+            expected_surface_guard="size:123",
+            current_surface_guard="size:456",
+        )
+        self.assertFalse(result.ready_for_append)
+        self.assertEqual(result.appended_updates, ())
+        self.assertIn("narrative_surface_guard_mismatch", result.blocked_reasons)
+
+    def test_append_result_blocks_missing_review_permission(self) -> None:
+        manager = self._manager_approval(status="blocked_pending_review")
+        shaliach = self._shaliach_clearance(required_rework=("tighten append text",))
+        result = build_narrative_append_result(
+            self._update_record(("append LongRunNarrativeUpdate for S203",)),
+            manager,
+            shaliach,
+            expected_surface_guard="size:123",
+            current_surface_guard="size:123",
+        )
+        self.assertIn("manager_approval_not_append_allowed", result.blocked_reasons)
+        self.assertIn("shaliach_clearance_not_append_allowed", result.blocked_reasons)
+
+    def test_append_result_blocks_ref_mismatch_and_empty_updates(self) -> None:
+        result = build_narrative_append_result(
+            self._update_record(()),
+            self._manager_approval(update_record_ref="other.sop"),
+            self._shaliach_clearance(update_record_ref="other.sop"),
+            expected_surface_guard="size:123",
+            current_surface_guard="size:123",
+        )
+        self.assertIn("manager_update_record_ref_mismatch", result.blocked_reasons)
+        self.assertIn("shaliach_update_record_ref_mismatch", result.blocked_reasons)
+        self.assertIn("update_record_has_no_appended_updates", result.blocked_reasons)
+        self.assertIn("blocked_reason_count] is 3", result.to_sop())
+
+    def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
+        return NarrativeCoverageUpdateRecord(
+            update_id="update-1",
+            stale_check_ref="coordination/narrative_stale_check.sop",
+            narrative_surface_ref="coordination/project_narrative_surface.sop",
+            appended_updates=appended_updates,
+            deferred_updates=(),
+            stale_claim_refs=(),
+        )
+
+    def _manager_approval(
+        self,
+        *,
+        status: str = "approved_for_narrative_append",
+        update_record_ref: str = "coordination/narrative_coverage_update_record.sop",
+    ) -> ManagerNarrativeAppendApproval:
+        return ManagerNarrativeAppendApproval(
+            approval_id="manager-append-1",
+            update_record_ref=update_record_ref,
+            approval_status=status,
+            approved_update_count=1,
+            frontier_at_approval="S203",
+        )
+
+    def _shaliach_clearance(
+        self,
+        *,
+        status: str = "clear_for_narrative_append",
+        update_record_ref: str = "coordination/narrative_coverage_update_record.sop",
+        required_rework: tuple[str, ...] = (),
+    ) -> ShaliachNarrativeAppendClearance:
+        return ShaliachNarrativeAppendClearance(
+            clearance_id="shaliach-append-1",
+            update_record_ref=update_record_ref,
+            clearance_status=status,
+            checked_protocols=("SOP",),
+            required_rework=required_rework,
+        )
 
 
 class RunManifestTests(unittest.TestCase):

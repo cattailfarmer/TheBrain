@@ -309,7 +309,8 @@
   + [completed_slice] is S200_narrative_coverage_update_record_cli
   + [completed_slice] is S201_reviewed_narrative_append_design
   + [completed_slice] is S202_narrative_append_review_records
-  + [ready_slice] is S203_narrative_append_result_plan
+  + [completed_slice] is S203_narrative_append_result_plan
+  + [ready_slice] is S204_reviewed_narrative_append_helper
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

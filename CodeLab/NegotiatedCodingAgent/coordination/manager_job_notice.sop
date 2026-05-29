@@ -2830,7 +2830,7 @@
 
 & [WorkSliceDetail S203_narrative_append_result_plan] is a coordination runtime implementation slice
   + [slice_id] is S203_narrative_append_result_plan
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add NarrativeAppendResult and pure append-plan helper with stale surface guard
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover applied and blocked result records missing review blocked update count and stale guard cases
@@ -2838,3 +2838,16 @@
   + [support_status] is prepared
   + [dependency_set] is S202_narrative_append_review_records
   + [known_risks] is implementing actual file append before result planning is proven
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T05:19:00Z, proof_ref tests passed with 174 tests, result_summary added NarrativeAppendResult and pure append planning helper with stale guard checks
+  + [completed_work_review] is support_delta verified append planning blocks missing reviews ref mismatch empty updates and stale guards without mutation; requirement_delta next step is add reviewed narrative append helper
+
+& [WorkSliceDetail S204_reviewed_narrative_append_helper] is a coordination runtime implementation slice
+  + [slice_id] is S204_reviewed_narrative_append_helper
+  + [slice_status] is open
+  + [scope] is add helper that appends reviewed updates to narrative surface only after ready result and matching guard
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover append-to-end ready result stale blocked preservation and result post-guard
+  + [completion_criteria] is narrative surface append can be performed by helper under exact guard while blocked cases preserve old text
+  + [support_status] is prepared
+  + [dependency_set] is S203_narrative_append_result_plan
+  + [known_risks] is helper becoming a CLI without explicit operator review artifact loading

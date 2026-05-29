@@ -370,6 +370,8 @@ Do not append update-record text to the narrative surface manually during automa
 
 The Manager and Shaliach review record types now exist in `negotiated_agent.narrative_append`, but no operator wrapper writes them yet.
 
+`NarrativeAppendResult` can now be produced in code as a non-mutating plan/result object. The operator-facing append command remains pending and should preserve the same stale surface guard.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
