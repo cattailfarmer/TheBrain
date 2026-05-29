@@ -105,6 +105,8 @@ The current orchestrator uses the same assignment artifact contract for the exec
 
 Before merge, `merge_conflict_ledger.sop` records same-file overlaps across isolated assignment roots. `merge_review_decision.sop` turns that evidence into a Manager-facing status such as blocked by conflict or ready for manual merge review. This is conflict visibility only: it does not choose a winner, combine code, or write to the target workspace.
 
+`coordination/manual_merge_packet_policy.sop` defines the next boundary before target-workspace mutation: a future merge packet must carry source assignment refs, accepted file maps, rejected output refs, rollback instructions, Manager acceptance, Shaliach review, and verification evidence.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

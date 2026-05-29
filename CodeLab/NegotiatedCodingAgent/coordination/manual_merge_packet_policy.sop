@@ -1,0 +1,68 @@
+& [ManualMergePacketPolicy] is the target-workspace application policy for reviewed Programmer outputs
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [merge_protocol] coordination/programmer_merge_review_protocol.sop
+  @ [created_at] 2026-05-29T22:50:00Z
+
+  + [policy_status] is design_ready_not_executable
+  + [authority_boundary] is merge_policy_not_workspace_mutation
+  + [purpose] is define the minimum evidence required before run-local multi-Programmer outputs may be converted into a target workspace patch
+
+  = must: require merge_review_decision.sop before any patch packet is assembled
+  = must: block automatic workspace application when merge_review_decision is blocked_by_conflict
+  = must: preserve source assignment output refs for every merged file
+  = must: require Manager acceptance of the merge packet before target workspace mutation
+  = must: require Shaliach review when merged output changes scope, authority, lineage, data shape, artifact form, or rollback exposure
+  = must: include rollback instructions before applying any target workspace patch
+  = must: run verification after patch application and record the command, exit code, and output summary
+
+  - never: apply a patch packet with unresolved same_file_overlap conflicts
+  - never: delete rejected Programmer outputs to simplify merge history
+  - never: treat ready_for_manual_merge_review as permission to mutate the target workspace
+  - never: mutate files outside the declared target workspace root
+
+& [ManualMergePacketInputSet] is the required evidence set
+  + [input] is code.package.sop
+  + [input] is programmer_assignment_plan.sop
+  + [input] is multi_programmer_execution_plan.sop
+  + [input] is multi_programmer_merge_review_input.sop
+  + [input] is merge_conflict_ledger.sop
+  + [input] is merge_review_decision.sop
+  + [input] is file_change_surface.sop
+  + [input] is per-assignment raw output, ProgrammerReport, ManagerReview, and AssignmentExecutionResult
+
+& [ManualMergePacket] is the future packet form
+  + [field] is packet_id
+  + [field] is source_run_root
+  + [field] is target_workspace_root
+  + [field] is source_assignment_refs
+  + [field] is accepted_file_map
+  + [field] is rejected_output_refs
+  + [field] is conflict_resolution_refs
+  + [field] is rollback_plan
+  + [field] is manager_acceptance_ref
+  + [field] is shaliach_review_ref
+  + [field] is verification_command
+  + [field] is verification_result_ref
+  + [field] is authority_boundary
+
+& [RollbackPlanMinimum] is the minimum rollback evidence
+  + [required] is target file paths to be created, replaced, or deleted
+  + [required] is pre-application content snapshot refs for replaced or deleted files
+  + [required] is reverse operation for each target file path
+  + [required] is verification command to run after rollback
+  + [required] is stop condition when rollback cannot restore a pre-application state
+
+& [ApplicationGate] is the policy gate before target workspace mutation
+  + [required] is merge_review_decision is ready_for_manual_merge_review or manually_resolved
+  + [required] is unresolved conflict_count is zero
+  + [required] is Manager acceptance says accepted_for_workspace_application
+  + [required] is Shaliach review says no_scope_or_authority_blocker
+  + [required] is rollback_plan is complete
+  + [required] is target_workspace_root is explicit and path-checked
+
+& [NextImplementationOrder] is the safe implementation sequence
+  + [step_1] is add ManualMergePacket dataclasses and SOP emitter
+  + [step_2] is add pure path checks for target workspace root and accepted_file_map
+  + [step_3] is add rollback plan record generation before any file writes
+  + [step_4] is add dry-run packet creation from run-local artifacts
+  + [step_5] is only then consider an explicit operator-approved workspace apply command
