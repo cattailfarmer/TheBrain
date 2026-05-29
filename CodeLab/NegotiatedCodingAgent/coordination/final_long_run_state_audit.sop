@@ -1,0 +1,33 @@
+& [FinalLongRunStateAudit] is the reentry audit after the extended unattended work segment
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [refined_project_plan] coordination/refined_project_plan.sop
+  @ [created_at] 2026-05-29T23:59:59Z
+
+  + [audit_status] is ready_for_continuation
+  + [git_status_before_audit] is clean
+  + [test_status] is passed
+  + [test_count] is 61
+  + [frontier_agreement] is conversation manager_board and refined_plan all identified S83_final_long_run_state_audit before this audit
+  + [latest_push_status] is commits pushed to origin main through S82
+  + [authority_boundary] is reentry_audit_not_human_acceptance
+
+& [CapabilityDelta] is what changed during the latest long-run segment
+  + [delta] is Director multi-round disagreement carry-forward is implemented and documented
+  + [delta] is Programmer assignments execute sequentially across planned slices into isolated run-local roots
+  + [delta] is merge conflict ledger and merge review decision artifacts are emitted
+  + [delta] is conflict-free runs can emit manual_merge_packet.sop
+  + [delta] is dry-run apply evidence can be emitted by orchestrator and by explicit CLI validation
+  + [delta] is dry-run apply CLI rejects mutation acknowledgement flags
+  + [delta] is specification audits and operator docs distinguish dry-run evidence from target workspace mutation
+
+& [RemainingBoundary] is what still must not be overclaimed
+  + [boundary] is no target workspace mutation command exists
+  + [boundary] is no rollback snapshot writer exists
+  + [boundary] is no automatic merge conflict resolver exists
+  + [boundary] is no live local multi-model serving proof exists
+  + [boundary] is Shaliach internal negotiation remains deterministic scaffold rather than live self-negotiation
+
+& [NextFrontier] is the recommended continuation point
+  + [next_slice] is S84_apply_cli_validation_docs_and_examples
+  + [reason] is dry-run apply validation exists and should have concrete example artifacts and operator examples before any mutation work
