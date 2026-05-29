@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 147
+  + [job_notice_revision] is 148
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3584,7 +3584,7 @@
 
 & [WorkSliceDetail S261_spec_audit_refresh_after_checkpoint_probe_cli] is a specification audit slice
   + [slice_id] is S261_spec_audit_refresh_after_checkpoint_probe_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after checkpoint probe parser validator CLI and checkpoint proof
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names checkpoint probe evidence parser validator CLI and long-run proof
@@ -3592,3 +3592,16 @@
   + [support_status] is prepared
   + [dependency_set] is S260_long_run_checkpoint_after_checkpoint_probe_cli
   + [known_risks] is audit overstating checkpoint probe validation as semantic Shaliach correctness
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:08:00Z, proof_ref spec_implementation_status.sop and tests passed with 255 tests, result_summary audit reflects checkpoint probe parser validator CLI and proof
+  + [completed_work_review] is support_delta verified audit distinguishes checkpoint evidence validation from semantic Shaliach correctness; requirement_delta next step is design combined artifact validation command
+
+& [WorkSliceDetail S262_combined_artifact_validation_design] is a validation design slice
+  + [slice_id] is S262_combined_artifact_validation_design
+  + [slice_status] is open
+  + [scope] is design a combined operator validation command for run manifest artifact refs and checkpoint Shaliach probe evidence
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is design names inputs outputs exit codes and non-approval boundary
+  + [completion_criteria] is future operator can validate a run manifest and checkpoint proof in one command without semantic approval claims
+  + [support_status] is prepared
+  + [dependency_set] is S261_spec_audit_refresh_after_checkpoint_probe_cli
+  + [known_risks] is making combined validation look like a final acceptance gate
