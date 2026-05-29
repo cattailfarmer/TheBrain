@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T21:10:00Z
+  @ [updated_at] 2026-05-29T22:40:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -64,9 +64,9 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Programmers are a small swarm of lightweight implementers
-  + [support] is config supports programmer list, planned multi-slice representation exists, ProgrammerAssignmentPlan is emitted, and merge review protocol surface exists
-  + [gap] is orchestrator currently executes one configured Programmer for the initial implementation slice and merge review is not executable
-  + [next_candidate] is implement executable multi-Programmer runner under merge review gates
+  + [support] is config supports programmer list, planned multi-slice representation exists, ProgrammerAssignmentPlan is emitted, orchestrator executes planned assignments sequentially into isolated run-local roots, file-change lineage is per assignment, and merge conflict plus merge decision surfaces are emitted
+  + [gap] is execution is sequential and run-local; merge is blocked or marked ready for manual review but no merged output is applied to the target workspace
+  + [next_candidate] is add manual merge packet or target workspace patch policy with rollback and Shaliach/Manager acceptance gates
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is multi-conversation coordination across active workers
@@ -86,6 +86,6 @@
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
-  + [candidate_2] is implement executable multi-Programmer runner under merge review gates
+  + [candidate_2] is add manual merge packet or target workspace patch policy with rollback and Shaliach/Manager acceptance gates
   + [candidate_3] is build a worker runner that consumes mailbox claims under Manager and Shaliach constraints
   + [candidate_4] is install and verify local live model serving when operator is ready

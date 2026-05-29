@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 72
+  + [job_notice_revision] is 73
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -90,7 +90,8 @@
     S65_sequential_multi_assignment_execution_loop |
     S66_merge_conflict_ledger_scaffold |
     S67_merge_review_decision_surface |
-    S68_spec_audit_refresh_after_programmer_execution
+    S68_spec_audit_refresh_after_programmer_execution |
+    S69_manual_merge_packet_policy
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1006,7 +1007,7 @@
 
 & [WorkSliceDetail S68_spec_audit_refresh_after_programmer_execution] is a documentation and planning slice
   + [slice_id] is S68_spec_audit_refresh_after_programmer_execution
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation audit after sequential Programmer execution, conflict ledger, and merge decision support
   + [target_files] is coordination/spec_implementation_status.sop
   + [proof_route] is audit updated and tests remain passing
@@ -1014,3 +1015,16 @@
   + [support_status] is prepared
   + [dependency_set] is S67_merge_review_decision_surface
   + [known_risks] is overstating sequential run-local execution as full autonomous parallel programming
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T22:40:00Z, proof_ref tests passed with 52 tests, result_summary spec audit refreshed after sequential Programmer execution and merge decision surfaces
+  + [completed_work_review] is support_delta verified audit reflects current Programmer swarm support and boundary; requirement_delta target workspace merge/application policy remains future work
+
+& [WorkSliceDetail S69_manual_merge_packet_policy] is a Programmer swarm design slice
+  + [slice_id] is S69_manual_merge_packet_policy
+  + [slice_status] is open
+  + [scope] is define a manual merge packet and target workspace patch policy with rollback, Manager acceptance, and Shaliach review gates
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is policy surface written and tests remain passing
+  + [completion_criteria] is future merge implementation has explicit preconditions before target workspace mutation
+  + [support_status] is prepared
+  + [dependency_set] is S68_spec_audit_refresh_after_programmer_execution
+  + [known_risks] is designing policy too broadly instead of the minimum gates for safe merge application
