@@ -1,8 +1,8 @@
 & [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
-  + [created_at] is 2026-05-29T19:48:51.026263+00:00
+  + [created_at] is 2026-05-29T19:54:09.186861+00:00
   + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
-  + [start_current_frontier] is S217_long_run_checkpoint_after_review_writers after Shaliach narrative append clearance writer
-  + [end_current_frontier] is run 20260529T194832Z completed and narrative updated with artifact manifest
+  + [start_current_frontier] is S221_long_run_checkpoint_after_e2e_fixture after reviewed narrative append e2e test
+  + [end_current_frontier] is run 20260529T195350Z completed and narrative updated with artifact manifest
   + [git_clean_before] is true
   + [status] is ready_for_continuation
   + [test_status] is passed
@@ -15,11 +15,11 @@
   & [HarnessCommand test] is a command proof summary
     + [returncode] is 0
     + [stdout_tail] is Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src'... Listing 'C:\\Project\\TheBrain\\CodeLab\\NegotiatedCodingAgent\\src\\negotiated_agent'...
-    + [stderr_tail] is ...................................................................................................................................................................................................... -----------------------------------------
+    + [stderr_tail] is ....................................................................................................................................................................................................... ----------------------------------------
 
   & [HarnessCommand dry_run] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T194832Z
+    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T195350Z
     + [stderr_tail] is none
 
   & [HarnessCommand model_inventory] is a command proof summary

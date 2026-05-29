@@ -3064,7 +3064,7 @@
 
 & [WorkSliceDetail S221_long_run_checkpoint_after_e2e_fixture] is a long-run reentry slice
   + [slice_id] is S221_long_run_checkpoint_after_e2e_fixture
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after reviewed narrative append e2e fixture
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 199-test suite and e2e fixture frontier
@@ -3072,3 +3072,16 @@
   + [support_status] is prepared
   + [dependency_set] is S220_reviewed_narrative_append_e2e_test
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T08:54:00Z, proof_ref long-run checkpoint passed 199 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after reviewed narrative append e2e fixture
+  + [completed_work_review] is support_delta verified checkpoint records 199-test e2e fixture frontier and ready_for_continuation; requirement_delta next step is refresh spec audit after e2e fixture proof
+
+& [WorkSliceDetail S222_spec_audit_refresh_after_e2e_fixture] is a specification audit slice
+  + [slice_id] is S222_spec_audit_refresh_after_e2e_fixture
+  + [slice_status] is open
+  + [scope] is refresh implementation status after reviewed narrative append e2e fixture proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names e2e fixture proof and moves next deterministic gap forward
+  + [completion_criteria] is spec audit reflects end-to-end deterministic reviewed narrative append proof
+  + [support_status] is prepared
+  + [dependency_set] is S221_long_run_checkpoint_after_e2e_fixture
+  + [known_risks] is audit treating fixture proof as live semantic review

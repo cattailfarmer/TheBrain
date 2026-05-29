@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S221_long_run_checkpoint_after_e2e_fixture after reviewed narrative append e2e test
+  + [current_frontier] is S222_spec_audit_refresh_after_e2e_fixture after checkpoint refreshed for reviewed narrative append e2e fixture
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -722,10 +722,20 @@
   + [completed_slice] is S216_shaliach_narrative_append_clearance_writer
   + [completed_slice] is S217_long_run_checkpoint_after_review_writers
   + [last_proof] is long-run checkpoint passed 198 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after review writers
+  + [last_proof] is run 20260529T195350Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T195350Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T195350Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T195350Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T195350Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T195350Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T195350Z
+  + [last_proof] is run 20260529T195350Z wrote run_manifest.sop
   + [completed_slice] is S218_spec_audit_refresh_after_review_writers
   + [completed_slice] is S219_reviewed_narrative_append_e2e_fixture_design
   + [completed_slice] is S220_reviewed_narrative_append_e2e_test
-  + [next_recommended_slice] is S221_long_run_checkpoint_after_e2e_fixture
+  + [completed_slice] is S221_long_run_checkpoint_after_e2e_fixture
+  + [last_proof] is long-run checkpoint passed 199 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after e2e fixture
+  + [next_recommended_slice] is S222_spec_audit_refresh_after_e2e_fixture
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
