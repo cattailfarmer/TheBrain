@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-30T07:56:00Z
+  @ [updated_at] 2026-05-30T08:59:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -36,7 +36,7 @@
 
 & [ImplementedObligation] is a proof-backed specification capability
   + [obligation] is long-run reentry preserves conversation UUID, frontier, proof, and narrative continuity
-  + [support] is active conversation surface, project narrative surface, long-run checkpoint, start/end frontier, manager job notice, narrative stale-check records, narrative coverage update records, reviewed narrative append review artifacts, guard discovery, plan/apply result artifacts, and review writer modes are updated across slices
+  + [support] is active conversation surface, project narrative surface, long-run checkpoint, start/end frontier, manager job notice, narrative stale-check records, narrative coverage update records, reviewed narrative append review artifacts, guard discovery, plan/apply result artifacts, review writer modes, and an isolated e2e fixture proof are updated across slices
   + [proof_ref] is coordination/long_run_checkpoint.sop, coordination/narrative_coverage_stale_check_design.sop, coordination/narrative_coverage_update_record_design.sop, coordination/reviewed_narrative_append_design.sop, coordination/reviewed_narrative_append_cli_design.sop, coordination/narrative_append_review_writer_design.sop, and conversation surface proof ledger
 
 & [ImplementedObligation] is a proof-backed specification capability
@@ -70,7 +70,7 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is multi-conversation coordination across active workers
-  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, worker runner design, WorkerLeaseRecord, WorkerCycleRecord, WorkerFailureRecord, non-mutating worker-runner preview CLI, explicit claim-record lease writer, explicit cycle-record writer, proof-command evidence runner, dirty-worktree failure summaries, worker execution gate design, execution gate record models, deterministic execution gate evaluator, no-write execution gate preview CLI, explicit execution gate decision writer helper and CLI, gate-to-worker-cycle bridge helper and CLI, ManagerProofHandoffRecord and writer CLI, handoff-aware proof runner helper and CLI, run-local execution plan/result records, run-local execution planner CLI, deterministic run-local execution writer helper and CLI, run-local output review and merge eligibility records plus CLI, run-local merge draft input records plus CLI, packet proposal records plus CLI, frontier advancement records plus writer CLI, frontier application plan/result records plus CLI and explicit surface apply helper/CLI, narrative stale-check records, narrative coverage update records, reviewed narrative append records/helper/CLI, Manager approval writer mode, Shaliach clearance writer mode, and long-run checkpoint proof for the 198-test reviewed narrative append writer frontier exist
+  + [support] is mailbox, claims, cursors, conflict signals, rendezvous packet helpers, worker runner design, WorkerLeaseRecord, WorkerCycleRecord, WorkerFailureRecord, non-mutating worker-runner preview CLI, explicit claim-record lease writer, explicit cycle-record writer, proof-command evidence runner, dirty-worktree failure summaries, worker execution gate design, execution gate record models, deterministic execution gate evaluator, no-write execution gate preview CLI, explicit execution gate decision writer helper and CLI, gate-to-worker-cycle bridge helper and CLI, ManagerProofHandoffRecord and writer CLI, handoff-aware proof runner helper and CLI, run-local execution plan/result records, run-local execution planner CLI, deterministic run-local execution writer helper and CLI, run-local output review and merge eligibility records plus CLI, run-local merge draft input records plus CLI, packet proposal records plus CLI, frontier advancement records plus writer CLI, frontier application plan/result records plus CLI and explicit surface apply helper/CLI, narrative stale-check records, narrative coverage update records, reviewed narrative append records/helper/CLI, Manager approval writer mode, Shaliach clearance writer mode, isolated e2e fixture, and long-run checkpoint proof for the 199-test reviewed narrative append e2e frontier exist
   + [gap] is no live Shaliach-gated implementation loop exists yet, and reviewed narrative append remains deterministic artifact governance rather than model-negotiated semantic memory review
   + [next_candidate] is add live or model-negotiated Shaliach/Manager review for narrative and post-apply decisions after local model serving is available
 
@@ -88,6 +88,6 @@
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available
   + [candidate_2] is add live Manager/Shaliach post-apply and narrative-append deliberation after endpoint health is available
-  + [candidate_3] is add deterministic end-to-end reviewed narrative append fixture that writes update, review, guard, plan, and apply artifacts in one isolated sample run
+  + [candidate_3] is add deterministic review artifact synthesis from update records to reduce hand-authored approval counts
   + [candidate_4] is add automatic conflict resolution and richer swarm parallelism once live model diversity can be measured
   + [candidate_5] is install and verify local live model serving when operator is ready

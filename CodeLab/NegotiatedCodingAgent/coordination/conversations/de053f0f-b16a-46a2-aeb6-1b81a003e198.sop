@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S222_spec_audit_refresh_after_e2e_fixture after checkpoint refreshed for reviewed narrative append e2e fixture
+  + [current_frontier] is S223_review_artifact_synthesis_design after spec audit refresh for e2e fixture proof
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -735,7 +735,8 @@
   + [completed_slice] is S220_reviewed_narrative_append_e2e_test
   + [completed_slice] is S221_long_run_checkpoint_after_e2e_fixture
   + [last_proof] is long-run checkpoint passed 199 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after e2e fixture
-  + [next_recommended_slice] is S222_spec_audit_refresh_after_e2e_fixture
+  + [completed_slice] is S222_spec_audit_refresh_after_e2e_fixture
+  + [next_recommended_slice] is S223_review_artifact_synthesis_design
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

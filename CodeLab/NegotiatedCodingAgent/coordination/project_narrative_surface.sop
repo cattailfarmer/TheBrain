@@ -1848,3 +1848,11 @@
   + [run_root] is runs\20260529T195350Z
   + [current_frontier] is S222_spec_audit_refresh_after_e2e_fixture
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S222_spec_audit_refresh_after_e2e_fixture] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S222_spec_audit_refresh_after_e2e_fixture
+  + [implemented_capability] is spec_implementation_status.sop recognizes reviewed narrative append e2e fixture proof and moves next deterministic gap to review artifact synthesis
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S223_review_artifact_synthesis_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
