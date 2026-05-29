@@ -3272,7 +3272,7 @@
 
 & [WorkSliceDetail S237_long_run_checkpoint_after_shaliach_self_negotiation] is a long-run reentry slice
   + [slice_id] is S237_long_run_checkpoint_after_shaliach_self_negotiation
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after Shaliach self-negotiation records and run artifacts
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 216-test suite and self-negotiation artifact support
@@ -3280,3 +3280,16 @@
   + [support_status] is prepared
   + [dependency_set] is S236_shaliach_self_negotiation_run_artifacts
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:20:00Z, proof_ref long-run checkpoint passed 218 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary checkpoint prefers next work frontier after run lifecycle markers and records Shaliach self-negotiation artifact support
+  + [completed_work_review] is support_delta verified checkpoint start frontier is S237 and git_clean_before is true; requirement_delta next step is refresh spec audit after Shaliach self-negotiation run artifacts
+
+& [WorkSliceDetail S238_spec_audit_refresh_after_shaliach_self_negotiation] is a specification audit slice
+  + [slice_id] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [slice_status] is open
+  + [scope] is refresh implementation status after Shaliach self-negotiation records and run artifacts
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names deterministic self-negotiation records builder finding refs and run artifacts while preserving live deliberation gap
+  + [completion_criteria] is spec audit reflects Shaliach scaffold progress and next gap accurately
+  + [support_status] is prepared
+  + [dependency_set] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [known_risks] is audit overstating deterministic scaffold as live Shaliach self-reasoning

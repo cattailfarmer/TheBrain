@@ -2013,3 +2013,20 @@
   + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
   + [proof_status] is run_completed
   + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T201934Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T201934Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S237_long_run_checkpoint_after_shaliach_self_negotiation] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [proof_result] is long-run harness passed 218 tests, dry-run, model inventory, non-gating OpenAI healthcheck, and route draft
+  + [run_root] is runs\20260529T201934Z
+  + [current_frontier] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [narrative_role] is long_run_coordination and proof_arc update

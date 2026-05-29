@@ -682,7 +682,7 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is run 20260529T201810Z completed and narrative updated with artifact manifest
+  + [current_frontier] is run 20260529T201934Z completed and narrative updated with artifact manifest
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -797,7 +797,17 @@
   + [last_proof] is run 20260529T201810Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T201810Z
   + [last_proof] is run 20260529T201810Z wrote run_manifest.sop
-  + [next_recommended_slice] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [last_proof] is run 20260529T201934Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T201934Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T201934Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T201934Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T201934Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T201934Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T201934Z
+  + [last_proof] is run 20260529T201934Z wrote run_manifest.sop
+  + [completed_slice] is S237_long_run_checkpoint_after_shaliach_self_negotiation
+  + [last_proof] is long-run checkpoint passed 218 tests dry-run model inventory non-gating OpenAI healthcheck and route draft after Shaliach self-negotiation artifacts
+  + [next_recommended_slice] is S238_spec_audit_refresh_after_shaliach_self_negotiation
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
