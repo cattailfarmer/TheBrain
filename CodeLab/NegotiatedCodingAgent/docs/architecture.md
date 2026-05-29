@@ -117,6 +117,8 @@ When merge review is ready and conflict-free, the orchestrator can emit `manual_
 
 For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `apply_result.sop` as dry-run evidence. Conflict-blocked runs do not emit apply evidence, keeping the unresolved merge decision as the active boundary.
 
+`coordination/apply_command_dry_run_cli_design.sop` defines the first future CLI step: validate a manual merge packet and write dry-run apply artifacts from explicit `--run-root` and `--target-workspace-root` arguments, while rejecting mutation behavior.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

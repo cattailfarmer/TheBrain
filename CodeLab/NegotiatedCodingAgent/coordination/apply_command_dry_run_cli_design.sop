@@ -1,0 +1,39 @@
+& [ApplyCommandDryRunCliDesign] is the dry-run-only design for applying manual merge packets
+  @ [operator_apply_policy] coordination/operator_approved_apply_policy.sop
+  @ [created_at] 2026-05-29T23:59:00Z
+
+  + [design_status] is ready_for_dry_run_cli_implementation
+  + [authority_boundary] is dry_run_cli_design_not_mutation_command
+  + [purpose] is define an operator CLI that validates a manual merge packet and writes apply_plan.sop plus dry-run apply_result.sop without mutating the target workspace
+
+  = must: default to dry-run
+  = must: reject mutation flags in the first implementation slice
+  = must: require --run-root and --target-workspace-root
+  = must: require manual_merge_packet.sop to exist under --run-root
+  = must: verify every accepted target path stays inside --target-workspace-root
+  = must: write apply_plan.sop and apply_result.sop under --run-root
+  = must: record skipped files instead of applied files during dry-run
+
+  - never: write to target_workspace_root in dry-run mode
+  - never: infer target_workspace_root from the current shell directory
+  - never: treat dry-run apply_result.sop as proof of applied code
+
+& [DryRunCliContract] is the first implementation contract
+  + [command_name] is apply-manual-merge-packet
+  + [required_arg] is --run-root
+  + [required_arg] is --target-workspace-root
+  + [optional_arg] is --verification-command
+  + [forced_mode] is dry_run_only
+  + [exit_zero_when] is packet validates and dry-run apply artifacts are written
+  + [exit_nonzero_when] is packet missing, paths escape target root, merge decision is blocked, or packet is malformed
+
+& [DryRunOutputSet] is the artifact set
+  + [artifact] is apply_plan.sop
+  + [artifact] is apply_result.sop
+  + [artifact] is apply_command_log.sop
+
+& [ImplementationBoundary] is the explicit non-goal set
+  + [outside] is applying files to target_workspace_root
+  + [outside] is creating rollback snapshots from target files
+  + [outside] is running post-apply verification as a mutation proof
+  + [outside] is resolving merge conflicts automatically
