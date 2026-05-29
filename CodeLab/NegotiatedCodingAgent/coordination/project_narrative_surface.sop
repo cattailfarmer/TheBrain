@@ -2087,3 +2087,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S244_shaliach_cross_artifact_inspection_design
   + [narrative_role] is specification_audit and shaliach_arc update
+
+
+& [LongRunNarrativeUpdate S244_shaliach_cross_artifact_inspection_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S244_shaliach_cross_artifact_inspection_design
+  + [implemented_capability] is shaliach_cross_artifact_inspection_design.sop specifies deterministic consistency checks across self-negotiation finding and response artifacts without approval authority
+  + [proof_ref] is coordination/shaliach_cross_artifact_inspection_design.sop
+  + [current_frontier] is S245_shaliach_finding_field_parser
+  + [narrative_role] is shaliach_arc and design_arc update

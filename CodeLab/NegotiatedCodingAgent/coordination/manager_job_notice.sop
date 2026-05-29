@@ -3363,7 +3363,7 @@
 
 & [WorkSliceDetail S244_shaliach_cross_artifact_inspection_design] is a coordination runtime design slice
   + [slice_id] is S244_shaliach_cross_artifact_inspection_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design cross-artifact inspection gate for Shaliach self-negotiation, finding, and response refs
   + [target_files] is coordination/**, docs/**
   + [proof_route] is design names required inputs, blocked states, and deterministic-not-live boundary
@@ -3371,3 +3371,16 @@
   + [support_status] is prepared
   + [dependency_set] is S243_spec_audit_refresh_after_shaliach_inspect_cli
   + [known_risks] is gate becoming accidental Manager approval
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T11:12:00Z, proof_ref shaliach_cross_artifact_inspection_design.sop docs/architecture.md and tests passed with 223 tests, result_summary designed deterministic consistency inspection across Shaliach self-negotiation finding and response artifacts
+  + [completed_work_review] is support_delta verified design names inputs consistency rules outcomes proof expectations and non-approval boundary; requirement_delta next step is add Shaliach finding field parser
+
+& [WorkSliceDetail S245_shaliach_finding_field_parser] is a coordination runtime implementation slice
+  + [slice_id] is S245_shaliach_finding_field_parser
+  + [slice_status] is open
+  + [scope] is add Shaliach finding field parser for cross-artifact inspection
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover parsing finding subject severity action self_negotiation_ref and wrong-header rejection
+  + [completion_criteria] is cross-artifact evaluator can inspect finding SOP fields without ad hoc parsing
+  + [support_status] is prepared
+  + [dependency_set] is S244_shaliach_cross_artifact_inspection_design
+  + [known_risks] is parser over-accepting malformed finding evidence

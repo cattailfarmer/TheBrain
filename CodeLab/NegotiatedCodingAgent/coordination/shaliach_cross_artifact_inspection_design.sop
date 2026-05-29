@@ -1,0 +1,55 @@
+& [ShaliachCrossArtifactInspectionDesign] is the design contract for deterministic Shaliach artifact consistency inspection
+  @ [created_at] 2026-05-30T11:10:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_artifact] coordination/shaliach_self_negotiation_record_design.sop
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is consistency_inspection_not_manager_approval
+  + [primary_goal] is compare Shaliach self-negotiation, finding, and response artifacts for structural consistency
+  + [non_goal] is live Shaliach deliberation
+  + [non_goal] is judging semantic truth of a finding
+  + [non_goal] is advancing current_frontier or applying files
+  + [non_goal] is replacing direct artifact inspection
+
+& [RequiredInputs] is the minimum evidence set for inspection
+  + [field] is inspection_id
+  + [field] is self_negotiation_ref
+  + [field] is shaliach_finding_ref
+  + [field] is shaliach_response_ref optional
+  + [field] is expected_subject_ref
+  + [field] is expected_self_negotiation_ref
+  + [authority_boundary] is file_ref_check_not_semantic_validation
+  = must: load self-negotiation artifact through structured parser
+  = must: load finding fields without requiring response artifact for clean no-action findings
+  = must: treat missing referenced artifacts as blocked inspection
+
+& [ConsistencyRules] is the deterministic rule set
+  + [rule] is self_negotiation.subject_ref must equal expected_subject_ref
+  + [rule] is finding.self_negotiation_ref must equal expected_self_negotiation_ref
+  + [rule] is response.self_negotiation_ref must match finding.self_negotiation_ref when response artifact exists
+  + [rule] is self_negotiation.status rework_required should align with finding severity pause blocking or escalation
+  + [rule] is self_negotiation.status advisory should align with finding severity advisory or warning
+  + [rule] is self_negotiation.status resolved should align with finding severity info
+  + [authority_boundary] is status_alignment_not_truth_claim
+
+& [InspectionOutcomes] is the allowed result vocabulary
+  + [status] is consistent
+  + [status] is inconsistent
+  + [status] is blocked_missing_artifact
+  + [status] is blocked_parse_error
+  + [authority_boundary] is inspection_status_not_layer_approval
+  = must: preserve all mismatches in the output record
+  = must: never mutate the inspected artifacts
+  = must: never publish mailbox messages by itself
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is consistent self-negotiation finding and response refs produce consistent result
+  + [test_case] is mismatched finding self_negotiation_ref produces inconsistent result
+  + [test_case] is missing response artifact is allowed when finding action is no_action
+  + [test_case] is missing required self-negotiation or finding artifact blocks inspection
+  + [test_case] is parser errors block inspection without traceback-only output
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add Shaliach finding field parser for self_negotiation_ref, severity, action, and subject
+  + [slice_2] is add pure cross-artifact inspection record and evaluator
+  + [slice_3] is add CLI wrapper after pure evaluator tests pass
