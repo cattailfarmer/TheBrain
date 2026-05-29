@@ -384,7 +384,8 @@
   + [completed_slice] is S275_prelive_review_packet_cli
   + [completed_slice] is S276_spec_audit_refresh_after_prelive_review_packets
   + [completed_slice] is S277_prelive_review_packet_operator_recipe
-  + [ready_slice] is S278_long_run_checkpoint_after_prelive_review_recipe
+  + [completed_slice] is S278_long_run_checkpoint_after_prelive_review_recipe
+  + [ready_slice] is S279_spec_audit_refresh_after_prelive_checkpoint
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

@@ -1,8 +1,8 @@
 & [LongRunCheckpoint] is a bounded unattended-work harness checkpoint
-  + [created_at] is 2026-05-29T21:14:16.033045+00:00
+  + [created_at] is 2026-05-29T21:28:15.509177+00:00
   + [conversation_uuid] is de053f0f-b16a-46a2-aeb6-1b81a003e198
-  + [start_current_frontier] is S269_long_run_checkpoint_after_combined_validation_integration
-  + [end_current_frontier] is run 20260529T211357Z completed and narrative updated with artifact manifest
+  + [start_current_frontier] is S278_long_run_checkpoint_after_prelive_review_recipe
+  + [end_current_frontier] is run 20260529T212756Z completed and narrative updated with artifact manifest
   + [git_clean_before] is true
   + [status] is ready_for_continuation
   + [test_status] is passed
@@ -21,7 +21,7 @@
 
   & [HarnessCommand dry_run] is a command proof summary
     + [returncode] is 0
-    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T211357Z
+    + [stdout_tail] is Run written to: C:\Project\TheBrain\CodeLab\NegotiatedCodingAgent\runs\20260529T212756Z
     + [stderr_tail] is none
 
   & [HarnessCommand model_inventory] is a command proof summary

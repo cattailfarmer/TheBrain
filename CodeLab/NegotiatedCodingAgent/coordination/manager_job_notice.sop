@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 164
+  + [job_notice_revision] is 165
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3805,7 +3805,7 @@
 
 & [WorkSliceDetail S278_long_run_checkpoint_after_prelive_review_recipe] is a long-run reentry slice
   + [slice_id] is S278_long_run_checkpoint_after_prelive_review_recipe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after pre-live review packet recipe
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 277-test suite and combined validation status passed
@@ -3813,3 +3813,16 @@
   + [support_status] is prepared
   + [dependency_set] is S277_prelive_review_packet_operator_recipe
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:28:00Z, proof_ref long-run checkpoint passed 277 tests and pre-live recipe proof review_ready, result_summary refreshed checkpoint after pre-live review recipe
+  + [completed_work_review] is support_delta verified checkpoint records combined validation passed and recipe proof produced review-ready packets; requirement_delta next step is refresh spec audit after pre-live checkpoint proof
+
+& [WorkSliceDetail S279_spec_audit_refresh_after_prelive_checkpoint] is a specification audit slice
+  + [slice_id] is S279_spec_audit_refresh_after_prelive_checkpoint
+  + [slice_status] is open
+  + [scope] is refresh implementation status after pre-live review recipe checkpoint proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names 277-test checkpoint and review-ready pre-live recipe proof
+  + [completion_criteria] is audit reflects pre-live packet workflow as reproducible and non-approval
+  + [support_status] is prepared
+  + [dependency_set] is S278_long_run_checkpoint_after_prelive_review_recipe
+  + [known_risks] is audit overstating review-ready packet scaffolds as live review
