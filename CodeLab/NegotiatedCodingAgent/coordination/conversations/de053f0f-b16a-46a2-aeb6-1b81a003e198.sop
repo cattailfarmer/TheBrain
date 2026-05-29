@@ -501,9 +501,10 @@
   + [completed_slice] is S127_long_run_checkpoint_after_worker_docs
   + [completed_slice] is S128_spec_audit_refresh_after_worker_runner
   + [completed_slice] is S129_worker_execution_gate_design
+  + [completed_slice] is S130_worker_execution_gate_records
 
-  + [current_frontier] is S130_worker_execution_gate_records after worker execution gate design
-  + [next_recommended_slice] is S130_worker_execution_gate_records
+  + [current_frontier] is S131_worker_execution_gate_evaluator after execution gate records
+  + [next_recommended_slice] is S131_worker_execution_gate_evaluator
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

@@ -22,6 +22,7 @@ from negotiated_agent.conversation import (
     update_active_conversation_surface,
 )
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
+from negotiated_agent.execution_gate import ExecutionGateDecision, ManagerAuthorizationRecord, ShaliachExecutionClearance
 from negotiated_agent.ledgers import NegotiatedLedgers, negotiate_ledgers
 from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
@@ -1582,6 +1583,57 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("cycle_status] is failed_proof", out.getvalue())
             self.assertTrue((root / "coordination" / "workers" / "worker-a" / "failures" / "cycle-fail.failure.sop").exists())
+
+    def test_manager_authorization_record_preserves_acceptance_boundary(self) -> None:
+        record = ManagerAuthorizationRecord(
+            authorization_id="auth-1",
+            worker_uuid="worker-a",
+            authorization_status="authorized",
+            claim_ref="coordination/mailbox/director_pool/claims.sop#claim-1",
+            slice_ref="manager_job_notice.sop#S130_worker_execution_gate_records",
+            frontier_at_authorization="S130_worker_execution_gate_records",
+            allowed_action="run_proof_only",
+            proof_route="scripts/test.ps1",
+            expires_at="2026-05-29T19:42:00Z",
+        )
+        sop = record.to_sop()
+        self.assertIn("authorization_status] is authorized", sop)
+        self.assertIn("allowed_action] is run_proof_only", sop)
+        self.assertIn("manager_authorization_not_final_acceptance", sop)
+
+    def test_shaliach_execution_clearance_preserves_manager_boundary(self) -> None:
+        record = ShaliachExecutionClearance(
+            clearance_id="clear-1",
+            worker_uuid="worker-a",
+            clearance_status="pause_required",
+            claim_ref="coordination/mailbox/director_pool/claims.sop#claim-1",
+            slice_ref="manager_job_notice.sop#S130_worker_execution_gate_records",
+            checked_protocols=("SOP", "SJS", "DataDrivenDesign"),
+            finding_ref="runs/current/component.shaliach_finding.sop",
+            required_response="pause_for_manager",
+        )
+        sop = record.to_sop()
+        self.assertIn("clearance_status] is pause_required", sop)
+        self.assertIn("checked_protocol_set] is SOP, SJS, DataDrivenDesign", sop)
+        self.assertIn("shaliach_clearance_not_manager_authorization", sop)
+
+    def test_execution_gate_decision_preserves_completion_boundary(self) -> None:
+        record = ExecutionGateDecision(
+            gate_id="gate-1",
+            worker_uuid="worker-a",
+            gate_status="stale_frontier",
+            manager_authorization_ref="coordination/workers/worker-a/authorizations/auth-1.sop",
+            shaliach_clearance_ref="coordination/workers/worker-a/shaliach_clearance/clear-1.sop",
+            lease_ref="coordination/workers/worker-a/leases/claim-1.sop",
+            allowed_action="run_proof_only",
+            proof_route="scripts/test.ps1",
+            expires_at="2026-05-29T19:42:00Z",
+            block_reason="frontier_changed",
+        )
+        sop = record.to_sop()
+        self.assertIn("gate_status] is stale_frontier", sop)
+        self.assertIn("block_reason] is frontier_changed", sop)
+        self.assertIn("execution_gate_decision_not_completion_approval", sop)
 
 
 class ModelInventoryTests(unittest.TestCase):

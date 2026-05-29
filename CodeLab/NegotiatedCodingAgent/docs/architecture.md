@@ -212,6 +212,8 @@ The worker proof-command scaffold can run an explicit proof command and write su
 
 `coordination/worker_execution_gate_design.sop` defines the authority boundary before any future autonomous worker can execute claimed implementation work. It requires Manager authorization, Shaliach execution clearance, lease validity, frontier matching, proof route evidence, and explicit blocking states before a runner may move beyond preview, claim, cycle, or proof evidence.
 
+`negotiated_agent.execution_gate` implements the first gate record forms: `ManagerAuthorizationRecord`, `ShaliachExecutionClearance`, and `ExecutionGateDecision`. These make the future execution gate auditable without granting final acceptance, Manager authority, or completion approval.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
