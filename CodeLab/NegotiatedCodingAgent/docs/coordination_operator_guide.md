@@ -34,6 +34,18 @@ Each completed or blocked run writes `run_manifest.sop`. Validate that listed ar
 
 This is a file-existence check, not semantic artifact validation.
 
+## Dry-Run Apply Validation
+
+When a run emits `manual_merge_packet.sop`, validate the packet without applying it to the target workspace:
+
+```powershell
+.\scripts\apply-merge-dry-run.ps1 -RunRoot .\runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain
+```
+
+This writes or refreshes `apply_plan.sop`, `apply_result.sop`, and `apply_command_log.sop` under the run root. It does not write to `TargetWorkspaceRoot`.
+
+The dry-run CLI rejects mutation acknowledgement flags by design. Treat `apply_result.sop` with `apply_status` set to `dry_run` as validation evidence only, not as proof that code was applied.
+
 ## Long-Run Checkpoint
 
 Write a checkpoint for unattended continuation:

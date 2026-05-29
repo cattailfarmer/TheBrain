@@ -162,6 +162,7 @@
   + [implemented_slice] is S79_apply_command_dry_run_cli_implementation
   + [implemented_slice] is S80_spec_audit_refresh_after_apply_cli
   + [implemented_slice] is S81_long_run_checkpoint_after_apply_cli
+  + [implemented_slice] is S82_apply_cli_operator_docs
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -253,6 +254,7 @@
   + [proof_result] is tests passed with 61 tests after S79 dry-run apply CLI implementation
   + [proof_result] is tests passed with 61 tests after S80 spec audit refresh
   + [proof_result] is long-run checkpoint refreshed after S81 with 61 tests dry-run model inventory and non-gating OpenAI healthcheck
+  + [proof_result] is tests passed with 61 tests after S82 apply CLI operator docs
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -342,6 +344,7 @@
   + [ready_capability] is dry-run apply CLI writes apply_plan apply_result and apply_command_log while rejecting mutation acknowledgement flag
   + [ready_capability] is specification implementation status audit reflects dry-run apply CLI validation while preserving no-mutation boundary
   + [ready_capability] is long_run_checkpoint.sop records post-S81 61-test suite, dry-run, model inventory, and non-gating endpoint state
+  + [ready_capability] is coordination operator guide documents dry-run apply validation and no-mutation boundary
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -412,8 +415,9 @@
   + [next_recommended_slice] is S80_spec_audit_refresh_after_apply_cli
   + [next_recommended_slice] is S81_long_run_checkpoint_after_apply_cli
   + [next_recommended_slice] is S82_apply_cli_operator_docs
-  + [next_reason] is operator docs should make dry-run apply usage discoverable without implying mutation
-  + [sleep_run_candidate] is continue S82 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S83_final_long_run_state_audit
+  + [next_reason] is final state audit should make reentry clean after this long run segment
+  + [sleep_run_candidate] is continue S83 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

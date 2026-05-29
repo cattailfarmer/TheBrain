@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 86
+  + [job_notice_revision] is 87
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -104,7 +104,8 @@
     S79_apply_command_dry_run_cli_implementation |
     S80_spec_audit_refresh_after_apply_cli |
     S81_long_run_checkpoint_after_apply_cli |
-    S82_apply_cli_operator_docs
+    S82_apply_cli_operator_docs |
+    S83_final_long_run_state_audit
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1202,7 +1203,7 @@
 
 & [WorkSliceDetail S82_apply_cli_operator_docs] is a documentation slice
   + [slice_id] is S82_apply_cli_operator_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is update operator docs for dry-run apply CLI usage and no-mutation boundary
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -1210,3 +1211,16 @@
   + [support_status] is prepared
   + [dependency_set] is S81_long_run_checkpoint_after_apply_cli
   + [known_risks] is implying dry-run validation applies code
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:59:59Z, proof_ref tests passed with 61 tests, result_summary operator guide documents dry-run apply validation and no-mutation boundary
+  + [completed_work_review] is support_delta verified operator docs expose dry-run apply usage; requirement_delta final state audit should check clean reentry after long run
+
+& [WorkSliceDetail S83_final_long_run_state_audit] is a long-run reentry slice
+  + [slice_id] is S83_final_long_run_state_audit
+  + [slice_status] is open
+  + [scope] is audit final long-run state for clean worktree, pushed commits, current frontier, and remaining risks
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is git status, tests pass, and SOP surfaces agree on frontier
+  + [completion_criteria] is project can be safely reentered from current conversation UUID and manager board
+  + [support_status] is prepared
+  + [dependency_set] is S82_apply_cli_operator_docs
+  + [known_risks] is stopping too early without a durable frontier
