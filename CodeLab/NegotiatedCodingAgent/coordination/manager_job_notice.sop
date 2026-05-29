@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 54
+  + [job_notice_revision] is 55
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -72,7 +72,8 @@
     S47_shaliach_internal_perspective_docs |
     S48_director_disagreement_ledger |
     S49_dry_run_director_stance_diversity |
-    S50_director_disagreement_docs
+    S50_director_disagreement_docs |
+    S51_multi_programmer_slice_assignment_plan
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -754,7 +755,7 @@
 
 & [WorkSliceDetail S50_director_disagreement_docs] is a Director negotiation depth slice
   + [slice_id] is S50_director_disagreement_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document DirectorDisagreementLedger and dry-run stance diversity
   + [target_files] is docs/**, README.md
   + [proof_route] is docs updated and tests remain passing
@@ -762,3 +763,16 @@
   + [support_status] is prepared
   + [dependency_set] is S48_director_disagreement_ledger, S49_dry_run_director_stance_diversity
   + [known_risks] is treating deterministic dry-run stances as proof of live model diversity
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:40:00Z, proof_ref tests passed with 44 tests, result_summary documented DirectorDisagreementLedger and dry-run stance diversity boundary
+  + [completed_work_review] is support_delta verified operators understand disagreement ledger purpose; requirement_delta multi-Programmer assignment remains a major partial obligation
+
+& [WorkSliceDetail S51_multi_programmer_slice_assignment_plan] is a Programmer swarm slice
+  + [slice_id] is S51_multi_programmer_slice_assignment_plan
+  + [slice_status] is open
+  + [scope] is add a deterministic assignment plan for distributing approved code-layer work slices across configured Programmers
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing assignment plan maps work slices to all configured Programmers or records why only one is active
+  + [completion_criteria] is runtime has a first-class ProgrammerAssignmentPlan before executing multiple Programmers
+  + [support_status] is prepared
+  + [dependency_set] is S44_specification_implementation_status_audit
+  + [known_risks] is pretending multi-Programmer execution exists before assignment planning and merge review are designed

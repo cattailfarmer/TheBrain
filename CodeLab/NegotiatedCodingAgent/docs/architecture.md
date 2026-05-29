@@ -104,6 +104,7 @@ Each run records protocol and review surfaces alongside the flowcharts:
 
 - `protocol_activation.sop` records active SOP protocol references and the authority boundary.
 - `<layer>.package.sop` carries the flowchart, Director proposals, SJS ledger, DataDesign ledger, Shaliach finding, and Manager decision.
+- `DirectorDisagreementLedger` inside the layer package preserves Director perspective diversity before Manager settlement.
 - `<layer>.shaliach_finding.sop` records no-finding, warning, pause, or rework findings.
 - `<layer>.shaliach_response.sop` records repair steps when Shaliach warning or rework coordination is required.
 - `file_change_surface.sop` and `file_change_index.sop` map generated files to solution records and justification refs.
@@ -135,6 +136,17 @@ The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packe
 - rendezvous packets are handoff carriers with explicit boundaries.
 
 Operator commands for these helpers are documented in `docs/coordination_operator_guide.md`.
+
+## Director Disagreement Ledger
+
+The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
+
+In dry-run mode, Directors emit deterministic stance differences:
+
+- `SystemsDirector` emphasizes structure, interfaces, decomposition, and flow control.
+- `FailureDirector` emphasizes failure modes, boundary mistakes, recovery paths, and unresolved risks.
+
+This proves the artifact path and review shape. It is not proof that live local models have achieved useful diversity; that still depends on model serving, model selection, and real proposal quality.
 
 ## Local Model Serving
 

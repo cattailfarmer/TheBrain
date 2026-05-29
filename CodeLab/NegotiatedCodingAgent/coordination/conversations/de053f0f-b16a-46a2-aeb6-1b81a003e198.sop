@@ -120,6 +120,7 @@
   + [last_proof] is tests passed with 42 tests after S47 Shaliach internal perspective docs
   + [last_proof] is tests passed with 43 tests and dry-run package emitted DirectorDisagreementLedger
   + [last_proof] is tests passed with 44 tests and dry-run package showed SystemsDirector and FailureDirector positions
+  + [last_proof] is tests passed with 44 tests after S50 Director disagreement docs
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -248,9 +249,10 @@
   + [completed_slice] is S47_shaliach_internal_perspective_docs
   + [completed_slice] is S48_director_disagreement_ledger
   + [completed_slice] is S49_dry_run_director_stance_diversity
+  + [completed_slice] is S50_director_disagreement_docs
 
-  + [current_frontier] is S50_director_disagreement_docs after dry-run stance diversity
-  + [next_recommended_slice] is S50_director_disagreement_docs
+  + [current_frontier] is S51_multi_programmer_slice_assignment_plan after Director disagreement docs
+  + [next_recommended_slice] is S51_multi_programmer_slice_assignment_plan
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

@@ -57,6 +57,7 @@ Runs are written under `runs/<timestamp>/`:
 - `protocol_activation.sop`
 - `<layer>.flowchart.md`
 - `<layer>.package.sop`
+- `DirectorDisagreementLedger` inside each layer package
 - `<layer>.shaliach_finding.sop`
 - `<layer>.shaliach_response.sop` when Shaliach requires a response
 - `<layer>.manager_review.sop`
