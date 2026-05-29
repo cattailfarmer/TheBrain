@@ -216,6 +216,8 @@ The reviewed narrative append e2e fixture now runs in `tests/test_core.py`, exer
 
 `coordination/review_artifact_synthesis_design.sop` defines the next boundary: deterministic draft Manager/Shaliach review artifacts can be derived from update records, but they remain drafts and not live deliberation.
 
+`negotiated_agent.narrative_append` now includes pure synthesis builders for Manager and Shaliach review drafts from `NarrativeCoverageUpdateRecord` evidence. The drafts carry explicit deterministic-review caution fields.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

@@ -1864,3 +1864,11 @@
   + [proof_ref] is coordination/review_artifact_synthesis_design.sop
   + [current_frontier] is S224_review_artifact_synthesis_builders
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S224_review_artifact_synthesis_builders] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S224_review_artifact_synthesis_builders
+  + [implemented_capability] is pure synthesis builders create Manager and Shaliach deterministic review drafts from NarrativeCoverageUpdateRecord evidence
+  + [proof_result] is tests passed with 203 tests
+  + [current_frontier] is S225_review_artifact_synthesis_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

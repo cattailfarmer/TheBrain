@@ -3103,7 +3103,7 @@
 
 & [WorkSliceDetail S224_review_artifact_synthesis_builders] is a coordination runtime implementation slice
   + [slice_id] is S224_review_artifact_synthesis_builders
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure Manager and Shaliach review draft builders from NarrativeCoverageUpdateRecord
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover approval count derivation empty blocks deferred rework and boundary strings
@@ -3111,3 +3111,16 @@
   + [support_status] is prepared
   + [dependency_set] is S223_review_artifact_synthesis_design
   + [known_risks] is generated drafts being mistaken for human or live model review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:18:00Z, proof_ref tests passed with 203 tests, result_summary added pure Manager and Shaliach review artifact synthesis builders
+  + [completed_work_review] is support_delta verified builders derive counts/rework and include deterministic draft caution fields without writing artifacts; requirement_delta next step is add CLI synthesis mode for review draft artifacts
+
+& [WorkSliceDetail S225_review_artifact_synthesis_cli] is a coordination runtime implementation slice
+  + [slice_id] is S225_review_artifact_synthesis_cli
+  + [slice_status] is open
+  + [scope] is add narrative append CLI synthesis mode that writes Manager and Shaliach draft review artifacts from update record evidence
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover synthesized artifact writes collision rejection caution fields and no narrative mutation
+  + [completion_criteria] is operators can draft both review artifacts from update-record evidence without applying narrative updates
+  + [support_status] is prepared
+  + [dependency_set] is S224_review_artifact_synthesis_builders
+  + [known_risks] is synthesized drafts being treated as final live review

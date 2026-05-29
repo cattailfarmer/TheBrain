@@ -94,6 +94,8 @@ from negotiated_agent.narrative_append import (
     narrative_surface_guard,
     parse_manager_narrative_append_approval_sop,
     parse_shaliach_narrative_append_clearance_sop,
+    synthesize_manager_narrative_append_approval,
+    synthesize_shaliach_narrative_append_clearance,
 )
 from negotiated_agent.narrative_append_cli import main as narrative_append_cli_main
 from negotiated_agent.openai_health import check_openai_compatible
@@ -5500,6 +5502,53 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             self.assertTrue(final_narrative.startswith(original.rstrip()))
             self.assertIn("NarrativeAppliedUpdate fixture-apply-1", final_narrative)
             self.assertIn("append LongRunNarrativeUpdate for fixture", final_narrative)
+
+    def test_synthesized_manager_review_uses_update_count_and_caution(self) -> None:
+        record = self._update_record(("append one", "append two"))
+        approval = synthesize_manager_narrative_append_approval(
+            record,
+            approval_id="manager-draft",
+            frontier_at_approval="S224",
+            residual_risks=("operator must review wording",),
+        )
+        self.assertEqual(approval.approval_status, "approved_for_narrative_append")
+        self.assertEqual(approval.approved_update_count, 2)
+        self.assertTrue(approval.allows_append)
+        self.assertIn("deterministic_draft_requires_manager_review", approval.residual_risks)
+        self.assertIn("operator must review wording", approval.residual_risks)
+
+    def test_synthesized_manager_review_blocks_empty_update_record(self) -> None:
+        approval = synthesize_manager_narrative_append_approval(self._update_record(()))
+        self.assertEqual(approval.approval_status, "blocked_pending_review")
+        self.assertEqual(approval.approved_update_count, 0)
+        self.assertFalse(approval.allows_append)
+
+    def test_synthesized_shaliach_review_clears_without_deferred_updates(self) -> None:
+        clearance = synthesize_shaliach_narrative_append_clearance(
+            self._update_record(("append one",)),
+            clearance_id="shaliach-draft",
+            checked_protocols=("SOP", "SJS"),
+            findings=("append text is evidence-scoped",),
+        )
+        self.assertEqual(clearance.clearance_status, "clear_for_narrative_append")
+        self.assertEqual(clearance.checked_protocols, ("SOP", "SJS"))
+        self.assertTrue(clearance.allows_append)
+        self.assertIn("deterministic_draft_requires_shaliach_review", clearance.findings)
+        self.assertIn("append text is evidence-scoped", clearance.findings)
+
+    def test_synthesized_shaliach_review_requires_rework_for_deferred_updates(self) -> None:
+        record = NarrativeCoverageUpdateRecord(
+            update_id="update-deferred",
+            stale_check_ref="coordination/narrative_stale_check.sop",
+            narrative_surface_ref="coordination/project_narrative_surface.sop",
+            appended_updates=("append one",),
+            deferred_updates=("duplicate_update_already_represented: append two",),
+            stale_claim_refs=(),
+        )
+        clearance = synthesize_shaliach_narrative_append_clearance(record)
+        self.assertEqual(clearance.clearance_status, "rework_required_for_narrative_append")
+        self.assertEqual(clearance.required_rework, ("duplicate_update_already_represented: append two",))
+        self.assertFalse(clearance.allows_append)
 
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(

@@ -137,6 +137,47 @@ def build_narrative_append_result(
     )
 
 
+def synthesize_manager_narrative_append_approval(
+    update_record: NarrativeCoverageUpdateRecord,
+    *,
+    approval_id: str = "manager-narrative-append-draft-1",
+    update_record_ref: str = "coordination/narrative_coverage_update_record.sop",
+    frontier_at_approval: str = "unknown",
+    residual_risks: tuple[str, ...] = (),
+) -> ManagerNarrativeAppendApproval:
+    approved_count = len(update_record.appended_updates)
+    status = "approved_for_narrative_append" if approved_count > 0 else "blocked_pending_review"
+    risks = ("deterministic_draft_requires_manager_review",) + residual_risks
+    return ManagerNarrativeAppendApproval(
+        approval_id=approval_id,
+        update_record_ref=update_record_ref,
+        approval_status=status,
+        approved_update_count=approved_count,
+        frontier_at_approval=frontier_at_approval,
+        residual_risks=risks,
+    )
+
+
+def synthesize_shaliach_narrative_append_clearance(
+    update_record: NarrativeCoverageUpdateRecord,
+    *,
+    clearance_id: str = "shaliach-narrative-append-draft-1",
+    update_record_ref: str = "coordination/narrative_coverage_update_record.sop",
+    checked_protocols: tuple[str, ...] = ("SOP",),
+    findings: tuple[str, ...] = (),
+) -> ShaliachNarrativeAppendClearance:
+    status = "rework_required_for_narrative_append" if update_record.deferred_updates else "clear_for_narrative_append"
+    draft_findings = ("deterministic_draft_requires_shaliach_review",) + findings
+    return ShaliachNarrativeAppendClearance(
+        clearance_id=clearance_id,
+        update_record_ref=update_record_ref,
+        clearance_status=status,
+        checked_protocols=checked_protocols,
+        findings=draft_findings,
+        required_rework=update_record.deferred_updates,
+    )
+
+
 def narrative_surface_guard(text: str) -> str:
     return f"size:{len(text)}"
 

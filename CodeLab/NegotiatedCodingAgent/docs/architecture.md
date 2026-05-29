@@ -312,6 +312,8 @@ That e2e fixture is now implemented in the test suite. It proves the determinist
 
 `coordination/review_artifact_synthesis_design.sop` defines deterministic review drafts from `NarrativeCoverageUpdateRecord` evidence. The draft policy can derive approval counts and required rework, but carries an explicit boundary that it is not live Manager or Shaliach deliberation.
 
+The pure synthesis builders are implemented in `negotiated_agent.narrative_append`. They derive Manager approval counts from appended updates and Shaliach required rework from deferred updates, while preserving caution fields in the generated review evidence.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
