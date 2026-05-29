@@ -3324,7 +3324,7 @@
 
 & [WorkSliceDetail S241_shaliach_self_negotiation_inspect_cli] is a coordination runtime CLI slice
   + [slice_id] is S241_shaliach_self_negotiation_inspect_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add CLI/wrapper to inspect Shaliach self-negotiation artifacts
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests cover CLI summary output for resolved advisory and wrong-header failure
@@ -3332,3 +3332,16 @@
   + [support_status] is prepared
   + [dependency_set] is S240_shaliach_self_negotiation_parser
   + [known_risks] is CLI output becoming a second artifact format instead of a concise inspection view
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:50:00Z, proof_ref tests passed with 223 tests, result_summary added Shaliach self-negotiation inspection CLI and PowerShell wrapper
+  + [completed_work_review] is support_delta verified CLI prints inspection summary with status tensions and authority boundary and rejects wrong headers; requirement_delta next step is refresh checkpoint after Shaliach self-negotiation inspection tooling
+
+& [WorkSliceDetail S242_long_run_checkpoint_after_shaliach_inspect_cli] is a long-run reentry slice
+  + [slice_id] is S242_long_run_checkpoint_after_shaliach_inspect_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after Shaliach self-negotiation inspection CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 223-test suite and inspection CLI frontier
+  + [completion_criteria] is checkpoint captures parser and inspect CLI progress
+  + [support_status] is prepared
+  + [dependency_set] is S241_shaliach_self_negotiation_inspect_cli
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

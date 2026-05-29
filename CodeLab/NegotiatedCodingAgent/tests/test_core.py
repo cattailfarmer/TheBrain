@@ -142,6 +142,7 @@ from negotiated_agent.shaliach import (
     parse_shaliach_self_negotiation_sop,
     review_layer_negotiation,
 )
+from negotiated_agent.shaliach_self_negotiation_cli import main as shaliach_self_negotiation_cli_main
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import (
@@ -6065,6 +6066,40 @@ class ShaliachRuntimeTests(unittest.TestCase):
     def test_parse_self_negotiation_rejects_wrong_header(self) -> None:
         with self.assertRaises(ValueError):
             parse_shaliach_self_negotiation_sop("& [ShaliachFinding application] is not the record")
+
+    def test_self_negotiation_inspect_cli_prints_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "application.shaliach_self_negotiation.sop"
+            record = build_shaliach_self_negotiation_record(
+                negotiation_id="inspect-test",
+                subject_ref="application_layer_package",
+                intention_statement="resolve test finding",
+                purpose_statement="preserve test boundary",
+                context_boundary="application review",
+                unresolved_tension_set=(
+                    ShaliachSelfNegotiationTension(
+                        tension="thin evidence",
+                        severity="advisory",
+                        reason="director support is weak",
+                    ),
+                ),
+            )
+            path.write_text(record.to_sop(), encoding="utf-8")
+            stdout = io.StringIO()
+            with contextlib.redirect_stdout(stdout):
+                self.assertEqual(shaliach_self_negotiation_cli_main([str(path)]), 0)
+        output = stdout.getvalue()
+        self.assertIn("ShaliachSelfNegotiationInspection inspect-test", output)
+        self.assertIn("status] is advisory", output)
+        self.assertIn("tension advisory] is thin evidence", output)
+        self.assertIn("inspection_summary_not_approval", output)
+
+    def test_self_negotiation_inspect_cli_rejects_wrong_header(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "bad.sop"
+            path.write_text("& [ShaliachFinding application] is not the record", encoding="utf-8")
+            with self.assertRaises(ValueError):
+                shaliach_self_negotiation_cli_main([str(path)])
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

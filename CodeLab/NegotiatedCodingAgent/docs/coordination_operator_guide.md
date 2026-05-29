@@ -44,6 +44,14 @@ Status meanings:
 
 The file is intentionally bounded. It is evidence for Shaliach review, and finding/response artifacts may cite it through `self_negotiation_ref`, but it is not live model self-deliberation, Manager approval, file-application permission, or a replacement for direct artifact inspection.
 
+Inspect a self-negotiation artifact with:
+
+```powershell
+.\scripts\shaliach-self-negotiation.ps1 -Artifact .\runs\<timestamp>\<layer>.shaliach_self_negotiation.sop
+```
+
+The command prints an inspection summary only. It does not rewrite the artifact, advance the frontier, or approve the layer.
+
 ## Run Manifests
 
 Each completed or blocked run writes `run_manifest.sop`. Validate that listed artifact refs exist:

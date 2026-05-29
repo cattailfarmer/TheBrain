@@ -813,7 +813,9 @@
   + [last_proof] is operator guide documents Shaliach self-negotiation artifact fields status meanings and deterministic boundary
   + [completed_slice] is S240_shaliach_self_negotiation_parser
   + [last_proof] is tests passed with 221 tests after Shaliach self-negotiation parser and loader
-  + [next_recommended_slice] is S241_shaliach_self_negotiation_inspect_cli
+  + [completed_slice] is S241_shaliach_self_negotiation_inspect_cli
+  + [last_proof] is tests passed with 223 tests after Shaliach self-negotiation inspection CLI
+  + [next_recommended_slice] is S242_long_run_checkpoint_after_shaliach_inspect_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
