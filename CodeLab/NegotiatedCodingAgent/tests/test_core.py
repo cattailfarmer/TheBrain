@@ -4605,6 +4605,28 @@ class LongRunHarnessTests(unittest.TestCase):
         self.assertIn("combined_artifact_validation_status] is passed", sop)
         self.assertIn("application:consistent", sop)
 
+    def test_checkpoint_points_to_prelive_recipe_without_generating_packets(self) -> None:
+        ok = CommandResult("command", 0, "ok", "")
+        combined = CombinedArtifactValidation("passed", "valid", 0, "passed", "ok", "non_gating_environment_state")
+        checkpoint = LongRunCheckpoint(
+            created_at="2026-05-29T12:00:00Z",
+            conversation_uuid="test-uuid",
+            current_frontier="S281",
+            git_clean_before=True,
+            test_result=ok,
+            dry_run_result=ok,
+            model_inventory_result=ok,
+            shaliach_cross_artifact_result=CommandResult("shaliach_cross_artifact_probe", 0, "application:consistent", ""),
+            combined_artifact_validation=combined,
+        )
+
+        sop = checkpoint.to_sop()
+
+        self.assertIn("prelive_review_packet_recipe_ref] is coordination/prelive_review_packet_operator_recipe.sop", sop)
+        self.assertIn("prelive_review_packet_generation] is operator_only", sop)
+        self.assertNotIn("ManagerPreliveReviewPacket", sop)
+        self.assertNotIn("ShaliachPreliveReviewPacket", sop)
+
     def test_checkpoint_fails_when_shaliach_cross_artifact_probe_fails(self) -> None:
         ok = CommandResult("command", 0, "ok", "")
         probe = CommandResult("shaliach_cross_artifact_probe", 1, "application:inconsistent", "")

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 167
+  + [job_notice_revision] is 168
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3844,7 +3844,7 @@
 
 & [WorkSliceDetail S281_checkpoint_prelive_recipe_reference] is a long-run proof implementation slice
   + [slice_id] is S281_checkpoint_prelive_recipe_reference
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pre-live review packet operator recipe reference to long-run checkpoint output
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover checkpoint SOP recipe reference and no auto-written Manager/Shaliach packet artifacts
@@ -3852,3 +3852,16 @@
   + [support_status] is prepared
   + [dependency_set] is S280_prelive_checkpoint_integration_decision_design
   + [known_risks] is recipe reference being mistaken for completed live review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T14:12:00Z, proof_ref tests passed with 278 tests, result_summary checkpoint SOP now cites pre-live review packet recipe and marks generation operator_only
+  + [completed_work_review] is support_delta verified checkpoint does not emit ManagerPreliveReviewPacket or ShaliachPreliveReviewPacket records; requirement_delta next step is refresh long-run checkpoint with recipe reference in generated proof
+
+& [WorkSliceDetail S282_long_run_checkpoint_after_prelive_recipe_reference] is a long-run reentry slice
+  + [slice_id] is S282_long_run_checkpoint_after_prelive_recipe_reference
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after adding pre-live recipe reference fields
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 278-test suite and prelive_review_packet_generation operator_only
+  + [completion_criteria] is checkpoint captures recipe reference and remains ready_for_continuation without packet artifacts
+  + [support_status] is prepared
+  + [dependency_set] is S281_checkpoint_prelive_recipe_reference
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

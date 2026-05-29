@@ -17,6 +17,10 @@ from .shaliach import (
 )
 
 
+PRELIVE_REVIEW_PACKET_RECIPE_REF = "coordination/prelive_review_packet_operator_recipe.sop"
+PRELIVE_REVIEW_PACKET_GENERATION = "operator_only"
+
+
 @dataclass(frozen=True)
 class CommandResult:
     name: str
@@ -69,6 +73,8 @@ class LongRunCheckpoint:
   + [model_inventory_status] is {_status(self.model_inventory_result)}
   + [shaliach_cross_artifact_status] is {_probe_status(self.shaliach_cross_artifact_result)}
   + [combined_artifact_validation_status] is {self.combined_artifact_validation.status if self.combined_artifact_validation else "not_run"}
+  + [prelive_review_packet_recipe_ref] is {PRELIVE_REVIEW_PACKET_RECIPE_REF}
+  + [prelive_review_packet_generation] is {PRELIVE_REVIEW_PACKET_GENERATION}
   + [openai_health_status] is {_status(self.openai_health_result) if self.openai_health_result else "not_run"}
   + [route_draft_status] is {_status(self.route_draft_result) if self.route_draft_result else "not_run"}
   + [authority_boundary] is harness_checkpoint_not_human_approval
@@ -99,6 +105,8 @@ class LongRunCheckpoint:
     + [manifest_status] is {self.combined_artifact_validation.manifest_status if self.combined_artifact_validation else "not_run"}
     + [checkpoint_probe_status] is {self.combined_artifact_validation.checkpoint_probe_status if self.combined_artifact_validation else "not_run"}
     + [openai_health_gating] is {self.combined_artifact_validation.openai_health_gating if self.combined_artifact_validation else "not_applicable"}
+    + [prelive_review_packet_recipe_ref] is {PRELIVE_REVIEW_PACKET_RECIPE_REF}
+    + [prelive_review_packet_generation] is {PRELIVE_REVIEW_PACKET_GENERATION}
     + [authority_boundary] is combined_artifact_validation_not_acceptance_review
 
   & [HarnessCommand openai_health] is an environment-state summary
