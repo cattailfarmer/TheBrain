@@ -29,6 +29,7 @@ from negotiated_agent.mailbox import (
 )
 from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
+from negotiated_agent.multi_programmer import build_merge_review_input, build_multi_programmer_execution_plan
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -307,6 +308,40 @@ class WorkSliceTests(unittest.TestCase):
         self.assertEqual(plan.active_programmer_count, 2)
         self.assertIn("WS003_documentation", sop)
         self.assertIn("ProgrammerB", sop)
+
+    def test_multi_programmer_execution_plan_uses_separate_artifact_names(self) -> None:
+        work_slices = create_planned_work_slices(Path("code.package.sop"), "build thing", include_support_slices=False)
+        plan = create_programmer_assignment_plan(
+            work_slices,
+            [AgentConfig(name="Core Programmer", model="m", temperature=0, role="core")],
+        )
+        execution_plan = build_multi_programmer_execution_plan(plan)
+        self.assertEqual(len(execution_plan.records), 1)
+        record = execution_plan.records[0]
+        self.assertEqual(record.output_root, "implementation/WS001_core_implementation.Core_Programmer")
+        self.assertEqual(record.raw_output_ref, "WS001_core_implementation.Core_Programmer.raw.md")
+        sop = execution_plan.to_sop()
+        self.assertIn("MultiProgrammerExecutionPlan", sop)
+        self.assertIn("execution_plan_not_workspace_patch_approval", sop)
+        self.assertIn("Core_Programmer.file_change_surface.sop", sop)
+
+    def test_merge_review_input_preserves_execution_record_refs(self) -> None:
+        work_slices = create_planned_work_slices(Path("code.package.sop"), "build thing")
+        plan = create_programmer_assignment_plan(
+            work_slices,
+            [
+                AgentConfig(name="ProgrammerA", model="m", temperature=0, role="core"),
+                AgentConfig(name="ProgrammerB", model="m", temperature=0, role="tests"),
+            ],
+        )
+        execution_plan = build_multi_programmer_execution_plan(plan)
+        merge_input = build_merge_review_input(execution_plan)
+        self.assertEqual(len(merge_input.inputs), 3)
+        self.assertEqual(merge_input.inputs[0].merge_status, "pending_manager_review")
+        sop = merge_input.to_sop()
+        self.assertIn("MultiProgrammerMergeReviewInput", sop)
+        self.assertIn("merge_input_not_merge_approval", sop)
+        self.assertIn("WS002_verification.ProgrammerB.programmer_report.sop", sop)
 
 
 class FileChangeSurfaceTests(unittest.TestCase):

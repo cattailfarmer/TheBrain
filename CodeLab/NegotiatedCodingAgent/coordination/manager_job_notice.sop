@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 65
+  + [job_notice_revision] is 66
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -83,7 +83,8 @@
     S58_director_multi_round_docs |
     S59_spec_audit_refresh_after_director_carry_forward |
     S60_executable_multi_programmer_runner_design |
-    S61_multi_programmer_runner_records
+    S61_multi_programmer_runner_records |
+    S62_orchestrator_multi_programmer_plan_artifacts
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -908,7 +909,7 @@
 
 & [WorkSliceDetail S61_multi_programmer_runner_records] is a Programmer swarm implementation slice
   + [slice_id] is S61_multi_programmer_runner_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure runtime record types for multi-Programmer assignment execution and merge-review input surfaces
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is unit tests for assignment execution records, artifact names, and merge review input SOP output
@@ -916,3 +917,16 @@
   + [support_status] is prepared
   + [dependency_set] is S60_executable_multi_programmer_runner_design
   + [known_risks] is adding records that diverge from the design contract
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:30:00Z, proof_ref tests passed with 49 tests, result_summary added multi_programmer execution and merge-review input records with deterministic artifact refs
+  + [completed_work_review] is support_delta verified pure records match the runner contract; requirement_delta orchestrator does not yet write these plan artifacts during runs
+
+& [WorkSliceDetail S62_orchestrator_multi_programmer_plan_artifacts] is a Programmer swarm implementation slice
+  + [slice_id] is S62_orchestrator_multi_programmer_plan_artifacts
+  + [slice_status] is open
+  + [scope] is have orchestrator write multi-Programmer execution plan and merge-review input artifacts after code package approval
+  + [target_files] is src/negotiated_agent/orchestrator.py, tests/**
+  + [proof_route] is dry-run test shows multi_programmer_execution_plan.sop and multi_programmer_merge_review_input.sop exist in run root
+  + [completion_criteria] is normal runs expose future multi-Programmer runner evidence without executing parallel Programmer calls yet
+  + [support_status] is prepared
+  + [dependency_set] is S61_multi_programmer_runner_records
+  + [known_risks] is implying multi-Programmer execution exists when only plan artifacts are written
