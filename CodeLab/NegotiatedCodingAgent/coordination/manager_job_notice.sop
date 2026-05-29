@@ -3285,7 +3285,7 @@
 
 & [WorkSliceDetail S238_spec_audit_refresh_after_shaliach_self_negotiation] is a specification audit slice
   + [slice_id] is S238_spec_audit_refresh_after_shaliach_self_negotiation
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after Shaliach self-negotiation records and run artifacts
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names deterministic self-negotiation records builder finding refs and run artifacts while preserving live deliberation gap
@@ -3293,3 +3293,16 @@
   + [support_status] is prepared
   + [dependency_set] is S237_long_run_checkpoint_after_shaliach_self_negotiation
   + [known_risks] is audit overstating deterministic scaffold as live Shaliach self-reasoning
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:28:00Z, proof_ref spec_implementation_status.sop README.md docs/architecture.md and tests passed with 218 tests, result_summary audit and docs distinguish deterministic Shaliach self-negotiation artifacts from live deliberation
+  + [completed_work_review] is support_delta verified audit now names records builder refs run artifacts and remaining live model gap; requirement_delta next step is document operator interpretation of Shaliach self-negotiation artifacts
+
+& [WorkSliceDetail S239_shaliach_self_negotiation_operator_docs] is a documentation slice
+  + [slice_id] is S239_shaliach_self_negotiation_operator_docs
+  + [slice_status] is open
+  + [scope] is add operator guide notes for reading Shaliach self-negotiation artifacts and boundaries
+  + [target_files] is docs/coordination_operator_guide.md, README.md
+  + [proof_route] is docs explain artifact location fields status meanings and deterministic-not-live boundary
+  + [completion_criteria] is operator can interpret self-negotiation artifacts during dry-run review
+  + [support_status] is prepared
+  + [dependency_set] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [known_risks] is docs making scaffold sound like a substitute for live Shaliach deliberation

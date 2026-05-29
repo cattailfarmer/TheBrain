@@ -166,6 +166,7 @@ Each run records protocol and review surfaces alongside the flowcharts:
 - `protocol_activation.sop` records active SOP protocol references and the authority boundary.
 - `<layer>.package.sop` carries the flowchart, Director proposals, SJS ledger, DataDesign ledger, Shaliach finding, and Manager decision.
 - `DirectorDisagreementLedger` inside the layer package preserves Director perspective diversity before Manager settlement.
+- `<layer>.shaliach_self_negotiation.sop` records deterministic Shaliach perspective intentions, proposed responses, resolved intention, and unresolved tensions for the layer finding.
 - `<layer>.shaliach_finding.sop` records no-finding, warning, pause, or rework findings.
 - `<layer>.shaliach_response.sop` records repair steps when Shaliach warning or rework coordination is required.
 - `file_change_surface.sop` and `file_change_index.sop` map generated files to solution records and justification refs.
@@ -316,7 +317,7 @@ The pure synthesis builders are implemented in `negotiated_agent.narrative_appen
 
 `--synthesize-review-drafts` / `-SynthesizeReviewDrafts` exposes the synthesis path through the narrative append CLI and wrapper. It writes both review artifacts with collision checks and does not plan or apply narrative updates.
 
-`coordination/shaliach_self_negotiation_record_design.sop` defines deterministic Shaliach self-negotiation records for pre-live scaffolding. The record preserves multiple advisory perspectives, resolved intention, and unresolved tensions without claiming live internal deliberation.
+`coordination/shaliach_self_negotiation_record_design.sop` defines deterministic Shaliach self-negotiation records for pre-live scaffolding. `ShaliachSelfNegotiationRecord` is implemented, Shaliach findings can cite it through `self_negotiation_ref`, and dry-runs write one artifact per layer. The record preserves multiple advisory perspectives, resolved intention, and unresolved tensions without claiming live internal deliberation.
 
 ## Director Disagreement Ledger
 

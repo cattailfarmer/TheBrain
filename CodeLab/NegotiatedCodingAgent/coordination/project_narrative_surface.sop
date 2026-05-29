@@ -2030,3 +2030,11 @@
   + [run_root] is runs\20260529T201934Z
   + [current_frontier] is S238_spec_audit_refresh_after_shaliach_self_negotiation
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S238_spec_audit_refresh_after_shaliach_self_negotiation] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [implemented_capability] is spec audit README and architecture now describe deterministic Shaliach self-negotiation artifacts while preserving the live deliberation gap
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S239_shaliach_self_negotiation_operator_docs
+  + [narrative_role] is specification_audit and documentation_arc update

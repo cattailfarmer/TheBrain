@@ -344,7 +344,8 @@
   + [completed_slice] is S235_shaliach_self_negotiation_from_finding
   + [completed_slice] is S236_shaliach_self_negotiation_run_artifacts
   + [completed_slice] is S237_long_run_checkpoint_after_shaliach_self_negotiation
-  + [ready_slice] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [completed_slice] is S238_spec_audit_refresh_after_shaliach_self_negotiation
+  + [ready_slice] is S239_shaliach_self_negotiation_operator_docs
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

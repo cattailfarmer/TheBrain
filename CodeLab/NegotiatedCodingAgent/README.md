@@ -59,6 +59,7 @@ Runs are written under `runs/<timestamp>/`:
 - `<layer>.flowchart.md`
 - `<layer>.package.sop`
 - `DirectorDisagreementLedger` inside each layer package
+- `<layer>.shaliach_self_negotiation.sop`
 - `<layer>.shaliach_finding.sop`
 - `<layer>.shaliach_response.sop` when Shaliach requires a response
 - `<layer>.manager_review.sop`
@@ -222,7 +223,7 @@ The reviewed narrative append e2e fixture now runs in `tests/test_core.py`, exer
 
 The complete deterministic reviewed narrative append recipe is documented in `docs/coordination_operator_guide.md`: stale-check, update-record, guard discovery, review synthesis, plan, then guarded apply.
 
-`coordination/shaliach_self_negotiation_record_design.sop` starts the next lane: deterministic Shaliach self-negotiation scaffolding with explicit higher/lower advisory roles and unresolved tension tracking.
+`coordination/shaliach_self_negotiation_record_design.sop` defines deterministic Shaliach self-negotiation scaffolding with explicit higher/lower advisory roles and unresolved tension tracking. Dry-runs now write `<layer>.shaliach_self_negotiation.sop` beside each finding; this is evidence scaffolding, not live model self-deliberation.
 
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
