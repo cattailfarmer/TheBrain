@@ -158,6 +158,8 @@ The next bridge is specified in `coordination/run_local_to_merge_packet_bridge_d
 
 The wrapper `scripts/packet-proposal.ps1` writes Manager packet acceptance, Shaliach packet review, and `manual_merge_packet.sop` proposal evidence. It does not create apply artifacts or touch the target workspace.
 
+`coordination/frontier_advancement_record_design.sop` defines the next Manager-control boundary: frontier advancement should be a reviewed evidence record before any active conversation surface changes. Packet proposals, proof refs, and Shaliach reviews can support that record, but they do not mutate `current_frontier` by themselves.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

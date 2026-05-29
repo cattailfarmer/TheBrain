@@ -301,6 +301,8 @@ Write packet proposal evidence:
 
 The packet proposal command writes `manual_merge_packet.sop` only after the acceptance and review artifacts exist. It does not write `apply_plan.sop` or mutate the target workspace.
 
+`coordination/frontier_advancement_record_design.sop` describes the next Manager-control boundary. Do not treat a packet proposal or a passing proof as a frontier update; a future frontier advancement record must be written and then explicitly applied to the conversation surface.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

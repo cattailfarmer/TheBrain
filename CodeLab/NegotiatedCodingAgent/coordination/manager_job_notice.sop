@@ -2570,7 +2570,7 @@
 
 & [WorkSliceDetail S183_frontier_advancement_record_design] is a coordination runtime design slice
   + [slice_id] is S183_frontier_advancement_record_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design Manager-reviewed frontier advancement record after packet proposal and proof evidence
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names Manager authority Shaliach clearance proof refs packet refs and no automatic code mutation
@@ -2578,3 +2578,16 @@
   + [support_status] is prepared
   + [dependency_set] is S182_spec_audit_refresh_after_packet_proposal_cli
   + [known_risks] is frontier advancement being treated as implicit workspace acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:00:00Z, proof_ref frontier_advancement_record_design.sop README architecture and operator guide updated, result_summary designed evidence-first Manager-reviewed frontier advancement record boundary
+  + [completed_work_review] is support_delta verified frontier record is not active conversation mutation; requirement_delta next step is add FrontierAdvancementRecord and validation helper
+
+& [WorkSliceDetail S184_frontier_advancement_records] is a coordination runtime implementation slice
+  + [slice_id] is S184_frontier_advancement_records
+  + [slice_status] is open
+  + [scope] is add FrontierAdvancementRecord and validation helper
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover valid record stale frontier blocked Manager blocked Shaliach proof refs packet refs and no surface mutation
+  + [completion_criteria] is Manager-reviewed frontier advancement can be represented without mutating active conversation surfaces
+  + [support_status] is prepared
+  + [dependency_set] is S183_frontier_advancement_record_design
+  + [known_risks] is record builder becoming a hidden surface writer

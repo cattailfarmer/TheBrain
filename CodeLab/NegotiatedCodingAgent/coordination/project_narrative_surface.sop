@@ -1496,3 +1496,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes packet proposal CLI and 140-test checkpoint as scaffold support
   + [current_frontier] is S183_frontier_advancement_record_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S183_frontier_advancement_record_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S183_frontier_advancement_record_design
+  + [implemented_capability] is frontier_advancement_record_design.sop defines evidence-first Manager-reviewed frontier advancement without active conversation surface mutation
+  + [current_frontier] is S184_frontier_advancement_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

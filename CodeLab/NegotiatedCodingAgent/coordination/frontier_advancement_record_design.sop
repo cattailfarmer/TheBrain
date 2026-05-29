@@ -1,0 +1,66 @@
+& [FrontierAdvancementRecordDesign] is the design contract for Manager-reviewed frontier movement after packet proposal and proof evidence
+  @ [conversation_kernel] src/negotiated_agent/conversation.py
+  @ [worker_runner_design] coordination/worker_runner_design.sop
+  @ [execution_gate_design] coordination/worker_execution_gate_design.sop
+  @ [packet_proposal_design] coordination/merge_draft_to_packet_proposal_design.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T02:00:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is frontier_advancement_record_not_surface_mutation
+  + [primary_goal] is make Manager-reviewed frontier advancement explicit and auditable before any active conversation surface is changed
+  + [non_goal] is applying code to the target workspace
+  + [non_goal] is treating packet proposal as completed implementation
+  + [non_goal] is letting workers advance current_frontier directly
+  + [non_goal] is replacing live Manager deliberation once local model serving is available
+
+& [AdvancementInputs] is what a frontier advancement record must inspect
+  + [required_ref] is current active conversation surface ref
+  + [required_ref] is previous frontier value
+  + [required_ref] is proposed next frontier value
+  + [required_ref] is Manager decision or acceptance evidence
+  + [required_ref] is Shaliach clearance or review evidence when protocol authority changed
+  + [required_ref] is proof refs such as tests, long-run checkpoint, packet proposal, or post-apply acceptance
+  + [authority_boundary] is evidence_set_not_frontier_mutation
+  = must: reject current frontier mismatch
+  = must: reject missing Manager evidence
+  = must: reject Shaliach pause, rework, or unresolved authority block
+  = must: preserve packet and apply refs as evidence, not as automatic workspace acceptance
+
+& [FrontierAdvancementRecord] is the future artifact form
+  + [field] is advancement_id
+  + [field] is previous_frontier
+  + [field] is next_frontier
+  + [field] is manager_decision_ref
+  + [field] is manager_decision_status
+  + [field] is shaliach_review_ref
+  + [field] is shaliach_review_status
+  + [field] is proof_refs
+  + [field] is packet_refs
+  + [field] is residual_risk_summary
+  + [field] is authority_boundary
+  + [authority_boundary] is frontier_advancement_record_not_surface_mutation
+  = must: distinguish record construction from active conversation mutation
+  = must: require a later explicit applier before changing current_frontier
+
+& [FrontierApplicationPlan] is the later explicit surface mutation step
+  + [planned_artifact] is frontier_advancement_apply_plan.sop
+  + [planned_artifact] is frontier_advancement_apply_result.sop
+  + [target_surface] is coordination/conversations/<uuid>.sop
+  + [mutation] is replace current_frontier and append completed/proof refs
+  + [authority_boundary] is frontier_apply_plan_not_manager_decision
+  = must: require exact previous_frontier match before writing
+  = must: update project_narrative_surface.sop or record why narrative update is deferred
+  = must: not modify target workspace files
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is valid Manager and Shaliach evidence produces a frontier advancement record without mutating active conversation
+  + [test_case] is stale previous frontier is rejected
+  + [test_case] is blocked Manager or Shaliach evidence is rejected
+  + [test_case] is record serializes proof refs and packet refs
+  + [test_case] is authority boundary says record is not surface mutation
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add FrontierAdvancementRecord and validation helper
+  + [slice_2] is add explicit writer CLI for frontier advancement records
+  + [slice_3] is design explicit frontier application plan before mutating active conversation surfaces from records
