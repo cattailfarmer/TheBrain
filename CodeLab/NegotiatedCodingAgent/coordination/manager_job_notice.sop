@@ -3441,7 +3441,7 @@
 
 & [WorkSliceDetail S250_cross_artifact_checkpoint_probe_design] is a long-run proof design slice
   + [slice_id] is S250_cross_artifact_checkpoint_probe_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design how cross-artifact inspection should be included in checkpoint or manifest validation proof
   + [target_files] is coordination/**, docs/**
   + [proof_route] is design names non-mutating probe inputs, failure behavior, and checkpoint boundaries
@@ -3449,3 +3449,16 @@
   + [support_status] is prepared
   + [dependency_set] is S249_spec_audit_refresh_after_cross_artifact_cli
   + [known_risks] is failing checkpoints on optional response artifacts too aggressively
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T11:56:00Z, proof_ref cross_artifact_checkpoint_probe_design.sop docs/architecture.md and tests passed with 233 tests, result_summary designed checkpoint probe for Shaliach cross-artifact consistency inspection
+  + [completed_work_review] is support_delta verified design ties probe to same dry-run output and keeps approval/live-serving boundaries separate; requirement_delta next step is implement harness probe
+
+& [WorkSliceDetail S251_cross_artifact_checkpoint_probe] is a long-run proof implementation slice
+  + [slice_id] is S251_cross_artifact_checkpoint_probe
+  + [slice_status] is open
+  + [scope] is add Shaliach cross-artifact consistency probe to long-run checkpoint harness
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover passed failed and not_run probe states and checkpoint status behavior
+  + [completion_criteria] is long-run checkpoint records Shaliach cross-artifact probe result from dry-run output
+  + [support_status] is prepared
+  + [dependency_set] is S250_cross_artifact_checkpoint_probe_design
+  + [known_risks] is making harness too brittle before live serving is available

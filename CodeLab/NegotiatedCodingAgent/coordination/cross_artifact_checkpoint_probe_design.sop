@@ -1,0 +1,46 @@
+& [CrossArtifactCheckpointProbeDesign] is the design contract for adding Shaliach consistency inspection to checkpoint proof
+  @ [created_at] 2026-05-30T11:56:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/shaliach_cross_artifact_inspection_design.sop
+  @ [harness_module] src/negotiated_agent/long_run.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is checkpoint_probe_not_manager_approval
+  + [primary_goal] is include cross-artifact consistency proof for the latest checkpoint dry-run
+  + [non_goal] is semantic validation of Shaliach findings
+  + [non_goal] is blocking live model setup because localhost serving is unavailable
+  + [non_goal] is applying files or advancing current_frontier
+
+& [ProbeInputs] is the minimum evidence needed from the dry-run
+  + [field] is run_root from the dry_run command stdout
+  + [field] is layer_set from configured negotiation layers or discovered layer artifacts
+  + [field] is layer.shaliach_self_negotiation.sop
+  + [field] is layer.shaliach_finding.sop
+  + [field] is layer.shaliach_response.sop optional
+  + [authority_boundary] is artifact_presence_not_artifact_truth
+  = must: use the dry-run output created during the same checkpoint
+  = must: inspect every layer that has self-negotiation and finding artifacts
+  = must: allow missing response artifacts when the finding action is no_action
+
+& [ProbeOutcomes] is the checkpoint vocabulary
+  + [status] is passed when every inspected layer is consistent
+  + [status] is failed when any inspected layer is inconsistent or required artifacts are missing
+  + [status] is not_run when dry_run did not produce a parseable run_root
+  + [authority_boundary] is checkpoint_status_not_layer_approval
+  = must: include stdout_tail with the inspection summary or mismatch
+  = must: keep openai_health non-gating as a separate environment state
+  = must: not publish mailbox messages
+
+& [HarnessIntegration] is the intended implementation shape
+  + [step] is parse run_root path from dry_run stdout
+  + [step] is call pure Shaliach cross-artifact evaluator for each layer
+  + [step] is add a HarnessCommand shaliach_cross_artifact_probe to LongRunCheckpoint
+  + [step] is make checkpoint status require the probe to pass when it runs
+  + [authority_boundary] is proof_probe_not_runtime_behavior_change
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is checkpoint SOP records shaliach_cross_artifact_probe passed
+  + [test_case] is checkpoint status fails when the probe reports mismatch
+  + [test_case] is probe is not_run when dry_run stdout lacks a run_root
+  + [test_case] is openai_health remains non-gating and separate from probe result
+  + [test_case] is probe reads run-local artifacts only and does not mutate them

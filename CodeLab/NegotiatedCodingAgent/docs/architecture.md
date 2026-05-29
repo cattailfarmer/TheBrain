@@ -190,6 +190,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/shaliach_cross_artifact_inspection_design.sop` defines the next consistency layer: a deterministic inspection should compare the self-negotiation artifact, Shaliach finding, and response refs for structural agreement. That inspection is not Manager approval, semantic validation, frontier advancement, or file-application permission.
 
+`coordination/cross_artifact_checkpoint_probe_design.sop` defines how that inspection should become checkpoint proof: the long-run harness should inspect the artifacts from its own dry-run output and record the result as a proof probe, still separate from live model serving and approval.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

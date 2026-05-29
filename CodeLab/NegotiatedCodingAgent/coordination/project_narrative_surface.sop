@@ -2144,3 +2144,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S250_cross_artifact_checkpoint_probe_design
   + [narrative_role] is specification_audit and proof_planning update
+
+
+& [LongRunNarrativeUpdate S250_cross_artifact_checkpoint_probe_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S250_cross_artifact_checkpoint_probe_design
+  + [implemented_capability] is cross_artifact_checkpoint_probe_design.sop specifies how long-run harness should inspect same-run Shaliach artifacts as proof without approval authority
+  + [proof_ref] is coordination/cross_artifact_checkpoint_probe_design.sop
+  + [current_frontier] is S251_cross_artifact_checkpoint_probe
+  + [narrative_role] is long_run_coordination and design_arc update
