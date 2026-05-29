@@ -249,7 +249,8 @@
   + [completed_slice] is S140_execution_gate_decision_writer_helper
   + [completed_slice] is S141_execution_gate_decision_writer_cli
   + [completed_slice] is S142_long_run_checkpoint_after_gate_writer_cli
-  + [ready_slice] is S143_spec_audit_refresh_after_gate_writer
+  + [completed_slice] is S143_spec_audit_refresh_after_gate_writer
+  + [ready_slice] is S144_gate_to_worker_cycle_bridge_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

@@ -1120,3 +1120,10 @@
   + [run_root] is runs\20260529T174134Z
   + [current_frontier] is S143_spec_audit_refresh_after_gate_writer
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S143_spec_audit_refresh_after_gate_writer] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S143_spec_audit_refresh_after_gate_writer
+  + [implemented_capability] is spec_implementation_status.sop now recognizes explicit gate decision writer helper CLI and 103-test checkpoint as scaffold support
+  + [current_frontier] is S144_gate_to_worker_cycle_bridge_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

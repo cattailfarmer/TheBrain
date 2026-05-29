@@ -2050,7 +2050,7 @@
 
 & [WorkSliceDetail S143_spec_audit_refresh_after_gate_writer] is a specification audit slice
   + [slice_id] is S143_spec_audit_refresh_after_gate_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after execution gate decision writer helper CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names explicit gate decision writer as scaffold support and chooses next gap
@@ -2058,3 +2058,16 @@
   + [support_status] is prepared
   + [dependency_set] is S142_long_run_checkpoint_after_gate_writer_cli
   + [known_risks] is overstating gate decision persistence as autonomous worker execution
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T20:44:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats explicit gate decision writer as scaffold support and recommends gate-to-cycle bridge design
+  + [completed_work_review] is support_delta verified gate writer is no longer listed as a future gap; requirement_delta next step is design bridge from gate decisions to worker cycle evidence without implementation execution
+
+& [WorkSliceDetail S144_gate_to_worker_cycle_bridge_design] is a coordination runtime design slice
+  + [slice_id] is S144_gate_to_worker_cycle_bridge_design
+  + [slice_status] is open
+  + [scope] is design a bridge from persisted ExecutionGateDecision records into WorkerCycleRecord evidence for blocked and proof-only outcomes
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names inputs outputs status mapping and no implementation execution boundary
+  + [completion_criteria] is design shows how blocked gate decisions become cycle evidence without moving Manager frontier
+  + [support_status] is prepared
+  + [dependency_set] is S143_spec_audit_refresh_after_gate_writer
+  + [known_risks] is turning a gate decision into automatic recovery or frontier advancement
