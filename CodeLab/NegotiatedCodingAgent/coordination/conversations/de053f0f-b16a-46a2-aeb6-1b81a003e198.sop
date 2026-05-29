@@ -389,6 +389,14 @@
   + [last_proof] is run 20260529T173342Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T173342Z
   + [last_proof] is run 20260529T173342Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T174134Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T174134Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T174134Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T174134Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T174134Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T174134Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T174134Z
+  + [last_proof] is run 20260529T174134Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -537,9 +545,10 @@
   + [completed_slice] is S139_execution_gate_decision_writer_design
   + [completed_slice] is S140_execution_gate_decision_writer_helper
   + [completed_slice] is S141_execution_gate_decision_writer_cli
+  + [completed_slice] is S142_long_run_checkpoint_after_gate_writer_cli
 
-  + [current_frontier] is S142_long_run_checkpoint_after_gate_writer_cli after explicit gate decision writer CLI
-  + [next_recommended_slice] is S142_long_run_checkpoint_after_gate_writer_cli
+  + [current_frontier] is S143_spec_audit_refresh_after_gate_writer after 103-test gate writer checkpoint
+  + [next_recommended_slice] is S143_spec_audit_refresh_after_gate_writer
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

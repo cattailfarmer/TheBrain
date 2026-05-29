@@ -2037,7 +2037,7 @@
 
 & [WorkSliceDetail S142_long_run_checkpoint_after_gate_writer_cli] is a long-run reentry slice
   + [slice_id] is S142_long_run_checkpoint_after_gate_writer_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after execution gate decision writer CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 103-test suite and route draft proof
@@ -2045,3 +2045,16 @@
   + [support_status] is prepared
   + [dependency_set] is S141_execution_gate_decision_writer_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:41:53Z, proof_ref long-run checkpoint passed 103 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after gate writer CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 103-test gate writer frontier; requirement_delta next step is refresh spec audit after gate decision writer support
+
+& [WorkSliceDetail S143_spec_audit_refresh_after_gate_writer] is a specification audit slice
+  + [slice_id] is S143_spec_audit_refresh_after_gate_writer
+  + [slice_status] is open
+  + [scope] is refresh implementation status after execution gate decision writer helper CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names explicit gate decision writer as scaffold support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists execution gate decision writer as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S142_long_run_checkpoint_after_gate_writer_cli
+  + [known_risks] is overstating gate decision persistence as autonomous worker execution
