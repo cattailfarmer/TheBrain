@@ -3,12 +3,16 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
+from .ledgers import NegotiatedLedgers, negotiate_ledgers
+
 
 @dataclass(frozen=True)
 class LayerPackage:
     layer: str
     flowchart: str
     parent_ref: str
+    proposals: list[tuple[str, str]] | None = None
+    ledgers: NegotiatedLedgers | None = None
     manager_decision: str = "pending"
     shaliach_severity: str = "info"
     shaliach_finding: str = "no protocol findings in scaffold pass"
@@ -16,6 +20,7 @@ class LayerPackage:
     def to_sop(self) -> str:
         package_id = f"{self.layer}_layer_package"
         timestamp = datetime.now(timezone.utc).isoformat()
+        ledgers = self.ledgers or negotiate_ledgers(self.layer, self.proposals or [], self.flowchart)
         return f"""& [LayerNegotiationPackage {package_id}] is the durable output package for the {self.layer} layer
   @ [created_at] {timestamp}
   @ [parent_package_ref] {self.parent_ref}
@@ -26,26 +31,13 @@ class LayerPackage:
   & [Flowchart] is the settled flowchart for this layer
 {_indent_block(self.flowchart, 4)}
 
-  & [SJSLedger] is the structured SJS output for this layer
-    + [requirement] is scaffold requirement extraction pending full Shaliach/Director implementation
-    + [constraint] is preserve layer boundary and parent lineage
-    + [condition] is Manager approval required before descent
-    + [risk] is ledger currently scaffold-derived rather than model-negotiated
-    + [acceptance_criterion] is package includes required sections
-    + [verification_step] is automated test verifies package shape
+{ledgers.to_sjs_sop()}
 
-  & [DataDesignLedger] is the structured DataDrivenDesign output for this layer
-    + [data_subject_record] is {self.layer}_flowchart
-    + [identity_record] is natural_key layer plus run timestamp
-    + [relation_record] is parent_package_ref to current package
-    + [state_record] is pending_manager_approval
-    + [transform_record] is objective_and_parent_flowchart_to_layer_package
-    + [operator_record] is layer_negotiation
-    + [decision_surface_record] is next layer descent or rework
+{ledgers.to_data_design_sop()}
 
   & [LayerJustificationGraph] is the support graph for this layer
     + [claim] is {self.layer} layer package exists
-    + [support] is settled flowchart and generated scaffold ledgers
+    + [support] is settled flowchart and negotiated Director proposal ledgers
     + [support_type] is observation
     + [confidence] is moderate
     + [invalidation_condition] is missing required package section or Manager rejection
@@ -69,4 +61,3 @@ class LayerPackage:
 def _indent_block(text: str, spaces: int) -> str:
     prefix = " " * spaces
     return "\n".join(f"{prefix}{line}" if line else prefix for line in text.splitlines())
-

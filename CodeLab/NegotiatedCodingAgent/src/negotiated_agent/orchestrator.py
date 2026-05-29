@@ -5,7 +5,9 @@ import json
 from pathlib import Path
 
 from .config import AppConfig
+from .conversation import update_active_conversation_surface
 from .flowchart import empty_flowchart
+from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
 from .package import LayerPackage
@@ -27,19 +29,24 @@ class NegotiatedCodingAgent:
         parent_package_ref = "objective"
 
         for layer in self.config.negotiation.layers:
-            settled = self._negotiate_layer(layer, objective, parent_flowchart, run_root)
+            settled, proposals = self._negotiate_layer(layer, objective, parent_flowchart, run_root)
             flowcharts[layer] = settled
             write_text(run_root / f"{layer}.flowchart.md", settled)
+            ledgers = negotiate_ledgers(layer, proposals, settled)
             pending_package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
                 parent_ref=parent_package_ref,
+                proposals=proposals,
+                ledgers=ledgers,
             )
             decision = review_layer_package(layer, pending_package.to_sop())
             package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
                 parent_ref=parent_package_ref,
+                proposals=proposals,
+                ledgers=ledgers,
                 manager_decision=decision.status,
             )
             package_path = run_root / f"{layer}.package.sop"
@@ -83,11 +90,19 @@ class NegotiatedCodingAgent:
                 "files": [str(path.relative_to(run_root)) for path in written],
             },
         )
+        self._write_run_narrative_update(run_root, objective, flowcharts, written)
         return run_root
 
-    def _negotiate_layer(self, layer: str, objective: str, parent_flowchart: str, run_root: Path) -> str:
+    def _negotiate_layer(
+        self,
+        layer: str,
+        objective: str,
+        parent_flowchart: str,
+        run_root: Path,
+    ) -> tuple[str, list[tuple[str, str]]]:
         current_parent = parent_flowchart
         settled = empty_flowchart(layer)
+        final_proposals: list[tuple[str, str]] = []
         for round_index in range(self.config.negotiation.rounds_per_layer):
             proposals: list[str] = []
             for agent in self.config.agents:
@@ -96,6 +111,7 @@ class NegotiatedCodingAgent:
                     proposal_prompt(agent.name, agent.role, layer, objective, current_parent),
                 )
                 proposals.append(response.text)
+                final_proposals.append((agent.name, response.text))
                 self._log(
                     run_root,
                     {
@@ -124,7 +140,7 @@ class NegotiatedCodingAgent:
                     "text": settled,
                 },
             )
-        return settled
+        return settled, final_proposals
 
     def _create_run_root(self) -> Path:
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -136,3 +152,47 @@ class NegotiatedCodingAgent:
         event = {"timestamp": datetime.now(timezone.utc).isoformat(), **event}
         with (run_root / "negotiation_log.jsonl").open("a", encoding="utf-8") as handle:
             handle.write(json.dumps(event, ensure_ascii=True) + "\n")
+
+    def _write_run_narrative_update(
+        self,
+        run_root: Path,
+        objective: str,
+        flowcharts: dict[str, str],
+        written: list[Path],
+    ) -> None:
+        narrative_path = self.project_root / "coordination" / "project_narrative_surface.sop"
+        if not narrative_path.exists():
+            return
+        rel_run = run_root.relative_to(self.project_root)
+        rel_files = ", ".join(str(path.relative_to(run_root)) for path in written)
+        objective_summary = _sop_field_value(objective, limit=240)
+        update = f"""
+
+& [RunNarrativeUpdate {run_root.name}] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is {rel_run}
+  + [objective_summary] is {objective_summary}
+  + [settled_layer_set] is {", ".join(flowcharts.keys())}
+  + [implementation_file_set] is {rel_files}
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+"""
+        with narrative_path.open("a", encoding="utf-8") as handle:
+            handle.write(update)
+        try:
+            update_active_conversation_surface(
+                self.project_root,
+                set_fields={"current_frontier": "run narrative updated after NegotiatedCodingAgent execution"},
+                proofs=[f"run narrative update written for {rel_run}"],
+            )
+        except (FileNotFoundError, KeyError, ValueError):
+            self._log(
+                run_root,
+                {
+                    "event": "conversation_surface_update_skipped",
+                    "reason": "active conversation surface unavailable or malformed",
+                },
+            )
+
+
+def _sop_field_value(value: str, *, limit: int) -> str:
+    return " ".join(value.split())[:limit]

@@ -9,8 +9,10 @@ from negotiated_agent.conversation import (
     ConversationSurface,
     update_active_conversation_surface,
 )
-from negotiated_agent.llm import LlmClient, LlmResponse, RoutedClient, make_client
+from negotiated_agent.ledgers import negotiate_ledgers
+from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
+from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.slices import create_initial_work_slice
@@ -172,6 +174,28 @@ class LayerPackageTests(unittest.TestCase):
         decision = review_layer_package("application", package)
         self.assertTrue(decision.approved)
 
+    def test_layer_package_uses_negotiated_ledgers(self) -> None:
+        ledgers = negotiate_ledgers(
+            "application",
+            [
+                (
+                    "DirectorA",
+                    "- Must preserve conversation_uuid identity\n- Risk: stale proof can mislead readiness",
+                )
+            ],
+            "# Application Flowchart\n- Data: conversation surface",
+        )
+        package = LayerPackage(
+            layer="application",
+            flowchart="# Application Flowchart",
+            parent_ref="objective",
+            proposals=[("DirectorA", "Must preserve conversation_uuid identity")],
+            ledgers=ledgers,
+        ).to_sop()
+        self.assertIn("DirectorA: Must preserve conversation_uuid identity", package)
+        self.assertIn("Risk: stale proof can mislead readiness", package)
+        self.assertNotIn("scaffold requirement extraction pending", package)
+
 
 class WorkSliceTests(unittest.TestCase):
     def test_initial_work_slice_references_code_package(self) -> None:
@@ -260,6 +284,67 @@ class ProtocolRegistryTests(unittest.TestCase):
         self.assertIn("ProtocolActivationSet", sop)
         self.assertIn("protocol_reference_registry_not_full_sop_interpreter", sop)
         self.assertIn("Project_Narrative_Surface.sop", sop)
+
+
+class NarrativeUpdateTests(unittest.TestCase):
+    def test_run_appends_project_narrative_update(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            (root / "coordination" / "conversations").mkdir(parents=True)
+            (root / "coordination" / "project_narrative_surface.sop").write_text(
+                "& [ProjectNarrativeSurface] is active\n",
+                encoding="utf-8",
+            )
+            (root / "coordination" / "active_conversation.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ActiveConversationPointer] is active",
+                        "  + [active_conversation_uuid] is test-uuid",
+                        "  + [conversation_surface_file] is coordination/conversations/test-uuid.sop",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            (root / "coordination" / "conversations" / "test-uuid.sop").write_text(
+                "\n".join(
+                    [
+                        "& [ConversationSurfaceFile] is active",
+                        "  + [conversation_uuid] is test-uuid",
+                        "  + [current_frontier] is old",
+                        "  + [last_proof] is old proof",
+                        "",
+                    ]
+                ),
+                encoding="utf-8",
+            )
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "DirectorA", "model": "m"},
+                                {"name": "DirectorB", "model": "m"},
+                            ],
+                            "programmers": [{"name": "Programmer", "model": "m"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            run_root = NegotiatedCodingAgent(load_config(config_path), DryRunClient(), root).run("Build a test app")
+            narrative = (root / "coordination" / "project_narrative_surface.sop").read_text(encoding="utf-8")
+            surface = (root / "coordination" / "conversations" / "test-uuid.sop").read_text(encoding="utf-8")
+            package = (run_root / "application.package.sop").read_text(encoding="utf-8")
+            self.assertIn("RunNarrativeUpdate", narrative)
+            self.assertIn("Build a test app", narrative)
+            self.assertIn("run narrative update written", surface)
+            self.assertIn("negotiated SJS output", package)
 
 
 if __name__ == "__main__":

@@ -104,8 +104,8 @@
   + [S08_runtime_conversation_kernel] is completed with runtime read/write support for active_conversation, conversation_surface, current frontier fields, unresolved_items, and proof updates
   + [S09_protocol_registry] is completed with runtime SOP protocol references, activation conditions, dispatch reasons, and explicit authority boundary
   + [S10_shaliach_faculty_runtime] is the next recommended slice to implement Shaliach higher/lower reasoning with selected faculty perspectives and recorded response coordination
-  + [S11_negotiated_sjs_datadesign_ledgers] is make Directors and Shaliach negotiate SJS and DataDrivenDesign ledgers rather than filling scaffold sections
-  + [S12_project_narrative_surface] is create a project narrative surface that binds source, specification, decisions, implementation, proof, faults, and frontier
+  + [S11_negotiated_sjs_datadesign_ledgers] is completed with Director proposal and Manager settlement extraction into SJS and DataDrivenDesign ledgers
+  + [S12_project_narrative_surface] is completed as seed surface plus automatic run narrative update writer
   + [S13_mailbox_and_notice_coordination] is implement inbox, notice, read_cursor, coordination claims, and rendezvous packets for multi-conversation work
   + [S14_file_change_surface] is add solution_uuid records and file-to-solution index entries when implementation slices need durable review lineage
 

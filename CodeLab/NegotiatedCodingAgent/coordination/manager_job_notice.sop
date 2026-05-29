@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 11
+  + [job_notice_revision] is 12
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -159,14 +159,16 @@
 
 & [WorkSliceDetail S11_negotiated_sjs_datadesign_ledgers] is a planned dependency slice
   + [slice_id] is S11_negotiated_sjs_datadesign_ledgers
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is make Directors and Shaliach negotiate SJS and DataDrivenDesign ledgers instead of filling scaffold sections
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is dry-run and unit tests showing layer packages contain model-shaped requirements, conditions, failures, forms, data subjects, transforms, operators, lifecycle, and provenance
   + [completion_criteria] is every layer package records negotiated SJS and DataDesign content traceable to Director proposals and Shaliach review
-  + [support_status] is pending_dependency
-  + [dependency_set] is S10_shaliach_faculty_runtime
+  + [support_status] is prepared
+  + [dependency_set] is S09_protocol_registry and direct_user_instruction_overrode_prior_S10_order
   + [known_risks] is accepting shallow ledger prose as if it were structured negotiation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:34:00Z, proof_ref tests passed with 17 tests and dry-run wrote runs/20260529T112648Z, result_summary added negotiated_agent.ledgers extraction from Director proposals and Manager settlement plus package writer support for negotiated SJS and DataDesign ledgers
+  + [completed_work_review] is support_delta verified scaffold ledger text replaced by proposal-derived ledger records; requirement_delta Shaliach faculty critique over ledgers remains future work
 
 & [WorkSliceDetail S12_project_narrative_surface] is a planned dependency slice
   + [slice_id] is S12_project_narrative_surface
@@ -179,7 +181,8 @@
   + [dependency_set] is direct_user_instruction_overrode_prior_order_for_seed_surface
   + [known_risks] is writing prose summaries that do not preserve citation or authority boundaries
   + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:12:25Z, proof_ref tests passed with 11 tests, result_summary seed project narrative surface created at coordination/project_narrative_surface.sop with origin, specification, decision, implementation, proof, readiness, frontier, weave, coverage, gap, and reentry arcs
-  + [completed_work_review] is support_delta created durable narrative reentry surface; requirement_delta executable narrative updater remains future work under S08/S09 and narrative runtime follow-up
+  + [completed_work_review] is support_delta created durable narrative reentry surface and later added automatic run narrative updates; requirement_delta coverage recomputation and stale-check updater remain future work
+  + [runtime_update_record] is completed_by current_codex_thread, completed_at 2026-05-29T11:34:00Z, proof_ref tests passed with 17 tests and dry-run wrote RunNarrativeUpdate 20260529T112648Z, result_summary orchestrator appends completed run summary to project_narrative_surface and proof entry to active conversation surface
 
 & [WorkSliceDetail S13_mailbox_and_notice_coordination] is a planned dependency slice
   + [slice_id] is S13_mailbox_and_notice_coordination
