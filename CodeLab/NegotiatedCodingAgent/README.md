@@ -170,6 +170,8 @@ The wrapper `scripts/frontier-application-plan.ps1` writes `frontier_application
 
 `negotiated_agent.frontier_application` now also includes `FrontierApplicationResult` plus plan loading and result-building helpers for applied and stale-blocked outcomes.
 
+The same module now has an explicit helper that can apply a valid frontier application plan to a conversation surface, append proof/completed-slice refs, and return a result; stale surfaces return a blocked result and remain unchanged. A CLI wrapper remains the next boundary.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

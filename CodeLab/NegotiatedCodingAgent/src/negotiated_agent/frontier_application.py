@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
+from .conversation import ConversationSurface
 from .frontier_advancement import FrontierAdvancementRecord
 
 
@@ -141,6 +142,41 @@ def build_frontier_application_result(
         narrative_update_ref=narrative_update_ref,
         block_reason=block_reason,
     )
+
+
+def apply_frontier_application_plan(
+    *,
+    project_root: Path,
+    plan: FrontierApplicationPlan,
+    plan_ref: str,
+    result_id: str,
+    narrative_update_ref: str = "none",
+) -> FrontierApplicationResult:
+    surface_path = project_root / plan.conversation_surface_ref
+    surface = ConversationSurface.load(surface_path)
+    current_frontier = surface.first("current_frontier", "unknown") or "unknown"
+    result = build_frontier_application_result(
+        result_id=result_id,
+        plan_ref=plan_ref,
+        plan=plan,
+        current_frontier=current_frontier,
+        narrative_update_ref=narrative_update_ref,
+    )
+    if result.applied_status == "applied":
+        surface.set_fields({"current_frontier": plan.next_frontier})
+        surface.append_unique_fields("last_proof", plan.proof_refs_to_append, after_key="last_proof")
+        surface.append_unique_fields("completed_slice", plan.completed_slice_refs_to_append, after_key="completed_slice")
+        surface.write()
+    return result
+
+
+def write_frontier_application_result(output_dir: Path, result: FrontierApplicationResult) -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "frontier_application_result.sop"
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.write_text(result.to_sop(), encoding="utf-8")
+    return path
 
 
 def load_frontier_advancement_record(path: Path) -> FrontierAdvancementRecord:

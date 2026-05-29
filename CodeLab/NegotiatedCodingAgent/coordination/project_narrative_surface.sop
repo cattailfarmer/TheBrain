@@ -1557,3 +1557,11 @@
   + [proof_result] is tests passed with 150 tests
   + [current_frontier] is S191_frontier_application_apply_helper
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S191_frontier_application_apply_helper] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S191_frontier_application_apply_helper
+  + [implemented_capability] is frontier application helper mutates active conversation current_frontier only on exact previous-frontier match and writes stale-blocked results otherwise
+  + [proof_result] is tests passed with 152 tests
+  + [current_frontier] is S192_frontier_application_apply_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

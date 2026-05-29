@@ -266,6 +266,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `FrontierApplicationResult` records applied and stale-blocked outcomes before the mutation helper is added. The same module can load `frontier_application_plan.sop` and synthesize result evidence, keeping the actual surface write as a separate boundary.
 
+The frontier application helper now performs that surface write under exact previous-frontier match: it updates `current_frontier`, appends proof refs, appends completed-slice refs, and returns a `FrontierApplicationResult`. If the active surface has moved, it returns a stale-blocked result and preserves the surface.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

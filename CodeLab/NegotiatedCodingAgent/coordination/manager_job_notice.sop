@@ -2674,7 +2674,7 @@
 
 & [WorkSliceDetail S191_frontier_application_apply_helper] is a coordination runtime implementation slice
   + [slice_id] is S191_frontier_application_apply_helper
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit helper to apply frontier application plans to active conversation surfaces
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover current_frontier update proof append completed slice append stale blocked result and no target workspace mutation
@@ -2682,3 +2682,16 @@
   + [support_status] is prepared
   + [dependency_set] is S190_frontier_application_result_records
   + [known_risks] is helper deleting existing proof or unresolved ledger entries
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:09:00Z, proof_ref tests passed with 152 tests, result_summary added explicit frontier application helper and result writer
+  + [completed_work_review] is support_delta verified helper updates current_frontier only on exact match and preserves stale surfaces; requirement_delta next step is explicit CLI wrapper for frontier application
+
+& [WorkSliceDetail S192_frontier_application_apply_cli] is a coordination runtime implementation slice
+  + [slice_id] is S192_frontier_application_apply_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI and wrapper to apply frontier application plans and write result artifacts
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover applied result stale blocked result surface update proof append completed slice append and no target workspace mutation
+  + [completion_criteria] is operators can explicitly apply a frontier application plan to the active conversation surface
+  + [support_status] is prepared
+  + [dependency_set] is S191_frontier_application_apply_helper
+  + [known_risks] is CLI being used on stale plans after compaction
