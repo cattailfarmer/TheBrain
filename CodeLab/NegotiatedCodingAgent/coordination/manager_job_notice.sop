@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 36
+  + [job_notice_revision] is 37
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -54,7 +54,8 @@
     S29_proof_run_side_effect_controls |
     S30_mailbox_claim_cli |
     S31_mailbox_unread_cursor_cli |
-    S32_mailbox_claim_listing_cli
+    S32_mailbox_claim_listing_cli |
+    S33_rendezvous_packet_cli
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -502,7 +503,7 @@
 
 & [WorkSliceDetail S32_mailbox_claim_listing_cli] is a post-S16 governance expansion slice
   + [slice_id] is S32_mailbox_claim_listing_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is extend mailbox CLI with claim listing so workers can inspect claimed and conflicting messages
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
   + [proof_route] is tests for claims list output including conflict status
@@ -510,3 +511,16 @@
   + [support_status] is prepared
   + [dependency_set] is S22_mailbox_claim_conflict_resolution, S30_mailbox_claim_cli
   + [known_risks] is presenting claim status as a lock guarantee rather than append-only coordination evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:40:00Z, proof_ref tests passed with 37 tests, result_summary mailbox CLI lists claim IDs, message IDs, claimant UUIDs, statuses, and conflict refs
+  + [completed_work_review] is support_delta verified claim/conflict state is operator-visible; requirement_delta claims remain coordination evidence not scheduler locks
+
+& [WorkSliceDetail S33_rendezvous_packet_cli] is a post-S16 governance expansion slice
+  + [slice_id] is S33_rendezvous_packet_cli
+  + [slice_status] is open
+  + [scope] is add CLI and script helper for writing rendezvous packets between worker conversations
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**
+  + [proof_route] is tests showing rendezvous packet file is written with source target subject and boundary
+  + [completion_criteria] is operator can create a durable handoff packet without writing Python snippets
+  + [support_status] is prepared
+  + [dependency_set] is S13_mailbox_and_notice_coordination
+  + [known_risks] is treating rendezvous packets as command authority rather than coordination handoff

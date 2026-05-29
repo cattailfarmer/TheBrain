@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory = $true)]
-  [ValidateSet("list", "claim", "advance")]
+  [ValidateSet("list", "claim", "advance", "claims")]
   [string]$Command,
   [Parameter(Mandatory = $true)]
   [string]$Mailbox,

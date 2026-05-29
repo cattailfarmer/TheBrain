@@ -413,6 +413,36 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertNotIn(first.message_id, unread_out.getvalue())
             self.assertIn(second.message_id, unread_out.getvalue())
 
+    def test_mailbox_cli_lists_claim_statuses(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            message = publish_message(
+                root,
+                sender_uuid="manager",
+                recipient_uuid="director_pool",
+                kind="notice",
+                subject="Claim me",
+                body="Claim body.",
+            )
+            claim_message(root, mailbox_uuid="director_pool", message_id=message.message_id, claimant_uuid="worker-a")
+            claim_message(root, mailbox_uuid="director_pool", message_id=message.message_id, claimant_uuid="worker-b")
+            claims_out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "claims",
+                    "--project-root",
+                    str(root),
+                    "--mailbox",
+                    "director_pool",
+                ],
+            ), contextlib.redirect_stdout(claims_out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            self.assertIn("worker-a", claims_out.getvalue())
+            self.assertIn("worker-b", claims_out.getvalue())
+            self.assertIn("conflict", claims_out.getvalue())
+
 
 class ModelInventoryTests(unittest.TestCase):
     def test_recommends_wsl_vllm_for_large_gpu_when_wsl_available(self) -> None:

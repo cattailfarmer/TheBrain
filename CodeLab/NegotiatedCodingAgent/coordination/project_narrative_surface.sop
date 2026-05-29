@@ -112,6 +112,7 @@
   + [implemented_slice] is S29_proof_run_side_effect_controls
   + [implemented_slice] is S30_mailbox_claim_cli
   + [implemented_slice] is S31_mailbox_unread_cursor_cli
+  + [implemented_slice] is S32_mailbox_claim_listing_cli
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -153,6 +154,7 @@
   + [proof_result] is tests passed with 34 tests and suppressed dry-run manifest validated for runs\20260529T141949Z\run_manifest.sop
   + [proof_result] is tests passed with 35 tests and mailbox script listed director_pool messages
   + [proof_result] is tests passed with 36 tests after S31 mailbox unread cursor CLI
+  + [proof_result] is tests passed with 37 tests after S32 mailbox claim listing CLI
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -192,6 +194,7 @@
   + [ready_capability] is proof dry-runs can suppress live mailbox rework notice publication while keeping run-local response artifacts
   + [ready_capability] is worker operators can list and claim mailbox messages through CLI and PowerShell helper
   + [ready_capability] is worker operators can advance mailbox read cursors and list only unread messages
+  + [ready_capability] is worker operators can list mailbox claim and conflict state through CLI
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -212,6 +215,7 @@
   + [next_recommended_slice] is S30_mailbox_claim_cli
   + [next_recommended_slice] is S31_mailbox_unread_cursor_cli
   + [next_recommended_slice] is S32_mailbox_claim_listing_cli
+  + [next_recommended_slice] is S33_rendezvous_packet_cli
   + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
   + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 
