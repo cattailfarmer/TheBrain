@@ -3,7 +3,7 @@
   @ [architecture_doc] docs/architecture.md
   @ [manager_job_notice] coordination/manager_job_notice.sop
   @ [created_at] 2026-05-29T18:30:00Z
-  @ [updated_at] 2026-05-29T15:58:00Z
+  @ [updated_at] 2026-05-29T16:08:00Z
 
   + [audit_status] is active_snapshot
   + [authority_boundary] is implementation_audit_not_specification_signature
@@ -41,8 +41,8 @@
 
 & [ImplementedObligation] is a proof-backed specification capability
   + [obligation] is local model serving route is explicit before live setup
-  + [support] is model inventory, role-model profile, vLLM WSL2 preflight, OpenAI-compatible healthcheck, local serving docs, and WSL2/vLLM operator guide are present
-  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop, docs/local_model_serving.md, docs/vllm_wsl2_operator_guide.md
+  + [support] is model inventory, role-model profile, live route draft, vLLM WSL2 preflight, OpenAI-compatible healthcheck, local serving docs, and WSL2/vLLM operator guide are present
+  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/role_model_profile.sop, coordination/live_route_config_draft.sop, coordination/vllm_wsl2_preflight.sop, coordination/openai_health.sop, docs/local_model_serving.md, docs/vllm_wsl2_operator_guide.md
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is Shaliach internal higher/lower reasoning and perspective negotiation
@@ -52,8 +52,8 @@
 
 & [PartialObligation] is a specification capability with scaffold support
   + [obligation] is two or more LLMs negotiate around the objective
-  + [support] is config supports distinct Manager, Directors, Programmers, Shaliach models and provider overrides
-  + [gap] is current proof path is dry-run and no local live multi-model server is installed
+  + [support] is config supports distinct Manager, Directors, Programmers, Shaliach models and provider overrides, and the live route draft helper can propose OpenAI-compatible role assignments without mutating config
+  + [gap] is current proof path is dry-run and no local live multi-model server is installed or benchmarked
   + [next_candidate] is install WSL2/vLLM or Ollama and run live route comparison after endpoint health is available
 
 & [PartialObligation] is a specification capability with scaffold support
@@ -81,8 +81,8 @@
 
 & [NotYetImplementedObligation] is a remaining specification gap
   + [obligation] is live local LLM swarm throughput
-  + [gap] is WSL2, vLLM, Ollama, and Docker are not installed or available in the current probe
-  + [reason] is current work has stayed non-destructive and setup remains a manual operator step
+  + [gap] is WSL2, vLLM, Ollama, and Docker are not installed or available in the current probe; route drafts are non-mutating and not throughput proof
+  + [reason] is current work has stayed non-destructive and setup remains a manual operator step before live multi-model validation
 
 & [NextGapOrder] is the recommended next work based on this audit
   + [candidate_1] is add live Shaliach self-negotiation once local model serving is available

@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 95
+  + [job_notice_revision] is 96
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -113,7 +113,8 @@
     S88_live_serving_bootstrap_operator_runbook |
     S89_long_run_checkpoint_after_serving_runbook |
     S90_live_route_config_draft |
-    S91_spec_audit_refresh_after_route_draft
+    S91_spec_audit_refresh_after_route_draft |
+    S92_long_run_checkpoint_after_route_draft
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1328,7 +1329,7 @@
 
 & [WorkSliceDetail S91_spec_audit_refresh_after_route_draft] is a documentation and planning slice
   + [slice_id] is S91_spec_audit_refresh_after_route_draft
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation audit after non-mutating live route draft support
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit updated and tests remain passing
@@ -1336,3 +1337,16 @@
   + [support_status] is prepared
   + [dependency_set] is S90_live_route_config_draft
   + [known_risks] is overstating a draft helper as live model-serving proof
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:08:00Z, proof_ref spec_implementation_status.sop updated and tests passed with 63 tests, result_summary audit now records route draft support while preserving live serving and throughput gaps
+  + [completed_work_review] is support_delta verified audit reflects non-mutating route draft bridge; requirement_delta checkpoint should capture route draft proof state
+
+& [WorkSliceDetail S92_long_run_checkpoint_after_route_draft] is a long-run reentry slice
+  + [slice_id] is S92_long_run_checkpoint_after_route_draft
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after live route draft implementation and audit
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness or tests update checkpoint without mutating target workspace
+  + [completion_criteria] is checkpoint records current frontier, 63-test suite, dry-run run, model inventory, OpenAI-compatible health, and route draft frontier
+  + [support_status] is prepared
+  + [dependency_set] is S91_spec_audit_refresh_after_route_draft
+  + [known_risks] is noisy generated dry-run artifacts
