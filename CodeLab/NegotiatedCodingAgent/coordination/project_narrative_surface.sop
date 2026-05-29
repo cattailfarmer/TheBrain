@@ -1905,3 +1905,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S228_reviewed_narrative_append_operator_recipe
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S228_reviewed_narrative_append_operator_recipe] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S228_reviewed_narrative_append_operator_recipe
+  + [implemented_capability] is coordination_operator_guide documents complete deterministic reviewed narrative append workflow from stale-check through guarded apply
+  + [proof_ref] is docs/coordination_operator_guide.md
+  + [current_frontier] is S229_long_run_checkpoint_after_append_recipe
+  + [narrative_role] is documentation_arc and coordination_runtime_arc update

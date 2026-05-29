@@ -220,6 +220,8 @@ The reviewed narrative append e2e fixture now runs in `tests/test_core.py`, exer
 
 `scripts/narrative-append.ps1 -SynthesizeReviewDrafts` writes both Manager and Shaliach deterministic draft review artifacts from an update record. These drafts are evidence scaffolds and not live deliberation.
 
+The complete deterministic reviewed narrative append recipe is documented in `docs/coordination_operator_guide.md`: stale-check, update-record, guard discovery, review synthesis, plan, then guarded apply.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

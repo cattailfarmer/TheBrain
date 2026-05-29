@@ -3155,7 +3155,7 @@
 
 & [WorkSliceDetail S228_reviewed_narrative_append_operator_recipe] is a documentation slice
   + [slice_id] is S228_reviewed_narrative_append_operator_recipe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add operator guide recipe for reviewed narrative append workflow from stale-check through synthesis and apply
   + [target_files] is docs/coordination_operator_guide.md, README.md
   + [proof_route] is docs list command sequence and boundaries without adding code
@@ -3163,3 +3163,16 @@
   + [support_status] is prepared
   + [dependency_set] is S227_spec_audit_refresh_after_review_synthesis
   + [known_risks] is documentation making deterministic drafts sound like live review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:13:00Z, proof_ref docs updated and tests passed with 206 tests, result_summary added full reviewed narrative append operator recipe
+  + [completed_work_review] is support_delta verified recipe includes stale-check update-record guard synthesis plan apply and deterministic-not-live boundary; requirement_delta next step is refresh long-run checkpoint after docs recipe
+
+& [WorkSliceDetail S229_long_run_checkpoint_after_append_recipe] is a long-run reentry slice
+  + [slice_id] is S229_long_run_checkpoint_after_append_recipe
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after reviewed narrative append operator recipe
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records 206-test suite and recipe frontier
+  + [completion_criteria] is checkpoint captures docs recipe and ready continuation
+  + [support_status] is prepared
+  + [dependency_set] is S228_reviewed_narrative_append_operator_recipe
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

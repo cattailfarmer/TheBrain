@@ -441,6 +441,38 @@ Draft both reviewed append artifacts from an update record:
 
 This writes Manager and Shaliach draft review artifacts. The drafts include deterministic-review caution fields and are not a replacement for live deliberation.
 
+Complete deterministic reviewed narrative append workflow:
+
+```powershell
+.\scripts\narrative-coverage.ps1 -StaleCheck -CheckId <check-id>
+
+.\scripts\narrative-coverage.ps1 `
+  -UpdateRecord `
+  -UpdateId <update-id> `
+  -StaleCheckRef coordination/narrative_stale_check.sop
+
+.\scripts\narrative-append.ps1 -GuardDiscovery
+
+.\scripts\narrative-append.ps1 `
+  -SynthesizeReviewDrafts `
+  -FrontierAtApproval <frontier> `
+  -CheckedProtocol SOP `
+  -CheckedProtocol SJS
+
+.\scripts\narrative-append.ps1 `
+  -ExpectedSurfaceGuard <guard-from-discovery> `
+  -ResultId <plan-id> `
+  -Out coordination/narrative_append_plan.sop
+
+.\scripts\narrative-append.ps1 `
+  -Apply `
+  -ExpectedSurfaceGuard <same-guard-if-still-current> `
+  -ResultId <apply-id> `
+  -Out coordination/narrative_append_result.sop
+```
+
+This workflow is deterministic artifact governance. It is useful for keeping narrative memory coherent, but the synthesized review drafts are not live Manager/Shaliach deliberation.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
