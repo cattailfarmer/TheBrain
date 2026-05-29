@@ -5,7 +5,7 @@ from pathlib import Path
 from uuid import uuid4
 
 from .worker_lifecycle import WorkerCycleRecord
-from .worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, write_worker_cycle_record
+from .worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, run_worker_proof_command, write_worker_cycle_record
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -27,7 +27,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--shaliach-finding-ref", default="none")
     parser.add_argument("--commit-ref", default="none")
     parser.add_argument("--failure-ref", default="none")
+    parser.add_argument("--run-proof-command", default=None)
+    parser.add_argument("--timeout-seconds", type=int, default=180)
     args = parser.parse_args(argv)
+    if args.run_proof_command:
+        record = run_worker_proof_command(
+            args.project_root,
+            worker_uuid=args.worker,
+            command=args.run_proof_command,
+            cycle_id=args.cycle_id,
+            claim_refs=tuple(args.claim_ref),
+            slice_ref=args.slice_ref,
+            changed_files=tuple(args.changed_file),
+            timeout_seconds=args.timeout_seconds,
+        )
+        print(record.to_sop(), end="")
+        return 0 if record.cycle_status == "completed" else 2
     if args.record_cycle:
         record = WorkerCycleRecord(
             worker_uuid=args.worker,

@@ -3,11 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+import subprocess
 from uuid import NAMESPACE_URL, uuid5
 
 from .conversation import ConversationSurface
 from .mailbox import MailboxClaim, MailboxMessage, claim_message, list_unread
-from .worker_lifecycle import WorkerCycleRecord, WorkerLeaseRecord
+from .worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
 
 
 @dataclass(frozen=True)
@@ -123,6 +124,51 @@ def write_worker_cycle_record(
     return path
 
 
+def run_worker_proof_command(
+    project_root: Path,
+    *,
+    worker_uuid: str,
+    command: str,
+    cwd: Path | None = None,
+    cycle_id: str | None = None,
+    claim_refs: tuple[str, ...] = (),
+    slice_ref: str = "none",
+    changed_files: tuple[str, ...] = (),
+    timeout_seconds: int = 180,
+) -> WorkerCycleRecord:
+    run_cwd = cwd or project_root
+    result = subprocess.run(command, cwd=run_cwd, shell=True, capture_output=True, text=True, timeout=timeout_seconds, check=False)
+    actual_cycle_id = cycle_id or str(uuid5(NAMESPACE_URL, f"proof:{worker_uuid}:{command}:{datetime.now(timezone.utc).isoformat()}"))
+    proof_ref = f"command:{command}"
+    failure_ref = "none"
+    status = "completed" if result.returncode == 0 else "failed_proof"
+    if result.returncode != 0:
+        failure = WorkerFailureRecord(
+            worker_uuid=worker_uuid,
+            failure_id=f"{actual_cycle_id}.failure",
+            failure_status="failed_proof",
+            command_returncode=result.returncode,
+            stdout_tail=_tail(result.stdout),
+            stderr_tail=_tail(result.stderr),
+            dirty_worktree_summary="not_checked",
+            safe_resume_action="inspect failure record and rerun proof command after repair",
+            escalation_recipient="manager",
+        )
+        failure_ref = str(_write_failure(project_root, failure).relative_to(project_root)).replace("\\", "/")
+    record = WorkerCycleRecord(
+        worker_uuid=worker_uuid,
+        cycle_id=actual_cycle_id,
+        cycle_status=status,
+        claim_refs=claim_refs,
+        slice_ref=slice_ref,
+        proof_refs=(proof_ref,),
+        changed_files=changed_files,
+        failure_ref=failure_ref,
+    )
+    write_worker_cycle_record(project_root, record)
+    return record
+
+
 def _lease_for_message(
     *,
     worker_uuid: str,
@@ -172,3 +218,14 @@ def _write_lease(project_root: Path, lease: WorkerLeaseRecord) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(lease.to_sop(), encoding="utf-8")
     return path
+
+
+def _write_failure(project_root: Path, failure: WorkerFailureRecord) -> Path:
+    path = project_root / "coordination" / "workers" / failure.worker_uuid / "failures" / f"{failure.failure_id}.sop"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(failure.to_sop(), encoding="utf-8")
+    return path
+
+
+def _tail(text: str, limit: int = 240) -> str:
+    return " ".join(text.replace("\x00", "").split())[:limit].rstrip() if text else "none"

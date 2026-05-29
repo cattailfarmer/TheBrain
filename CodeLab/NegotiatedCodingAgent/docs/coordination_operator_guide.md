@@ -179,6 +179,14 @@ Record a worker cycle outcome from explicit evidence refs:
 
 Cycle-record mode writes `coordination/workers/<worker-uuid>/cycles/<cycle-id>.sop`. It is Manager review input, not completion approval, and it does not mutate the active conversation frontier.
 
+Run an explicit proof command and record the result:
+
+```powershell
+.\scripts\worker-runner-preview.ps1 -Worker <worker-uuid> -Mailbox director_pool -RunProofCommand "powershell -ExecutionPolicy Bypass -File scripts\test.ps1" -CycleId <cycle-id>
+```
+
+Proof-command mode writes a `WorkerCycleRecord`. On failed proof it also writes a `WorkerFailureRecord` under `coordination/workers/<worker-uuid>/failures/` and returns a nonzero exit code. It should be used only for explicit proof commands selected by the active slice.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

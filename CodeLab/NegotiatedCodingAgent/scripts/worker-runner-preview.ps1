@@ -16,7 +16,9 @@ param(
   [string]$ManagerFrontierRequest = "none",
   [string]$ShaliachFindingRef = "none",
   [string]$CommitRef = "none",
-  [string]$FailureRef = "none"
+  [string]$FailureRef = "none",
+  [string]$RunProofCommand = "",
+  [int]$TimeoutSeconds = 180
 )
 
 $ErrorActionPreference = "Stop"
@@ -56,6 +58,9 @@ if ($RecordCycle) {
     "--commit-ref", $CommitRef,
     "--failure-ref", $FailureRef
   )
+}
+if ($RunProofCommand -ne "") {
+  $argsList += @("--run-proof-command", $RunProofCommand, "--timeout-seconds", $TimeoutSeconds)
 }
 
 & $Python @argsList

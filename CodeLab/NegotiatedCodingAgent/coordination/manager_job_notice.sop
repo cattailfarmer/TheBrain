@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 126
+  + [job_notice_revision] is 127
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -144,7 +144,8 @@
     S119_worker_runner_preview_cli |
     S120_worker_claim_record_cli |
     S121_worker_cycle_record_scaffold |
-    S122_worker_proof_command_runner_scaffold
+    S122_worker_proof_command_runner_scaffold |
+    S123_long_run_checkpoint_after_worker_runner_scaffold
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1762,7 +1763,7 @@
 
 & [WorkSliceDetail S122_worker_proof_command_runner_scaffold] is a coordination runtime implementation slice
   + [slice_id] is S122_worker_proof_command_runner_scaffold
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a proof command runner helper that executes explicit proof commands and records WorkerCycleRecord or WorkerFailureRecord evidence
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests cover passing proof command, failing proof command, stdout/stderr tails, and no Manager frontier mutation
@@ -1770,3 +1771,16 @@
   + [support_status] is prepared
   + [dependency_set] is S121_worker_cycle_record_scaffold
   + [known_risks] is making arbitrary command execution too broad before Shaliach/Manager gates are enforced
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:45:00Z, proof_ref tests passed with 88 tests, result_summary worker runner proof-command mode records completed or failed_proof cycle evidence and failure records
+  + [completed_work_review] is support_delta verified proof runner captures output and failure evidence without Manager frontier mutation; requirement_delta next checkpoint should capture 88-test worker runner scaffold
+
+& [WorkSliceDetail S123_long_run_checkpoint_after_worker_runner_scaffold] is a long-run reentry slice
+  + [slice_id] is S123_long_run_checkpoint_after_worker_runner_scaffold
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after worker runner preview claim cycle and proof scaffolds
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 88-test suite and route draft proof
+  + [completion_criteria] is checkpoint records 88-test suite and worker runner scaffold frontier
+  + [support_status] is prepared
+  + [dependency_set] is S122_worker_proof_command_runner_scaffold
+  + [known_risks] is noisy generated dry-run artifacts

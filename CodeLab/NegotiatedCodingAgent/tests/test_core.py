@@ -67,7 +67,7 @@ from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
 from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
-from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, write_worker_cycle_record
+from negotiated_agent.worker_runner import build_worker_runner_preview, claim_and_record_worker_leases, run_worker_proof_command, write_worker_cycle_record
 from negotiated_agent.worker_runner_cli import main as worker_runner_cli_main
 from negotiated_agent.writer import write_implementation
 
@@ -1505,6 +1505,66 @@ class MailboxCoordinationTests(unittest.TestCase):
             path = root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-1.sop"
             self.assertTrue(path.exists())
             self.assertIn("worker_cycle_record_not_manager_approval", path.read_text(encoding="utf-8"))
+
+    def test_worker_proof_command_records_completed_cycle(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = run_worker_proof_command(
+                root,
+                worker_uuid="worker-a",
+                command="cmd /c echo proof-ok",
+                cycle_id="cycle-ok",
+                claim_refs=("coordination/mailbox/director_pool/claims.sop#claim-1",),
+                slice_ref="manager_job_notice.sop#S122_worker_proof_command_runner_scaffold",
+            )
+            self.assertEqual(record.cycle_status, "completed")
+            cycle_path = root / "coordination" / "workers" / "worker-a" / "cycles" / "cycle-ok.sop"
+            self.assertTrue(cycle_path.exists())
+            self.assertIn("command:cmd /c echo proof-ok", cycle_path.read_text(encoding="utf-8"))
+            self.assertFalse((root / "coordination" / "active_conversation.sop").exists())
+
+    def test_worker_proof_command_records_failure_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            record = run_worker_proof_command(
+                root,
+                worker_uuid="worker-a",
+                command="cmd /c echo proof-failed && exit 7",
+                cycle_id="cycle-fail",
+                slice_ref="manager_job_notice.sop#S122_worker_proof_command_runner_scaffold",
+            )
+            self.assertEqual(record.cycle_status, "failed_proof")
+            self.assertNotEqual(record.failure_ref, "none")
+            failure_path = root / record.failure_ref
+            self.assertTrue(failure_path.exists())
+            failure_text = failure_path.read_text(encoding="utf-8")
+            self.assertIn("command_returncode] is 7", failure_text)
+            self.assertIn("proof-failed", failure_text)
+
+    def test_worker_proof_command_cli_returns_nonzero_on_failed_proof(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    worker_runner_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--worker",
+                            "worker-a",
+                            "--mailbox",
+                            "director_pool",
+                            "--run-proof-command",
+                            "cmd /c exit 3",
+                            "--cycle-id",
+                            "cycle-fail",
+                        ]
+                    ),
+                    2,
+                )
+            self.assertIn("cycle_status] is failed_proof", out.getvalue())
+            self.assertTrue((root / "coordination" / "workers" / "worker-a" / "failures" / "cycle-fail.failure.sop").exists())
 
 
 class ModelInventoryTests(unittest.TestCase):
