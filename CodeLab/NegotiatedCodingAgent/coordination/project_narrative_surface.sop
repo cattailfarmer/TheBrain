@@ -1308,3 +1308,10 @@
   + [run_root] is runs\20260529T180935Z
   + [current_frontier] is S163_spec_audit_refresh_after_run_local_plan_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S163_spec_audit_refresh_after_run_local_plan_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S163_spec_audit_refresh_after_run_local_plan_cli
+  + [implemented_capability] is spec_implementation_status.sop now recognizes run-local execution planner CLI and 123-test checkpoint as scaffold support
+  + [current_frontier] is S164_run_local_execution_writer
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

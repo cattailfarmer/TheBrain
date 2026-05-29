@@ -2310,7 +2310,7 @@
 
 & [WorkSliceDetail S163_spec_audit_refresh_after_run_local_plan_cli] is a specification audit slice
   + [slice_id] is S163_spec_audit_refresh_after_run_local_plan_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after run-local execution planner CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names run-local execution planner support and chooses next gap
@@ -2318,3 +2318,16 @@
   + [support_status] is prepared
   + [dependency_set] is S162_long_run_checkpoint_after_run_local_plan_cli
   + [known_risks] is overstating planner support as implementation file generation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:18:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats run-local execution planner as support and recommends deterministic run-local file writer
+  + [completed_work_review] is support_delta verified planner support is current and non-generating; requirement_delta next step is deterministic run-local implementation writer behind plan evidence
+
+& [WorkSliceDetail S164_run_local_execution_writer] is a coordination runtime implementation slice
+  + [slice_id] is S164_run_local_execution_writer
+  + [slice_status] is open
+  + [scope] is add deterministic run-local implementation file writer from RunLocalExecutionPlan evidence
+  + [target_files] is src/negotiated_agent/**, tests/**, docs/**
+  + [proof_route] is tests cover generated file under implementation root result record no target workspace writes and containment rejection
+  + [completion_criteria] is a run-local plan can generate evidence files only under runs/<run-id>/worker_execution/<cycle-id>/
+  + [support_status] is prepared
+  + [dependency_set] is S163_spec_audit_refresh_after_run_local_plan_cli
+  + [known_risks] is writer accidentally touching target workspace files
