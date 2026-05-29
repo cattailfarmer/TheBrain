@@ -336,7 +336,8 @@
   + [completed_slice] is S227_spec_audit_refresh_after_review_synthesis
   + [completed_slice] is S228_reviewed_narrative_append_operator_recipe
   + [completed_slice] is S229_long_run_checkpoint_after_append_recipe
-  + [ready_slice] is S230_spec_audit_refresh_after_append_recipe
+  + [completed_slice] is S230_spec_audit_refresh_after_append_recipe
+  + [ready_slice] is S231_shaliach_self_negotiation_record_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
