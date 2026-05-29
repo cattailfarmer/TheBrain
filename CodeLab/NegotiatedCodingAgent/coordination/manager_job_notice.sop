@@ -3142,7 +3142,7 @@
 
 & [WorkSliceDetail S227_spec_audit_refresh_after_review_synthesis] is a specification audit slice
   + [slice_id] is S227_spec_audit_refresh_after_review_synthesis
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after deterministic review artifact synthesis CLI
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names synthesis builders and CLI and chooses next non-live deterministic gap
@@ -3150,3 +3150,16 @@
   + [support_status] is prepared
   + [dependency_set] is S226_long_run_checkpoint_after_review_synthesis
   + [known_risks] is audit blurring deterministic drafts with real Manager/Shaliach review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T09:05:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now reflects deterministic review draft synthesis support
+  + [completed_work_review] is support_delta verified audit still distinguishes deterministic drafts from live deliberation; requirement_delta next step is add operator recipe for full reviewed narrative append workflow
+
+& [WorkSliceDetail S228_reviewed_narrative_append_operator_recipe] is a documentation slice
+  + [slice_id] is S228_reviewed_narrative_append_operator_recipe
+  + [slice_status] is open
+  + [scope] is add operator guide recipe for reviewed narrative append workflow from stale-check through synthesis and apply
+  + [target_files] is docs/coordination_operator_guide.md, README.md
+  + [proof_route] is docs list command sequence and boundaries without adding code
+  + [completion_criteria] is operator can follow a complete deterministic reviewed append workflow without reading tests
+  + [support_status] is prepared
+  + [dependency_set] is S227_spec_audit_refresh_after_review_synthesis
+  + [known_risks] is documentation making deterministic drafts sound like live review

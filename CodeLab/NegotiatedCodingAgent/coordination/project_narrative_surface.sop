@@ -1897,3 +1897,11 @@
   + [run_root] is runs\20260529T200035Z
   + [current_frontier] is S227_spec_audit_refresh_after_review_synthesis
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S227_spec_audit_refresh_after_review_synthesis] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S227_spec_audit_refresh_after_review_synthesis
+  + [implemented_capability] is spec_implementation_status.sop recognizes deterministic review draft synthesis while preserving live deliberation gap
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S228_reviewed_narrative_append_operator_recipe
+  + [narrative_role] is specification_audit and coordination_runtime_arc update
