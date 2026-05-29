@@ -3298,7 +3298,7 @@
 
 & [WorkSliceDetail S239_shaliach_self_negotiation_operator_docs] is a documentation slice
   + [slice_id] is S239_shaliach_self_negotiation_operator_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add operator guide notes for reading Shaliach self-negotiation artifacts and boundaries
   + [target_files] is docs/coordination_operator_guide.md, README.md
   + [proof_route] is docs explain artifact location fields status meanings and deterministic-not-live boundary
@@ -3306,3 +3306,16 @@
   + [support_status] is prepared
   + [dependency_set] is S238_spec_audit_refresh_after_shaliach_self_negotiation
   + [known_risks] is docs making scaffold sound like a substitute for live Shaliach deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:35:00Z, proof_ref docs/coordination_operator_guide.md README.md and tests passed with 218 tests, result_summary documented Shaliach self-negotiation artifact fields statuses and authority boundary
+  + [completed_work_review] is support_delta verified operator guide explains resolved advisory rework_required status meanings and self_negotiation_ref boundary; requirement_delta next step is add parser or inspection helper for Shaliach self-negotiation artifacts
+
+& [WorkSliceDetail S240_shaliach_self_negotiation_parser] is a coordination runtime implementation slice
+  + [slice_id] is S240_shaliach_self_negotiation_parser
+  + [slice_status] is open
+  + [scope] is add parser/loader for Shaliach self-negotiation SOP artifacts
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover loading status resolved intention tensions and rejecting wrong headers
+  + [completion_criteria] is downstream tools can inspect self-negotiation artifacts without ad hoc string parsing
+  + [support_status] is prepared
+  + [dependency_set] is S239_shaliach_self_negotiation_operator_docs
+  + [known_risks] is parser accepting malformed evidence too loosely

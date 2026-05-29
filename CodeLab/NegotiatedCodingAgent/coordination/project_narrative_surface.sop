@@ -2038,3 +2038,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S239_shaliach_self_negotiation_operator_docs
   + [narrative_role] is specification_audit and documentation_arc update
+
+
+& [LongRunNarrativeUpdate S239_shaliach_self_negotiation_operator_docs] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S239_shaliach_self_negotiation_operator_docs
+  + [implemented_capability] is operator guide and README explain how to read Shaliach self-negotiation artifacts and their deterministic evidence boundary
+  + [proof_ref] is docs/coordination_operator_guide.md
+  + [current_frontier] is S240_shaliach_self_negotiation_parser
+  + [narrative_role] is documentation_arc and shaliach_arc update

@@ -24,6 +24,26 @@ When a run writes `<layer>.shaliach_response.sop`, inspect `perspective_trace` f
 
 These traces are useful repair evidence, but they are deterministic scaffold records. Treat them as Shaliach support context, not as a substitute for Manager review or future live Shaliach internal negotiation.
 
+## Shaliach Self-Negotiation Artifacts
+
+Each layer dry-run writes `<layer>.shaliach_self_negotiation.sop` beside `<layer>.shaliach_finding.sop`. Read it before treating a finding as resolved or assigning rework.
+
+Key fields:
+
+- `status`: `resolved`, `advisory`, or `rework_required`.
+- `perspective`: deterministic Shaliach perspectives such as `legal_counsel`, `protocol_officer`, `failure_advocate`, and `purpose_guardian`.
+- `proposed_response`: the response each deterministic perspective supports.
+- `resolved_intention`: the reconciled Shaliach intention for this finding.
+- `unresolved_tension`: tension that should remain visible instead of being smoothed away.
+
+Status meanings:
+
+- `resolved`: no unresolved tension was detected by the deterministic scaffold.
+- `advisory`: a non-blocking tension should be carried forward or repaired opportunistically.
+- `rework_required`: a blocking tension should be repaired before treating the layer as clean.
+
+The file is intentionally bounded. It is evidence for Shaliach review, and finding/response artifacts may cite it through `self_negotiation_ref`, but it is not live model self-deliberation, Manager approval, file-application permission, or a replacement for direct artifact inspection.
+
 ## Run Manifests
 
 Each completed or blocked run writes `run_manifest.sop`. Validate that listed artifact refs exist:
