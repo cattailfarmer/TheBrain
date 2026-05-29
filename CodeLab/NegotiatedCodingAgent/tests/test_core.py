@@ -16,7 +16,15 @@ from negotiated_agent.long_run import CommandResult, LongRunCheckpoint
 from negotiated_agent.llm import DryRunClient, LlmClient, LlmResponse, RoutedClient, make_client
 from negotiated_agent.manager import review_layer_package
 from negotiated_agent.manager import ManagerDecision
-from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
+from negotiated_agent.mailbox import (
+    advance_read_cursor,
+    claim_message,
+    list_claims,
+    list_messages,
+    list_unread,
+    publish_message,
+    write_rendezvous_packet,
+)
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -276,6 +284,26 @@ class MailboxCoordinationTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             self.assertIn("RendezvousPacket", text)
             self.assertIn("conversation-a owns S13", text)
+
+    def test_mailbox_claim_conflict_preserves_history(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            message = publish_message(
+                root,
+                sender_uuid="manager",
+                recipient_uuid="director_pool",
+                kind="rework_notice",
+                subject="Rework",
+                body="Fix thin ledger evidence.",
+            )
+            first = claim_message(root, mailbox_uuid="director_pool", message_id=message.message_id, claimant_uuid="worker-a")
+            second = claim_message(root, mailbox_uuid="director_pool", message_id=message.message_id, claimant_uuid="worker-b")
+            self.assertEqual(first.status, "claimed")
+            self.assertEqual(second.status, "conflict")
+            self.assertEqual([claim.status for claim in list_claims(root, "director_pool")], ["claimed", "conflict"])
+            conflict_inbox = root / "coordination" / "mailbox" / "worker-b" / "inbox.sop"
+            self.assertIn("conflict_signal", conflict_inbox.read_text(encoding="utf-8"))
+            self.assertEqual(len(list_messages(root, "director_pool")), 1)
 
 
 class ModelInventoryTests(unittest.TestCase):

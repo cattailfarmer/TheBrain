@@ -102,6 +102,7 @@
   + [implemented_slice] is S19_shaliach_ledger_critique
   + [implemented_slice] is S20_rework_response_coordination
   + [implemented_slice] is S21_mailbox_orchestrator_assignment
+  + [implemented_slice] is S22_mailbox_claim_conflict_resolution
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -133,6 +134,7 @@
   + [proof_result] is tests passed with 30 tests and dry-run wrote thin_ledger_evidence Shaliach warnings in runs/20260529T135949Z
   + [proof_result] is tests passed with 30 tests and dry-run wrote Shaliach response coordination artifacts in runs/20260529T140204Z
   + [proof_result] is tests passed with 30 tests and dry-run published director_pool mailbox rework notices in runs/20260529T140405Z
+  + [proof_result] is tests passed with 31 tests after S22 mailbox claim conflict resolution
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -162,6 +164,7 @@
   + [ready_capability] is Shaliach can warn on present-but-thin ledger support instead of only checking field presence
   + [ready_capability] is non-blocking Shaliach warnings produce response coordination artifacts with repair steps and completion signals
   + [ready_capability] is orchestrator publishes Shaliach response coordination rework notices into the director_pool mailbox
+  + [ready_capability] is mailbox messages can be claimed by worker UUIDs and duplicate claims publish conflict signals without deleting history
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -172,8 +175,9 @@
 
 & [FrontierArc] is the next useful work sequence
   + [next_recommended_slice] is S22_mailbox_claim_conflict_resolution
-  + [next_reason] is mailbox notices need claim and conflict semantics before multiple worker conversations can safely consume them
-  + [sleep_run_candidate] is continue S22 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S23_role_model_assignment_profile
+  + [next_reason] is role-to-model assignment should be materialized from config and inventory before live serving installation
+  + [sleep_run_candidate] is continue S23 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

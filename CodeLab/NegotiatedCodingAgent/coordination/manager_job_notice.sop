@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 26
+  + [job_notice_revision] is 27
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -44,7 +44,8 @@
     S19_shaliach_ledger_critique |
     S20_rework_response_coordination |
     S21_mailbox_orchestrator_assignment |
-    S22_mailbox_claim_conflict_resolution
+    S22_mailbox_claim_conflict_resolution |
+    S23_role_model_assignment_profile
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -362,11 +363,24 @@
 
 & [WorkSliceDetail S22_mailbox_claim_conflict_resolution] is a post-S16 governance expansion slice
   + [slice_id] is S22_mailbox_claim_conflict_resolution
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add mailbox claim and conflict helpers for worker conversations taking response coordination messages
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests for claim publication, duplicate claim conflict signal, and read cursor preservation
   + [completion_criteria] is multiple worker UUIDs can claim mailbox messages and detect conflicts without deleting inbox history
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S13_mailbox_and_notice_coordination, S21_mailbox_orchestrator_assignment
   + [known_risks] is overbuilding scheduler semantics before real worker processes exist
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T15:00:00Z, proof_ref tests passed with 31 tests, result_summary mailbox claims are append-only and conflicting duplicate claims publish conflict_signal messages without deleting inbox history
+  + [completed_work_review] is support_delta verified multiple worker UUIDs can claim and conflict on mailbox messages; requirement_delta real worker scheduling remains future work
+
+& [WorkSliceDetail S23_role_model_assignment_profile] is a post-S16 governance expansion slice
+  + [slice_id] is S23_role_model_assignment_profile
+  + [slice_status] is open
+  + [scope] is materialize Manager Director Programmer Shaliach model assignment profile from model inventory and config
+  + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
+  + [proof_route] is generated role model profile showing current dry-run fallbacks and future vLLM route expectations
+  + [completion_criteria] is role-to-model assignment is explicit even before local serving is installed
+  + [support_status] is pending_dependency
+  + [dependency_set] is S15_model_inventory_and_serving_probe
+  + [known_risks] is hard-coding model names before actual local model inventory exists

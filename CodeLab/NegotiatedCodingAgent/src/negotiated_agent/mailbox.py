@@ -8,6 +8,7 @@ from uuid import NAMESPACE_URL, uuid5
 
 
 MESSAGE_RE = re.compile(r"& \[MailboxMessage (?P<id>[^\]]+)\](?P<body>.*?)(?=\n& \[MailboxMessage |\Z)", re.DOTALL)
+CLAIM_RE = re.compile(r"& \[MailboxClaim (?P<id>[^\]]+)\](?P<body>.*?)(?=\n& \[MailboxClaim |\Z)", re.DOTALL)
 FIELD_RE = re.compile(r"^\s*\+ \[(?P<key>[^\]]+)\] is (?P<value>.*)$", re.MULTILINE)
 
 
@@ -31,6 +32,27 @@ class MailboxMessage:
   + [body] is {_field_value(self.body)}
   + [created_at] is {self.created_at}
   + [authority_boundary] is coordination_carrier_not_instruction_authority
+"""
+
+
+@dataclass(frozen=True)
+class MailboxClaim:
+    claim_id: str
+    message_id: str
+    claimant_uuid: str
+    status: str
+    conflict_with: str
+    created_at: str
+
+    def to_sop(self) -> str:
+        return f"""& [MailboxClaim {self.claim_id}] is a durable worker claim over a mailbox message
+  + [claim_id] is {self.claim_id}
+  + [message_id] is {self.message_id}
+  + [claimant_uuid] is {self.claimant_uuid}
+  + [status] is {self.status}
+  + [conflict_with] is {self.conflict_with or "none"}
+  + [created_at] is {self.created_at}
+  + [authority_boundary] is mailbox_claim_not_scheduler_lock
 """
 
 
@@ -100,6 +122,59 @@ def advance_read_cursor(project_root: Path, conversation_uuid: str, message_ids:
             handle.write(("\n" if cursor.exists() and cursor.stat().st_size else "") + "\n".join(lines) + "\n")
 
 
+def claim_message(project_root: Path, *, mailbox_uuid: str, message_id: str, claimant_uuid: str) -> MailboxClaim:
+    existing_claims = list_claims(project_root, mailbox_uuid)
+    conflict = next(
+        (
+            claim
+            for claim in existing_claims
+            if claim.message_id == message_id and claim.claimant_uuid != claimant_uuid and claim.status != "released"
+        ),
+        None,
+    )
+    status = "conflict" if conflict else "claimed"
+    conflict_with = conflict.claim_id if conflict else ""
+    created_at = datetime.now(timezone.utc).isoformat()
+    claim_id = str(uuid5(NAMESPACE_URL, f"{mailbox_uuid}:{message_id}:{claimant_uuid}:{created_at}"))
+    claim = MailboxClaim(claim_id, message_id, claimant_uuid, status, conflict_with, created_at)
+    path = _claim_path(project_root, mailbox_uuid)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.exists():
+        path.write_text(f"& [MailboxClaimSurface {mailbox_uuid}] is an append-only mailbox claim surface\n", encoding="utf-8")
+    with path.open("a", encoding="utf-8") as handle:
+        handle.write("\n" + claim.to_sop())
+    if conflict:
+        publish_message(
+            project_root,
+            sender_uuid=mailbox_uuid,
+            recipient_uuid=claimant_uuid,
+            kind="conflict_signal",
+            subject=f"Mailbox claim conflict for {message_id}",
+            body=f"Existing claim {conflict.claim_id} by {conflict.claimant_uuid}",
+        )
+    return claim
+
+
+def list_claims(project_root: Path, mailbox_uuid: str) -> list[MailboxClaim]:
+    path = _claim_path(project_root, mailbox_uuid)
+    if not path.exists():
+        return []
+    claims: list[MailboxClaim] = []
+    for match in CLAIM_RE.finditer(path.read_text(encoding="utf-8")):
+        fields = {field.group("key"): field.group("value") for field in FIELD_RE.finditer(match.group("body"))}
+        claims.append(
+            MailboxClaim(
+                claim_id=fields["claim_id"],
+                message_id=fields["message_id"],
+                claimant_uuid=fields["claimant_uuid"],
+                status=fields["status"],
+                conflict_with="" if fields.get("conflict_with") == "none" else fields.get("conflict_with", ""),
+                created_at=fields["created_at"],
+            )
+        )
+    return claims
+
+
 def write_rendezvous_packet(
     project_root: Path,
     *,
@@ -131,6 +206,10 @@ def _inbox_path(project_root: Path, conversation_uuid: str) -> Path:
 
 def _cursor_path(project_root: Path, conversation_uuid: str) -> Path:
     return project_root / "coordination" / "mailbox" / conversation_uuid / "read_cursor.sop"
+
+
+def _claim_path(project_root: Path, conversation_uuid: str) -> Path:
+    return project_root / "coordination" / "mailbox" / conversation_uuid / "claims.sop"
 
 
 def _read_message_ids(project_root: Path, conversation_uuid: str) -> set[str]:
