@@ -2167,7 +2167,7 @@
 
 & [WorkSliceDetail S152_long_run_checkpoint_after_proof_handoff_writer] is a long-run reentry slice
   + [slice_id] is S152_long_run_checkpoint_after_proof_handoff_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after Manager proof handoff writer CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 113-test suite and route draft proof
@@ -2175,3 +2175,16 @@
   + [support_status] is prepared
   + [dependency_set] is S151_manager_proof_handoff_writer_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:56:41Z, proof_ref long-run checkpoint passed 113 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after proof handoff writer CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 113-test proof handoff frontier; requirement_delta next step is refresh spec audit after proof handoff writer support
+
+& [WorkSliceDetail S153_spec_audit_refresh_after_proof_handoff_writer] is a specification audit slice
+  + [slice_id] is S153_spec_audit_refresh_after_proof_handoff_writer
+  + [slice_status] is open
+  + [scope] is refresh implementation status after Manager proof handoff record writer and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names Manager proof handoff support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists Manager-reviewed proof handoff as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S152_long_run_checkpoint_after_proof_handoff_writer
+  + [known_risks] is overstating handoff writer as proof command execution
