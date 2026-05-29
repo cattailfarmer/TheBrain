@@ -861,6 +861,55 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("restore_snapshot", preview)
             self.assertIn("remove_created_file", preview)
 
+    def test_rollback_preview_cli_can_restore_and_remove_with_acknowledgement(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "run"
+            target_root = root / "workspace"
+            run_root.mkdir()
+            target_root.mkdir()
+            (run_root / "apply_snapshots").mkdir()
+            (run_root / "apply_snapshots" / "existing.py").write_text("old\n", encoding="utf-8")
+            (target_root / "existing.py").write_text("new\n", encoding="utf-8")
+            (target_root / "new.py").write_text("created\n", encoding="utf-8")
+            apply_result = ApplyResult(
+                apply_status="applied",
+                applied_files=("existing.py", "new.py"),
+                skipped_files=(),
+                snapshot_refs=("apply_snapshots/existing.py",),
+                rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+                verification_result_ref="verification_result.sop",
+            )
+            snapshots = SnapshotMaterializationResult(
+                entries=(
+                    SnapshotMaterializationEntry("existing.py", "apply_snapshots/existing.py", "created", "replace_existing"),
+                    SnapshotMaterializationEntry("new.py", "none", "not_needed", "create_new"),
+                ),
+                snapshot_root="apply_snapshots",
+            )
+            (run_root / "apply_result.sop").write_text(apply_result.to_sop(), encoding="utf-8")
+            (run_root / "snapshot_materialization.sop").write_text(snapshots.to_sop(), encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    rollback_cli_main(
+                        [
+                            "--run-root",
+                            str(run_root),
+                            "--target-workspace-root",
+                            str(target_root),
+                            "--i-understand-this-mutates-workspace",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertEqual((target_root / "existing.py").read_text(encoding="utf-8"), "old\n")
+            self.assertFalse((target_root / "new.py").exists())
+            result = (run_root / "rollback_result.sop").read_text(encoding="utf-8")
+            self.assertIn("rollback_status] is rolled_back", result)
+            self.assertIn("restored_file_set] is existing.py", result)
+            self.assertIn("removed_file_set] is new.py", result)
+
 
 class MailboxCoordinationTests(unittest.TestCase):
     def test_mailbox_preserves_messages_and_advances_cursor(self) -> None:

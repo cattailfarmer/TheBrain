@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 114
+  + [job_notice_revision] is 115
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -132,7 +132,8 @@
     S107_rollback_preview_cli |
     S108_spec_audit_refresh_after_rollback_preview |
     S109_long_run_checkpoint_after_apply_rollback_preview |
-    S110_operator_acknowledged_rollback_writer
+    S110_operator_acknowledged_rollback_writer |
+    S111_spec_audit_refresh_after_rollback_writer
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1594,7 +1595,7 @@
 
 & [WorkSliceDetail S110_operator_acknowledged_rollback_writer] is an apply pipeline implementation slice
   + [slice_id] is S110_operator_acknowledged_rollback_writer
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is implement rollback file restoration/removal behind explicit acknowledgement
   + [target_files] is src/negotiated_agent/**, tests/**, scripts/**, docs/**, coordination/**
   + [proof_route] is tests use temporary workspaces to verify restore_snapshot and remove_created_file behavior with path containment
@@ -1602,3 +1603,16 @@
   + [support_status] is prepared
   + [dependency_set] is S109_long_run_checkpoint_after_apply_rollback_preview
   + [known_risks] is deleting files not created by the apply being rolled back
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:00:00Z, proof_ref tests passed with 71 tests, result_summary rollback CLI can restore snapshot-backed files and remove create-new files with explicit acknowledgement and writes rollback_result.sop
+  + [completed_work_review] is support_delta verified explicit rollback writer exists with temp-workspace proof; requirement_delta spec audit should reflect rollback writer support and remaining post-apply review gaps
+
+& [WorkSliceDetail S111_spec_audit_refresh_after_rollback_writer] is a documentation and planning slice
+  + [slice_id] is S111_spec_audit_refresh_after_rollback_writer
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after rollback writer support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit recognizes rollback execution while post-apply Manager/Shaliach acceptance remains future work
+  + [support_status] is prepared
+  + [dependency_set] is S110_operator_acknowledged_rollback_writer
+  + [known_risks] is overstating rollback execution as final acceptance

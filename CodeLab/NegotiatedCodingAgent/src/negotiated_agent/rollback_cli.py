@@ -5,12 +5,14 @@ from pathlib import Path
 
 from .apply_preflight import SnapshotMaterializationEntry, SnapshotMaterializationResult
 from .apply_plan import ApplyResult
-from .rollback import build_rollback_preview
+from .rollback import build_rollback_preview, execute_rollback_preview
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="rollback-preview")
     parser.add_argument("--run-root", required=True)
+    parser.add_argument("--target-workspace-root")
+    parser.add_argument("--i-understand-this-mutates-workspace", action="store_true")
     parser.add_argument("--out", default="rollback_preview.sop")
     args = parser.parse_args(argv)
     run_root = Path(args.run_root)
@@ -21,6 +23,11 @@ def main(argv: list[str] | None = None) -> int:
         out = Path(args.out)
         out_path = out if out.is_absolute() else run_root / out
         out_path.write_text(preview.to_sop(), encoding="utf-8")
+        if args.i_understand_this_mutates_workspace:
+            if not args.target_workspace_root:
+                raise ValueError("--target-workspace-root is required for rollback mutation")
+            result = execute_rollback_preview(run_root, Path(args.target_workspace_root), preview)
+            (run_root / "rollback_result.sop").write_text(result.to_sop(), encoding="utf-8")
         print(preview.to_sop(), end="")
         return 0
     except (FileNotFoundError, KeyError, ValueError) as exc:

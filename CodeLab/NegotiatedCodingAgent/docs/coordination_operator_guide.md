@@ -56,6 +56,14 @@ Before running any future rollback mutation, generate a preview:
 
 This writes `rollback_preview.sop` from `apply_result.sop` and `snapshot_materialization.sop`. It does not restore or remove target files.
 
+To execute rollback, add the explicit mutation acknowledgement and target workspace:
+
+```powershell
+.\scripts\rollback-preview.ps1 -RunRoot .\runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain -IUnderstandThisMutatesWorkspace
+```
+
+Rollback restores files from snapshot refs and removes files recorded as created by the apply result. It writes `rollback_result.sop`.
+
 Expected dry-run artifacts:
 
 - `apply_plan.sop`: target paths, snapshot plan, rollback reference, and verification command that would be used by a future apply command.

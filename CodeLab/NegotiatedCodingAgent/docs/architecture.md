@@ -127,7 +127,7 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `coordination/rollback_command_design.sop` defines the matching rollback contract. It requires explicit acknowledgement, same-run apply evidence, snapshot restoration for replaced files, removal only for files created by the apply result, verification evidence, and a durable `rollback_result.sop`.
 
-`negotiated_agent.rollback` provides dry-run rollback preview records. The preview can distinguish snapshot restoration, created-file removal, and skipped files, but it does not mutate the target workspace.
+`negotiated_agent.rollback` provides rollback preview records and explicit-acknowledgement rollback execution. The preview can distinguish snapshot restoration, created-file removal, and skipped files. The rollback writer restores snapshot-backed files and removes create-new files only when the operator supplies the target workspace and acknowledgement flag.
 
 ## Flowchart Format
 
