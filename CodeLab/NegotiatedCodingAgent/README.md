@@ -162,7 +162,7 @@ The wrapper `scripts/packet-proposal.ps1` writes Manager packet acceptance, Shal
 
 The wrapper `scripts/frontier-advancement.ps1` writes `frontier_advancement_record.sop` under `coordination/frontier_advancements/<id>/`. It is still evidence only; it does not apply the frontier change to the active conversation surface.
 
-`coordination/frontier_application_plan_design.sop` defines the next boundary after that evidence: a dry-run plan must verify the active conversation frontier before any future command mutates `current_frontier`.
+`coordination/frontier_application_plan_design.sop` defines the next boundary after that evidence: a dry-run plan must verify the active conversation frontier before any future command mutates `current_frontier`. `negotiated_agent.frontier_application` implements the plan record and loader/helper for that dry-run step.
 
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 

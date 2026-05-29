@@ -258,7 +258,7 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `negotiated_agent.frontier_advancement_cli` and `scripts/frontier-advancement.ps1` write that advancement record under `coordination/frontier_advancements/<id>/`. This writer validates the current frontier and review statuses, then persists evidence only; an explicit later surface-application plan is still required before changing `current_frontier`.
 
-`coordination/frontier_application_plan_design.sop` defines that next surface-application boundary. A future planner must load a frontier advancement record, load the active conversation surface, verify the exact previous frontier, and write a dry-run `FrontierApplicationPlan` before any later command changes `current_frontier`. This boundary remains separate from target workspace code application.
+`coordination/frontier_application_plan_design.sop` defines that next surface-application boundary. `negotiated_agent.frontier_application` loads a frontier advancement record, verifies the exact previous frontier, and builds a dry-run `FrontierApplicationPlan` before any later command changes `current_frontier`. This boundary remains separate from target workspace code application.
 
 ## Director Disagreement Ledger
 

@@ -21,6 +21,7 @@ from negotiated_agent.conversation import (
     ConversationSurface,
     update_active_conversation_surface,
 )
+from negotiated_agent.frontier_application import build_frontier_application_plan, load_frontier_advancement_record
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.frontier_advancement import build_frontier_advancement_record
 from negotiated_agent.frontier_advancement_cli import main as frontier_advancement_cli_main
@@ -3745,6 +3746,62 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("current frontier", out.getvalue())
             self.assertFalse((root / "coordination" / "frontier_advancements" / "advance-1").exists())
+
+    def test_frontier_application_plan_preserves_dry_run_boundary(self) -> None:
+        advancement = build_frontier_advancement_record(
+            advancement_id="advance-1",
+            current_frontier="S187_frontier_application_plan_records",
+            previous_frontier="S187_frontier_application_plan_records",
+            next_frontier="S188_frontier_application_plan_cli",
+            manager_decision_ref="manager_frontier_decision.sop",
+            manager_decision_status="approved_for_frontier_advancement",
+            shaliach_review_ref="shaliach_frontier_review.sop",
+            shaliach_review_status="clear_for_frontier_advancement",
+            proof_refs=("coordination/long_run_checkpoint.sop",),
+            packet_refs=("runs/run-1/manual_merge_packet.sop",),
+            residual_risk_summary="none",
+        )
+        plan = build_frontier_application_plan(
+            plan_id="plan-1",
+            advancement_ref="coordination/frontier_advancements/advance-1/frontier_advancement_record.sop",
+            advancement=advancement,
+            conversation_surface_ref="coordination/conversations/convo-1.sop",
+            current_frontier="S187_frontier_application_plan_records",
+            completed_slice_refs_to_append=("S187_frontier_application_plan_records",),
+        )
+        sop = plan.to_sop()
+        self.assertIn("FrontierApplicationPlan plan-1", sop)
+        self.assertIn("frontier_application_plan_not_surface_write", sop)
+        self.assertIn("proof_ref_set] is coordination/long_run_checkpoint.sop, runs/run-1/manual_merge_packet.sop", sop)
+
+    def test_frontier_application_plan_rejects_stale_frontier_and_loads_advancement(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S187_frontier_application_plan_records",
+                previous_frontier="S187_frontier_application_plan_records",
+                next_frontier="S188_frontier_application_plan_cli",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="warning_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+                packet_refs=(),
+                residual_risk_summary="warning accepted",
+            )
+            path = root / "frontier_advancement_record.sop"
+            path.write_text(advancement.to_sop(), encoding="utf-8")
+            loaded = load_frontier_advancement_record(path)
+            self.assertEqual(loaded.advancement_id, "advance-1")
+            with self.assertRaisesRegex(ValueError, "active conversation frontier"):
+                build_frontier_application_plan(
+                    plan_id="plan-1",
+                    advancement_ref=path.name,
+                    advancement=loaded,
+                    conversation_surface_ref="coordination/conversations/convo-1.sop",
+                    current_frontier="S999_other",
+                )
 
 
 def _merge_draft(
