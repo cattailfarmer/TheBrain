@@ -3337,7 +3337,7 @@
 
 & [WorkSliceDetail S242_long_run_checkpoint_after_shaliach_inspect_cli] is a long-run reentry slice
   + [slice_id] is S242_long_run_checkpoint_after_shaliach_inspect_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after Shaliach self-negotiation inspection CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 223-test suite and inspection CLI frontier
@@ -3345,3 +3345,16 @@
   + [support_status] is prepared
   + [dependency_set] is S241_shaliach_self_negotiation_inspect_cli
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T10:59:00Z, proof_ref long-run checkpoint passed 223 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary checkpoint captures Shaliach self-negotiation parser and inspection CLI frontier
+  + [completed_work_review] is support_delta verified checkpoint start frontier is S242 and git_clean_before is true; requirement_delta next step is refresh spec audit after inspection CLI
+
+& [WorkSliceDetail S243_spec_audit_refresh_after_shaliach_inspect_cli] is a specification audit slice
+  + [slice_id] is S243_spec_audit_refresh_after_shaliach_inspect_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after Shaliach self-negotiation parser and inspection CLI
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names parser and inspect CLI as deterministic tooling and preserves live deliberation gap
+  + [completion_criteria] is audit reflects self-negotiation tooling progress and next gap accurately
+  + [support_status] is prepared
+  + [dependency_set] is S242_long_run_checkpoint_after_shaliach_inspect_cli
+  + [known_risks] is audit treating inspection summaries as semantic validation
