@@ -76,8 +76,11 @@ Key fields:
 - `end_current_frontier`: the conversation frontier after the harness ran proof commands.
 - `test_status`, `dry_run_status`, and `model_inventory_status`: gating checks for continuation.
 - `openai_health_status`: non-gating environment state for the local OpenAI-compatible server.
+- `route_draft_status`: non-gating configuration guidance from `scripts\live-route-draft.ps1`.
 
 An unavailable OpenAI-compatible server should not block continuation when the current work is governance, documentation, or dry-run proof. It only means live local serving is not ready yet.
+
+`route_draft_status` passing means the harness wrote or refreshed `coordination/live_route_config_draft.sop`. It does not mean `agent.config.json` was changed, live serving is available, or model quality has been benchmarked. Use it as a bridge between machine readiness and a later operator-reviewed config edit.
 
 ## Mailbox Messages
 

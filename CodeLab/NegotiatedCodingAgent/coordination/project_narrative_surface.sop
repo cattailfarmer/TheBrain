@@ -364,6 +364,7 @@
   + [ready_capability] is specification implementation status audit recognizes live route draft support without claiming live serving or config mutation
   + [ready_capability] is long_run_checkpoint.sop records post-S92 63-test suite, dry-run, model inventory, non-gating endpoint state, and route draft frontier
   + [ready_capability] is long-run harness now records route_draft_status and a non-gating route_draft command proof
+  + [ready_capability] is coordination operator guide explains route_draft_status as non-gating non-mutating configuration guidance
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -438,9 +439,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S94_long_run_harness_route_draft_docs
-  + [next_reason] is operator guidance should explain route_draft_status before the next checkpoint
-  + [sleep_run_candidate] is continue S94 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S95_long_run_checkpoint_after_route_draft_harness
+  + [next_reason] is route draft harness documentation should be captured in a fresh checkpoint
+  + [sleep_run_candidate] is continue S95 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

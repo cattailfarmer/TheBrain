@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 98
+  + [job_notice_revision] is 99
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -116,7 +116,8 @@
     S91_spec_audit_refresh_after_route_draft |
     S92_long_run_checkpoint_after_route_draft |
     S93_long_run_harness_route_draft_check |
-    S94_long_run_harness_route_draft_docs
+    S94_long_run_harness_route_draft_docs |
+    S95_long_run_checkpoint_after_route_draft_harness
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1370,7 +1371,7 @@
 
 & [WorkSliceDetail S94_long_run_harness_route_draft_docs] is a documentation slice
   + [slice_id] is S94_long_run_harness_route_draft_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is document route_draft_status in long-run harness/operator guidance
   + [target_files] is docs/**, README.md, coordination/**
   + [proof_route] is docs updated and tests remain passing
@@ -1378,3 +1379,16 @@
   + [support_status] is prepared
   + [dependency_set] is S93_long_run_harness_route_draft_check
   + [known_risks] is implying route draft status proves model quality or live serving
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:11:00Z, proof_ref coordination_operator_guide.md updated and tests passed with 63 tests, result_summary operator docs explain route_draft_status as non-gating non-mutating configuration guidance
+  + [completed_work_review] is support_delta verified route draft checkpoint field is documented; requirement_delta checkpoint should capture harness route draft documentation
+
+& [WorkSliceDetail S95_long_run_checkpoint_after_route_draft_harness] is a long-run reentry slice
+  + [slice_id] is S95_long_run_checkpoint_after_route_draft_harness
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after route_draft_status harness documentation
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint with route_draft_status after docs
+  + [completion_criteria] is checkpoint records 63-test suite, dry-run run, model inventory, non-gating endpoint health, and route_draft_status
+  + [support_status] is prepared
+  + [dependency_set] is S94_long_run_harness_route_draft_docs
+  + [known_risks] is noisy generated dry-run artifacts
