@@ -3480,7 +3480,7 @@
 
 & [WorkSliceDetail S253_spec_audit_refresh_after_cross_artifact_probe] is a specification audit slice
   + [slice_id] is S253_spec_audit_refresh_after_cross_artifact_probe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after checkpoint probe proof
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names long-run harness Shaliach cross-artifact probe as proof-backed deterministic consistency
@@ -3488,3 +3488,16 @@
   + [support_status] is prepared
   + [dependency_set] is S252_long_run_checkpoint_after_cross_artifact_probe
   + [known_risks] is audit overstating consistency proof as semantic correctness
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:18:00Z, proof_ref spec_implementation_status.sop and tests passed with 238 tests, result_summary audit reflects checkpoint-level Shaliach cross-artifact probe proof
+  + [completed_work_review] is support_delta verified audit distinguishes checkpoint consistency proof from semantic correctness and approval; requirement_delta next step is add run-manifest validation awareness of Shaliach cross-artifact probe refs
+
+& [WorkSliceDetail S254_manifest_shaliach_probe_validation_design] is a manifest validation design slice
+  + [slice_id] is S254_manifest_shaliach_probe_validation_design
+  + [slice_status] is open
+  + [scope] is design run-manifest validation awareness for Shaliach self-negotiation and cross-artifact probe evidence
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is design names manifest refs expected artifacts and non-approval validation boundary
+  + [completion_criteria] is future manifest validation can check Shaliach evidence refs without semantic approval
+  + [support_status] is prepared
+  + [dependency_set] is S253_spec_audit_refresh_after_cross_artifact_probe
+  + [known_risks] is expanding manifest validation into semantic review
