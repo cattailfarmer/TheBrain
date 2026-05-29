@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 162
+  + [job_notice_revision] is 163
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3779,7 +3779,7 @@
 
 & [WorkSliceDetail S276_spec_audit_refresh_after_prelive_review_packets] is a specification audit slice
   + [slice_id] is S276_spec_audit_refresh_after_prelive_review_packets
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after pre-live Manager/Shaliach review packet tooling
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names deterministic pre-live packet records CLI and live-serving boundary
@@ -3787,3 +3787,16 @@
   + [support_status] is prepared
   + [dependency_set] is S275_prelive_review_packet_cli
   + [known_risks] is audit overstating deterministic packets as live review
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:48:00Z, proof_ref spec_implementation_status.sop and tests passed with 277 tests, result_summary audit reflects pre-live Manager and Shaliach review packet tooling
+  + [completed_work_review] is support_delta verified audit treats pre-live review packets as future live prompt scaffolds not approval; requirement_delta next step is add operator recipe proof for generating pre-live review packets
+
+& [WorkSliceDetail S277_prelive_review_packet_operator_recipe] is an operator recipe slice
+  + [slice_id] is S277_prelive_review_packet_operator_recipe
+  + [slice_status] is open
+  + [scope] is document and prove the operator sequence for combined validation plus pre-live Manager/Shaliach review packet generation
+  + [target_files] is docs/**, coordination/**
+  + [proof_route] is recipe names commands refs outputs and non-approval boundaries; wrapper proof uses latest run manifest and checkpoint
+  + [completion_criteria] is operator can reproduce combined validation and review packet generation without live serving
+  + [support_status] is prepared
+  + [dependency_set] is S276_spec_audit_refresh_after_prelive_review_packets
+  + [known_risks] is recipe being mistaken for final acceptance workflow

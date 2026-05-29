@@ -2388,3 +2388,11 @@
   + [proof_result] is tests passed with 277 tests and wrapper wrote packet files from latest combined validation proof
   + [current_frontier] is S276_spec_audit_refresh_after_prelive_review_packets
   + [narrative_role] is review_runtime and live_serving_bridge update
+
+
+& [LongRunNarrativeUpdate S276_spec_audit_refresh_after_prelive_review_packets] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S276_spec_audit_refresh_after_prelive_review_packets
+  + [implemented_capability] is spec audit reflects deterministic pre-live Manager and Shaliach review packet records CLI and live-serving boundary
+  + [proof_ref] is coordination/spec_implementation_status.sop
+  + [current_frontier] is S277_prelive_review_packet_operator_recipe
+  + [narrative_role] is specification_audit and review_runtime update
