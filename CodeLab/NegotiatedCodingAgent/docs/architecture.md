@@ -173,6 +173,8 @@ In dry-run mode, Directors emit deterministic stance differences:
 
 This proves the artifact path and review shape. It is not proof that live local models have achieved useful diversity; that still depends on model serving, model selection, and real proposal quality.
 
+When `rounds_per_layer` is greater than one, later Director proposal prompts include prior Director concerns. This carry-forward keeps disagreement visible across rounds before Manager settlement. It is prompt context, not full deliberative memory or a replacement for the package-level `DirectorDisagreementLedger`.
+
 ## Local Model Serving
 
 The preferred high-throughput route for this machine is WSL2 plus vLLM serving an OpenAI-compatible endpoint. The current preflight detects the RTX 5090 and records WSL as the blocker. Local serving remains uninstalled until a human performs the WSL2/vLLM setup.

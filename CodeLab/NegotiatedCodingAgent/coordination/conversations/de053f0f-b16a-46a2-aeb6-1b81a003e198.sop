@@ -128,6 +128,7 @@
   + [last_proof] is tests passed with 46 tests after S55 Programmer merge review protocol surface
   + [last_proof] is tests passed with 46 tests after S56 spec audit refresh
   + [last_proof] is tests passed with 47 tests after S57 Director multi-round carry-forward
+  + [last_proof] is tests passed with 47 tests after S58 Director multi-round docs
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -272,9 +273,10 @@
   + [completed_slice] is S55_programmer_merge_review_protocol_surface
   + [completed_slice] is S56_spec_audit_refresh_after_programmer_swarm_groundwork
   + [completed_slice] is S57_director_multi_round_carry_forward
+  + [completed_slice] is S58_director_multi_round_docs
 
-  + [current_frontier] is S58_director_multi_round_docs after Director multi-round carry-forward
-  + [next_recommended_slice] is S58_director_multi_round_docs
+  + [current_frontier] is S59_spec_audit_refresh_after_director_carry_forward after Director multi-round docs
+  + [next_recommended_slice] is S59_spec_audit_refresh_after_director_carry_forward
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

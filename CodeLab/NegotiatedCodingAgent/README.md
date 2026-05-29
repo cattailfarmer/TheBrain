@@ -49,6 +49,7 @@ By default the config uses:
 - `llama3.1:8b` for critic/arbiter roles
 
 Edit `agent.config.json` to use the models you actually have installed.
+Increasing `negotiation.rounds_per_layer` above `1` carries prior Director disagreement into later proposal rounds.
 
 ## Output
 
