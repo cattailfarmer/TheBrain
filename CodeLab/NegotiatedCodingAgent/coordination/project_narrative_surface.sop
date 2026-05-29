@@ -1402,3 +1402,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes run-local output review CLI and 131-test checkpoint as scaffold support
   + [current_frontier] is S173_run_local_to_merge_packet_bridge_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S173_run_local_to_merge_packet_bridge_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S173_run_local_to_merge_packet_bridge_design
+  + [implemented_capability] is run_local_to_merge_packet_bridge_design.sop defines draft accepted-file-map input bridge from eligible run-local output without issuing ManualMergePacket
+  + [current_frontier] is S174_run_local_merge_draft_input_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

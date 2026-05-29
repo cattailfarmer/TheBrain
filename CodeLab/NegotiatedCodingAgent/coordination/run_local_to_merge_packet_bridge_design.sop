@@ -1,0 +1,57 @@
+& [RunLocalToMergePacketBridgeDesign] is the design contract for drafting manual merge packet inputs from eligible run-local outputs
+  @ [run_local_review_design] coordination/run_local_output_review_design.sop
+  @ [manual_merge_policy] coordination/manual_merge_packet_policy.sop
+  @ [merge_packet_records] src/negotiated_agent/merge_packet.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T00:36:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is merge_packet_draft_input_not_manual_merge_packet
+  + [primary_goal] is prepare non-mutating draft accepted-file-map inputs from run-local outputs that are eligible for manual merge review
+  + [non_goal] is issuing ManualMergePacket
+  + [non_goal] is target workspace mutation
+  + [non_goal] is apply plan generation
+  + [non_goal] is Manager frontier advancement
+
+& [BridgeInputs] is what the bridge must inspect
+  + [required_ref] is RunLocalMergeEligibilitySummary with eligibility_status eligible_for_manual_merge_packet
+  + [required_ref] is ManagerRunLocalOutputReview
+  + [required_ref] is ShaliachRunLocalOutputReview
+  + [required_ref] is RunLocalExecutionResult
+  + [required_ref] is generated file refs under the run-local root
+  + [required_arg] is target workspace root for target-path containment checks
+  + [authority_boundary] is eligibility_not_merge_packet
+  = must: reject blocked_by_manager, blocked_by_shaliach, needs_revision, and needs_human_review eligibility statuses
+  = must: reject generated source refs outside the run-local root
+  = must: reject target paths outside the target workspace root
+
+& [RunLocalMergeDraftInput] is the bridge output artifact
+  + [artifact_name] is runs/<run_id>/worker_execution/<cycle_id>/run_local_merge_draft_input.sop
+  + [source_result_ref] is required
+  + [eligibility_ref] is required
+  + [accepted_file_map_entry_set] is required
+  + [target_workspace_root] is required
+  + [authority_boundary] is draft_input_not_manual_merge_packet
+  = must: preserve generated source refs as run-local evidence
+  = must: preserve target paths as proposed paths only
+  = must: require later ManualMergePacket construction before apply planning
+
+& [DraftEntryRules] is how generated files become proposed accepted-file-map entries
+  + [source_file_ref] is the run-local generated file ref
+  + [target_path] is operator supplied or derived by stripping the run-local implementation prefix
+  + [justification_ref] is Manager and Shaliach review refs plus eligibility ref
+  + [authority_boundary] is accepted_file_map_draft_not_accepted_patch
+  = must: never infer target paths that escape the workspace
+  = must: require explicit target path override when source path cannot be mapped safely
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is eligible output produces draft accepted-file-map input without ManualMergePacket
+  + [test_case] is blocked eligibility is rejected
+  + [test_case] is escaped source ref is rejected
+  + [test_case] is escaped target path is rejected
+  + [test_case] is draft artifact preserves not-manual-merge-packet boundary
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add RunLocalMergeDraftInput record and source/target containment helpers
+  + [slice_2] is add explicit CLI writer for draft inputs
+  + [slice_3] is refresh audit and checkpoint before connecting draft inputs to ManualMergePacket construction

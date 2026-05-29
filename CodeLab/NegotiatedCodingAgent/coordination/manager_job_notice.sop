@@ -2440,7 +2440,7 @@
 
 & [WorkSliceDetail S173_run_local_to_merge_packet_bridge_design] is a coordination runtime design slice
   + [slice_id] is S173_run_local_to_merge_packet_bridge_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design non-mutating bridge from eligible run-local outputs into manual merge packet draft inputs
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names eligibility inputs accepted file map draft boundary and no apply mutation
@@ -2448,3 +2448,16 @@
   + [support_status] is prepared
   + [dependency_set] is S172_spec_audit_refresh_after_run_local_review
   + [known_risks] is bridge being mistaken for target workspace application
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T00:36:00Z, proof_ref run_local_to_merge_packet_bridge_design.sop README architecture and operator guide updated, result_summary designed non-mutating bridge from eligible run-local outputs to manual merge draft inputs
+  + [completed_work_review] is support_delta verified draft inputs are not ManualMergePacket or apply; requirement_delta next step is RunLocalMergeDraftInput record and containment helpers
+
+& [WorkSliceDetail S174_run_local_merge_draft_input_records] is a coordination runtime implementation slice
+  + [slice_id] is S174_run_local_merge_draft_input_records
+  + [slice_status] is open
+  + [scope] is add RunLocalMergeDraftInput record and source/target containment helpers
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover eligible draft creation blocked eligibility escaped source escaped target and boundary text
+  + [completion_criteria] is eligible run-local outputs can be represented as draft merge inputs without issuing ManualMergePacket
+  + [support_status] is prepared
+  + [dependency_set] is S173_run_local_to_merge_packet_bridge_design
+  + [known_risks] is draft input being treated as accepted patch

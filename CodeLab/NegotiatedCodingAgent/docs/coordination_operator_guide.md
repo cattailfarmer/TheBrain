@@ -277,6 +277,8 @@ Write run-local output review evidence:
 
 Eligibility writes `run_local_merge_eligibility.sop`. It does not create `manual_merge_packet.sop`.
 
+`coordination/run_local_to_merge_packet_bridge_design.sop` describes the next planned bridge from eligible run-local output to draft manual merge inputs. Draft inputs are not manual merge packets and cannot be applied.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

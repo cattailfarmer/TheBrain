@@ -624,9 +624,10 @@
   + [completed_slice] is S170_run_local_output_review_cli
   + [completed_slice] is S171_long_run_checkpoint_after_run_local_review_cli
   + [completed_slice] is S172_spec_audit_refresh_after_run_local_review
+  + [completed_slice] is S173_run_local_to_merge_packet_bridge_design
 
-  + [current_frontier] is S173_run_local_to_merge_packet_bridge_design after spec audit refresh for run-local output review
-  + [next_recommended_slice] is S173_run_local_to_merge_packet_bridge_design
+  + [current_frontier] is S174_run_local_merge_draft_input_records after run-local to merge packet bridge design
+  + [next_recommended_slice] is S174_run_local_merge_draft_input_records
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
