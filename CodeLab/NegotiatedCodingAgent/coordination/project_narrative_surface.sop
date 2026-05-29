@@ -1355,3 +1355,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes run-local execution writer helper CLI and 126-test checkpoint as scaffold support
   + [current_frontier] is S168_run_local_output_review_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S168_run_local_output_review_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S168_run_local_output_review_design
+  + [implemented_capability] is run_local_output_review_design.sop defines Manager Shaliach and merge eligibility review records before generated outputs can become merge candidates
+  + [current_frontier] is S169_run_local_output_review_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update

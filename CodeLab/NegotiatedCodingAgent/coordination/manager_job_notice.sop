@@ -2375,7 +2375,7 @@
 
 & [WorkSliceDetail S168_run_local_output_review_design] is a coordination runtime design slice
   + [slice_id] is S168_run_local_output_review_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design Manager and Shaliach review records for run-local generated outputs before merge/apply eligibility
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names review inputs decisions risk handling and no target workspace mutation boundary
@@ -2383,3 +2383,16 @@
   + [support_status] is prepared
   + [dependency_set] is S167_spec_audit_refresh_after_run_local_writer
   + [known_risks] is review records being mistaken for final apply acceptance
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:56:00Z, proof_ref run_local_output_review_design.sop README architecture and operator guide updated, result_summary designed Manager Shaliach and merge eligibility review records for run-local generated outputs
+  + [completed_work_review] is support_delta verified review design preserves merge/apply boundaries; requirement_delta next step is implement review record models and eligibility helper
+
+& [WorkSliceDetail S169_run_local_output_review_records] is a coordination runtime implementation slice
+  + [slice_id] is S169_run_local_output_review_records
+  + [slice_status] is open
+  + [scope] is add ManagerRunLocalOutputReview ShaliachRunLocalOutputReview and MergeEligibilitySummary records
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover boundary serialization accepted clear eligibility manager block shaliach block and escaped generated ref rejection
+  + [completion_criteria] is run-local output review can be represented and combined without creating merge packets or applying files
+  + [support_status] is prepared
+  + [dependency_set] is S168_run_local_output_review_design
+  + [known_risks] is review records being treated as manual merge packet

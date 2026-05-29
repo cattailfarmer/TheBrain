@@ -265,6 +265,8 @@ Execute an existing run-local plan into generated evidence:
 
 Execute-plan mode writes generated evidence under the plan root and writes `run_local_execution_result.sop`. It still does not apply files to the target workspace.
 
+The next planned review boundary is `coordination/run_local_output_review_design.sop`. Run-local generated files need Manager and Shaliach review before they can become eligible for a manual merge packet, and eligibility is still not apply acceptance.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

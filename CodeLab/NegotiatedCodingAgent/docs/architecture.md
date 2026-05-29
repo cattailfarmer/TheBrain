@@ -244,6 +244,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `scripts/run-local-execution-plan.ps1 -ExecutePlan` exposes that deterministic writer through the operator wrapper. The command consumes existing plan evidence and writes generated run-local artifacts only under the plan root.
 
+`coordination/run_local_output_review_design.sop` defines the review boundary after run-local generation. Manager and Shaliach review artifacts must inspect the generated file refs and proof evidence before a non-mutating merge eligibility summary can say the output is eligible for later manual merge packet construction.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

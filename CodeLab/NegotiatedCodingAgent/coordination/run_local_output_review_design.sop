@@ -1,0 +1,73 @@
+& [RunLocalOutputReviewDesign] is the design contract for reviewing generated run-local outputs before merge or apply eligibility
+  @ [run_local_execution_design] coordination/gate_authorized_run_local_execution_design.sop
+  @ [manual_merge_policy] coordination/manual_merge_packet_policy.sop
+  @ [apply_policy] coordination/operator_approved_apply_policy.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T23:56:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is run_local_output_review_design_not_merge_or_apply_acceptance
+  + [primary_goal] is require Manager and Shaliach review evidence over run-local generated outputs before they can be considered for merge packet construction
+  + [non_goal] is target workspace mutation
+  + [non_goal] is manual merge packet generation
+  + [non_goal] is apply or rollback approval
+  + [non_goal] is Manager frontier advancement
+
+& [ReviewInputs] is the evidence reviewers must inspect
+  + [required_ref] is RunLocalExecutionPlan
+  + [required_ref] is RunLocalExecutionResult
+  + [required_ref] is generated file refs under the plan run-local root
+  + [required_ref] is WorkerCycleRecord for execution outcome
+  + [required_ref] is proof result cycle when proof was run
+  + [required_ref] is active conversation current_frontier
+  + [authority_boundary] is review_inputs_not_patch_acceptance
+  = must: reject generated file refs outside the run-local worker execution root
+  = must: preserve generated file refs as evidence, not target workspace paths
+
+& [ManagerRunLocalOutputReview] is the Manager-side review artifact
+  + [artifact_name] is runs/<run_id>/worker_execution/<cycle_id>/manager_run_local_output_review.sop
+  + [review_status] is accepted_for_merge_review, rejected, needs_revision, or needs_human_review
+  + [plan_ref] is required
+  + [result_ref] is required
+  + [generated_file_set] is required
+  + [frontier_at_review] is required
+  + [risk_summary] is required
+  + [authority_boundary] is manager_run_local_review_not_apply_acceptance
+  = must: never mark target workspace files accepted
+  = must: require separate manual merge packet before any target workspace apply
+
+& [ShaliachRunLocalOutputReview] is the protocol counsel review artifact
+  + [artifact_name] is runs/<run_id>/worker_execution/<cycle_id>/shaliach_run_local_output_review.sop
+  + [review_status] is clear, warning, rework_required, pause_required, or needs_human_review
+  + [plan_ref] is required
+  + [result_ref] is required
+  + [checked_protocol_set] is SOP, SJS, DataDrivenDesign, lineage, uncertainty, artifact_form, and workspace_boundary
+  + [finding_summary] is required
+  + [required_response] is proceed_to_merge_review, revise_run_local_output, pause_for_manager, or human_review
+  + [authority_boundary] is shaliach_run_local_review_not_manager_acceptance
+  = must: pause when generated refs escape the run-local root
+  = must: request rework when SJS or DataDesign support is thin for generated behavior changes
+
+& [MergeEligibilitySummary] is the non-mutating combined review result
+  + [artifact_name] is runs/<run_id>/worker_execution/<cycle_id>/run_local_merge_eligibility.sop
+  + [eligibility_status] is eligible_for_manual_merge_packet, blocked_by_manager, blocked_by_shaliach, needs_revision, or needs_human_review
+  + [manager_review_ref] is required
+  + [shaliach_review_ref] is required
+  + [generated_file_set] is required
+  + [authority_boundary] is merge_eligibility_not_manual_merge_packet
+  = must: never create a manual merge packet directly
+  = must: never apply files to target workspace
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is Manager review record preserves not-apply boundary
+  + [test_case] is Shaliach review record preserves not-Manager-acceptance boundary
+  + [test_case] is merge eligibility combines accepted and clear into eligible_for_manual_merge_packet
+  + [test_case] is Manager rejection blocks eligibility
+  + [test_case] is Shaliach pause blocks eligibility
+  + [test_case] is generated file refs outside run-local root fail validation
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add ManagerRunLocalOutputReview ShaliachRunLocalOutputReview and MergeEligibilitySummary records
+  + [slice_2] is add validation helper for generated refs and eligibility decisions
+  + [slice_3] is add explicit CLI writer for reviews and eligibility after tests
+  + [slice_4] is only later connect eligible outputs to manual merge packet construction

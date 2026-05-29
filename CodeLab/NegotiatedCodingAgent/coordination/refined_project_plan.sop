@@ -274,7 +274,8 @@
   + [completed_slice] is S165_run_local_execution_writer_cli
   + [completed_slice] is S166_long_run_checkpoint_after_run_local_writer_cli
   + [completed_slice] is S167_spec_audit_refresh_after_run_local_writer
-  + [ready_slice] is S168_run_local_output_review_design
+  + [completed_slice] is S168_run_local_output_review_design
+  + [ready_slice] is S169_run_local_output_review_records
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

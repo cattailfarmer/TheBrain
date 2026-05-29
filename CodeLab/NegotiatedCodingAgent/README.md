@@ -148,6 +148,8 @@ The run-local execution writer helper now writes deterministic generated evidenc
 
 The same wrapper supports `-ExecutePlan` to produce run-local generated evidence from a plan.
 
+Run-local generated outputs still need Manager and Shaliach review before merge eligibility; that boundary is specified in `coordination/run_local_output_review_design.sop`.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
