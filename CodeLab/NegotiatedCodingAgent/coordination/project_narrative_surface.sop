@@ -1636,3 +1636,11 @@
   + [proof_result] is tests passed with 161 tests
   + [current_frontier] is S200_narrative_coverage_update_record_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S200_narrative_coverage_update_record_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S200_narrative_coverage_update_record_cli
+  + [implemented_capability] is scripts/narrative-coverage.ps1 -UpdateRecord writes narrative coverage update evidence from explicit stale-check refs without narrative mutation
+  + [proof_result] is tests passed with 164 tests
+  + [current_frontier] is S201_reviewed_narrative_append_design
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

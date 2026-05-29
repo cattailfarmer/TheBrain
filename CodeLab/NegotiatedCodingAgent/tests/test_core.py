@@ -4681,6 +4681,90 @@ class NarrativeCoverageTests(unittest.TestCase):
         )
         self.assertIn("deferred_update_count] is 1", record.to_sop())
 
+    def test_update_record_cli_writes_from_stale_check_without_mutating_narrative(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            stale_check_path = coordination / "narrative_stale_check.sop"
+            stale_check_path.write_text(
+                NarrativeStaleCheckRecord(
+                    check_id="check-cli",
+                    narrative_surface_ref="coordination/project_narrative_surface.sop",
+                    latest_run_ref="runs/20260529T190511Z",
+                    current_frontier_ref="S200",
+                    covered_arcs=("OriginArc",),
+                    missing_arcs=("ProofArc",),
+                    stale_claims=("latest run 20260529T190511Z is missing",),
+                    recommended_updates=("append RunNarrativeUpdate for 20260529T190511Z",),
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out_path = coordination / "narrative_coverage_update_record.sop"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_coverage_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--update-record",
+                            "--update-id",
+                            "update-cli",
+                            "--stale-check-ref",
+                            "coordination/narrative_stale_check.sop",
+                            "--out",
+                            str(out_path),
+                        ]
+                    ),
+                    0,
+                )
+            written = out_path.read_text(encoding="utf-8")
+            self.assertIn("NarrativeCoverageUpdateRecord update-cli", written)
+            self.assertIn("appended_update] is append RunNarrativeUpdate for 20260529T190511Z", written)
+            self.assertIn("narrative_update_record_not_history_rewrite", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_update_record_cli_rejects_output_collision(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            (coordination / "project_narrative_surface.sop").write_text("& [OriginArc] is origin\n", encoding="utf-8")
+            (coordination / "narrative_stale_check.sop").write_text(
+                NarrativeStaleCheckRecord(
+                    check_id="check-cli",
+                    narrative_surface_ref="coordination/project_narrative_surface.sop",
+                    latest_run_ref="",
+                    current_frontier_ref="S200",
+                    covered_arcs=("OriginArc",),
+                    missing_arcs=(),
+                    stale_claims=(),
+                    recommended_updates=(),
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out_path = coordination / "narrative_coverage_update_record.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_coverage_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--update-record",
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+
+    def test_update_record_cli_rejects_combined_modes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            with self.assertRaises(ValueError):
+                narrative_coverage_cli_main(["--project-root", temp, "--stale-check", "--update-record"])
+
 
 class RunManifestTests(unittest.TestCase):
     def test_run_manifest_validation_detects_missing_artifacts(self) -> None:

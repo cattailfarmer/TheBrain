@@ -280,6 +280,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `build_narrative_coverage_update_record` implements that artifact boundary as a pure function. It carries recommended updates forward, defers duplicate or current-state recommendations, preserves stale claim refs, and writes only SOP evidence.
 
+`scripts/narrative-coverage.ps1 -UpdateRecord` exposes the update-record writer. It consumes an explicit stale-check ref and persists update evidence while keeping project narrative append behavior reserved for a later reviewed command.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

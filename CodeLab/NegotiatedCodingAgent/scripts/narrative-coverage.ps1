@@ -1,6 +1,9 @@
 param(
   [switch]$StaleCheck,
+  [switch]$UpdateRecord,
   [string]$CheckId = "narrative-stale-check-1",
+  [string]$UpdateId = "narrative-coverage-update-1",
+  [string]$StaleCheckRef = "coordination/narrative_stale_check.sop",
   [string]$Out = ""
 )
 
@@ -12,7 +15,10 @@ if (-not (Test-Path $Python)) {
 }
 $env:PYTHONPATH = Join-Path $ProjectRoot "src"
 $argsList = @("-m", "negotiated_agent.narrative_coverage_cli", "--project-root", $ProjectRoot)
-if ($StaleCheck) {
+if ($UpdateRecord) {
+  $defaultOut = Join-Path $ProjectRoot "coordination\narrative_coverage_update_record.sop"
+  $argsList += @("--update-record", "--update-id", $UpdateId, "--stale-check-ref", $StaleCheckRef)
+} elseif ($StaleCheck) {
   $defaultOut = Join-Path $ProjectRoot "coordination\narrative_stale_check.sop"
   $argsList += @("--stale-check", "--check-id", $CheckId)
 } else {

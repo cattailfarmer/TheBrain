@@ -217,6 +217,22 @@ def build_narrative_coverage_update_record(
     )
 
 
+def parse_narrative_stale_check_sop(text: str) -> NarrativeStaleCheckRecord:
+    check_match = re.search(r"& \[NarrativeStaleCheckRecord (?P<id>[^\]]+)\]", text)
+    if not check_match:
+        raise ValueError("NarrativeStaleCheckRecord header not found")
+    return NarrativeStaleCheckRecord(
+        check_id=check_match.group("id"),
+        narrative_surface_ref=_first_field(text, "narrative_surface_ref"),
+        latest_run_ref=_none_to_empty(_first_field(text, "latest_run_ref")),
+        current_frontier_ref=_none_to_empty(_first_field(text, "current_frontier_ref")),
+        covered_arcs=_all_fields(text, "covered_arc"),
+        missing_arcs=_drop_none(_all_fields(text, "missing_arc")),
+        stale_claims=_drop_none(_all_fields(text, "stale_claim")),
+        recommended_updates=_drop_none(_all_fields(text, "recommended_update")),
+    )
+
+
 def _latest_run(project_root: Path) -> str:
     runs = project_root / "runs"
     if not runs.exists():
@@ -245,3 +261,21 @@ def _fields(key: str, values: tuple[str, ...]) -> str:
     if not values:
         return f"  + [{key}] is none\n"
     return "".join(f"  + [{key}] is {value}\n" for value in values)
+
+
+def _first_field(text: str, key: str) -> str:
+    values = _all_fields(text, key)
+    return values[0] if values else ""
+
+
+def _all_fields(text: str, key: str) -> tuple[str, ...]:
+    matches = re.findall(rf"^\s*\+ \[{re.escape(key)}\] is (?P<value>.+)$", text, flags=re.MULTILINE)
+    return tuple(match.strip() for match in matches)
+
+
+def _drop_none(values: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(value for value in values if value != "none")
+
+
+def _none_to_empty(value: str) -> str:
+    return "" if value in {"none", "none_detected", "unknown"} else value

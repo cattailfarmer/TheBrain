@@ -2791,7 +2791,7 @@
 
 & [WorkSliceDetail S200_narrative_coverage_update_record_cli] is a coordination runtime implementation slice
   + [slice_id] is S200_narrative_coverage_update_record_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper mode to write narrative coverage update record evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover CLI writes update record from stale-check evidence rejects collisions and preserves narrative surface
@@ -2799,3 +2799,16 @@
   + [support_status] is prepared
   + [dependency_set] is S199_narrative_coverage_update_records
   + [known_risks] is users mistaking update-record writer for narrative append automation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T04:38:00Z, proof_ref tests passed with 164 tests, result_summary added narrative coverage update-record CLI and wrapper mode
+  + [completed_work_review] is support_delta verified CLI consumes explicit stale-check evidence and preserves narrative surface; requirement_delta next step is design reviewed narrative append command
+
+& [WorkSliceDetail S201_reviewed_narrative_append_design] is a coordination runtime design slice
+  + [slice_id] is S201_reviewed_narrative_append_design
+  + [slice_status] is open
+  + [scope] is design reviewed append command from update records to project narrative surface
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design names Manager approval Shaliach clearance update-record refs stale frontier guard and append-only mutation result
+  + [completion_criteria] is future narrative append has explicit review and result boundaries before implementation
+  + [support_status] is prepared
+  + [dependency_set] is S200_narrative_coverage_update_record_cli
+  + [known_risks] is appending narrative text without fresh review or stale surface guard
