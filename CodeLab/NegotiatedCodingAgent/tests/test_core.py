@@ -135,6 +135,7 @@ from negotiated_agent.shaliach import (
     ShaliachSelfNegotiationPerspective,
     ShaliachSelfNegotiationRecord,
     ShaliachSelfNegotiationTension,
+    build_shaliach_self_negotiation_record,
     review_layer_negotiation,
 )
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -5876,6 +5877,62 @@ class ShaliachRuntimeTests(unittest.TestCase):
         sop = record.to_sop()
         self.assertIn("unresolved_tension_set] is none", sop)
         self.assertIn("perspective_records] is none", sop)
+
+    def test_self_negotiation_builder_creates_default_perspective_roster(self) -> None:
+        record = build_shaliach_self_negotiation_record(
+            negotiation_id="builder-clean",
+            subject_ref="application_layer_package",
+            intention_statement="preserve application objective",
+            purpose_statement="approve clean package",
+            context_boundary="application negotiation",
+        )
+        self.assertEqual(record.status, "resolved")
+        self.assertEqual(record.proposed_response_set, ("approve",))
+        self.assertEqual(
+            [perspective.perspective for perspective in record.perspective_records],
+            ["legal_counsel", "protocol_officer", "failure_advocate", "purpose_guardian"],
+        )
+        self.assertIn("no unresolved tension detected", record.resolved_intention)
+
+    def test_self_negotiation_builder_synthesizes_blocking_response(self) -> None:
+        record = build_shaliach_self_negotiation_record(
+            negotiation_id="builder-blocking",
+            subject_ref="code_layer_package",
+            intention_statement="protect code mutation authority",
+            purpose_statement="prevent unsafe descent",
+            context_boundary="code negotiation",
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="no Manager approval",
+                    severity="blocking",
+                    reason="code writer lacks authority",
+                ),
+            ),
+        )
+        self.assertEqual(record.status, "rework_required")
+        self.assertEqual(record.proposed_response_set, ("request_rework", "pause_descent"))
+        responses = {perspective.perspective: perspective.proposed_response for perspective in record.perspective_records}
+        self.assertEqual(responses["protocol_officer"], "pause_descent")
+        self.assertEqual(responses["failure_advocate"], "record_residual_tension")
+
+    def test_self_negotiation_builder_synthesizes_advisory_response(self) -> None:
+        record = build_shaliach_self_negotiation_record(
+            negotiation_id="builder-advisory",
+            subject_ref="subsystem_layer_package",
+            intention_statement="preserve subsystem lineage",
+            purpose_statement="continue with visible risk",
+            context_boundary="subsystem negotiation",
+            unresolved_tension_set=(
+                ShaliachSelfNegotiationTension(
+                    tension="lineage wording is thin",
+                    severity="advisory",
+                    reason="lineage exists but could be stronger",
+                ),
+            ),
+        )
+        self.assertEqual(record.status, "advisory")
+        self.assertEqual(record.proposed_response_set, ("approve_with_advisory", "record_residual_tension"))
+        self.assertIn("advisory tension recorded", record.to_sop())
 
     def test_shaliach_no_finding_for_complete_ledgers(self) -> None:
         ledgers = negotiate_ledgers(

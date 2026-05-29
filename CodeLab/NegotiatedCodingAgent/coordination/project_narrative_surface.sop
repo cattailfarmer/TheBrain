@@ -1954,3 +1954,11 @@
   + [proof_result] is tests passed with 209 tests
   + [current_frontier] is S233_shaliach_self_negotiation_builder
   + [narrative_role] is shaliach_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S233_shaliach_self_negotiation_builder] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S233_shaliach_self_negotiation_builder
+  + [implemented_capability] is build_shaliach_self_negotiation_record creates deterministic Shaliach perspective records and resolved advisory or rework responses from unresolved tensions
+  + [proof_result] is tests passed with 212 tests
+  + [current_frontier] is S234_shaliach_finding_self_negotiation_refs
+  + [narrative_role] is shaliach_arc and proof_arc update

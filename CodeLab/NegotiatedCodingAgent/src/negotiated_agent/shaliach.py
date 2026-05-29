@@ -15,6 +15,15 @@ SEVERITY_RANK = {
     "escalation": 5,
 }
 
+DEFAULT_SELF_NEGOTIATION_PERSPECTIVES = ("legal_counsel", "protocol_officer", "failure_advocate", "purpose_guardian")
+
+SELF_NEGOTIATION_PURPOSES = {
+    "legal_counsel": "check obligation fit and duty of care",
+    "protocol_officer": "enforce SOP and DataDesign protocol boundaries",
+    "failure_advocate": "surface blockers and recovery requirements",
+    "purpose_guardian": "preserve the user's objective and useful scope",
+}
+
 
 @dataclass(frozen=True)
 class ShaliachPerspectiveRecord:
@@ -101,6 +110,42 @@ class ShaliachSelfNegotiationRecord:
 {perspective_lines}
 {tension_lines}
   + [authority_boundary] is {self.authority_boundary}"""
+
+
+def build_shaliach_self_negotiation_record(
+    *,
+    negotiation_id: str,
+    subject_ref: str,
+    intention_statement: str,
+    purpose_statement: str,
+    context_boundary: str,
+    perspective_set: tuple[str, ...] = DEFAULT_SELF_NEGOTIATION_PERSPECTIVES,
+    unresolved_tension_set: tuple[ShaliachSelfNegotiationTension, ...] = (),
+    proposed_response_set: tuple[str, ...] | None = None,
+) -> ShaliachSelfNegotiationRecord:
+    responses = proposed_response_set or _default_self_negotiation_responses(unresolved_tension_set)
+    resolved_intention = _resolved_self_negotiation_intention(intention_statement, unresolved_tension_set)
+    perspective_records = tuple(
+        ShaliachSelfNegotiationPerspective(
+            perspective=perspective,
+            intention=_perspective_intention(perspective, intention_statement, unresolved_tension_set),
+            purpose=SELF_NEGOTIATION_PURPOSES.get(perspective, "contribute bounded Shaliach review perspective"),
+            proposed_response=_perspective_response(perspective, responses, unresolved_tension_set),
+        )
+        for perspective in perspective_set
+    )
+    return ShaliachSelfNegotiationRecord(
+        negotiation_id=negotiation_id,
+        subject_ref=subject_ref,
+        intention_statement=intention_statement,
+        purpose_statement=purpose_statement,
+        context_boundary=context_boundary,
+        perspective_set=perspective_set,
+        proposed_response_set=responses,
+        resolved_intention=resolved_intention,
+        perspective_records=perspective_records,
+        unresolved_tension_set=unresolved_tension_set,
+    )
 
 
 @dataclass(frozen=True)
@@ -256,6 +301,55 @@ def _thin_evidence_fields(ledgers: NegotiatedLedgers) -> list[str]:
 def _has_director_evidence(values: list[str]) -> bool:
     default_prefixes = ("package_writer:", "manager_settlement:", "manager_gate:", "negotiation_log:")
     return any(":" in value and not value.startswith(default_prefixes) for value in values)
+
+
+def _default_self_negotiation_responses(tensions: tuple[ShaliachSelfNegotiationTension, ...]) -> tuple[str, ...]:
+    if any(tension.blocks_resolution for tension in tensions):
+        return ("request_rework", "pause_descent")
+    if tensions:
+        return ("approve_with_advisory", "record_residual_tension")
+    return ("approve",)
+
+
+def _resolved_self_negotiation_intention(
+    intention_statement: str,
+    tensions: tuple[ShaliachSelfNegotiationTension, ...],
+) -> str:
+    if any(tension.blocks_resolution for tension in tensions):
+        return f"{intention_statement}; require rework before approval"
+    if tensions:
+        return f"{intention_statement}; proceed only with advisory tension recorded"
+    return f"{intention_statement}; no unresolved tension detected"
+
+
+def _perspective_intention(
+    perspective: str,
+    intention_statement: str,
+    tensions: tuple[ShaliachSelfNegotiationTension, ...],
+) -> str:
+    if perspective == "failure_advocate" and tensions:
+        return "verify unresolved tensions have an explicit response"
+    if perspective == "protocol_officer" and any(tension.blocks_resolution for tension in tensions):
+        return "hold boundary until blocking tension is repaired"
+    if perspective == "legal_counsel":
+        return "preserve accountable advisory and enforcement posture"
+    if perspective == "purpose_guardian":
+        return "keep response aligned to the user's objective"
+    return intention_statement
+
+
+def _perspective_response(
+    perspective: str,
+    responses: tuple[str, ...],
+    tensions: tuple[ShaliachSelfNegotiationTension, ...],
+) -> str:
+    if perspective == "failure_advocate" and tensions:
+        return "record_residual_tension"
+    if perspective == "protocol_officer" and any(tension.blocks_resolution for tension in tensions):
+        return "pause_descent"
+    if perspective == "legal_counsel" and "request_rework" in responses:
+        return "request_rework"
+    return responses[0]
 
 
 def _join_record_lines(lines_groups) -> str:
