@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+import re
 
 from .narrative_coverage import NarrativeCoverageUpdateRecord
 
@@ -196,6 +197,34 @@ def _append_text(result: NarrativeAppendResult) -> str:
     return "\n\n".join(sections) + "\n"
 
 
+def parse_manager_narrative_append_approval_sop(text: str) -> ManagerNarrativeAppendApproval:
+    approval_match = re.search(r"& \[ManagerNarrativeAppendApproval (?P<id>[^\]]+)\]", text)
+    if not approval_match:
+        raise ValueError("ManagerNarrativeAppendApproval header not found")
+    return ManagerNarrativeAppendApproval(
+        approval_id=approval_match.group("id"),
+        update_record_ref=_first_field(text, "update_record_ref"),
+        approval_status=_first_field(text, "approval_status"),
+        approved_update_count=_int_field(text, "approved_update_count"),
+        frontier_at_approval=_first_field(text, "frontier_at_approval"),
+        residual_risks=_drop_none(_all_fields(text, "residual_risk")),
+    )
+
+
+def parse_shaliach_narrative_append_clearance_sop(text: str) -> ShaliachNarrativeAppendClearance:
+    clearance_match = re.search(r"& \[ShaliachNarrativeAppendClearance (?P<id>[^\]]+)\]", text)
+    if not clearance_match:
+        raise ValueError("ShaliachNarrativeAppendClearance header not found")
+    return ShaliachNarrativeAppendClearance(
+        clearance_id=clearance_match.group("id"),
+        update_record_ref=_first_field(text, "update_record_ref"),
+        clearance_status=_first_field(text, "clearance_status"),
+        checked_protocols=_drop_none(_all_fields(text, "checked_protocol")),
+        findings=_drop_none(_all_fields(text, "finding")),
+        required_rework=_drop_none(_all_fields(text, "required_rework")),
+    )
+
+
 def _fields(key: str, values: tuple[str, ...]) -> str:
     if not values:
         return f"  + [{key}] is none\n"
@@ -204,3 +233,22 @@ def _fields(key: str, values: tuple[str, ...]) -> str:
 
 def _bool(value: bool) -> str:
     return "true" if value else "false"
+
+
+def _first_field(text: str, key: str) -> str:
+    values = _all_fields(text, key)
+    return values[0] if values else ""
+
+
+def _all_fields(text: str, key: str) -> tuple[str, ...]:
+    matches = re.findall(rf"^\s*\+ \[{re.escape(key)}\] is (?P<value>.+)$", text, flags=re.MULTILINE)
+    return tuple(match.strip() for match in matches)
+
+
+def _drop_none(values: tuple[str, ...]) -> tuple[str, ...]:
+    return tuple(value for value in values if value != "none")
+
+
+def _int_field(text: str, key: str) -> int:
+    value = _first_field(text, key)
+    return int(value) if value else 0

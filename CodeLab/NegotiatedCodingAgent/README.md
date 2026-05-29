@@ -196,6 +196,8 @@ The same module now includes `NarrativeAppendResult` and a pure `build_narrative
 
 `coordination/reviewed_narrative_append_cli_design.sop` defines the future operator CLI. It must load update, Manager approval, and Shaliach clearance artifacts; plan mode remains non-mutating, and apply mode must write applied or blocked results.
 
+The required artifact parsers now exist for `NarrativeCoverageUpdateRecord`, `ManagerNarrativeAppendApproval`, and `ShaliachNarrativeAppendClearance`, giving the future CLI an explicit SOP-loading boundary.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

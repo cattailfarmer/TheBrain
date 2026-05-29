@@ -233,6 +233,20 @@ def parse_narrative_stale_check_sop(text: str) -> NarrativeStaleCheckRecord:
     )
 
 
+def parse_narrative_coverage_update_sop(text: str) -> NarrativeCoverageUpdateRecord:
+    update_match = re.search(r"& \[NarrativeCoverageUpdateRecord (?P<id>[^\]]+)\]", text)
+    if not update_match:
+        raise ValueError("NarrativeCoverageUpdateRecord header not found")
+    return NarrativeCoverageUpdateRecord(
+        update_id=update_match.group("id"),
+        stale_check_ref=_first_field(text, "stale_check_ref"),
+        narrative_surface_ref=_first_field(text, "narrative_surface_ref"),
+        appended_updates=_drop_none(_all_fields(text, "appended_update")),
+        deferred_updates=_drop_none(_all_fields(text, "deferred_update")),
+        stale_claim_refs=_drop_none(_all_fields(text, "stale_claim_ref")),
+    )
+
+
 def _latest_run(project_root: Path) -> str:
     runs = project_root / "runs"
     if not runs.exists():

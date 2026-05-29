@@ -376,6 +376,8 @@ The guarded append helper exists in code, but no shell wrapper loads review arti
 
 The reviewed append CLI is designed in `coordination/reviewed_narrative_append_cli_design.sop`. Until the parser and wrapper slices land, do not use shell commands to apply narrative update records.
 
+The parser slice has landed, but the shell wrapper has not. Narrative append still requires code-level orchestration or the later CLI slice.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

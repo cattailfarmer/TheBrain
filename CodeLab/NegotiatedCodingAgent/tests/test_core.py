@@ -82,6 +82,7 @@ from negotiated_agent.narrative_coverage import (
     build_narrative_coverage_update_record,
     compute_narrative_coverage,
     compute_narrative_stale_check,
+    parse_narrative_coverage_update_sop,
 )
 from negotiated_agent.narrative_coverage_cli import main as narrative_coverage_cli_main
 from negotiated_agent.narrative_append import (
@@ -90,6 +91,8 @@ from negotiated_agent.narrative_append import (
     apply_reviewed_narrative_append,
     build_narrative_append_result,
     narrative_surface_guard,
+    parse_manager_narrative_append_approval_sop,
+    parse_shaliach_narrative_append_clearance_sop,
 )
 from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
@@ -4963,6 +4966,63 @@ class NarrativeAppendReviewTests(unittest.TestCase):
             self.assertEqual(blocked.append_status, "blocked")
             self.assertIn("append_result_not_ready", blocked.blocked_reasons)
             self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_parses_narrative_coverage_update_record_sop(self) -> None:
+        record = self._update_record(("append LongRunNarrativeUpdate for S206",))
+        parsed = parse_narrative_coverage_update_sop(record.to_sop())
+        self.assertEqual(parsed.update_id, "update-1")
+        self.assertEqual(parsed.stale_check_ref, "coordination/narrative_stale_check.sop")
+        self.assertEqual(parsed.appended_updates, ("append LongRunNarrativeUpdate for S206",))
+        self.assertEqual(parsed.deferred_updates, ())
+
+    def test_update_record_parser_rejects_missing_header(self) -> None:
+        with self.assertRaises(ValueError):
+            parse_narrative_coverage_update_sop("& [WrongRecord] is no\n")
+
+    def test_parses_manager_approval_sop(self) -> None:
+        approval = self._manager_approval()
+        parsed = parse_manager_narrative_append_approval_sop(approval.to_sop())
+        self.assertEqual(parsed.approval_id, approval.approval_id)
+        self.assertEqual(parsed.approval_status, "approved_for_narrative_append")
+        self.assertEqual(parsed.approved_update_count, 1)
+        self.assertTrue(parsed.allows_append)
+
+    def test_manager_approval_parser_preserves_risks_and_rejects_missing_header(self) -> None:
+        approval = ManagerNarrativeAppendApproval(
+            approval_id="manager-risk",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            approval_status="approved_for_narrative_append",
+            approved_update_count=1,
+            frontier_at_approval="S206",
+            residual_risks=("review was narrow",),
+        )
+        parsed = parse_manager_narrative_append_approval_sop(approval.to_sop())
+        self.assertEqual(parsed.residual_risks, ("review was narrow",))
+        with self.assertRaises(ValueError):
+            parse_manager_narrative_append_approval_sop("& [WrongRecord] is no\n")
+
+    def test_parses_shaliach_clearance_sop(self) -> None:
+        clearance = ShaliachNarrativeAppendClearance(
+            clearance_id="shaliach-parse",
+            update_record_ref="coordination/narrative_coverage_update_record.sop",
+            clearance_status="clear_for_narrative_append",
+            checked_protocols=("SOP", "SJS"),
+            findings=("no history rewrite",),
+            required_rework=(),
+        )
+        parsed = parse_shaliach_narrative_append_clearance_sop(clearance.to_sop())
+        self.assertEqual(parsed.clearance_id, "shaliach-parse")
+        self.assertEqual(parsed.checked_protocols, ("SOP", "SJS"))
+        self.assertEqual(parsed.findings, ("no history rewrite",))
+        self.assertTrue(parsed.allows_append)
+
+    def test_shaliach_clearance_parser_preserves_rework_and_rejects_missing_header(self) -> None:
+        clearance = self._shaliach_clearance(required_rework=("add guard proof",))
+        parsed = parse_shaliach_narrative_append_clearance_sop(clearance.to_sop())
+        self.assertEqual(parsed.required_rework, ("add guard proof",))
+        self.assertFalse(parsed.allows_append)
+        with self.assertRaises(ValueError):
+            parse_shaliach_narrative_append_clearance_sop("& [WrongRecord] is no\n")
 
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(

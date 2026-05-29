@@ -2869,7 +2869,7 @@
 
 & [WorkSliceDetail S206_narrative_append_artifact_parsers] is a coordination runtime implementation slice
   + [slice_id] is S206_narrative_append_artifact_parsers
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add SOP parsers for NarrativeCoverageUpdateRecord Manager approval and Shaliach clearance
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover parsed fields list fields missing header rejection and boundary preservation
@@ -2877,3 +2877,16 @@
   + [support_status] is prepared
   + [dependency_set] is S205_reviewed_narrative_append_cli_design
   + [known_risks] is parser overclaiming validation beyond SOP field extraction
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:00:00Z, proof_ref tests passed with 183 tests, result_summary added SOP parsers for narrative update Manager approval and Shaliach clearance artifacts
+  + [completed_work_review] is support_delta verified parsers extract fields and reject missing headers without claiming semantic verification; requirement_delta next step is add reviewed append CLI plan mode
+
+& [WorkSliceDetail S207_reviewed_narrative_append_cli_plan] is a coordination runtime implementation slice
+  + [slice_id] is S207_reviewed_narrative_append_cli_plan
+  + [slice_status] is open
+  + [scope] is add reviewed narrative append CLI plan mode that writes result evidence without mutation
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover artifact loading ready result blocked result output collision and no narrative mutation
+  + [completion_criteria] is operators can generate reviewed append result evidence from artifacts without applying it
+  + [support_status] is prepared
+  + [dependency_set] is S206_narrative_append_artifact_parsers
+  + [known_risks] is plan mode being mistaken for applied narrative update
