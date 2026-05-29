@@ -361,6 +361,58 @@ class MailboxCoordinationTests(unittest.TestCase):
             self.assertIn("MailboxClaim", claim_out.getvalue())
             self.assertIn("worker-a", claim_out.getvalue())
 
+    def test_mailbox_cli_advances_cursor_for_unread_listing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            first = publish_message(
+                root,
+                sender_uuid="manager",
+                recipient_uuid="director_pool",
+                kind="notice",
+                subject="First",
+                body="First body.",
+            )
+            second = publish_message(
+                root,
+                sender_uuid="manager",
+                recipient_uuid="director_pool",
+                kind="notice",
+                subject="Second",
+                body="Second body.",
+            )
+            advance_out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "advance",
+                    "--project-root",
+                    str(root),
+                    "--mailbox",
+                    "director_pool",
+                    "--message-id",
+                    first.message_id,
+                ],
+            ), contextlib.redirect_stdout(advance_out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            unread_out = io.StringIO()
+            with patch(
+                "sys.argv",
+                [
+                    "mailbox",
+                    "list",
+                    "--project-root",
+                    str(root),
+                    "--mailbox",
+                    "director_pool",
+                    "--unread",
+                ],
+            ), contextlib.redirect_stdout(unread_out):
+                self.assertEqual(mailbox_cli_main(), 0)
+            self.assertIn("advanced", advance_out.getvalue())
+            self.assertNotIn(first.message_id, unread_out.getvalue())
+            self.assertIn(second.message_id, unread_out.getvalue())
+
 
 class ModelInventoryTests(unittest.TestCase):
     def test_recommends_wsl_vllm_for_large_gpu_when_wsl_available(self) -> None:

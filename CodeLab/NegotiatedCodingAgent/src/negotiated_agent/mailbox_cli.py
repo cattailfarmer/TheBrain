@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .mailbox import claim_message, list_messages, list_unread
+from .mailbox import advance_read_cursor, claim_message, list_messages, list_unread
 
 
 def main() -> int:
@@ -21,6 +21,11 @@ def main() -> int:
     claim_parser.add_argument("--message-id", required=True)
     claim_parser.add_argument("--claimant", required=True, help="Worker conversation UUID claiming the message.")
 
+    advance_parser = subparsers.add_parser("advance", help="Advance a mailbox read cursor.")
+    advance_parser.add_argument("--project-root", type=Path, default=Path.cwd())
+    advance_parser.add_argument("--mailbox", required=True, help="Mailbox UUID whose cursor should advance.")
+    advance_parser.add_argument("--message-id", required=True, help="Last observed message ID.")
+
     args = parser.parse_args()
     if args.command == "list":
         messages = list_unread(args.project_root, args.mailbox) if args.unread else list_messages(args.project_root, args.mailbox)
@@ -36,6 +41,10 @@ def main() -> int:
         )
         print(claim.to_sop(), end="")
         return 0 if claim.status == "claimed" else 2
+    if args.command == "advance":
+        advance_read_cursor(args.project_root, args.mailbox, [args.message_id])
+        print(f"advanced\t{args.mailbox}\t{args.message_id}")
+        return 0
     return 1
 
 

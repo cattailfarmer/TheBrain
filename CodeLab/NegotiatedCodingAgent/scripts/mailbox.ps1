@@ -1,6 +1,6 @@
 param(
   [Parameter(Mandatory = $true)]
-  [ValidateSet("list", "claim")]
+  [ValidateSet("list", "claim", "advance")]
   [string]$Command,
   [Parameter(Mandatory = $true)]
   [string]$Mailbox,
@@ -18,11 +18,17 @@ $argsList = @("-m", "negotiated_agent.mailbox_cli", $Command, "--project-root", 
 if ($Unread) {
   $argsList += "--unread"
 }
-if ($Command -eq "claim") {
-  if ($MessageId -eq "" -or $Claimant -eq "") {
-    throw "Claim requires -MessageId and -Claimant."
+if ($Command -eq "claim" -or $Command -eq "advance") {
+  if ($MessageId -eq "") {
+    throw "$Command requires -MessageId."
   }
-  $argsList += @("--message-id", $MessageId, "--claimant", $Claimant)
+  $argsList += @("--message-id", $MessageId)
+}
+if ($Command -eq "claim") {
+  if ($Claimant -eq "") {
+    throw "Claim requires -Claimant."
+  }
+  $argsList += @("--claimant", $Claimant)
 }
 
 & $Python @argsList
