@@ -2102,7 +2102,7 @@
 
 & [WorkSliceDetail S147_long_run_checkpoint_after_gate_cycle_bridge] is a long-run reentry slice
   + [slice_id] is S147_long_run_checkpoint_after_gate_cycle_bridge
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after gate-to-worker-cycle bridge CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 108-test suite and route draft proof
@@ -2110,3 +2110,16 @@
   + [support_status] is prepared
   + [dependency_set] is S146_gate_to_worker_cycle_bridge_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:49:51Z, proof_ref long-run checkpoint passed 108 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after gate-cycle bridge CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 108-test gate-cycle bridge frontier; requirement_delta next step is refresh spec audit after gate-cycle bridge support
+
+& [WorkSliceDetail S148_spec_audit_refresh_after_gate_cycle_bridge] is a specification audit slice
+  + [slice_id] is S148_spec_audit_refresh_after_gate_cycle_bridge
+  + [slice_status] is open
+  + [scope] is refresh implementation status after gate-to-worker-cycle bridge helper CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names gate-cycle bridge support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists worker cycle integration from gate decisions as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S147_long_run_checkpoint_after_gate_cycle_bridge
+  + [known_risks] is overstating cycle bridge as autonomous runner execution
