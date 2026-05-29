@@ -381,12 +381,14 @@ The parser slice has landed, but the shell wrapper has not. Narrative append sti
 Write reviewed narrative append plan evidence:
 
 ```powershell
+.\scripts\narrative-append.ps1 -GuardDiscovery
+
 .\scripts\narrative-append.ps1 `
   -ExpectedSurfaceGuard <guard> `
   -ResultId <result-id>
 ```
 
-This writes `coordination/narrative_append_result.sop` from existing update, Manager approval, and Shaliach clearance artifacts. It does not append to the narrative surface.
+Guard discovery prints the current surface guard. Plan mode writes `coordination/narrative_append_result.sop` from existing update, Manager approval, and Shaliach clearance artifacts. It does not append to the narrative surface.
 
 Apply reviewed narrative append evidence:
 

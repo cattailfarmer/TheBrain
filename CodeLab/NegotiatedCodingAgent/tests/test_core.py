@@ -5206,6 +5206,36 @@ class NarrativeAppendReviewTests(unittest.TestCase):
                 )
             self.assertEqual(narrative.read_text(encoding="utf-8"), original)
 
+    def test_narrative_append_cli_guard_discovery_prints_current_guard_without_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    narrative_append_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--guard-discovery",
+                        ]
+                    ),
+                    0,
+                )
+            self.assertIn("NarrativeSurfaceGuard", out.getvalue())
+            self.assertIn(f"surface_guard] is {narrative_surface_guard(original)}", out.getvalue())
+            self.assertIn("guard_discovery_not_append_approval", out.getvalue())
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_requires_guard_outside_discovery(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            with self.assertRaises(ValueError):
+                narrative_append_cli_main(["--project-root", temp])
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",

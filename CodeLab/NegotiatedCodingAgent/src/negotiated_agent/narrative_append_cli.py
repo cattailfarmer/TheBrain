@@ -23,13 +23,22 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--shaliach-clearance-ref", type=Path, default=Path("coordination/shaliach_narrative_append_clearance.sop")
     )
+    parser.add_argument("--narrative-surface-ref", type=Path, default=Path("coordination/project_narrative_surface.sop"))
     parser.add_argument("--result-id", default="narrative-append-result-1")
-    parser.add_argument("--expected-surface-guard", required=True)
+    parser.add_argument("--expected-surface-guard")
+    parser.add_argument("--guard-discovery", action="store_true")
     parser.add_argument("--apply", action="store_true")
     parser.add_argument("--out", type=Path, default=Path("coordination/narrative_append_result.sop"))
     args = parser.parse_args(argv)
 
     project_root = args.project_root.resolve()
+    if args.guard_discovery:
+        narrative_surface = _resolve(project_root, args.narrative_surface_ref)
+        guard = narrative_surface_guard(narrative_surface.read_text(encoding="utf-8"))
+        print(f"& [NarrativeSurfaceGuard] is current narrative surface guard\n  + [narrative_surface_ref] is {_ref_text(args.narrative_surface_ref)}\n  + [surface_guard] is {guard}\n  + [authority_boundary] is guard_discovery_not_append_approval\n")
+        return 0
+    if not args.expected_surface_guard:
+        raise ValueError("--expected-surface-guard is required unless --guard-discovery is used")
     out = _resolve(project_root, args.out)
     if out.exists():
         raise FileExistsError(f"{out} already exists")

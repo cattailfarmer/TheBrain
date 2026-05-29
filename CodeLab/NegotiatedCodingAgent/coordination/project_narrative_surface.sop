@@ -1758,3 +1758,11 @@
   + [run_root] is runs\20260529T194057Z
   + [current_frontier] is S213_narrative_append_guard_discovery_cli
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S213_narrative_append_guard_discovery_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S213_narrative_append_guard_discovery_cli
+  + [implemented_capability] is scripts/narrative-append.ps1 -GuardDiscovery prints current narrative surface guard without approving or applying append
+  + [proof_result] is tests passed with 192 tests
+  + [current_frontier] is S214_narrative_append_review_writer_design
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -202,6 +202,8 @@ The required artifact parsers now exist for `NarrativeCoverageUpdateRecord`, `Ma
 
 The same wrapper supports `-Apply` for explicit reviewed append. Apply mode uses the same artifact path and surface guard, writes an applied or blocked result artifact, and appends only when the guard still matches.
 
+Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrative surface guard before plan or apply mode. Guard discovery is evidence only and does not approve append.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

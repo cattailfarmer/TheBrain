@@ -298,6 +298,8 @@ The parser layer for that wrapper is implemented now. It extracts fields from `N
 
 Apply mode is now explicit through `--apply` / `-Apply`. It reuses the loaded artifacts, checks the same guard through `apply_reviewed_narrative_append`, writes blocked results for stale cases, and appends reviewed entries only at the end of the narrative surface.
 
+Guard discovery is also exposed through `--guard-discovery` / `-GuardDiscovery`. It prints the current narrative surface guard and carries the boundary `guard_discovery_not_append_approval`.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

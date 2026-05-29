@@ -2960,7 +2960,7 @@
 
 & [WorkSliceDetail S213_narrative_append_guard_discovery_cli] is a coordination runtime implementation slice
   + [slice_id] is S213_narrative_append_guard_discovery_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add narrative append CLI guard-discovery mode for current narrative surface guard
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover guard output and no narrative mutation
@@ -2968,3 +2968,16 @@
   + [support_status] is prepared
   + [dependency_set] is S212_long_run_checkpoint_after_quiet_cli_tests
   + [known_risks] is guard discovery being mistaken for approval to append
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:05:00Z, proof_ref tests passed with 192 tests, result_summary added narrative append guard-discovery CLI mode and wrapper switch
+  + [completed_work_review] is support_delta verified guard discovery prints current guard without narrative mutation and does not bypass plan/apply guard requirement; requirement_delta next step is design/implement append review artifact writer helpers
+
+& [WorkSliceDetail S214_narrative_append_review_writer_design] is a coordination runtime design slice
+  + [slice_id] is S214_narrative_append_review_writer_design
+  + [slice_status] is open
+  + [scope] is design operator writers for Manager narrative append approval and Shaliach clearance artifacts
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design names accepted statuses blocked statuses update-record refs output paths and no append mutation
+  + [completion_criteria] is review artifact writers can be implemented without freeform hidden approval assumptions
+  + [support_status] is prepared
+  + [dependency_set] is S213_narrative_append_guard_discovery_cli
+  + [known_risks] is making review writers too permissive and ceremonial
