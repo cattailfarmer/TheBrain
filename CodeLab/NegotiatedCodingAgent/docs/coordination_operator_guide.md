@@ -291,6 +291,16 @@ This writes `run_local_merge_draft_input.sop`. It does not create `manual_merge_
 
 `coordination/merge_draft_to_packet_proposal_design.sop` describes the next boundary after draft input. A future writer may create `manual_merge_packet.sop` only from explicit Manager packet acceptance and Shaliach packet review evidence; draft input alone is insufficient.
 
+Write packet proposal evidence:
+
+```powershell
+.\scripts\packet-proposal.ps1 -RunLocalRoot <root> -ManagerAcceptance -AcceptanceStatus accepted_for_packet_proposal -AcceptedEntryCount 1 -FrontierAtAcceptance <frontier>
+.\scripts\packet-proposal.ps1 -RunLocalRoot <root> -ShaliachReview -ReviewStatus clear_for_packet_proposal -CheckedProtocol SOP
+.\scripts\packet-proposal.ps1 -RunLocalRoot <root> -PacketProposal -PacketId <packet-id> -VerificationCommand "powershell -ExecutionPolicy Bypass -File scripts\test.ps1"
+```
+
+The packet proposal command writes `manual_merge_packet.sop` only after the acceptance and review artifacts exist. It does not write `apply_plan.sop` or mutate the target workspace.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

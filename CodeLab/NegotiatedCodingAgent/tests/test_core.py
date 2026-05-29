@@ -74,6 +74,7 @@ from negotiated_agent.packet_proposal import (
     ShaliachPacketProposalReview,
     build_manual_merge_packet_proposal,
 )
+from negotiated_agent.packet_proposal_cli import main as packet_proposal_cli_main
 from negotiated_agent.post_apply import build_post_apply_acceptance_record
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
@@ -3487,6 +3488,126 @@ class MailboxCoordinationTests(unittest.TestCase):
                     shaliach_review_ref="shaliach_packet_review.sop",
                     verification_command="test",
                 )
+
+    def test_packet_proposal_cli_writes_review_evidence_and_packet_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            (run_root / "implementation").mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "implementation" / "README.generated.txt").write_text("body\n", encoding="utf-8")
+            draft = _merge_draft(run_root, target_root)
+            (run_root / "run_local_merge_draft_input.sop").write_text(draft.to_sop(), encoding="utf-8")
+            manager_out = io.StringIO()
+            with contextlib.redirect_stdout(manager_out):
+                self.assertEqual(
+                    packet_proposal_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--manager-acceptance",
+                            "--acceptance-status",
+                            "accepted_for_packet_proposal",
+                            "--accepted-entry-count",
+                            "1",
+                            "--frontier-at-acceptance",
+                            "S180_packet_proposal_cli",
+                        ]
+                    ),
+                    0,
+                )
+            shaliach_out = io.StringIO()
+            with contextlib.redirect_stdout(shaliach_out):
+                self.assertEqual(
+                    packet_proposal_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--shaliach-review",
+                            "--review-status",
+                            "clear_for_packet_proposal",
+                            "--checked-protocol",
+                            "SOP",
+                        ]
+                    ),
+                    0,
+                )
+            packet_out = io.StringIO()
+            with contextlib.redirect_stdout(packet_out):
+                self.assertEqual(
+                    packet_proposal_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--packet-proposal",
+                            "--packet-id",
+                            "packet-1",
+                            "--verification-command",
+                            "powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+                        ]
+                    ),
+                    0,
+                )
+            packet = (run_root / "manual_merge_packet.sop").read_text(encoding="utf-8")
+            self.assertIn("ManualMergePacket packet-1", packet)
+            self.assertIn("manual_merge_packet_not_workspace_application", packet)
+            self.assertIn("packet_proposal_write_not_workspace_application", packet_out.getvalue())
+            self.assertFalse((run_root / "apply_plan.sop").exists())
+            self.assertFalse((target_root / "implementation" / "README.generated.txt").exists())
+
+    def test_packet_proposal_cli_blocks_bad_evidence(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            target_root = root / "workspace"
+            run_root.mkdir(parents=True)
+            target_root.mkdir()
+            (run_root / "run_local_merge_draft_input.sop").write_text(_merge_draft(run_root, target_root).to_sop(), encoding="utf-8")
+            (run_root / "manager_packet_proposal_acceptance.sop").write_text(
+                ManagerPacketProposalAcceptance(
+                    acceptance_id="acceptance-1",
+                    acceptance_status="needs_revision",
+                    draft_input_ref="run_local_merge_draft_input.sop",
+                    accepted_entry_count=1,
+                    frontier_at_acceptance="S180_packet_proposal_cli",
+                    risk_summary="revise",
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            (run_root / "shaliach_packet_proposal_review.sop").write_text(
+                ShaliachPacketProposalReview(
+                    review_id="shaliach-packet-1",
+                    review_status="clear_for_packet_proposal",
+                    draft_input_ref="run_local_merge_draft_input.sop",
+                    checked_protocols=("SOP",),
+                    finding_summary="clear",
+                    required_response="proceed_to_packet_proposal",
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    packet_proposal_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--packet-proposal",
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("Manager acceptance", out.getvalue())
+            self.assertFalse((run_root / "manual_merge_packet.sop").exists())
 
 
 def _merge_draft(

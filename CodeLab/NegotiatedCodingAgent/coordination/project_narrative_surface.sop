@@ -1464,3 +1464,11 @@
   + [proof_result] is tests passed with 138 tests
   + [current_frontier] is S180_packet_proposal_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S180_packet_proposal_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S180_packet_proposal_cli
+  + [implemented_capability] is packet proposal CLI and wrapper write Manager acceptance Shaliach review and manual_merge_packet.sop proposal evidence without apply artifacts
+  + [proof_result] is tests passed with 140 tests
+  + [current_frontier] is S181_long_run_checkpoint_after_packet_proposal_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

@@ -102,6 +102,31 @@ def load_run_local_merge_eligibility_summary(path: Path) -> RunLocalMergeEligibi
     )
 
 
+def load_run_local_merge_draft_input(path: Path) -> RunLocalMergeDraftInput:
+    fields = _read_fields(path)
+    entries: list[RunLocalMergeDraftEntry] = []
+    current_entry: dict[str, str] | None = None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("& [RunLocalMergeDraftEntry "):
+            if current_entry is not None:
+                entries.append(_draft_entry(current_entry))
+            current_entry = {}
+        elif current_entry is not None and stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            current_entry[key] = value
+    if current_entry is not None:
+        entries.append(_draft_entry(current_entry))
+    return RunLocalMergeDraftInput(
+        draft_id=fields["draft_id"],
+        eligibility_ref=fields["eligibility_ref"],
+        source_result_ref=fields["source_result_ref"],
+        source_run_root=fields["source_run_root"],
+        target_workspace_root=fields["target_workspace_root"],
+        entries=tuple(entries),
+    )
+
+
 def ensure_source_ref_within_run_local_root(run_local_root: Path, source_ref: str) -> str:
     resolved_root = run_local_root.resolve()
     candidate = Path(source_ref)
@@ -131,3 +156,11 @@ def _split_set(value: str) -> tuple[str, ...]:
     if not value or value == "none":
         return ()
     return tuple(item.strip() for item in value.split(",") if item.strip())
+
+
+def _draft_entry(fields: dict[str, str]) -> RunLocalMergeDraftEntry:
+    return RunLocalMergeDraftEntry(
+        source_ref=fields["source_ref"],
+        target_path=fields["target_path"],
+        justification_refs=_split_set(fields.get("justification_ref_set", "")),
+    )

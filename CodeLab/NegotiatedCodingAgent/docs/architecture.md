@@ -252,6 +252,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `coordination/merge_draft_to_packet_proposal_design.sop` defines the next packet-construction boundary for run-local worker output. A draft input is not enough by itself: packet proposal construction requires Manager packet acceptance, Shaliach packet review, source and target containment rechecks, rollback evidence, and a verification command before creating a `ManualMergePacket` proposal. `negotiated_agent.packet_proposal` implements the pure records and builder; it writes nothing and cannot apply files or move the Manager frontier.
 
+`negotiated_agent.packet_proposal_cli` and `scripts/packet-proposal.ps1` expose that boundary to operators. They can write Manager packet acceptance, Shaliach packet review, and `manual_merge_packet.sop` proposal evidence under the run-local root, but they do not create `apply_plan.sop` or mutate the target workspace.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

@@ -156,6 +156,8 @@ The next bridge is specified in `coordination/run_local_to_merge_packet_bridge_d
 
 `coordination/merge_draft_to_packet_proposal_design.sop` defines the next boundary: a draft input can become a `ManualMergePacket` proposal only after fresh Manager packet acceptance and Shaliach packet review evidence. `negotiated_agent.packet_proposal` implements those record types and the pure proposal builder; the proposal still cannot apply files or advance the frontier.
 
+The wrapper `scripts/packet-proposal.ps1` writes Manager packet acceptance, Shaliach packet review, and `manual_merge_packet.sop` proposal evidence. It does not create apply artifacts or touch the target workspace.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

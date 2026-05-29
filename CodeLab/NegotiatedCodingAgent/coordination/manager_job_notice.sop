@@ -2531,7 +2531,7 @@
 
 & [WorkSliceDetail S180_packet_proposal_cli] is a coordination runtime implementation slice
   + [slice_id] is S180_packet_proposal_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write Manager/Shaliach packet proposal evidence and manual_merge_packet.sop proposal
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover acceptance write review write packet proposal write blocked evidence source target containment and no apply artifact creation
@@ -2539,3 +2539,16 @@
   + [support_status] is prepared
   + [dependency_set] is S179_packet_proposal_records
   + [known_risks] is CLI name implying workspace mutation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T01:43:00Z, proof_ref tests passed with 140 tests, result_summary added packet proposal CLI and wrapper
+  + [completed_work_review] is support_delta verified CLI writes manual_merge_packet.sop but no apply artifacts or target workspace files; requirement_delta next checkpoint should capture 140-test packet proposal frontier
+
+& [WorkSliceDetail S181_long_run_checkpoint_after_packet_proposal_cli] is a long-run reentry slice
+  + [slice_id] is S181_long_run_checkpoint_after_packet_proposal_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after packet proposal CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 140-test suite and route draft proof
+  + [completion_criteria] is checkpoint records packet proposal frontier
+  + [support_status] is prepared
+  + [dependency_set] is S180_packet_proposal_cli
+  + [known_risks] is noisy generated dry-run artifacts
