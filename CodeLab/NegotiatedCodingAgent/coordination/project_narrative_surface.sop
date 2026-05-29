@@ -1181,3 +1181,11 @@
   + [implemented_capability] is manager_reviewed_proof_handoff_design.sop requires explicit Manager handoff before ready_for_proof cycle evidence can drive proof command execution
   + [current_frontier] is S150_manager_proof_handoff_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S150_manager_proof_handoff_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S150_manager_proof_handoff_records
+  + [implemented_capability] is ManagerProofHandoffRecord and validate_manager_proof_handoff represent and validate proof handoff evidence without running commands
+  + [proof_result] is tests passed with 111 tests
+  + [current_frontier] is S151_manager_proof_handoff_writer_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

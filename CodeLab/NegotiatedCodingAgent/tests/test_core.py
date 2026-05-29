@@ -79,7 +79,13 @@ from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
 from negotiated_agent.vllm_preflight import build_vllm_wsl_preflight
-from negotiated_agent.worker_lifecycle import WorkerCycleRecord, WorkerFailureRecord, WorkerLeaseRecord
+from negotiated_agent.worker_lifecycle import (
+    ManagerProofHandoffRecord,
+    WorkerCycleRecord,
+    WorkerFailureRecord,
+    WorkerLeaseRecord,
+    validate_manager_proof_handoff,
+)
 from negotiated_agent.worker_runner import (
     build_worker_cycle_from_gate_decision,
     build_worker_runner_preview,
@@ -2131,6 +2137,100 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("GateWorkerCycleBridgeError", collision.getvalue())
             self.assertIn("worker_uuid does not match", mismatch.getvalue())
+
+    def test_manager_proof_handoff_record_preserves_boundary(self) -> None:
+        handoff = ManagerProofHandoffRecord(
+            handoff_id="handoff-1",
+            handoff_status="approved",
+            worker_uuid="worker-a",
+            ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+            execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+            proof_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            proof_route="scripts/test.ps1",
+            frontier_at_handoff="S150_manager_proof_handoff_records",
+            expires_at="2026-05-29T21:40:00Z",
+        )
+        sop = handoff.to_sop()
+        self.assertIn("handoff_status] is approved", sop)
+        self.assertIn("proof_command] is powershell -ExecutionPolicy Bypass -File scripts/test.ps1", sop)
+        self.assertIn("proof_handoff_not_frontier_approval", sop)
+
+    def test_manager_proof_handoff_validation_accepts_ready_cycle(self) -> None:
+        ready_cycle = WorkerCycleRecord(
+            worker_uuid="worker-a",
+            cycle_id="cycle-proof",
+            cycle_status="ready_for_proof",
+            claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+            slice_ref="manager_job_notice.sop#S150",
+            proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+            changed_files=(),
+        )
+        handoff = ManagerProofHandoffRecord(
+            handoff_id="handoff-1",
+            handoff_status="approved",
+            worker_uuid="worker-a",
+            ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+            execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+            proof_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            proof_route="scripts/test.ps1",
+            frontier_at_handoff="S150_manager_proof_handoff_records",
+            expires_at="2026-05-29T21:40:00Z",
+        )
+        ok, reason = validate_manager_proof_handoff(
+            handoff=handoff,
+            ready_cycle=ready_cycle,
+            requested_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            current_frontier="S150_manager_proof_handoff_records",
+        )
+        self.assertTrue(ok)
+        self.assertEqual(reason, "approved")
+
+    def test_manager_proof_handoff_validation_rejects_bad_inputs(self) -> None:
+        ready_cycle = WorkerCycleRecord(
+            worker_uuid="worker-a",
+            cycle_id="cycle-proof",
+            cycle_status="completed",
+            claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+            slice_ref="manager_job_notice.sop#S150",
+            proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+            changed_files=(),
+        )
+        handoff = ManagerProofHandoffRecord(
+            handoff_id="handoff-1",
+            handoff_status="approved",
+            worker_uuid="worker-a",
+            ready_cycle_ref="coordination/workers/worker-a/cycles/cycle-proof.sop",
+            execution_gate_ref="coordination/workers/worker-a/execution_gates/gate-proof.sop",
+            proof_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            proof_route="scripts/test.ps1",
+            frontier_at_handoff="S150_manager_proof_handoff_records",
+            expires_at="2026-05-29T21:40:00Z",
+        )
+        ok, reason = validate_manager_proof_handoff(
+            handoff=handoff,
+            ready_cycle=ready_cycle,
+            requested_command="powershell -ExecutionPolicy Bypass -File scripts/test.ps1",
+            current_frontier="S150_manager_proof_handoff_records",
+        )
+        self.assertFalse(ok)
+        self.assertEqual(reason, "cycle_status_completed")
+        ready_cycle = WorkerCycleRecord(
+            worker_uuid="worker-a",
+            cycle_id="cycle-proof",
+            cycle_status="ready_for_proof",
+            claim_refs=("coordination/workers/worker-a/leases/claim-1.sop#claim",),
+            slice_ref="manager_job_notice.sop#S150",
+            proof_refs=("coordination/workers/worker-a/execution_gates/gate-proof.sop",),
+            changed_files=(),
+        )
+        ok, reason = validate_manager_proof_handoff(
+            handoff=handoff,
+            ready_cycle=ready_cycle,
+            requested_command="other command",
+            current_frontier="S150_manager_proof_handoff_records",
+        )
+        self.assertFalse(ok)
+        self.assertEqual(reason, "proof_command_mismatch")
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

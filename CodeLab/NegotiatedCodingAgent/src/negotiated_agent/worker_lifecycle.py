@@ -88,6 +88,55 @@ class WorkerFailureRecord:
 """
 
 
+@dataclass(frozen=True)
+class ManagerProofHandoffRecord:
+    handoff_id: str
+    handoff_status: str
+    worker_uuid: str
+    ready_cycle_ref: str
+    execution_gate_ref: str
+    proof_command: str
+    proof_route: str
+    frontier_at_handoff: str
+    expires_at: str
+
+    def to_sop(self) -> str:
+        return f"""& [ManagerProofHandoffRecord {self.handoff_id}] is Manager-reviewed proof command handoff evidence
+  + [handoff_id] is {self.handoff_id}
+  + [handoff_status] is {self.handoff_status}
+  + [worker_uuid] is {self.worker_uuid}
+  + [ready_cycle_ref] is {self.ready_cycle_ref}
+  + [execution_gate_ref] is {self.execution_gate_ref}
+  + [proof_command] is {_field_value(self.proof_command)}
+  + [proof_route] is {_field_value(self.proof_route)}
+  + [frontier_at_handoff] is {self.frontier_at_handoff}
+  + [expires_at] is {self.expires_at}
+  + [authority_boundary] is proof_handoff_not_frontier_approval
+"""
+
+
+def validate_manager_proof_handoff(
+    *,
+    handoff: ManagerProofHandoffRecord,
+    ready_cycle: WorkerCycleRecord,
+    requested_command: str,
+    current_frontier: str,
+) -> tuple[bool, str]:
+    if handoff.handoff_status != "approved":
+        return False, f"handoff_status_{handoff.handoff_status}"
+    if ready_cycle.cycle_status != "ready_for_proof":
+        return False, f"cycle_status_{ready_cycle.cycle_status}"
+    if handoff.worker_uuid != ready_cycle.worker_uuid:
+        return False, "worker_mismatch"
+    if handoff.execution_gate_ref not in ready_cycle.proof_refs:
+        return False, "execution_gate_ref_missing_from_ready_cycle"
+    if handoff.proof_command != requested_command:
+        return False, "proof_command_mismatch"
+    if handoff.frontier_at_handoff != current_frontier:
+        return False, "frontier_changed"
+    return True, "approved"
+
+
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
 

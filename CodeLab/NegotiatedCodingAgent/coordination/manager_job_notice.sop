@@ -2141,7 +2141,7 @@
 
 & [WorkSliceDetail S150_manager_proof_handoff_records] is a coordination runtime implementation slice
   + [slice_id] is S150_manager_proof_handoff_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add ManagerProofHandoffRecord model and validation helper for ready_for_proof cycle evidence
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover approved record serialization non-ready cycle rejection command mismatch and boundary text
@@ -2149,3 +2149,16 @@
   + [support_status] is prepared
   + [dependency_set] is S149_manager_reviewed_proof_handoff_design
   + [known_risks] is validation becoming a command runner
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:38:00Z, proof_ref tests passed with 111 tests, result_summary added ManagerProofHandoffRecord and validation helper for ready_for_proof cycles
+  + [completed_work_review] is support_delta verified handoff records validate without running commands; requirement_delta next step is explicit handoff writer command
+
+& [WorkSliceDetail S151_manager_proof_handoff_writer_cli] is a coordination runtime implementation slice
+  + [slice_id] is S151_manager_proof_handoff_writer_cli
+  + [slice_status] is open
+  + [scope] is add explicit CLI mode and wrapper support to write ManagerProofHandoffRecord artifacts
+  + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
+  + [proof_route] is tests cover approved handoff write non-ready cycle rejection command mismatch and no command execution
+  + [completion_criteria] is operators can persist Manager proof handoff evidence without running proof commands
+  + [support_status] is prepared
+  + [dependency_set] is S150_manager_proof_handoff_records
+  + [known_risks] is handoff writer appearing to execute proof commands
