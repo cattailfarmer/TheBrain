@@ -2527,3 +2527,11 @@
   + [proof_ref] is coordination/narrative_coverage_report.sop, coordination/narrative_stale_check.sop, coordination/narrative_coverage_update_record.sop
   + [current_frontier] is S290_conversation_upsert_anchor_fields
   + [narrative_role] is narrative_memory and conversation_surface update
+
+
+& [LongRunNarrativeUpdate S290_conversation_upsert_anchor_fields] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S290_conversation_upsert_anchor_fields
+  + [implemented_capability] is conversation surface upserts anchor run_lifecycle_frontier after current_frontier instead of appending it after reentry and worktree policy sections
+  + [proof_result] is tests passed with 279 tests and active conversation surface normalized
+  + [current_frontier] is S291_long_run_checkpoint_after_upsert_anchor_fields
+  + [narrative_role] is conversation_memory and surface_hygiene update

@@ -7,6 +7,9 @@ from typing import Iterable, Mapping
 
 
 FIELD_RE = re.compile(r"^(?P<indent>\s*)\+ \[(?P<key>[^\]]+)\] is (?P<value>.*)$")
+UPSERT_ANCHORS = {
+    "run_lifecycle_frontier": "current_frontier",
+}
 
 
 @dataclass(frozen=True)
@@ -61,7 +64,7 @@ class ConversationSurface:
     def set_fields(self, updates: Mapping[str, str]) -> None:
         text = self.text
         for key, value in updates.items():
-            text = upsert_first_field(text, key, value)
+            text = upsert_first_field(text, key, value, after_key=UPSERT_ANCHORS.get(key))
         self.text = text
         self.fields = parse_sop_fields(text)
 

@@ -6524,6 +6524,9 @@ class ConversationKernelTests(unittest.TestCase):
             self.assertEqual(surface.first("current_frontier"), "old frontier")
             self.assertEqual(surface.first("run_lifecycle_frontier"), "run 1 completed")
             self.assertEqual(surface.fields["last_proof"], ["existing proof", "run proof"])
+            text = surface.path.read_text(encoding="utf-8")
+            self.assertLess(text.index("[current_frontier]"), text.index("[run_lifecycle_frontier]"))
+            self.assertLess(text.index("[run_lifecycle_frontier]"), text.index("[next_recommended_slice]"))
 
 
 class ProtocolRegistryTests(unittest.TestCase):

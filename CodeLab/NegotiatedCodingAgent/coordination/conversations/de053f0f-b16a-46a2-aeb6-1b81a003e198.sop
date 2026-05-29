@@ -682,7 +682,8 @@
   + [completed_slice] is S196_narrative_stale_check_records
   + [completed_slice] is S197_narrative_stale_check_cli
 
-  + [current_frontier] is S290_conversation_upsert_anchor_fields
+  + [current_frontier] is S291_long_run_checkpoint_after_upsert_anchor_fields
+  + [run_lifecycle_frontier] is run 20260529T214357Z completed and narrative updated with artifact manifest
   + [completed_slice] is S198_narrative_coverage_update_record_design
   + [completed_slice] is S199_narrative_coverage_update_records
   + [completed_slice] is S200_narrative_coverage_update_record_cli
@@ -983,7 +984,9 @@
   + [last_proof] is spec audit refreshed after lifecycle frontier checkpoint proof
   + [completed_slice] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
   + [last_proof] is narrative coverage report covered and stale-check current after lifecycle frontier checkpoint proof
-  + [next_recommended_slice] is S290_conversation_upsert_anchor_fields
+  + [completed_slice] is S290_conversation_upsert_anchor_fields
+  + [last_proof] is tests passed with 279 tests after run_lifecycle_frontier upserts were anchored after current_frontier
+  + [next_recommended_slice] is S291_long_run_checkpoint_after_upsert_anchor_fields
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
@@ -1019,4 +1022,3 @@
     = must: inspect git status before editing
     = must: avoid reverting foreign or unknown work
     = must: update this conversation surface after meaningful frontier, proof, commit, or blocker changes
-  + [run_lifecycle_frontier] is run 20260529T214357Z completed and narrative updated with artifact manifest

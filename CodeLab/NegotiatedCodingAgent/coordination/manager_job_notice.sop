@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 176
+  + [job_notice_revision] is 177
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3961,7 +3961,7 @@
 
 & [WorkSliceDetail S290_conversation_upsert_anchor_fields] is a conversation memory implementation slice
   + [slice_id] is S290_conversation_upsert_anchor_fields
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is anchor newly-upserted conversation fields near related existing fields
   + [target_files] is src/negotiated_agent/conversation.py, tests/**
   + [proof_route] is tests prove run_lifecycle_frontier is inserted after current_frontier when missing
@@ -3969,3 +3969,16 @@
   + [support_status] is prepared
   + [dependency_set] is S289_narrative_coverage_after_lifecycle_frontier_checkpoint
   + [known_risks] is changing generic upsert behavior for unrelated fields
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T16:06:00Z, proof_ref tests passed with 279 tests, result_summary run_lifecycle_frontier upserts now anchor after current_frontier and active conversation surface was normalized
+  + [completed_work_review] is support_delta verified new lifecycle fields no longer append after reentry/worktree policy blocks; requirement_delta next step is refresh checkpoint after anchored upsert behavior
+
+& [WorkSliceDetail S291_long_run_checkpoint_after_upsert_anchor_fields] is a long-run reentry slice
+  + [slice_id] is S291_long_run_checkpoint_after_upsert_anchor_fields
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after anchored lifecycle field upserts
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 279-test suite and active conversation keeps lifecycle field adjacent to current_frontier
+  + [completion_criteria] is generated proof remains ready_for_continuation and active conversation field placement stays clean
+  + [support_status] is prepared
+  + [dependency_set] is S290_conversation_upsert_anchor_fields
+  + [known_risks] is lifecycle field placement proof being visual/textual rather than semantic validation
