@@ -198,6 +198,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/combined_artifact_validation_design.sop` defines the next operator validation view: one read-only command should be able to check a run manifest and, optionally, checkpoint Shaliach probe evidence with `passed`, `incomplete`, or `failed` status. That view is still not code acceptance, Manager approval, or apply permission.
 
+`coordination/combined_validation_checkpoint_integration_design.sop` defines how the long-run harness can report that combined validation without reading the checkpoint file it is currently producing. The harness should validate the dry-run manifest plus in-memory Shaliach probe result, then summarize the status inside the checkpoint as continuation evidence, not acceptance.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

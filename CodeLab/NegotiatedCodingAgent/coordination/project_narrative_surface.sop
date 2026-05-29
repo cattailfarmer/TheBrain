@@ -2307,3 +2307,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S267_combined_validation_checkpoint_integration_design
   + [narrative_role] is specification_audit and validation_runtime update
+
+
+& [LongRunNarrativeUpdate S267_combined_validation_checkpoint_integration_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S267_combined_validation_checkpoint_integration_design
+  + [implemented_capability] is combined_validation_checkpoint_integration_design.sop defines in-memory combined validation reporting for long-run checkpoints
+  + [proof_ref] is coordination/combined_validation_checkpoint_integration_design.sop
+  + [current_frontier] is S268_combined_validation_checkpoint_integration
+  + [narrative_role] is long_run_coordination and validation_design update

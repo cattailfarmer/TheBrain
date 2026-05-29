@@ -1,0 +1,41 @@
+& [CombinedValidationCheckpointIntegrationDesign] is the design contract for reporting combined validation inside long-run checkpoints
+  @ [created_at] 2026-05-30T13:18:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/combined_artifact_validation_design.sop
+  @ [harness_module] src/negotiated_agent/long_run.py
+  @ [validation_module] src/negotiated_agent/artifact_validation.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is checkpoint_validation_summary_not_acceptance_gate
+  + [primary_goal] is make the long-run checkpoint report combined validation over the same dry-run manifest and Shaliach probe evidence it just produced
+  + [non_goal] is validating a checkpoint file after it is written
+  + [non_goal] is re-running validate-artifacts.ps1 from inside the harness
+  + [non_goal] is approving generated code, Manager decisions, or target workspace mutation
+
+& [RecursionBoundary] is the required implementation constraint
+  + [rule] is harness must not depend on reading coordination/long_run_checkpoint.sop while building that same checkpoint
+  + [rule] is combined validation should use the run_manifest.sop from the dry-run root parsed from dry_run stdout
+  + [rule] is checkpoint probe validation should be built from the in-memory Shaliach probe CommandResult
+  + [rule] is output may summarize combined validation status in LongRunCheckpoint after all source evidence exists in memory
+  + [authority_boundary] is in_memory_summary_not_self_referential_checkpoint_read
+
+& [CheckpointFields] is the intended checkpoint vocabulary
+  + [field] is combined_artifact_validation_status
+  + [field] is combined_artifact_validation_manifest_status
+  + [field] is combined_artifact_validation_checkpoint_probe_status
+  + [field] is combined_artifact_validation_authority_boundary
+  + [authority_boundary] is validation_summary_not_final_acceptance
+
+& [GatingPolicy] is the deterministic continuation rule
+  + [rule] is combined validation passed may support ready_for_continuation
+  + [rule] is combined validation failed should make checkpoint status needs_attention
+  + [rule] is combined validation incomplete should make checkpoint status needs_attention when manifest validation was possible
+  + [rule] is combined validation not_run is allowed only when dry-run root or run_manifest.sop cannot be found and should be reported explicitly
+  + [authority_boundary] is continuation_readiness_not_human_approval
+
+& [ProofExpectations] is the minimum implementation proof
+  + [test_case] is checkpoint SOP records combined_artifact_validation_status passed for a valid dry-run manifest and passed Shaliach probe
+  + [test_case] is checkpoint status needs_attention when combined validation fails because manifest refs are missing
+  + [test_case] is checkpoint status needs_attention when combined validation is incomplete
+  + [test_case] is combined validation not_run is reported when dry-run stdout lacks a run root
+  + [test_case] is harness does not read coordination/long_run_checkpoint.sop while building the checkpoint
