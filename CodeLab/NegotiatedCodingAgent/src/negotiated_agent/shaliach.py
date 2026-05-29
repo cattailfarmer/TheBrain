@@ -17,6 +17,16 @@ SEVERITY_RANK = {
 
 
 @dataclass(frozen=True)
+class ShaliachPerspectiveRecord:
+    perspective: str
+    role: str
+    finding: str
+
+    def to_sop_line(self) -> str:
+        return f"    + [internal_perspective {self.perspective}] is {self.role}: {self.finding}"
+
+
+@dataclass(frozen=True)
 class ShaliachFinding:
     finding: str
     severity: str
@@ -29,6 +39,7 @@ class ShaliachFinding:
     higher_reasoning: str = "objective integrity preserved"
     lower_reasoning: str = "artifact fields inspected"
     perspective_set: tuple[str, ...] = ("ProtocolCounsel", "BoundaryMarshal", "EvidenceClerk")
+    perspective_records: tuple[ShaliachPerspectiveRecord, ...] = ()
 
     @property
     def blocks_progress(self) -> bool:
@@ -36,6 +47,8 @@ class ShaliachFinding:
 
     def to_sop(self, subject: str) -> str:
         perspectives = ", ".join(self.perspective_set)
+        perspective_records = self.perspective_records or _perspective_records(self)
+        record_lines = "\n".join(record.to_sop_line() for record in perspective_records)
         return f"""& [ShaliachFinding {subject}] is the Shaliach response coordination output
     + [finding] is {self.finding}
     + [severity] is {self.severity}
@@ -46,6 +59,7 @@ class ShaliachFinding:
     + [higher_reasoning] is {self.higher_reasoning}
     + [lower_reasoning] is {self.lower_reasoning}
     + [perspective_set] is {perspectives}
+{record_lines}
     + [reason] is {self.reason}
     + [required_response] is {self.required_response}"""
 
@@ -162,3 +176,30 @@ def _thin_evidence_fields(ledgers: NegotiatedLedgers) -> list[str]:
 def _has_director_evidence(values: list[str]) -> bool:
     default_prefixes = ("package_writer:", "manager_settlement:", "manager_gate:", "negotiation_log:")
     return any(":" in value and not value.startswith(default_prefixes) for value in values)
+
+
+def _perspective_records(finding: ShaliachFinding) -> tuple[ShaliachPerspectiveRecord, ...]:
+    roles = {
+        "ProtocolCounsel": "checks SOP/SJS/DataDesign obligation fit",
+        "BoundaryMarshal": "checks scope, role, and lineage boundaries",
+        "EvidenceClerk": "checks support strength and provenance",
+        "FailureExaminer": "checks blocker and recovery paths",
+        "FormKeeper": "checks artifact shape and required fields",
+        "ResponseCoordinator": "selects least intrusive sufficient response",
+    }
+    records = []
+    for perspective in finding.perspective_set:
+        if perspective == "ResponseCoordinator":
+            result = f"{finding.action} chosen at {finding.severity} severity with {finding.confidence} confidence"
+        elif perspective == "EvidenceClerk" and finding.finding in {"thin_ledger_evidence", "incomplete_negotiation_ledgers"}:
+            result = finding.reason
+        elif perspective == "BoundaryMarshal" and finding.finding == "missing_parent_lineage":
+            result = finding.reason
+        elif perspective == "FormKeeper":
+            result = f"{finding.target_artifact} form reviewed"
+        elif perspective == "ProtocolCounsel":
+            result = f"{finding.finding} evaluated against active protocol obligations"
+        else:
+            result = finding.reason
+        records.append(ShaliachPerspectiveRecord(perspective, roles.get(perspective, "internal Shaliach perspective"), result))
+    return tuple(records)
