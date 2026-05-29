@@ -8,7 +8,12 @@ from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
 from negotiated_agent.apply_cli import main as apply_cli_main
-from negotiated_agent.apply_preflight import build_apply_mutation_preflight, materialize_snapshot_evidence
+from negotiated_agent.apply_preflight import (
+    SnapshotMaterializationEntry,
+    SnapshotMaterializationResult,
+    build_apply_mutation_preflight,
+    materialize_snapshot_evidence,
+)
 from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
@@ -54,6 +59,7 @@ from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
+from negotiated_agent.rollback import build_rollback_preview
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -801,6 +807,30 @@ class ApplyPlanTests(unittest.TestCase):
             )
             with self.assertRaisesRegex(ValueError, "escapes workspace"):
                 materialize_snapshot_evidence(run_root, target_root, packet)
+
+    def test_rollback_preview_distinguishes_restore_remove_and_skip(self) -> None:
+        apply_result = ApplyResult(
+            apply_status="applied",
+            applied_files=("existing.py", "new.py"),
+            skipped_files=("skipped.py",),
+            snapshot_refs=("apply_snapshots/existing.py",),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        snapshot_result = SnapshotMaterializationResult(
+            entries=(
+                SnapshotMaterializationEntry("existing.py", "apply_snapshots/existing.py", "created", "replace_existing"),
+                SnapshotMaterializationEntry("new.py", "none", "not_needed", "create_new"),
+                SnapshotMaterializationEntry("skipped.py", "apply_snapshots/skipped.py", "created", "replace_existing"),
+            ),
+            snapshot_root="apply_snapshots",
+        )
+        preview = build_rollback_preview(apply_result, snapshot_result)
+        sop = preview.to_sop()
+        self.assertIn("restore_snapshot", sop)
+        self.assertIn("remove_created_file", sop)
+        self.assertIn("skip_not_applied", sop)
+        self.assertIn("rollback_preview_not_target_workspace_mutation", sop)
 
 
 class MailboxCoordinationTests(unittest.TestCase):
