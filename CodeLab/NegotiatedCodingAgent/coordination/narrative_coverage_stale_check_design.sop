@@ -1,0 +1,63 @@
+& [NarrativeCoverageStaleCheckDesign] is the design contract for executable narrative coverage and stale-check update records
+  @ [narrative_surface] coordination/project_narrative_surface.sop
+  @ [coverage_module] src/negotiated_agent/narrative_coverage.py
+  @ [conversation_surface] coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T03:34:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is narrative_coverage_check_not_narrative_rewrite
+  + [primary_goal] is recompute narrative coverage and stale-risk evidence from current project surfaces without rewriting narrative history
+  + [non_goal] is replacing the project narrative surface
+  + [non_goal] is signing specification claims
+  + [non_goal] is proving semantic truth beyond available artifacts
+  + [non_goal] is hiding stale narrative arcs by deleting old entries
+
+& [CoverageInputs] is what the stale-check updater must inspect
+  + [required_ref] is coordination/project_narrative_surface.sop
+  + [required_ref] is coordination/manager_job_notice.sop
+  + [required_ref] is coordination/refined_project_plan.sop
+  + [required_ref] is active conversation surface
+  + [required_ref] is coordination/long_run_checkpoint.sop when present
+  + [required_ref] is latest runs/<timestamp>/run_manifest.sop when present
+  + [authority_boundary] is coverage_inputs_not_semantic_truth
+  = must: recompute latest completed slice from manager job notice or conversation surface
+  = must: detect latest run referenced or missing in narrative
+  = must: compare current_frontier across conversation surface, refined plan, manager notice, and narrative updates when possible
+  = must: report stale claims rather than editing them out
+
+& [NarrativeStaleCheckRecord] is the future artifact form
+  + [field] is check_id
+  + [field] is narrative_surface_ref
+  + [field] is latest_run_ref
+  + [field] is current_frontier_ref
+  + [field] is covered_arc_set
+  + [field] is missing_arc_set
+  + [field] is stale_claim_set
+  + [field] is recommended_update_set
+  + [field] is authority_boundary
+  + [authority_boundary] is stale_check_record_not_narrative_rewrite
+  = must: include stale_count and missing_count in SOP output
+
+& [NarrativeCoverageUpdateRecord] is the future append-only update form
+  + [field] is update_id
+  + [field] is stale_check_ref
+  + [field] is appended_update_set
+  + [field] is deferred_update_set
+  + [field] is narrative_surface_ref
+  + [field] is authority_boundary
+  + [authority_boundary] is narrative_update_record_not_history_rewrite
+  = must: append an update section rather than modifying old narrative claims
+  = must: preserve stale findings until a later check proves they are resolved
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is stale-check record detects missing latest run reference
+  + [test_case] is stale-check record detects mismatched current frontier references
+  + [test_case] is stale-check record serializes covered missing stale and recommended update sets
+  + [test_case] is update record is append-only and does not rewrite old narrative text
+  + [test_case] is CLI writes stale-check evidence without mutating project narrative surface unless explicit append mode is used later
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add NarrativeStaleCheckRecord and recompute helper over current surfaces
+  + [slice_2] is add explicit stale-check CLI writer
+  + [slice_3] is add append-only NarrativeCoverageUpdateRecord before any narrative surface append command

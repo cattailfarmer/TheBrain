@@ -2726,7 +2726,7 @@
 
 & [WorkSliceDetail S195_narrative_coverage_stale_check_design] is a coordination runtime design slice
   + [slice_id] is S195_narrative_coverage_stale_check_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design executable narrative coverage and stale-check update records
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names narrative surface refs covered arcs stale arcs recomputation inputs and no narrative overwrite
@@ -2734,3 +2734,16 @@
   + [support_status] is prepared
   + [dependency_set] is S194_spec_audit_refresh_after_frontier_application
   + [known_risks] is rewriting narrative history instead of appending coverage evidence
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:34:00Z, proof_ref narrative_coverage_stale_check_design.sop README and architecture updated, result_summary designed executable narrative stale-check record and append-only update boundary
+  + [completed_work_review] is support_delta verified stale-check design reports stale claims instead of rewriting narrative history; requirement_delta next step is add NarrativeStaleCheckRecord and recompute helper
+
+& [WorkSliceDetail S196_narrative_stale_check_records] is a coordination runtime implementation slice
+  + [slice_id] is S196_narrative_stale_check_records
+  + [slice_status] is open
+  + [scope] is add NarrativeStaleCheckRecord and recompute helper over current surfaces
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover latest run missing reference frontier mismatch stale count missing arcs and boundary text
+  + [completion_criteria] is project narrative stale risk can be recomputed into a structured record without mutating narrative
+  + [support_status] is prepared
+  + [dependency_set] is S195_narrative_coverage_stale_check_design
+  + [known_risks] is overclaiming semantic narrative correctness from string checks

@@ -670,9 +670,10 @@
   + [completed_slice] is S192_frontier_application_apply_cli
   + [completed_slice] is S193_long_run_checkpoint_after_frontier_apply_cli
   + [completed_slice] is S194_spec_audit_refresh_after_frontier_application
+  + [completed_slice] is S195_narrative_coverage_stale_check_design
 
-  + [current_frontier] is S195_narrative_coverage_stale_check_design after spec audit refresh for frontier application support
-  + [next_recommended_slice] is S195_narrative_coverage_stale_check_design
+  + [current_frontier] is S196_narrative_stale_check_records after narrative coverage stale-check design
+  + [next_recommended_slice] is S196_narrative_stale_check_records
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

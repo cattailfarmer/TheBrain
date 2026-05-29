@@ -270,6 +270,8 @@ The frontier application helper now performs that surface write under exact prev
 
 `scripts/frontier-application-plan.ps1 -ApplyPlan` exposes that explicit surface application path. It writes `frontier_application_result.sop` for applied and stale-blocked outcomes and does not touch target workspace code.
 
+`coordination/narrative_coverage_stale_check_design.sop` defines the next narrative-memory boundary. It extends the existing artifact-presence coverage check into explicit stale-check records over narrative surface, manager notice, refined plan, active conversation surface, long-run checkpoint, and latest run manifest refs. The design keeps updates append-only.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

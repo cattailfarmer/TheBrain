@@ -174,6 +174,8 @@ The same module now has an explicit helper that can apply a valid frontier appli
 
 The wrapper `scripts/frontier-application-plan.ps1 -ApplyPlan` applies a frontier application plan and writes `frontier_application_result.sop`. It mutates only the active conversation surface named by the plan and never target workspace files.
 
+`coordination/narrative_coverage_stale_check_design.sop` defines the next narrative-memory boundary: recompute coverage and stale claims from current surfaces, then write evidence without rewriting narrative history.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

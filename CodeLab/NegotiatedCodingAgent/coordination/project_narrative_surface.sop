@@ -1597,3 +1597,10 @@
   + [implemented_capability] is spec_implementation_status.sop now recognizes frontier advancement and frontier application support through the 154-test checkpoint
   + [current_frontier] is S195_narrative_coverage_stale_check_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S195_narrative_coverage_stale_check_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S195_narrative_coverage_stale_check_design
+  + [implemented_capability] is narrative_coverage_stale_check_design.sop defines recomputable stale-check records and append-only narrative update boundary
+  + [current_frontier] is S196_narrative_stale_check_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update
