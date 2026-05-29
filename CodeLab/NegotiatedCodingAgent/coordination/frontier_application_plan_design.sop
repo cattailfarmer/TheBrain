@@ -1,0 +1,64 @@
+& [FrontierApplicationPlanDesign] is the design contract for applying a frontier advancement record to active conversation surfaces
+  @ [conversation_kernel] src/negotiated_agent/conversation.py
+  @ [frontier_advancement_record_design] coordination/frontier_advancement_record_design.sop
+  @ [frontier_advancement_writer] src/negotiated_agent/frontier_advancement_cli.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-30T02:24:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is frontier_application_plan_not_manager_decision
+  + [primary_goal] is define the explicit surface mutation plan required before applying a reviewed frontier advancement record
+  + [non_goal] is creating Manager approval
+  + [non_goal] is creating Shaliach clearance
+  + [non_goal] is applying code to the target workspace
+  + [non_goal] is silently editing project narrative without a recorded proof ref
+
+& [PlanInputs] is what a frontier application plan must inspect
+  + [required_ref] is frontier_advancement_record.sop
+  + [required_ref] is active_conversation.sop pointer
+  + [required_ref] is active conversation surface file
+  + [required_ref] is project_narrative_surface.sop when narrative update is required
+  + [authority_boundary] is application_plan_not_surface_write
+  = must: verify active conversation current_frontier equals record previous_frontier
+  = must: verify record authority_boundary is frontier_advancement_record_not_surface_mutation
+  = must: verify next_frontier is non-empty and distinct from previous_frontier
+  = must: preserve proof_refs and packet_refs as last_proof additions or linked refs
+
+& [FrontierApplicationPlan] is the future dry-run artifact form
+  + [field] is plan_id
+  + [field] is advancement_ref
+  + [field] is conversation_surface_ref
+  + [field] is previous_frontier
+  + [field] is next_frontier
+  + [field] is proof_refs_to_append
+  + [field] is completed_slice_refs_to_append
+  + [field] is narrative_update_required
+  + [field] is authority_boundary
+  + [authority_boundary] is frontier_application_plan_not_surface_write
+  = must: be writeable without mutating the conversation surface
+
+& [FrontierApplicationResult] is the future mutation result artifact
+  + [field] is result_id
+  + [field] is plan_ref
+  + [field] is applied_status
+  + [field] is conversation_surface_ref
+  + [field] is previous_frontier
+  + [field] is next_frontier
+  + [field] is appended_proof_refs
+  + [field] is narrative_update_ref
+  + [field] is authority_boundary
+  + [authority_boundary] is frontier_application_result_not_code_apply
+  = must: only be written after exact previous_frontier match
+  = must: record skipped or blocked state rather than forcing stale application
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is valid advancement record produces application plan without mutating surface
+  + [test_case] is stale active conversation frontier rejects plan creation
+  + [test_case] is plan serializes proof refs and packet refs
+  + [test_case] is result application updates current_frontier only with explicit apply command
+  + [test_case] is stale apply writes blocked result and preserves surface
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add FrontierApplicationPlan record and dry-run planner helper
+  + [slice_2] is add explicit CLI to write frontier_application_plan.sop
+  + [slice_3] is add explicit apply command that mutates only the active conversation surface after exact frontier match

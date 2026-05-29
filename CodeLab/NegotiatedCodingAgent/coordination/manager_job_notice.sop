@@ -2609,7 +2609,7 @@
 
 & [WorkSliceDetail S186_frontier_application_plan_design] is a coordination runtime design slice
   + [slice_id] is S186_frontier_application_plan_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design explicit application plan for applying frontier advancement records to active conversation surfaces
   + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
   + [proof_route] is design SOP names exact previous frontier check narrative update refs completed slice refs and no target workspace mutation
@@ -2617,3 +2617,16 @@
   + [support_status] is prepared
   + [dependency_set] is S185_frontier_advancement_writer_cli
   + [known_risks] is applying stale advancement records after compaction
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T02:24:00Z, proof_ref frontier_application_plan_design.sop README architecture and operator guide updated, result_summary designed dry-run frontier application plan and explicit result boundary
+  + [completed_work_review] is support_delta verified application plan remains separate from Manager decision and target workspace code apply; requirement_delta next step is add FrontierApplicationPlan record and dry-run planner helper
+
+& [WorkSliceDetail S187_frontier_application_plan_records] is a coordination runtime implementation slice
+  + [slice_id] is S187_frontier_application_plan_records
+  + [slice_status] is open
+  + [scope] is add FrontierApplicationPlan record and dry-run planner helper
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover valid plan stale frontier boundary proof refs packet refs and no surface mutation
+  + [completion_criteria] is frontier advancement records can produce dry-run application plans without changing active conversation surfaces
+  + [support_status] is prepared
+  + [dependency_set] is S186_frontier_application_plan_design
+  + [known_risks] is planner becoming a hidden surface writer

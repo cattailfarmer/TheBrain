@@ -292,7 +292,8 @@
   + [completed_slice] is S183_frontier_advancement_record_design
   + [completed_slice] is S184_frontier_advancement_records
   + [completed_slice] is S185_frontier_advancement_writer_cli
-  + [ready_slice] is S186_frontier_application_plan_design
+  + [completed_slice] is S186_frontier_application_plan_design
+  + [ready_slice] is S187_frontier_application_plan_records
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

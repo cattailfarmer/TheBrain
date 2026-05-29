@@ -319,6 +319,8 @@ Write frontier advancement evidence:
 
 This writes `frontier_advancement_record.sop` under `coordination/frontier_advancements/<id>/`. It does not mutate the active conversation surface.
 
+`coordination/frontier_application_plan_design.sop` describes the next boundary. A future planner must verify the active conversation surface still has the record's previous frontier before any explicit surface mutation command can update `current_frontier`.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

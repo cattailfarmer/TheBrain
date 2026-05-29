@@ -1519,3 +1519,10 @@
   + [proof_result] is tests passed with 144 tests
   + [current_frontier] is S186_frontier_application_plan_design
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S186_frontier_application_plan_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S186_frontier_application_plan_design
+  + [implemented_capability] is frontier_application_plan_design.sop defines dry-run surface application planning before any active conversation current_frontier mutation
+  + [current_frontier] is S187_frontier_application_plan_records
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update
