@@ -581,6 +581,7 @@ class NarrativeUpdateTests(unittest.TestCase):
             shaliach_response = (run_root / "application.shaliach_response.sop").read_text(encoding="utf-8")
             file_change_surface = (run_root / "file_change_surface.sop").read_text(encoding="utf-8")
             file_change_index = (run_root / "file_change_index.sop").read_text(encoding="utf-8")
+            director_inbox = (root / "coordination" / "mailbox" / "director_pool" / "inbox.sop").read_text(encoding="utf-8")
             log = (run_root / "negotiation_log.jsonl").read_text(encoding="utf-8")
             self.assertIn("RunNarrativeUpdate", narrative)
             self.assertIn("Build a test app", narrative)
@@ -596,8 +597,11 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("ShaliachResponseCoordination application_layer_package", shaliach_response)
             self.assertIn("FileChangeSurface", file_change_surface)
             self.assertIn("implementation/README.generated.txt", file_change_index)
+            self.assertIn("rework_notice", director_inbox)
+            self.assertIn("application.shaliach_response.sop", director_inbox)
             self.assertIn("application.shaliach_finding.sop", log)
             self.assertIn("application.shaliach_response.sop", log)
+            self.assertIn("mailbox_rework_notice_published", log)
             self.assertIn("file_change_surface.sop", log)
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:

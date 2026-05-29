@@ -5,12 +5,13 @@ import json
 from pathlib import Path
 
 from .config import AppConfig
-from .conversation import update_active_conversation_surface
+from .conversation import ConversationSurface, update_active_conversation_surface
 from .file_change import build_file_change_records, records_to_index, records_to_surface
 from .flowchart import empty_flowchart
 from .ledgers import negotiate_ledgers
 from .llm import LlmClient
 from .manager import review_layer_package
+from .mailbox import publish_message
 from .package import LayerPackage
 from .prompts import arbiter_prompt, coder_prompt, proposal_prompt
 from .protocols import ProtocolRegistry, activations_to_sop
@@ -85,6 +86,7 @@ class NegotiatedCodingAgent:
                     run_root / shaliach_response_ref,
                     shaliach_finding.to_response_coordination_sop(f"{layer}_layer_package"),
                 )
+                self._publish_response_coordination_mailbox(run_root, layer, shaliach_response_ref, shaliach_finding)
             pending_package = LayerPackage(
                 layer=layer,
                 flowchart=settled,
@@ -290,6 +292,47 @@ class NegotiatedCodingAgent:
             current_frontier=f"run {run_root.name} blocked at {layer} by {blocker}",
             proofs=[f"run {run_root.name} wrote run_blocked.sop"],
         )
+
+    def _publish_response_coordination_mailbox(
+        self,
+        run_root: Path,
+        layer: str,
+        shaliach_response_ref: str,
+        shaliach_finding: object,
+    ) -> None:
+        try:
+            sender_uuid = ConversationSurface.load_active(self.project_root).first("conversation_uuid", "manager") or "manager"
+            message = publish_message(
+                self.project_root,
+                sender_uuid=sender_uuid,
+                recipient_uuid="director_pool",
+                kind="rework_notice",
+                subject=f"{layer} layer Shaliach response coordination",
+                body=(
+                    f"{run_root.name}/{shaliach_response_ref}: "
+                    f"{getattr(shaliach_finding, 'required_response', 'inspect Shaliach response')}"
+                ),
+            )
+            self._log(
+                run_root,
+                {
+                    "event": "mailbox_rework_notice_published",
+                    "layer": layer,
+                    "recipient_uuid": "director_pool",
+                    "message_id": message.message_id,
+                    "shaliach_response_ref": shaliach_response_ref,
+                },
+            )
+        except (FileNotFoundError, KeyError, ValueError):
+            self._log(
+                run_root,
+                {
+                    "event": "mailbox_rework_notice_skipped",
+                    "layer": layer,
+                    "reason": "active conversation surface unavailable or malformed",
+                    "shaliach_response_ref": shaliach_response_ref,
+                },
+            )
 
     def _write_run_narrative_update(
         self,

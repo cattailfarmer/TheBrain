@@ -101,6 +101,7 @@
   + [implemented_slice] is S18_narrative_coverage_stale_recompute
   + [implemented_slice] is S19_shaliach_ledger_critique
   + [implemented_slice] is S20_rework_response_coordination
+  + [implemented_slice] is S21_mailbox_orchestrator_assignment
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -131,6 +132,7 @@
   + [proof_result] is tests passed with 29 tests and narrative coverage report status covered
   + [proof_result] is tests passed with 30 tests and dry-run wrote thin_ledger_evidence Shaliach warnings in runs/20260529T135949Z
   + [proof_result] is tests passed with 30 tests and dry-run wrote Shaliach response coordination artifacts in runs/20260529T140204Z
+  + [proof_result] is tests passed with 30 tests and dry-run published director_pool mailbox rework notices in runs/20260529T140405Z
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -159,6 +161,7 @@
   + [ready_capability] is narrative coverage report can identify covered, missing, and stale-risk project artifacts from current files
   + [ready_capability] is Shaliach can warn on present-but-thin ledger support instead of only checking field presence
   + [ready_capability] is non-blocking Shaliach warnings produce response coordination artifacts with repair steps and completion signals
+  + [ready_capability] is orchestrator publishes Shaliach response coordination rework notices into the director_pool mailbox
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -168,9 +171,9 @@
   + [not_ready_capability] is WSL2, Docker, Ollama, and vLLM installation
 
 & [FrontierArc] is the next useful work sequence
-  + [next_recommended_slice] is S21_mailbox_orchestrator_assignment
-  + [next_reason] is response coordination artifacts should be routable through mailbox surfaces for future multi-conversation workers
-  + [sleep_run_candidate] is continue S21 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S22_mailbox_claim_conflict_resolution
+  + [next_reason] is mailbox notices need claim and conflict semantics before multiple worker conversations can safely consume them
+  + [sleep_run_candidate] is continue S22 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -321,6 +324,15 @@
 
 & [RunNarrativeUpdate 20260529T140204Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
   + [run_root] is runs\20260529T140204Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [RunNarrativeUpdate 20260529T140405Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T140405Z
   + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
   + [settled_layer_set] is application, subsystem, component, code
   + [implementation_file_set] is implementation\README.generated.txt
