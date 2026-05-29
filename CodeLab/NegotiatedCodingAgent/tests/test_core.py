@@ -146,6 +146,15 @@ class FakeClient(LlmClient):
         return LlmResponse(text=f"{self.label}:{agent.name}:{prompt}", model=agent.model)
 
 
+class RecordingDryRunClient(DryRunClient):
+    def __init__(self) -> None:
+        self.prompts: list[tuple[str, str]] = []
+
+    def complete(self, agent: AgentConfig, prompt: str) -> LlmResponse:
+        self.prompts.append((agent.name, prompt))
+        return super().complete(agent, prompt)
+
+
 class ProviderRoutingTests(unittest.TestCase):
     def test_dry_run_preserves_director_stance_diversity(self) -> None:
         client = DryRunClient()
@@ -903,6 +912,36 @@ class ShaliachRuntimeTests(unittest.TestCase):
 
 
 class NarrativeUpdateTests(unittest.TestCase):
+    def test_second_negotiation_round_receives_prior_director_disagreement(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            config_path = root / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "m"},
+                            "manager": {"name": "Manager", "model": "m"},
+                            "directors": [
+                                {"name": "SystemsDirector", "model": "m", "role": "system structure"},
+                                {"name": "FailureDirector", "model": "m", "role": "failure modes"},
+                            ],
+                            "programmers": [{"name": "Programmer", "model": "m"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 2, "layers": ["application"]},
+                        "coordination": {"publish_rework_notices": False},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            client = RecordingDryRunClient()
+            NegotiatedCodingAgent(load_config(config_path), client, root).run("Build a test app")
+            systems_prompts = [prompt for name, prompt in client.prompts if name == "SystemsDirector"]
+            self.assertEqual(len(systems_prompts), 2)
+            self.assertIn("Prior Director disagreement", systems_prompts[1])
+            self.assertIn("FailureDirector", systems_prompts[1])
+
     def test_run_appends_project_narrative_update(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

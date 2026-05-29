@@ -200,12 +200,13 @@ class NegotiatedCodingAgent:
         current_parent = parent_flowchart
         settled = empty_flowchart(layer)
         final_proposals: list[tuple[str, str]] = []
+        prior_disagreement = ""
         for round_index in range(self.config.negotiation.rounds_per_layer):
             proposals: list[str] = []
             for agent in self.config.agents:
                 response = self.client.complete(
                     agent,
-                    proposal_prompt(agent.name, agent.role, layer, objective, current_parent),
+                    proposal_prompt(agent.name, agent.role, layer, objective, current_parent, prior_disagreement),
                 )
                 proposals.append(response.text)
                 final_proposals.append((agent.name, response.text))
@@ -226,6 +227,7 @@ class NegotiatedCodingAgent:
             )
             settled = settled_response.text
             current_parent = settled
+            prior_disagreement = _director_disagreement_context(final_proposals)
             self._log(
                 run_root,
                 {
@@ -452,6 +454,15 @@ class NegotiatedCodingAgent:
 
 def _sop_field_value(value: str, *, limit: int) -> str:
     return " ".join(value.split())[:limit]
+
+
+def _director_disagreement_context(proposals: list[tuple[str, str]]) -> str:
+    if len(proposals) < 2:
+        return ""
+    lines = []
+    for name, text in proposals[-4:]:
+        lines.append(f"- {name}: {' '.join(text.split())[:220]}")
+    return "\n".join(lines)
 
 
 def _artifact_role(name: str) -> str:

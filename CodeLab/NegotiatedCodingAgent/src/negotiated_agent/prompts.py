@@ -1,7 +1,19 @@
 from __future__ import annotations
 
 
-def proposal_prompt(agent_name: str, role: str, layer: str, objective: str, parent_flowchart: str) -> str:
+def proposal_prompt(
+    agent_name: str,
+    role: str,
+    layer: str,
+    objective: str,
+    parent_flowchart: str,
+    prior_disagreement: str = "",
+) -> str:
+    disagreement_section = (
+        f"\nPrior Director disagreement or preserved concerns:\n{prior_disagreement}\n"
+        if prior_disagreement
+        else ""
+    )
     return f"""You are {agent_name}.
 Role: {role}
 Layer: {layer}
@@ -11,6 +23,7 @@ Objective:
 
 Parent or prior settled flowchart:
 {parent_flowchart}
+{disagreement_section}
 
 Produce a Markdown flowchart for this layer only.
 Do not jump past this layer.
@@ -76,4 +89,3 @@ Rules:
 - Keep the first implementation small.
 - Include a README or usage note when helpful.
 """
-
