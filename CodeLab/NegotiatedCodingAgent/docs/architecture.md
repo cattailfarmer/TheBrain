@@ -246,6 +246,8 @@ The worker-runner CLI now supports handoff consumption. It loads a `ManagerProof
 
 `coordination/run_local_output_review_design.sop` defines the review boundary after run-local generation. Manager and Shaliach review artifacts must inspect the generated file refs and proof evidence before a non-mutating merge eligibility summary can say the output is eligible for later manual merge packet construction.
 
+`negotiated_agent.run_local_review` and `scripts/run-local-output-review.ps1` implement the review and eligibility evidence path. The CLI can write Manager review, Shaliach review, and merge eligibility artifacts, but it never creates a manual merge packet or applies files.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

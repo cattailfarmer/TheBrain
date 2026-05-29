@@ -86,6 +86,7 @@ from negotiated_agent.run_local_review import (
     ShaliachRunLocalOutputReview,
     decide_run_local_merge_eligibility,
 )
+from negotiated_agent.run_local_review_cli import main as run_local_review_cli_main
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -3008,6 +3009,139 @@ class MailboxCoordinationTests(unittest.TestCase):
                     shaliach_review_ref="shaliach.sop",
                     run_local_root=root,
                 )
+
+    def test_run_local_review_cli_writes_reviews_and_eligibility(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            run_root.mkdir(parents=True)
+            manager_out = io.StringIO()
+            with contextlib.redirect_stdout(manager_out):
+                self.assertEqual(
+                    run_local_review_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--manager-review",
+                            "--review-id",
+                            "manager-review-1",
+                            "--review-status",
+                            "accepted_for_merge_review",
+                            "--plan-ref",
+                            "plan.sop",
+                            "--result-ref",
+                            "result.sop",
+                            "--generated-file",
+                            "implementation/README.generated.txt",
+                            "--frontier-at-review",
+                            "S170_run_local_output_review_cli",
+                            "--risk-summary",
+                            "low",
+                        ]
+                    ),
+                    0,
+                )
+            shaliach_out = io.StringIO()
+            with contextlib.redirect_stdout(shaliach_out):
+                self.assertEqual(
+                    run_local_review_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--shaliach-review",
+                            "--review-id",
+                            "shaliach-review-1",
+                            "--review-status",
+                            "clear",
+                            "--plan-ref",
+                            "plan.sop",
+                            "--result-ref",
+                            "result.sop",
+                            "--checked-protocol",
+                            "SOP",
+                            "--required-response",
+                            "proceed_to_merge_review",
+                        ]
+                    ),
+                    0,
+                )
+            eligibility_out = io.StringIO()
+            with contextlib.redirect_stdout(eligibility_out):
+                self.assertEqual(
+                    run_local_review_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--eligibility",
+                            "--manager-review-ref",
+                            (run_root / "manager_run_local_output_review.sop").relative_to(root).as_posix(),
+                            "--shaliach-review-ref",
+                            (run_root / "shaliach_run_local_output_review.sop").relative_to(root).as_posix(),
+                            "--eligibility-id",
+                            "eligibility-1",
+                        ]
+                    ),
+                    0,
+                )
+            eligibility = (run_root / "run_local_merge_eligibility.sop").read_text(encoding="utf-8")
+            self.assertIn("eligible_for_manual_merge_packet", eligibility)
+            self.assertIn("run_local_review_write_not_merge_packet", eligibility_out.getvalue())
+            self.assertFalse((run_root / "manual_merge_packet.sop").exists())
+
+    def test_run_local_review_cli_blocks_escaped_generated_ref(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            run_root.mkdir(parents=True)
+            (run_root / "manager_run_local_output_review.sop").write_text(
+                ManagerRunLocalOutputReview(
+                    review_id="manager-review-1",
+                    review_status="accepted_for_merge_review",
+                    plan_ref="plan.sop",
+                    result_ref="result.sop",
+                    generated_files=("..\\escape.txt",),
+                    frontier_at_review="S170_run_local_output_review_cli",
+                    risk_summary="bad",
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            (run_root / "shaliach_run_local_output_review.sop").write_text(
+                ShaliachRunLocalOutputReview(
+                    review_id="shaliach-review-1",
+                    review_status="clear",
+                    plan_ref="plan.sop",
+                    result_ref="result.sop",
+                    checked_protocols=("SOP",),
+                    finding_summary="none",
+                    required_response="proceed_to_merge_review",
+                ).to_sop(),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                self.assertEqual(
+                    run_local_review_cli_main(
+                        [
+                            "--project-root",
+                            str(root),
+                            "--run-local-root",
+                            run_root.relative_to(root).as_posix(),
+                            "--eligibility",
+                            "--manager-review-ref",
+                            (run_root / "manager_run_local_output_review.sop").relative_to(root).as_posix(),
+                            "--shaliach-review-ref",
+                            (run_root / "shaliach_run_local_output_review.sop").relative_to(root).as_posix(),
+                        ]
+                    ),
+                    1,
+                )
+            self.assertIn("escapes", out.getvalue())
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

@@ -1370,3 +1370,11 @@
   + [proof_result] is tests passed with 129 tests
   + [current_frontier] is S170_run_local_output_review_cli
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S170_run_local_output_review_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S170_run_local_output_review_cli
+  + [implemented_capability] is run-local output review CLI and wrapper write Manager review Shaliach review and merge eligibility evidence without merge packet creation
+  + [proof_result] is tests passed with 131 tests
+  + [current_frontier] is S171_long_run_checkpoint_after_run_local_review_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

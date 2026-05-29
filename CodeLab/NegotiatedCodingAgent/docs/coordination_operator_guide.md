@@ -267,6 +267,16 @@ Execute-plan mode writes generated evidence under the plan root and writes `run_
 
 The next planned review boundary is `coordination/run_local_output_review_design.sop`. Run-local generated files need Manager and Shaliach review before they can become eligible for a manual merge packet, and eligibility is still not apply acceptance.
 
+Write run-local output review evidence:
+
+```powershell
+.\scripts\run-local-output-review.ps1 -RunLocalRoot <root> -ManagerReview -ReviewStatus accepted_for_merge_review -PlanRef <plan-ref> -ResultRef <result-ref> -GeneratedFile <generated-ref>
+.\scripts\run-local-output-review.ps1 -RunLocalRoot <root> -ShaliachReview -ReviewStatus clear -PlanRef <plan-ref> -ResultRef <result-ref> -CheckedProtocol SOP
+.\scripts\run-local-output-review.ps1 -RunLocalRoot <root> -Eligibility -ManagerReviewRef <manager-review-ref> -ShaliachReviewRef <shaliach-review-ref>
+```
+
+Eligibility writes `run_local_merge_eligibility.sop`. It does not create `manual_merge_packet.sop`.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

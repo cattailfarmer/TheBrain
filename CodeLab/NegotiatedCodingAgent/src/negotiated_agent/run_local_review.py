@@ -98,6 +98,41 @@ def decide_run_local_merge_eligibility(
     )
 
 
+def write_review_artifact(run_local_root: Path, filename: str, body: str) -> Path:
+    path = run_local_root / filename
+    if path.exists():
+        raise FileExistsError(f"{path} already exists")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(body, encoding="utf-8")
+    return path
+
+
+def load_manager_run_local_output_review(path: Path) -> ManagerRunLocalOutputReview:
+    fields = _read_fields(path)
+    return ManagerRunLocalOutputReview(
+        review_id=fields["review_id"],
+        review_status=fields["review_status"],
+        plan_ref=fields["plan_ref"],
+        result_ref=fields["result_ref"],
+        generated_files=_split_set(fields.get("generated_file_set", "")),
+        frontier_at_review=fields["frontier_at_review"],
+        risk_summary=fields["risk_summary"],
+    )
+
+
+def load_shaliach_run_local_output_review(path: Path) -> ShaliachRunLocalOutputReview:
+    fields = _read_fields(path)
+    return ShaliachRunLocalOutputReview(
+        review_id=fields["review_id"],
+        review_status=fields["review_status"],
+        plan_ref=fields["plan_ref"],
+        result_ref=fields["result_ref"],
+        checked_protocols=_split_set(fields.get("checked_protocol_set", "")),
+        finding_summary=fields["finding_summary"],
+        required_response=fields["required_response"],
+    )
+
+
 def _validate_generated_refs(run_local_root: Path, generated_files: tuple[str, ...]) -> None:
     resolved_root = run_local_root.resolve()
     for item in generated_files:
@@ -109,3 +144,21 @@ def _validate_generated_refs(run_local_root: Path, generated_files: tuple[str, .
 
 def _join(values: tuple[str, ...]) -> str:
     return ", ".join(values) if values else "none"
+
+
+def _read_fields(path: Path) -> dict[str, str]:
+    if not path.exists():
+        raise FileNotFoundError(f"{path} is missing")
+    fields = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if stripped.startswith("+ [") and "] is " in stripped:
+            key, value = stripped[3:].split("] is ", 1)
+            fields[key] = value
+    return fields
+
+
+def _split_set(value: str) -> tuple[str, ...]:
+    if not value or value == "none":
+        return ()
+    return tuple(item.strip() for item in value.split(",") if item.strip())

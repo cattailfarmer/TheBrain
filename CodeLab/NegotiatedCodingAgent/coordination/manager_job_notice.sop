@@ -2401,7 +2401,7 @@
 
 & [WorkSliceDetail S170_run_local_output_review_cli] is a coordination runtime implementation slice
   + [slice_id] is S170_run_local_output_review_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add explicit CLI and wrapper to write run-local output reviews and merge eligibility evidence
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover manager review write shaliach review write eligibility write blocked eligibility and no merge packet creation
@@ -2409,3 +2409,16 @@
   + [support_status] is prepared
   + [dependency_set] is S169_run_local_output_review_records
   + [known_risks] is eligibility CLI being mistaken for merge packet generation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T00:18:00Z, proof_ref tests passed with 131 tests, result_summary added run-local output review CLI and wrapper
+  + [completed_work_review] is support_delta verified review CLI writes eligibility but not manual merge packet; requirement_delta next checkpoint should capture 131-test run-local review frontier
+
+& [WorkSliceDetail S171_long_run_checkpoint_after_run_local_review_cli] is a long-run reentry slice
+  + [slice_id] is S171_long_run_checkpoint_after_run_local_review_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after run-local output review CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after 131-test suite and route draft proof
+  + [completion_criteria] is checkpoint records run-local output review frontier
+  + [support_status] is prepared
+  + [dependency_set] is S170_run_local_output_review_cli
+  + [known_risks] is noisy generated dry-run artifacts
