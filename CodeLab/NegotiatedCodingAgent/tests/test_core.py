@@ -7,7 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
-from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry
+from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry, build_dry_run_apply_artifacts
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
     ConversationSurface,
@@ -544,6 +544,33 @@ class ApplyPlanTests(unittest.TestCase):
         self.assertIn("ApplyResult", sop)
         self.assertIn("apply_result_record_not_rollback_execution", sop)
         self.assertIn("rollback-manual-merge-packet", sop)
+
+    def test_dry_run_apply_artifacts_from_manual_merge_packet(self) -> None:
+        packet = ManualMergePacket(
+            packet_id="MMP001",
+            source_run_root="runs/20260529T000000Z",
+            target_workspace_root="C:/Project/TheBrain",
+            accepted_files=(
+                AcceptedFileMapEntry(
+                    source_ref="implementation/WS001.ProgrammerA/app.py",
+                    target_path="app.py",
+                    source_assignment_ref="WS001.ProgrammerA.execution_result.sop",
+                ),
+            ),
+            rejected_output_refs=(),
+            conflict_resolution_refs=(),
+            rollback_plan=RollbackPlan(
+                entries=(),
+                verification_command="powershell -File scripts/test.ps1",
+            ),
+            manager_acceptance_ref="merge_review_decision.sop",
+            shaliach_review_ref="not_yet_run",
+            verification_command="powershell -File scripts/test.ps1",
+        )
+        plan, result = build_dry_run_apply_artifacts(packet)
+        self.assertIn("app.py", plan.to_sop())
+        self.assertEqual(result.apply_status, "dry_run")
+        self.assertIn("not_run_in_dry_run", result.to_sop())
 
 
 class MailboxCoordinationTests(unittest.TestCase):
@@ -1274,6 +1301,8 @@ class NarrativeUpdateTests(unittest.TestCase):
             self.assertIn("merge_review_decision.sop", log)
             self.assertIn("run_manifest_written", log)
             self.assertFalse((run_root / "manual_merge_packet.sop").exists())
+            self.assertFalse((run_root / "apply_plan.sop").exists())
+            self.assertFalse((run_root / "apply_result.sop").exists())
 
     def test_manager_rejection_writes_blocked_lifecycle_record(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -1519,12 +1548,20 @@ class NarrativeUpdateTests(unittest.TestCase):
             )
             decision = (run_root / "merge_review_decision.sop").read_text(encoding="utf-8")
             packet = (run_root / "manual_merge_packet.sop").read_text(encoding="utf-8")
+            apply_plan = (run_root / "apply_plan.sop").read_text(encoding="utf-8")
+            apply_result = (run_root / "apply_result.sop").read_text(encoding="utf-8")
             manifest = (run_root / "run_manifest.sop").read_text(encoding="utf-8")
             self.assertIn("ready_for_manual_merge_review", decision)
             self.assertIn("ManualMergePacket", packet)
             self.assertIn("manual_merge_packet_not_workspace_application", packet)
             self.assertIn("ProgrammerA.txt", packet)
+            self.assertIn("ApplyPlan", apply_plan)
+            self.assertIn("dry_run_default] is true", apply_plan)
+            self.assertIn("ApplyResult", apply_result)
+            self.assertIn("apply_status] is dry_run", apply_result)
             self.assertIn("artifact_ref manual_merge_packet] is manual_merge_packet.sop", manifest)
+            self.assertIn("artifact_ref apply_plan] is apply_plan.sop", manifest)
+            self.assertIn("artifact_ref apply_result] is apply_result.sop", manifest)
 
 
 if __name__ == "__main__":

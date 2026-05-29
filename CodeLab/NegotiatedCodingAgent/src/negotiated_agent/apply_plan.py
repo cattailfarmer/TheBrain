@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from .merge_packet import ManualMergePacket
+
 
 @dataclass(frozen=True)
 class SnapshotPlanEntry:
@@ -68,3 +70,33 @@ class ApplyResult:
   + [error_summary] is {self.error_summary}
   + [authority_boundary] is apply_result_record_not_rollback_execution
 """
+
+
+def build_dry_run_apply_artifacts(packet: ManualMergePacket) -> tuple[ApplyPlan, ApplyResult]:
+    snapshots = tuple(
+        SnapshotPlanEntry(
+            target_path=item.target_path,
+            snapshot_ref=f"snapshots/{item.target_path}.before",
+        )
+        for item in packet.accepted_files
+    )
+    target_paths = tuple(item.target_path for item in packet.accepted_files)
+    plan = ApplyPlan(
+        packet_ref="manual_merge_packet.sop",
+        target_workspace_root=packet.target_workspace_root,
+        target_paths=target_paths,
+        snapshot_plan=snapshots,
+        rollback_plan_ref="manual_merge_packet.sop#RollbackPlan",
+        verification_command=packet.verification_command,
+        manager_acceptance_ref=packet.manager_acceptance_ref,
+        shaliach_review_ref=packet.shaliach_review_ref,
+    )
+    result = ApplyResult(
+        apply_status="dry_run",
+        applied_files=(),
+        skipped_files=target_paths,
+        snapshot_refs=tuple(entry.snapshot_ref for entry in snapshots),
+        rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop --dry-run",
+        verification_result_ref="not_run_in_dry_run",
+    )
+    return plan, result

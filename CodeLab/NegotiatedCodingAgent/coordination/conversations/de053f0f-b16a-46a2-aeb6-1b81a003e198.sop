@@ -145,6 +145,7 @@
   + [last_proof] is tests passed with 56 tests after S72 spec audit refresh
   + [last_proof] is tests passed with 56 tests after S73 operator-approved apply policy
   + [last_proof] is tests passed with 58 tests after S74 apply plan records
+  + [last_proof] is tests passed with 59 tests after S75 apply plan dry-run generation
   + [last_proof] is run 20260529T141744Z started and wrote protocol_activation.sop
   + [last_proof] is run 20260529T141744Z approved application layer with application.shaliach_finding.sop
   + [last_proof] is run 20260529T141744Z approved subsystem layer with subsystem.shaliach_finding.sop
@@ -306,9 +307,10 @@
   + [completed_slice] is S72_spec_audit_refresh_after_merge_packet
   + [completed_slice] is S73_operator_approved_apply_policy
   + [completed_slice] is S74_apply_plan_records
+  + [completed_slice] is S75_apply_plan_dry_run_generation
 
-  + [current_frontier] is S75_apply_plan_dry_run_generation after apply plan records
-  + [next_recommended_slice] is S75_apply_plan_dry_run_generation
+  + [current_frontier] is S76_spec_audit_refresh_after_apply_plan after dry-run apply evidence
+  + [next_recommended_slice] is S76_spec_audit_refresh_after_apply_plan
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

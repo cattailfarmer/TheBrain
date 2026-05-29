@@ -115,6 +115,8 @@ When merge review is ready and conflict-free, the orchestrator can emit `manual_
 
 `negotiated_agent.apply_plan` now provides pure `ApplyPlan` and `ApplyResult` records for that future command. These records preserve dry-run defaults, snapshot plans, rollback commands, and verification refs without performing any file writes.
 
+For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `apply_result.sop` as dry-run evidence. Conflict-blocked runs do not emit apply evidence, keeping the unresolved merge decision as the active boundary.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

@@ -68,6 +68,7 @@ Runs are written under `runs/<timestamp>/`:
 - `merge_conflict_ledger.sop`
 - `merge_review_decision.sop`
 - `manual_merge_packet.sop` when merge review is ready and no conflicts block packet creation
+- `apply_plan.sop` and `apply_result.sop` as dry-run evidence when a manual merge packet is generated
 - `WS001_core_implementation.<Programmer>.work_slice.sop`
 - `WS001_core_implementation.<Programmer>.raw.md`
 - `WS001_core_implementation.<Programmer>.programmer_report.sop`

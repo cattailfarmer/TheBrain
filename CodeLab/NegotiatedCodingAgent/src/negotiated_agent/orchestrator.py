@@ -6,6 +6,7 @@ from pathlib import Path
 
 from .config import AppConfig
 from .conversation import ConversationSurface, update_active_conversation_surface
+from .apply_plan import build_dry_run_apply_artifacts
 from .file_change import build_file_change_records, records_to_index, records_to_surface
 from .flowchart import empty_flowchart
 from .ledgers import negotiate_ledgers
@@ -225,6 +226,9 @@ class NegotiatedCodingAgent:
         if manual_merge_packet:
             manual_merge_packet_ref = "manual_merge_packet.sop"
             write_text(run_root / manual_merge_packet_ref, manual_merge_packet.to_sop())
+            apply_plan, apply_result = build_dry_run_apply_artifacts(manual_merge_packet)
+            write_text(run_root / "apply_plan.sop", apply_plan.to_sop())
+            write_text(run_root / "apply_result.sop", apply_result.to_sop())
         write_text(run_root / "file_change_surface.sop", records_to_surface(file_change_records))
         write_text(run_root / "file_change_index.sop", records_to_index(file_change_records))
         self._log(
@@ -555,6 +559,10 @@ def _artifact_role(name: str) -> str:
         return "merge_review_decision"
     if name == "manual_merge_packet.sop":
         return "manual_merge_packet"
+    if name == "apply_plan.sop":
+        return "apply_plan"
+    if name == "apply_result.sop":
+        return "apply_result"
     if name.endswith(".flowchart.md"):
         return "flowchart"
     if name.endswith(".package.sop"):
