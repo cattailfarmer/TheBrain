@@ -2445,3 +2445,20 @@
   + [proof_result] is tests passed with 278 tests and checkpoint SOP omits ManagerPreliveReviewPacket and ShaliachPreliveReviewPacket artifacts
   + [current_frontier] is S282_long_run_checkpoint_after_prelive_recipe_reference
   + [narrative_role] is long_run_coordination and review_boundary update
+
+
+& [RunNarrativeUpdate 20260529T213450Z] is an automatic narrative update from a completed NegotiatedCodingAgent run
+  + [run_root] is runs\20260529T213450Z
+  + [objective_summary] is Build a tiny command-line notes app. Requirements: - A user can add a note with text. - A user can list all notes. - A user can search notes by a case-insensitive substring. - Notes are persisted in a local JSON file. - Keep the implementat
+  + [settled_layer_set] is application, subsystem, component, code
+  + [implementation_file_set] is implementation\WS001_core_implementation.Programmer\README.generated.txt, implementation\WS002_verification.Programmer\README.generated.txt, implementation\WS003_documentation.Programmer\README.generated.txt
+  + [proof_status] is run_completed
+  + [narrative_role] is implementation_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S282_long_run_checkpoint_after_prelive_recipe_reference] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S282_long_run_checkpoint_after_prelive_recipe_reference
+  + [proof_result] is long-run checkpoint passed 278 tests with combined validation passed and prelive_review_packet_generation operator_only
+  + [run_root] is runs\20260529T213450Z
+  + [current_frontier] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
+  + [narrative_role] is long_run_coordination and proof_arc update
