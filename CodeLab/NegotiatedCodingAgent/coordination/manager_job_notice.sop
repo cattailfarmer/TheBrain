@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 137
+  + [job_notice_revision] is 138
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -155,7 +155,8 @@
     S130_worker_execution_gate_records |
     S131_worker_execution_gate_evaluator |
     S132_long_run_checkpoint_after_execution_gate |
-    S133_execution_gate_readme_inventory
+    S133_execution_gate_readme_inventory |
+    S134_long_run_checkpoint_after_execution_gate_docs
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1916,7 +1917,7 @@
 
 & [WorkSliceDetail S133_execution_gate_readme_inventory] is a documentation slice
   + [slice_id] is S133_execution_gate_readme_inventory
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is update README and operator guide with execution gate records and evaluator boundary
   + [target_files] is README.md, docs/**, coordination/**
   + [proof_route] is tests remain passing and docs mention ManagerAuthorizationRecord ShaliachExecutionClearance ExecutionGateDecision without claiming execution runner
@@ -1924,3 +1925,16 @@
   + [support_status] is prepared
   + [dependency_set] is S132_long_run_checkpoint_after_execution_gate
   + [known_risks] is suggesting gate evaluator runs live Manager/Shaliach deliberation
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T19:38:00Z, proof_ref README and operator guide updated with tests pending final verification, result_summary docs inventory execution gate records and deterministic evaluator boundary
+  + [completed_work_review] is support_delta verified docs state gate evidence is prerequisite and not autonomous execution; requirement_delta next checkpoint should capture execution gate docs state
+
+& [WorkSliceDetail S134_long_run_checkpoint_after_execution_gate_docs] is a long-run reentry slice
+  + [slice_id] is S134_long_run_checkpoint_after_execution_gate_docs
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after execution gate documentation
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness updates checkpoint after current test suite and route draft proof
+  + [completion_criteria] is checkpoint records execution gate docs frontier
+  + [support_status] is prepared
+  + [dependency_set] is S133_execution_gate_readme_inventory
+  + [known_risks] is noisy generated dry-run artifacts

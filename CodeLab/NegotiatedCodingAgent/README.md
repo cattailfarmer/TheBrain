@@ -122,6 +122,8 @@ powershell -ExecutionPolicy Bypass -File scripts\worker-runner-preview.ps1 -Work
 
 These commands write worker evidence under `coordination/workers/<worker-uuid>/` when run in claim, cycle, or proof mode. They do not make the system a full autonomous scheduler, do not approve Manager frontier changes, and do not mutate target workspace code.
 
+Before any future autonomous worker executes implementation work, the execution gate must be represented. Current gate records are `ManagerAuthorizationRecord`, `ShaliachExecutionClearance`, and `ExecutionGateDecision`; the deterministic evaluator can classify gate state as proof-only allowed or blocked by Manager, Shaliach, stale frontier, or invalid lease. This is prerequisite evidence, not live Manager/Shaliach deliberation and not permission to apply target workspace changes.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

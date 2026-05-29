@@ -187,6 +187,16 @@ Run an explicit proof command and record the result:
 
 Proof-command mode writes a `WorkerCycleRecord`. On failed proof it also writes a `WorkerFailureRecord` under `coordination/workers/<worker-uuid>/failures/` and returns a nonzero exit code. It should be used only for explicit proof commands selected by the active slice.
 
+## Execution Gate Boundary
+
+Before a future worker runner executes claimed implementation work, it must have execution-gate evidence:
+
+- `ManagerAuthorizationRecord`: Manager-side permission evidence, not final acceptance.
+- `ShaliachExecutionClearance`: protocol counsel evidence, not Manager authorization.
+- `ExecutionGateDecision`: combined gate result, not completion approval.
+
+The deterministic evaluator can allow proof-only work or block on Manager denial, Shaliach pause/rework, stale frontier, or invalid lease. It does not run live Manager/Shaliach deliberation, execute implementation work, or mutate the target workspace.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:
