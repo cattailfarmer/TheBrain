@@ -647,10 +647,10 @@ class ApplyPlanTests(unittest.TestCase):
                 accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
                 rejected_output_refs=(),
                 conflict_resolution_refs=(),
-                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                rollback_plan=RollbackPlan(entries=(), verification_command="cmd /c exit 0"),
                 manager_acceptance_ref="merge_review_decision.sop",
                 shaliach_review_ref="merge.shaliach_review.sop",
-                verification_command="test",
+                verification_command="cmd /c exit 0",
             )
             (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
             (run_root / "merge_review_decision.sop").write_text(
@@ -682,10 +682,10 @@ class ApplyPlanTests(unittest.TestCase):
                 accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
                 rejected_output_refs=(),
                 conflict_resolution_refs=(),
-                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                rollback_plan=RollbackPlan(entries=(), verification_command="cmd /c exit 0"),
                 manager_acceptance_ref="merge_review_decision.sop",
                 shaliach_review_ref="merge.shaliach_review.sop",
-                verification_command="test",
+                verification_command="cmd /c exit 0",
             )
             (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
             (run_root / "merge_review_decision.sop").write_text(
@@ -701,7 +701,7 @@ class ApplyPlanTests(unittest.TestCase):
             self.assertIn("mutation_allowed] is false", preflight.to_sop())
             self.assertFalse((target_root / "app.py").exists())
 
-    def test_apply_cli_mutation_flag_writes_preflight_without_mutation(self) -> None:
+    def test_apply_cli_mutation_flag_applies_after_preflight_and_snapshot(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             run_root = root / "run"
@@ -717,10 +717,10 @@ class ApplyPlanTests(unittest.TestCase):
                 accepted_files=(AcceptedFileMapEntry("implementation/app.py", "app.py", "assignment.sop"),),
                 rejected_output_refs=(),
                 conflict_resolution_refs=(),
-                rollback_plan=RollbackPlan(entries=(), verification_command="test"),
+                rollback_plan=RollbackPlan(entries=(), verification_command="cmd /c exit 0"),
                 manager_acceptance_ref="merge_review_decision.sop",
                 shaliach_review_ref="merge.shaliach_review.sop",
-                verification_command="test",
+                verification_command="cmd /c exit 0",
             )
             (run_root / "manual_merge_packet.sop").write_text(packet.to_sop(), encoding="utf-8")
             (run_root / "merge_review_decision.sop").write_text(
@@ -741,13 +741,14 @@ class ApplyPlanTests(unittest.TestCase):
                         "--i-understand-this-mutates-workspace",
                     ]
                 ),
-                2,
+                0,
             )
             self.assertIn("ApplyMutationPreflight", (run_root / "apply_mutation_preflight.sop").read_text(encoding="utf-8"))
             self.assertIn("SnapshotMaterializationResult", (run_root / "snapshot_materialization.sop").read_text(encoding="utf-8"))
-            self.assertIn("mutation_performed] is false", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
+            self.assertIn("mutation_performed] is true", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
             self.assertIn("snapshot_materialization] is written", (run_root / "apply_command_log.sop").read_text(encoding="utf-8"))
-            self.assertFalse((target_root / "app.py").exists())
+            self.assertIn("apply_status] is applied", (run_root / "apply_result.sop").read_text(encoding="utf-8"))
+            self.assertEqual((target_root / "app.py").read_text(encoding="utf-8"), "print('ok')\n")
 
     def test_snapshot_materialization_copies_existing_targets_only(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

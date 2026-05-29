@@ -374,6 +374,7 @@
   + [ready_capability] is mutation preflight CLI writes snapshot_materialization.sop after ready gates while preserving no target patch application
   + [ready_capability] is specification implementation status audit recognizes snapshot materialization support without claiming target patch application
   + [ready_capability] is long_run_checkpoint.sop records post-S103 68-test suite, dry-run, model inventory, non-gating endpoint health, and route draft status
+  + [ready_capability] is explicit apply writer can copy accepted packet files to an operator-specified target workspace only after acknowledgement, preflight, snapshot materialization, and verification evidence
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -448,9 +449,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S104_operator_acknowledged_apply_writer
-  + [next_reason] is snapshot evidence and preflight gates are ready enough to implement explicit-acknowledgement target writes in temp-workspace tests
-  + [sleep_run_candidate] is continue S104 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S105_rollback_command_design
+  + [next_reason] is explicit apply writer exists and now needs rollback command design before broader operator rollout
+  + [sleep_run_candidate] is continue S105 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

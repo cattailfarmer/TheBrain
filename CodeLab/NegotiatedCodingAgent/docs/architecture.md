@@ -123,7 +123,7 @@ For conflict-free packet runs, the orchestrator emits `apply_plan.sop` and `appl
 
 `coordination/operator_approved_apply_mutation_design.sop` now defines the later mutation contract without enabling it. It requires explicit operator acknowledgement, same-run merge evidence, conflict-free status, Manager acceptance, Shaliach review, target-path containment checks, pre-write snapshots, verification, rollback evidence, and post-apply review gates before target workspace mutation can be implemented.
 
-`negotiated_agent.apply_preflight` implements the first non-writing pieces of that contract: mutation preflight validation and rollback snapshot materialization helpers. Snapshot materialization writes rollback evidence under the run root for existing target files and records create-new operations without applying generated source files to the target workspace.
+`negotiated_agent.apply_preflight` implements the first pieces of that contract: mutation preflight validation, rollback snapshot materialization helpers, and target file copying behind explicit operator acknowledgement. Snapshot materialization writes rollback evidence under the run root for existing target files and records create-new operations before generated source files are applied to the explicit target workspace.
 
 ## Flowchart Format
 

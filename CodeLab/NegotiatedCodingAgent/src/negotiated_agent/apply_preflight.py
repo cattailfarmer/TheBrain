@@ -58,6 +58,17 @@ class SnapshotMaterializationResult:
         return "\n".join(lines) + "\n"
 
 
+@dataclass(frozen=True)
+class TargetApplyWriteResult:
+    applied_files: tuple[str, ...]
+    skipped_files: tuple[str, ...]
+    error_summary: str = "none"
+
+    @property
+    def ok(self) -> bool:
+        return self.error_summary == "none"
+
+
 def build_apply_mutation_preflight(run_root: Path, target_workspace_root: Path, packet: ManualMergePacket) -> ApplyMutationPreflight:
     try:
         _require_file(run_root / "manual_merge_packet.sop", "manual_merge_packet.sop")
@@ -123,6 +134,32 @@ def materialize_snapshot_evidence(
                 )
             )
     return SnapshotMaterializationResult(entries=tuple(entries), snapshot_root=snapshot_dir_name)
+
+
+def apply_packet_files_to_workspace(
+    run_root: Path,
+    target_workspace_root: Path,
+    packet: ManualMergePacket,
+) -> TargetApplyWriteResult:
+    applied = []
+    skipped = []
+    run_root_resolved = run_root.resolve()
+    try:
+        for item in packet.accepted_files:
+            source = (run_root / item.source_ref).resolve()
+            if not str(source).startswith(str(run_root_resolved)):
+                raise ValueError(f"Source ref escapes run root: {item.source_ref}")
+            if not source.exists():
+                raise FileNotFoundError(f"Accepted source ref is missing: {item.source_ref}")
+            target = ensure_target_path_within_workspace(target_workspace_root, item.target_path)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+            applied.append(item.target_path)
+    except (OSError, ValueError) as exc:
+        remaining = [item.target_path for item in packet.accepted_files if item.target_path not in applied]
+        skipped.extend(remaining)
+        return TargetApplyWriteResult(applied_files=tuple(applied), skipped_files=tuple(skipped), error_summary=str(exc))
+    return TargetApplyWriteResult(applied_files=tuple(applied), skipped_files=(), error_summary="none")
 
 
 def _read_fields(path: Path) -> dict[str, str]:
