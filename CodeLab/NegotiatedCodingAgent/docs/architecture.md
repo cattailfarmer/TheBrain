@@ -113,6 +113,8 @@ When merge review is ready and conflict-free, the orchestrator can emit `manual_
 
 `coordination/operator_approved_apply_policy.sop` defines the next safety boundary. Normal negotiation runs still never mutate the target workspace; any future apply command must default to dry-run and require an explicit mutation acknowledgement, path checks, rollback snapshots, and verification.
 
+`negotiated_agent.apply_plan` now provides pure `ApplyPlan` and `ApplyResult` records for that future command. These records preserve dry-run defaults, snapshot plans, rollback commands, and verification refs without performing any file writes.
+
 ## Flowchart Format
 
 The expected flowchart format is Markdown:

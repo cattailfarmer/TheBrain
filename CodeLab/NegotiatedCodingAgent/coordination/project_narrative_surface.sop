@@ -154,6 +154,7 @@
   + [implemented_slice] is S71_manual_merge_packet_dry_run_generation
   + [implemented_slice] is S72_spec_audit_refresh_after_merge_packet
   + [implemented_slice] is S73_operator_approved_apply_policy
+  + [implemented_slice] is S74_apply_plan_records
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -237,6 +238,7 @@
   + [proof_result] is tests passed with 56 tests after S71 manual merge packet dry-run generation
   + [proof_result] is tests passed with 56 tests after S72 spec audit refresh
   + [proof_result] is tests passed with 56 tests after S73 operator-approved apply policy
+  + [proof_result] is tests passed with 58 tests after S74 apply plan records
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -318,6 +320,7 @@
   + [ready_capability] is orchestrator emits manual_merge_packet.sop only when merge review is conflict-free and ready for manual review
   + [ready_capability] is specification implementation status audit distinguishes manual merge packet generation from target workspace application
   + [ready_capability] is operator_approved_apply_policy.sop requires dry-run default and explicit mutation acknowledgement for future apply commands
+  + [ready_capability] is ApplyPlan and ApplyResult records preserve dry-run defaults, snapshots, rollback commands, and verification refs without mutation
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -380,8 +383,9 @@
   + [next_recommended_slice] is S72_spec_audit_refresh_after_merge_packet
   + [next_recommended_slice] is S73_operator_approved_apply_policy
   + [next_recommended_slice] is S74_apply_plan_records
-  + [next_reason] is apply evidence records are the smallest executable step after policy
-  + [sleep_run_candidate] is continue S74 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S75_apply_plan_dry_run_generation
+  + [next_reason] is no-conflict manual merge packets should produce dry-run apply evidence without mutation
+  + [sleep_run_candidate] is continue S75 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances

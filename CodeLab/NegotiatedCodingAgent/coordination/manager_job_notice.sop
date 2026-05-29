@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 78
+  + [job_notice_revision] is 79
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -96,7 +96,8 @@
     S71_manual_merge_packet_dry_run_generation |
     S72_spec_audit_refresh_after_merge_packet |
     S73_operator_approved_apply_policy |
-    S74_apply_plan_records
+    S74_apply_plan_records |
+    S75_apply_plan_dry_run_generation
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1090,7 +1091,7 @@
 
 & [WorkSliceDetail S74_apply_plan_records] is a target workspace safety implementation slice
   + [slice_id] is S74_apply_plan_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add pure ApplyPlan and ApplyResult records for future manual merge packet application
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests showing apply plan preserves packet refs, target path set, dry-run default, rollback command, and authority boundary
@@ -1098,3 +1099,16 @@
   + [support_status] is prepared
   + [dependency_set] is S73_operator_approved_apply_policy
   + [known_risks] is adding command semantics that imply mutation before explicit approval exists
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:40:00Z, proof_ref tests passed with 58 tests, result_summary added ApplyPlan ApplyResult and SnapshotPlanEntry records with dry-run and rollback evidence
+  + [completed_work_review] is support_delta verified apply evidence can be represented without mutation; requirement_delta orchestrator does not yet emit dry-run apply_plan.sop from manual merge packets
+
+& [WorkSliceDetail S75_apply_plan_dry_run_generation] is a target workspace safety implementation slice
+  + [slice_id] is S75_apply_plan_dry_run_generation
+  + [slice_status] is open
+  + [scope] is generate apply_plan.sop and dry-run apply_result.sop from manual_merge_packet.sop without mutating the target workspace
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests showing no-conflict packet runs emit apply plan/result dry-run artifacts and conflict-blocked runs do not
+  + [completion_criteria] is dry-run application evidence exists without file mutation or explicit apply command
+  + [support_status] is prepared
+  + [dependency_set] is S74_apply_plan_records
+  + [known_risks] is confusing dry-run apply evidence with actual application

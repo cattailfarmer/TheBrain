@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 
 from negotiated_agent.config import AgentConfig, LlmConfig, load_config
+from negotiated_agent.apply_plan import ApplyPlan, ApplyResult, SnapshotPlanEntry
 from negotiated_agent.conversation import (
     ActiveConversationPointer,
     ConversationSurface,
@@ -510,6 +511,39 @@ class ManualMergePacketTests(unittest.TestCase):
                 verification_command="test",
             )
             self.assertIsNone(packet)
+
+
+class ApplyPlanTests(unittest.TestCase):
+    def test_apply_plan_preserves_dry_run_boundary(self) -> None:
+        plan = ApplyPlan(
+            packet_ref="manual_merge_packet.sop",
+            target_workspace_root="C:/Project/TheBrain",
+            target_paths=("app.py",),
+            snapshot_plan=(SnapshotPlanEntry(target_path="app.py", snapshot_ref="snapshots/app.py.before"),),
+            rollback_plan_ref="manual_merge_packet.sop#RollbackPlan",
+            verification_command="powershell -File scripts/test.ps1",
+            manager_acceptance_ref="merge.manager_review.sop",
+            shaliach_review_ref="merge.shaliach_review.sop",
+        )
+        sop = plan.to_sop()
+        self.assertIn("ApplyPlan", sop)
+        self.assertIn("dry_run_default] is true", sop)
+        self.assertIn("apply_plan_not_workspace_mutation", sop)
+        self.assertIn("SnapshotPlanEntry app.py", sop)
+
+    def test_apply_result_preserves_rollback_command(self) -> None:
+        result = ApplyResult(
+            apply_status="dry_run",
+            applied_files=(),
+            skipped_files=("app.py",),
+            snapshot_refs=("snapshots/app.py.before",),
+            rollback_command="rollback-manual-merge-packet --apply-result apply_result.sop",
+            verification_result_ref="verification_result.sop",
+        )
+        sop = result.to_sop()
+        self.assertIn("ApplyResult", sop)
+        self.assertIn("apply_result_record_not_rollback_execution", sop)
+        self.assertIn("rollback-manual-merge-packet", sop)
 
 
 class MailboxCoordinationTests(unittest.TestCase):
