@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 76
+  + [job_notice_revision] is 77
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -94,7 +94,8 @@
     S69_manual_merge_packet_policy |
     S70_manual_merge_packet_records |
     S71_manual_merge_packet_dry_run_generation |
-    S72_spec_audit_refresh_after_merge_packet
+    S72_spec_audit_refresh_after_merge_packet |
+    S73_operator_approved_apply_policy
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1062,7 +1063,7 @@
 
 & [WorkSliceDetail S72_spec_audit_refresh_after_merge_packet] is a documentation and planning slice
   + [slice_id] is S72_spec_audit_refresh_after_merge_packet
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh specification implementation audit after manual merge packet records and dry-run generation
   + [target_files] is coordination/spec_implementation_status.sop
   + [proof_route] is audit updated and tests remain passing
@@ -1070,3 +1071,16 @@
   + [support_status] is prepared
   + [dependency_set] is S71_manual_merge_packet_dry_run_generation
   + [known_risks] is overstating manual packet generation as actual accepted patch application
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T23:20:00Z, proof_ref tests passed with 56 tests, result_summary spec audit refreshed after manual merge packet dry-run generation
+  + [completed_work_review] is support_delta verified audit distinguishes packet generation from target workspace application; requirement_delta operator-approved apply policy remains future work
+
+& [WorkSliceDetail S73_operator_approved_apply_policy] is a target workspace safety design slice
+  + [slice_id] is S73_operator_approved_apply_policy
+  + [slice_status] is open
+  + [scope] is define an operator-approved target workspace apply policy for manual merge packets, including no-default-apply behavior
+  + [target_files] is coordination/**, docs/**
+  + [proof_route] is policy surface written and tests remain passing
+  + [completion_criteria] is future apply command has explicit approval, rollback, verification, and target path constraints
+  + [support_status] is prepared
+  + [dependency_set] is S72_spec_audit_refresh_after_merge_packet
+  + [known_risks] is allowing unattended target workspace mutation despite the current safety boundary

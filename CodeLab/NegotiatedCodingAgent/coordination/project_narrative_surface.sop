@@ -152,6 +152,7 @@
   + [implemented_slice] is S69_manual_merge_packet_policy
   + [implemented_slice] is S70_manual_merge_packet_records
   + [implemented_slice] is S71_manual_merge_packet_dry_run_generation
+  + [implemented_slice] is S72_spec_audit_refresh_after_merge_packet
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -233,6 +234,7 @@
   + [proof_result] is tests passed with 52 tests after S69 manual merge packet policy
   + [proof_result] is tests passed with 54 tests after S70 manual merge packet records
   + [proof_result] is tests passed with 56 tests after S71 manual merge packet dry-run generation
+  + [proof_result] is tests passed with 56 tests after S72 spec audit refresh
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -312,6 +314,7 @@
   + [ready_capability] is manual_merge_packet_policy.sop defines rollback Manager Shaliach and verification gates before target workspace mutation
   + [ready_capability] is ManualMergePacket and RollbackPlan records can represent target application evidence without applying changes
   + [ready_capability] is orchestrator emits manual_merge_packet.sop only when merge review is conflict-free and ready for manual review
+  + [ready_capability] is specification implementation status audit distinguishes manual merge packet generation from target workspace application
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -372,8 +375,9 @@
   + [next_recommended_slice] is S70_manual_merge_packet_records
   + [next_recommended_slice] is S71_manual_merge_packet_dry_run_generation
   + [next_recommended_slice] is S72_spec_audit_refresh_after_merge_packet
-  + [next_reason] is audit should distinguish merge packet generation from target workspace application
-  + [sleep_run_candidate] is continue S72 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S73_operator_approved_apply_policy
+  + [next_reason] is target workspace application must remain explicit and operator-approved before any apply command exists
+  + [sleep_run_candidate] is continue S73 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
