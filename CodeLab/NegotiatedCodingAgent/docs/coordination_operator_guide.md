@@ -153,6 +153,14 @@ Validate recorded Shaliach checkpoint probe evidence without rerunning the harne
 
 The validator returns exit code `0` for passed evidence, `2` for incomplete evidence, and `1` for failed probe evidence. It keeps `openai_health_status` non-gating and does not approve Shaliach findings semantically.
 
+To validate both a run manifest and checkpoint proof evidence in one read-only summary:
+
+```powershell
+.\scripts\validate-artifacts.ps1 -Manifest .\runs\<timestamp>\run_manifest.sop -Checkpoint .\coordination\long_run_checkpoint.sop
+```
+
+This combined validator uses the same exit-code vocabulary: `0` passed, `2` incomplete, and `1` failed. It checks artifact refs and recorded proof status only; it is not final code acceptance or apply permission.
+
 ## Mailbox Messages
 
 List mailbox messages:

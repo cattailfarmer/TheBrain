@@ -370,7 +370,8 @@
   + [completed_slice] is S261_spec_audit_refresh_after_checkpoint_probe_cli
   + [completed_slice] is S262_combined_artifact_validation_design
   + [completed_slice] is S263_combined_artifact_validation_result
-  + [ready_slice] is S264_combined_artifact_validation_cli
+  + [completed_slice] is S264_combined_artifact_validation_cli
+  + [ready_slice] is S265_long_run_checkpoint_after_combined_validation_cli
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

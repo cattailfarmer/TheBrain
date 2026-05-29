@@ -2274,3 +2274,11 @@
   + [proof_result] is tests passed with 259 tests
   + [current_frontier] is S264_combined_artifact_validation_cli
   + [narrative_role] is validation_runtime and operator_tooling update
+
+
+& [LongRunNarrativeUpdate S264_combined_artifact_validation_cli] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S264_combined_artifact_validation_cli
+  + [implemented_capability] is validate-artifacts wrapper validates run manifest refs and optional checkpoint Shaliach probe evidence in one read-only summary
+  + [proof_result] is tests passed with 264 tests and validate-artifacts reported passed on runs\20260529T205859Z\run_manifest.sop plus coordination\long_run_checkpoint.sop
+  + [current_frontier] is S265_long_run_checkpoint_after_combined_validation_cli
+  + [narrative_role] is validation_runtime and operator_tooling update

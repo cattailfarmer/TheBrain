@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 150
+  + [job_notice_revision] is 151
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3623,7 +3623,7 @@
 
 & [WorkSliceDetail S264_combined_artifact_validation_cli] is a validation implementation slice
   + [slice_id] is S264_combined_artifact_validation_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is expose combined run manifest and checkpoint probe validation through a CLI and PowerShell wrapper
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover CLI manifest-only passed missing refs incomplete checkpoint failed checkpoint output file and exit codes
@@ -3631,3 +3631,16 @@
   + [support_status] is prepared
   + [dependency_set] is S263_combined_artifact_validation_result
   + [known_risks] is CLI wording implying final acceptance or apply permission
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:27:00Z, proof_ref tests passed with 264 tests and validate-artifacts reported passed, result_summary added combined artifact validation CLI PowerShell wrapper and docs
+  + [completed_work_review] is support_delta verified manifest-only missing-ref checkpoint incomplete checkpoint failed output file and real-run wrapper behavior; requirement_delta next step is refresh long-run checkpoint after combined validation CLI
+
+& [WorkSliceDetail S265_long_run_checkpoint_after_combined_validation_cli] is a long-run reentry slice
+  + [slice_id] is S265_long_run_checkpoint_after_combined_validation_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after combined artifact validation CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records current 264-test suite and validate-artifacts confirms latest run manifest plus checkpoint
+  + [completion_criteria] is checkpoint captures combined validation CLI frontier and proof remains passed
+  + [support_status] is prepared
+  + [dependency_set] is S264_combined_artifact_validation_cli
+  + [known_risks] is checkpoint run still records non-gating endpoint health unavailable

@@ -17,6 +17,7 @@ from negotiated_agent.apply_preflight import (
     materialize_snapshot_evidence,
 )
 from negotiated_agent.artifact_validation import combine_artifact_validation
+from negotiated_agent.artifact_validation_cli import main as artifact_validation_cli_main
 from negotiated_agent.checkpoint_probe import (
     load_checkpoint_probe_evidence,
     parse_checkpoint_probe_evidence_sop,
@@ -6170,6 +6171,78 @@ class RunManifestTests(unittest.TestCase):
 
         self.assertEqual(result.status, "failed")
         self.assertFalse(result.ok)
+
+    def test_combined_artifact_validation_cli_passes_manifest_only(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest_path = self._write_manifest_fixture(Path(temp))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = artifact_validation_cli_main(["--manifest", str(manifest_path)])
+        self.assertEqual(exit_code, 0)
+        self.assertIn("status] is passed", out.getvalue())
+        self.assertIn("checkpoint_probe_status] is omitted", out.getvalue())
+
+    def test_combined_artifact_validation_cli_fails_missing_manifest_ref(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            manifest_path = self._write_manifest_fixture(Path(temp), include_missing=True)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = artifact_validation_cli_main(["--manifest", str(manifest_path)])
+        self.assertEqual(exit_code, 1)
+        self.assertIn("status] is failed", out.getvalue())
+        self.assertIn("manifest_missing_ref_count] is 1", out.getvalue())
+
+    def test_combined_artifact_validation_cli_reports_incomplete_checkpoint(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest_path = self._write_manifest_fixture(root)
+            checkpoint_path = root / "long_run_checkpoint.sop"
+            checkpoint_path.write_text(
+                CheckpointProbeEvidenceTests()._checkpoint_sop(
+                    probe_status="not_run",
+                    probe_returncode="2",
+                    probe_stdout="dry_run_root_not_found",
+                ),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = artifact_validation_cli_main(
+                    ["--manifest", str(manifest_path), "--checkpoint", str(checkpoint_path)]
+                )
+        self.assertEqual(exit_code, 2)
+        self.assertIn("status] is incomplete", out.getvalue())
+
+    def test_combined_artifact_validation_cli_fails_failed_checkpoint(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest_path = self._write_manifest_fixture(root)
+            checkpoint_path = root / "long_run_checkpoint.sop"
+            checkpoint_path.write_text(
+                CheckpointProbeEvidenceTests()._checkpoint_sop(
+                    checkpoint_status="needs_attention",
+                    probe_status="failed",
+                    probe_returncode="1",
+                    probe_stdout="application:inconsistent",
+                ),
+                encoding="utf-8",
+            )
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                exit_code = artifact_validation_cli_main(
+                    ["--manifest", str(manifest_path), "--checkpoint", str(checkpoint_path)]
+                )
+        self.assertEqual(exit_code, 1)
+        self.assertIn("checkpoint_probe_status] is failed", out.getvalue())
+
+    def test_combined_artifact_validation_cli_writes_output_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest_path = self._write_manifest_fixture(root)
+            out_path = root / "combined_artifact_validation.sop"
+            exit_code = artifact_validation_cli_main(["--manifest", str(manifest_path), "--out", str(out_path)])
+            self.assertEqual(exit_code, 0)
+            self.assertIn("CombinedArtifactValidation", out_path.read_text(encoding="utf-8"))
 
 
 class ConversationKernelTests(unittest.TestCase):
