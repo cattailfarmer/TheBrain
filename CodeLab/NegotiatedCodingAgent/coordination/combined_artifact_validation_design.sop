@@ -1,0 +1,49 @@
+& [CombinedArtifactValidationDesign] is the design contract for one operator validation view over run and checkpoint evidence
+  @ [created_at] 2026-05-30T13:12:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/manifest_shaliach_probe_validation_design.sop
+  @ [related_design] coordination/manifest_checkpoint_probe_validation_design.sop
+  @ [manifest_module] src/negotiated_agent/run_manifest.py
+  @ [checkpoint_probe_module] src/negotiated_agent/checkpoint_probe.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is combined_artifact_validation_not_acceptance_review
+  + [primary_goal] is let an operator validate run_manifest.sop artifact refs and long_run_checkpoint.sop Shaliach probe evidence in one command
+  + [non_goal] is re-running dry-run or the long-run harness
+  + [non_goal] is approving generated code or target workspace mutation
+  + [non_goal] is deciding semantic truth of Shaliach findings or Manager reviews
+
+& [Inputs] is the explicit operator evidence set
+  + [required_input] is run_manifest.sop
+  + [optional_input] is coordination/long_run_checkpoint.sop
+  + [optional_input] is output path for combined validation SOP
+  + [authority_boundary] is existing_artifact_read_only_validation
+
+& [CombinedStatusVocabulary] is the deterministic result language
+  + [status] is passed when manifest validation is valid and checkpoint proof is passed or omitted by operator choice
+  + [status] is incomplete when manifest validation is valid but checkpoint proof is incomplete
+  + [status] is failed when manifest refs are missing or checkpoint proof failed
+  + [authority_boundary] is artifact_and_probe_status_not_final_acceptance
+
+& [ExitCodes] is the intended CLI contract
+  + [exit_code 0] is passed
+  + [exit_code 2] is incomplete
+  + [exit_code 1] is failed
+  + [authority_boundary] is command_status_not_apply_permission
+
+& [OutputShape] is the SOP summary contract
+  + [field] is status
+  + [field] is manifest_status
+  + [field] is manifest_missing_ref_count
+  + [field] is checkpoint_probe_status
+  + [field] is checkpoint_probe_reason
+  + [field] is openai_health_gating non_gating_environment_state when checkpoint input is supplied
+  + [authority_boundary] is summary_not_source_artifact_rewrite
+
+& [ProofExpectations] is the minimum implementation proof
+  + [test_case] is combined validation passes with valid manifest and passed checkpoint proof
+  + [test_case] is combined validation fails when manifest has missing refs
+  + [test_case] is combined validation is incomplete when checkpoint proof is incomplete
+  + [test_case] is combined validation fails when checkpoint proof failed
+  + [test_case] is combined validation passes with manifest-only mode
+  + [test_case] is command does not mutate run manifest or checkpoint artifacts

@@ -196,6 +196,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/manifest_checkpoint_probe_validation_design.sop` narrows the checkpoint side of that boundary: validation may confirm that `coordination/long_run_checkpoint.sop` recorded `shaliach_cross_artifact_status` and the `shaliach_cross_artifact_probe` command result, while keeping OpenAI health separate and non-gating.
 
+`coordination/combined_artifact_validation_design.sop` defines the next operator validation view: one read-only command should be able to check a run manifest and, optionally, checkpoint Shaliach probe evidence with `passed`, `incomplete`, or `failed` status. That view is still not code acceptance, Manager approval, or apply permission.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:

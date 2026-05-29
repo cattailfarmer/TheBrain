@@ -2258,3 +2258,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S262_combined_artifact_validation_design
   + [narrative_role] is specification_audit and proof_arc update
+
+
+& [LongRunNarrativeUpdate S262_combined_artifact_validation_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S262_combined_artifact_validation_design
+  + [implemented_capability] is combined_artifact_validation_design.sop defines a read-only operator validation view over run manifest refs and optional checkpoint Shaliach probe evidence
+  + [proof_ref] is coordination/combined_artifact_validation_design.sop
+  + [current_frontier] is S263_combined_artifact_validation_result
+  + [narrative_role] is validation_design and operator_tooling update

@@ -887,7 +887,9 @@
   + [last_proof] is long-run checkpoint passed 255 tests and validate-checkpoint-probe reported passed after checkpoint probe CLI
   + [completed_slice] is S261_spec_audit_refresh_after_checkpoint_probe_cli
   + [last_proof] is spec audit refreshed after checkpoint probe parser validator CLI and checkpoint proof
-  + [next_recommended_slice] is S262_combined_artifact_validation_design
+  + [completed_slice] is S262_combined_artifact_validation_design
+  + [last_proof] is designed combined run manifest and checkpoint probe evidence validation boundary
+  + [next_recommended_slice] is S263_combined_artifact_validation_result
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
