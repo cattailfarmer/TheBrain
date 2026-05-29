@@ -1,0 +1,46 @@
+& [ExecutionGatePreviewCliDesign] is the design contract for a non-mutating execution gate preview command
+  @ [source_design] coordination/worker_execution_gate_design.sop
+  @ [record_model] src/negotiated_agent/execution_gate.py
+  @ [manager_job_notice] coordination/manager_job_notice.sop
+  @ [created_at] 2026-05-29T19:45:00Z
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is execution_gate_preview_design_not_gate_write
+  + [primary_goal] is let operators or future worker loops inspect the deterministic gate decision before writing gate evidence or executing work
+  + [non_goal] is Manager authorization writing
+  + [non_goal] is Shaliach clearance writing
+  + [non_goal] is worker implementation execution
+  + [non_goal] is target workspace mutation
+
+& [PreviewInputs] is what the command must accept
+  + [required_arg] is project_root
+  + [required_arg] is manager_authorization_ref
+  + [required_arg] is shaliach_clearance_ref
+  + [required_arg] is lease_ref
+  + [required_arg] is current_frontier or active conversation lookup
+  + [optional_arg] is gate_id
+  + [authority_boundary] is input_refs_not_trusted_without_parse
+
+& [PreviewParsingBoundary] is how evidence is read
+  + [parse_target] is ManagerAuthorizationRecord fields from an existing SOP file
+  + [parse_target] is ShaliachExecutionClearance fields from an existing SOP file
+  + [parse_target] is WorkerLeaseRecord fields from an existing SOP file
+  + [parse_target] is active current_frontier from ConversationSurface when current_frontier arg is omitted
+  + [parse_rule] is reject missing required fields instead of guessing
+  + [parse_rule] is preserve refs exactly as operator supplied them in output
+  + [authority_boundary] is parser_not_semantic_validator
+
+& [PreviewOutput] is the only allowed command output
+  + [stdout_artifact] is ExecutionGateDecision.to_sop()
+  + [exit_code_zero] is preview command parsed inputs and produced a decision, even if gate_status is blocked
+  + [exit_code_nonzero] is input parse failure or missing file
+  + [write_behavior] is no files written
+  + [authority_boundary] is preview_output_not_execution_permission
+  = must: leave manager authorization, Shaliach clearance, lease, claims, read cursors, active conversation, and worker cycle files unchanged
+  = must: include execution_gate_decision_not_completion_approval in stdout
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add SOP field loaders for ManagerAuthorizationRecord, ShaliachExecutionClearance, and WorkerLeaseRecord
+  + [slice_2] is add execution gate preview CLI and tests proving no files are written
+  + [slice_3] is add PowerShell wrapper after CLI behavior is stable
+  + [slice_4] is only later consider explicit gate decision writer

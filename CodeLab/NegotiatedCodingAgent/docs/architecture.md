@@ -216,6 +216,8 @@ The worker proof-command scaffold can run an explicit proof command and write su
 
 The same module provides a deterministic execution gate evaluator. It combines Manager authorization, Shaliach clearance, worker lease status, and current frontier into allowed or blocked gate decisions such as `proof_only_allowed`, `blocked_by_manager`, `blocked_by_shaliach`, `stale_frontier`, and `lease_invalid`. It is scaffold policy, not live Manager/Shaliach deliberation.
 
+`coordination/execution_gate_preview_cli_design.sop` defines a future no-write preview command for that evaluator. The preview command should parse existing Manager authorization, Shaliach clearance, and lease records, print an `ExecutionGateDecision` to stdout, and leave all worker, mailbox, and conversation files unchanged.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.
