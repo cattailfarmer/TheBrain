@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 138
+  + [job_notice_revision] is 139
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -156,7 +156,8 @@
     S131_worker_execution_gate_evaluator |
     S132_long_run_checkpoint_after_execution_gate |
     S133_execution_gate_readme_inventory |
-    S134_long_run_checkpoint_after_execution_gate_docs
+    S134_long_run_checkpoint_after_execution_gate_docs |
+    S135_execution_gate_preview_cli_design
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1930,7 +1931,7 @@
 
 & [WorkSliceDetail S134_long_run_checkpoint_after_execution_gate_docs] is a long-run reentry slice
   + [slice_id] is S134_long_run_checkpoint_after_execution_gate_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after execution gate documentation
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after current test suite and route draft proof
@@ -1938,3 +1939,16 @@
   + [support_status] is prepared
   + [dependency_set] is S133_execution_gate_readme_inventory
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:27:07Z, proof_ref long-run checkpoint passed 96 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after execution gate docs
+  + [completed_work_review] is support_delta verified checkpoint captures execution gate docs frontier; requirement_delta next step is non-mutating execution gate preview CLI design
+
+& [WorkSliceDetail S135_execution_gate_preview_cli_design] is a coordination runtime design slice
+  + [slice_id] is S135_execution_gate_preview_cli_design
+  + [slice_status] is open
+  + [scope] is design a non-mutating CLI that previews ExecutionGateDecision from explicit Manager authorization Shaliach clearance lease and current frontier inputs
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP updated and tests remain passing
+  + [completion_criteria] is design identifies input refs parsing boundary output destination and no-write preview behavior
+  + [support_status] is prepared
+  + [dependency_set] is S134_long_run_checkpoint_after_execution_gate_docs
+  + [known_risks] is letting preview CLI become authorization writer or execution runner

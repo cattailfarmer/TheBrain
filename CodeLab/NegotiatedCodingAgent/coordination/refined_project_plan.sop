@@ -240,7 +240,8 @@
   + [completed_slice] is S131_worker_execution_gate_evaluator
   + [completed_slice] is S132_long_run_checkpoint_after_execution_gate
   + [completed_slice] is S133_execution_gate_readme_inventory
-  + [ready_slice] is S134_long_run_checkpoint_after_execution_gate_docs
+  + [completed_slice] is S134_long_run_checkpoint_after_execution_gate_docs
+  + [ready_slice] is S135_execution_gate_preview_cli_design
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
