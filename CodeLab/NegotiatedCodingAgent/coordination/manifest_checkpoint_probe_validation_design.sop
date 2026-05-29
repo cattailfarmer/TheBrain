@@ -1,0 +1,45 @@
+& [ManifestCheckpointProbeValidationDesign] is the design contract for validating checkpoint Shaliach probe evidence
+  @ [created_at] 2026-05-30T12:40:00Z
+  @ [governing_specification] specifications/Hierarchical_Agent_Swarm.sop
+  @ [related_design] coordination/manifest_shaliach_probe_validation_design.sop
+  @ [related_design] coordination/cross_artifact_checkpoint_probe_design.sop
+  @ [checkpoint_artifact] coordination/long_run_checkpoint.sop
+  @ [manifest_module] src/negotiated_agent/run_manifest.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is checkpoint_probe_presence_validation_not_semantic_review
+  + [primary_goal] is let validation tools confirm that a long-run checkpoint recorded Shaliach cross-artifact probe evidence
+  + [non_goal] is re-running the checkpoint harness
+  + [non_goal] is deciding whether Shaliach findings are true
+  + [non_goal] is approving a Manager gate, advancing a frontier, or applying generated files
+
+& [CheckpointEvidenceFields] is the minimum evidence vocabulary
+  + [field] is checkpoint_status
+  + [field] is shaliach_cross_artifact_status
+  + [field] is HarnessCommand shaliach_cross_artifact_probe returncode
+  + [field] is HarnessCommand shaliach_cross_artifact_probe stdout_tail
+  + [field] is HarnessCommand shaliach_cross_artifact_probe authority_boundary
+  + [authority_boundary] is field_presence_and_status_not_probe_reexecution
+
+& [ValidationRules] is the deterministic rule set
+  + [rule] is checkpoint proof is acceptable when shaliach_cross_artifact_status is passed and the probe command returncode is 0
+  + [rule] is checkpoint proof is incomplete when shaliach_cross_artifact_status is not_run or the probe command is absent
+  + [rule] is checkpoint proof is failed when shaliach_cross_artifact_status is failed or the probe command returncode is nonzero other than the explicit not_run code
+  + [rule] is validator must preserve openai_health_status as a separate non-gating environment field
+  + [rule] is validator must report checkpoint proof status without mutating the checkpoint or run artifacts
+  + [authority_boundary] is proof_status_validation_not_human_or_manager_approval
+
+& [ImplementationShape] is the intended safe split
+  + [slice_1] is add a parser for the checkpoint Shaliach probe fields
+  + [slice_2] is add a pure validator that returns passed incomplete or failed evidence status
+  + [slice_3] is expose an optional CLI or integrate the validator beside run manifest validation
+  + [slice_4] is document the operator sequence for manifest validation followed by checkpoint proof validation
+  + [authority_boundary] is validation_helper_not_long_run_execution
+
+& [ProofExpectations] is the minimum implementation proof
+  + [test_case] is checkpoint proof validates passed status with returncode 0
+  + [test_case] is checkpoint proof reports incomplete when probe status is not_run
+  + [test_case] is checkpoint proof rejects failed probe status
+  + [test_case] is checkpoint proof rejects missing probe command fields
+  + [test_case] is openai_health_status remains non-gating and separately reported
+  + [test_case] is validation never mutates checkpoint or run artifacts

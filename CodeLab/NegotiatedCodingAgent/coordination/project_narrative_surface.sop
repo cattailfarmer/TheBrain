@@ -2201,3 +2201,11 @@
   + [proof_result] is tests passed with 240 tests
   + [current_frontier] is S256_manifest_checkpoint_probe_validation_design
   + [narrative_role] is manifest_validation and shaliach_arc update
+
+
+& [LongRunNarrativeUpdate S256_manifest_checkpoint_probe_validation_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S256_manifest_checkpoint_probe_validation_design
+  + [implemented_capability] is manifest_checkpoint_probe_validation_design.sop defines checkpoint Shaliach probe evidence validation without semantic approval
+  + [proof_ref] is coordination/manifest_checkpoint_probe_validation_design.sop
+  + [current_frontier] is S257_checkpoint_probe_evidence_parser
+  + [narrative_role] is manifest_validation and design_arc update

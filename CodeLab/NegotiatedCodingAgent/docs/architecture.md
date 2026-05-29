@@ -194,6 +194,8 @@ These records are deterministic scaffold traces. They make Shaliach’s reasonin
 
 `coordination/manifest_shaliach_probe_validation_design.sop` defines the next validation boundary: manifest checks may become aware of Shaliach self-negotiation artifacts and checkpoint probe status, but only as artifact/proof presence checks.
 
+`coordination/manifest_checkpoint_probe_validation_design.sop` narrows the checkpoint side of that boundary: validation may confirm that `coordination/long_run_checkpoint.sop` recorded `shaliach_cross_artifact_status` and the `shaliach_cross_artifact_probe` command result, while keeping OpenAI health separate and non-gating.
+
 ## Coordination Surfaces
 
 The runtime includes mailbox, claim, read cursor, conflict, and rendezvous packet helpers for multiple conversations working in the same project:
