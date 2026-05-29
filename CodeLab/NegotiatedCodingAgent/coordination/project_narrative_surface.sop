@@ -1167,3 +1167,10 @@
   + [run_root] is runs\20260529T174933Z
   + [current_frontier] is S148_spec_audit_refresh_after_gate_cycle_bridge
   + [narrative_role] is long_run_coordination and proof_arc update
+
+
+& [LongRunNarrativeUpdate S148_spec_audit_refresh_after_gate_cycle_bridge] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S148_spec_audit_refresh_after_gate_cycle_bridge
+  + [implemented_capability] is spec_implementation_status.sop now recognizes gate-to-worker-cycle bridge helper CLI and 108-test checkpoint as scaffold support
+  + [current_frontier] is S149_manager_reviewed_proof_handoff_design
+  + [narrative_role] is specification_audit and coordination_runtime_arc update

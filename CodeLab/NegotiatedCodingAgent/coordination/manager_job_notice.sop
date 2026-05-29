@@ -2115,7 +2115,7 @@
 
 & [WorkSliceDetail S148_spec_audit_refresh_after_gate_cycle_bridge] is a specification audit slice
   + [slice_id] is S148_spec_audit_refresh_after_gate_cycle_bridge
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh implementation status after gate-to-worker-cycle bridge helper CLI and checkpoint
   + [target_files] is coordination/spec_implementation_status.sop, coordination/**
   + [proof_route] is audit names gate-cycle bridge support and chooses next gap
@@ -2123,3 +2123,16 @@
   + [support_status] is prepared
   + [dependency_set] is S147_long_run_checkpoint_after_gate_cycle_bridge
   + [known_risks] is overstating cycle bridge as autonomous runner execution
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T21:20:00Z, proof_ref spec_implementation_status.sop updated, result_summary audit now treats gate-to-worker-cycle bridge as scaffold support and recommends Manager-reviewed proof handoff design
+  + [completed_work_review] is support_delta verified bridge support is current and non-executing; requirement_delta next step is design proof handoff from ready_for_proof cycle evidence
+
+& [WorkSliceDetail S149_manager_reviewed_proof_handoff_design] is a coordination runtime design slice
+  + [slice_id] is S149_manager_reviewed_proof_handoff_design
+  + [slice_status] is open
+  + [scope] is design Manager-reviewed handoff from ready_for_proof WorkerCycleRecord evidence into explicit proof-command runner
+  + [target_files] is coordination/**, docs/**, src/negotiated_agent/**
+  + [proof_route] is design SOP names ready_for_proof inputs Manager review requirement proof command constraints and no implementation execution boundary
+  + [completion_criteria] is design prevents proof handoff from becoming autonomous implementation or frontier advancement
+  + [support_status] is prepared
+  + [dependency_set] is S148_spec_audit_refresh_after_gate_cycle_bridge
+  + [known_risks] is treating ready_for_proof as automatic permission to run arbitrary commands
