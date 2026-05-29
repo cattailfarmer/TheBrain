@@ -46,6 +46,20 @@ This writes or refreshes `apply_plan.sop`, `apply_result.sop`, and `apply_comman
 
 The dry-run CLI rejects mutation acknowledgement flags by design. Treat `apply_result.sop` with `apply_status` set to `dry_run` as validation evidence only, not as proof that code was applied.
 
+Expected dry-run artifacts:
+
+- `apply_plan.sop`: target paths, snapshot plan, rollback reference, and verification command that would be used by a future apply command.
+- `apply_result.sop`: `apply_status` remains `dry_run`; proposed target files are listed as skipped, not applied.
+- `apply_command_log.sop`: records whether validation completed or was rejected.
+
+If the merge decision is `blocked_by_conflict`, inspect `merge_conflict_ledger.sop` first. Do not run dry-run apply validation until a conflict-free `manual_merge_packet.sop` exists.
+
+The dry-run command can be rerun after changing only validation arguments, such as a different verification command:
+
+```powershell
+.\scripts\apply-merge-dry-run.ps1 -RunRoot .\runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain -VerificationCommand "powershell -ExecutionPolicy Bypass -File scripts\test.ps1"
+```
+
 ## Long-Run Checkpoint
 
 Write a checkpoint for unattended continuation:

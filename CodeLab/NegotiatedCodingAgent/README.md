@@ -108,6 +108,8 @@ To validate a generated manual merge packet without applying it to the workspace
 powershell -ExecutionPolicy Bypass -File scripts\apply-merge-dry-run.ps1 -RunRoot runs\<timestamp> -TargetWorkspaceRoot C:\Project\TheBrain
 ```
 
+This command writes dry-run validation artifacts under the run root. It does not apply generated code to `TargetWorkspaceRoot`.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
