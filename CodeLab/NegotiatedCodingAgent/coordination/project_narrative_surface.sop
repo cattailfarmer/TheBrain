@@ -1700,3 +1700,11 @@
   + [proof_result] is tests passed with 187 tests
   + [current_frontier] is S208_reviewed_narrative_append_cli_apply
   + [narrative_role] is coordination_runtime_arc and proof_arc update
+
+
+& [LongRunNarrativeUpdate S208_reviewed_narrative_append_cli_apply] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S208_reviewed_narrative_append_cli_apply
+  + [implemented_capability] is scripts/narrative-append.ps1 -Apply appends reviewed narrative entries only from loaded evidence and matching surface guard
+  + [proof_result] is tests passed with 190 tests
+  + [current_frontier] is S209_long_run_checkpoint_after_narrative_append_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

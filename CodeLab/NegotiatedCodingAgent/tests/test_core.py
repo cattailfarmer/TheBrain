@@ -5124,6 +5124,85 @@ class NarrativeAppendReviewTests(unittest.TestCase):
                     ]
                 )
 
+    def test_narrative_append_cli_apply_appends_and_writes_applied_result(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S208",))
+            out_path = coordination / "narrative_append_result.sop"
+            narrative_append_cli_main(
+                [
+                    "--project-root",
+                    str(root),
+                    "--apply",
+                    "--result-id",
+                    "result-apply",
+                    "--expected-surface-guard",
+                    narrative_surface_guard(original),
+                    "--out",
+                    str(out_path),
+                ]
+            )
+            result_text = out_path.read_text(encoding="utf-8")
+            narrative_text = narrative.read_text(encoding="utf-8")
+            self.assertIn("append_status] is applied", result_text)
+            self.assertIn("post_append_guard] is size:", result_text)
+            self.assertIn("NarrativeAppliedUpdate result-apply-1", narrative_text)
+            self.assertIn("append LongRunNarrativeUpdate for S208", narrative_text)
+
+    def test_narrative_append_cli_apply_blocks_stale_guard_and_preserves_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S208",))
+            out_path = coordination / "narrative_append_result.sop"
+            narrative_append_cli_main(
+                [
+                    "--project-root",
+                    str(root),
+                    "--apply",
+                    "--expected-surface-guard",
+                    "size:1",
+                    "--out",
+                    str(out_path),
+                ]
+            )
+            self.assertIn("append_status] is blocked", out_path.read_text(encoding="utf-8"))
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
+    def test_narrative_append_cli_apply_rejects_output_collision_before_mutation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            coordination = root / "coordination"
+            coordination.mkdir()
+            narrative = coordination / "project_narrative_surface.sop"
+            original = "& [OriginArc] is origin\n"
+            narrative.write_text(original, encoding="utf-8")
+            self._write_append_cli_artifacts(coordination, ("append LongRunNarrativeUpdate for S208",))
+            out_path = coordination / "narrative_append_result.sop"
+            out_path.write_text("existing\n", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                narrative_append_cli_main(
+                    [
+                        "--project-root",
+                        str(root),
+                        "--apply",
+                        "--expected-surface-guard",
+                        narrative_surface_guard(original),
+                        "--out",
+                        str(out_path),
+                    ]
+                )
+            self.assertEqual(narrative.read_text(encoding="utf-8"), original)
+
     def _update_record(self, appended_updates: tuple[str, ...]) -> NarrativeCoverageUpdateRecord:
         return NarrativeCoverageUpdateRecord(
             update_id="update-1",

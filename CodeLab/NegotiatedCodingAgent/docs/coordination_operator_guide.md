@@ -388,6 +388,17 @@ Write reviewed narrative append plan evidence:
 
 This writes `coordination/narrative_append_result.sop` from existing update, Manager approval, and Shaliach clearance artifacts. It does not append to the narrative surface.
 
+Apply reviewed narrative append evidence:
+
+```powershell
+.\scripts\narrative-append.ps1 `
+  -Apply `
+  -ExpectedSurfaceGuard <guard> `
+  -ResultId <result-id>
+```
+
+Apply mode writes the same result artifact path. It appends only when the loaded evidence allows append and the surface guard matches; blocked outcomes preserve the narrative surface.
+
 ## Rendezvous Packets
 
 Write a handoff packet between conversations:

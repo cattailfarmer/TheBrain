@@ -200,6 +200,8 @@ The required artifact parsers now exist for `NarrativeCoverageUpdateRecord`, `Ma
 
 `scripts/narrative-append.ps1` now exposes plan mode. It loads the update record, Manager approval, and Shaliach clearance artifacts, writes `coordination/narrative_append_result.sop`, and does not mutate the narrative surface.
 
+The same wrapper supports `-Apply` for explicit reviewed append. Apply mode uses the same artifact path and surface guard, writes an applied or blocked result artifact, and appends only when the guard still matches.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

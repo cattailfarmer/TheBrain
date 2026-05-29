@@ -296,6 +296,8 @@ The parser layer for that wrapper is implemented now. It extracts fields from `N
 
 `negotiated_agent.narrative_append_cli` and `scripts/narrative-append.ps1` implement plan mode. They persist a `NarrativeAppendResult` from loaded artifacts and the supplied surface guard, while leaving apply mode as a later explicit boundary.
 
+Apply mode is now explicit through `--apply` / `-Apply`. It reuses the loaded artifacts, checks the same guard through `apply_reviewed_narrative_append`, writes blocked results for stale cases, and appends reviewed entries only at the end of the narrative surface.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

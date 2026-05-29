@@ -4,6 +4,7 @@ param(
   [string]$ShaliachClearanceRef = "coordination/shaliach_narrative_append_clearance.sop",
   [string]$ResultId = "narrative-append-result-1",
   [string]$ExpectedSurfaceGuard,
+  [switch]$Apply,
   [string]$Out = ""
 )
 
@@ -28,5 +29,8 @@ $argsList = @(
   "--expected-surface-guard", $ExpectedSurfaceGuard,
   "--out", $Out
 )
+if ($Apply) {
+  $argsList += @("--apply")
+}
 & $Python @argsList
 exit $LASTEXITCODE

@@ -2895,7 +2895,7 @@
 
 & [WorkSliceDetail S208_reviewed_narrative_append_cli_apply] is a coordination runtime implementation slice
   + [slice_id] is S208_reviewed_narrative_append_cli_apply
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add reviewed narrative append CLI apply mode that appends only ready result evidence under guard
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**
   + [proof_route] is tests cover apply appends reviewed entries stale guard blocks output collision and result artifact captures post guard
@@ -2903,3 +2903,16 @@
   + [support_status] is prepared
   + [dependency_set] is S207_reviewed_narrative_append_cli_plan
   + [known_risks] is apply mode being run on the live narrative surface without fresh guard
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T06:28:00Z, proof_ref tests passed with 190 tests, result_summary added explicit reviewed narrative append CLI apply mode
+  + [completed_work_review] is support_delta verified apply mode appends only under loaded evidence and matching guard, with stale and collision cases preserving file; requirement_delta next step is refresh long-run checkpoint after narrative append CLI
+
+& [WorkSliceDetail S209_long_run_checkpoint_after_narrative_append_cli] is a long-run reentry slice
+  + [slice_id] is S209_long_run_checkpoint_after_narrative_append_cli
+  + [slice_status] is open
+  + [scope] is refresh long-run checkpoint after reviewed narrative append plan and apply CLI
+  + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
+  + [proof_route] is long-run harness records 190-test suite and reviewed append CLI frontier
+  + [completion_criteria] is checkpoint captures reviewed narrative append support and clean continuation state
+  + [support_status] is prepared
+  + [dependency_set] is S208_reviewed_narrative_append_cli_apply
+  + [known_risks] is checkpoint run creating noisy non-gating endpoint health artifacts

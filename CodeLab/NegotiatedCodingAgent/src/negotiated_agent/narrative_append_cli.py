@@ -4,6 +4,7 @@ import argparse
 from pathlib import Path
 
 from .narrative_append import (
+    apply_reviewed_narrative_append,
     build_narrative_append_result,
     narrative_surface_guard,
     parse_manager_narrative_append_approval_sop,
@@ -24,6 +25,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--result-id", default="narrative-append-result-1")
     parser.add_argument("--expected-surface-guard", required=True)
+    parser.add_argument("--apply", action="store_true")
     parser.add_argument("--out", type=Path, default=Path("coordination/narrative_append_result.sop"))
     args = parser.parse_args(argv)
 
@@ -52,6 +54,8 @@ def main(argv: list[str] | None = None) -> int:
         expected_surface_guard=args.expected_surface_guard,
         current_surface_guard=current_guard,
     )
+    if args.apply:
+        result = apply_reviewed_narrative_append(narrative_surface, result)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(result.to_sop(), encoding="utf-8")
     print(result.to_sop())
