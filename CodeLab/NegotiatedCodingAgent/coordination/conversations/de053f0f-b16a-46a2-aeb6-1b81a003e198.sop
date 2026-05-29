@@ -421,6 +421,14 @@
   + [last_proof] is run 20260529T180247Z wrote implementation files
   + [last_proof] is run narrative update written for runs\20260529T180247Z
   + [last_proof] is run 20260529T180247Z wrote run_manifest.sop
+  + [last_proof] is run 20260529T180935Z started and wrote protocol_activation.sop
+  + [last_proof] is run 20260529T180935Z approved application layer with application.shaliach_finding.sop
+  + [last_proof] is run 20260529T180935Z approved subsystem layer with subsystem.shaliach_finding.sop
+  + [last_proof] is run 20260529T180935Z approved component layer with component.shaliach_finding.sop
+  + [last_proof] is run 20260529T180935Z approved code layer with code.shaliach_finding.sop
+  + [last_proof] is run 20260529T180935Z wrote implementation files
+  + [last_proof] is run narrative update written for runs\20260529T180935Z
+  + [last_proof] is run 20260529T180935Z wrote run_manifest.sop
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -589,9 +597,10 @@
   + [completed_slice] is S159_gate_authorized_run_local_execution_design
   + [completed_slice] is S160_run_local_execution_records
   + [completed_slice] is S161_run_local_execution_plan_cli
+  + [completed_slice] is S162_long_run_checkpoint_after_run_local_plan_cli
 
-  + [current_frontier] is S162_long_run_checkpoint_after_run_local_plan_cli after run-local execution plan CLI
-  + [next_recommended_slice] is S162_long_run_checkpoint_after_run_local_plan_cli
+  + [current_frontier] is S163_spec_audit_refresh_after_run_local_plan_cli after 123-test run-local planner checkpoint
+  + [next_recommended_slice] is S163_spec_audit_refresh_after_run_local_plan_cli
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work

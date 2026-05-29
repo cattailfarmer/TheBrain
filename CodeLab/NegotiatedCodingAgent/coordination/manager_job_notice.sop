@@ -2297,7 +2297,7 @@
 
 & [WorkSliceDetail S162_long_run_checkpoint_after_run_local_plan_cli] is a long-run reentry slice
   + [slice_id] is S162_long_run_checkpoint_after_run_local_plan_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after run-local execution plan CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 123-test suite and route draft proof
@@ -2305,3 +2305,16 @@
   + [support_status] is prepared
   + [dependency_set] is S161_run_local_execution_plan_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:09:53Z, proof_ref long-run checkpoint passed 123 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after run-local execution plan CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 123-test run-local planner frontier; requirement_delta next step is refresh spec audit after run-local planner support
+
+& [WorkSliceDetail S163_spec_audit_refresh_after_run_local_plan_cli] is a specification audit slice
+  + [slice_id] is S163_spec_audit_refresh_after_run_local_plan_cli
+  + [slice_status] is open
+  + [scope] is refresh implementation status after run-local execution planner CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names run-local execution planner support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists run-local execution planning as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S162_long_run_checkpoint_after_run_local_plan_cli
+  + [known_risks] is overstating planner support as implementation file generation
