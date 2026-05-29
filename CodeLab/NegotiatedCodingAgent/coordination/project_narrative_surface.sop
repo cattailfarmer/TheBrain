@@ -2348,3 +2348,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S271_live_serving_readiness_recheck_after_validation_arc
   + [narrative_role] is specification_audit and proof_arc update
+
+
+& [LongRunNarrativeUpdate S271_live_serving_readiness_recheck_after_validation_arc] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [proof_result] is model inventory detects NVIDIA GeForce RTX 5090 but WSL2 Docker Ollama and localhost OpenAI-compatible endpoint remain unavailable
+  + [proof_ref] is coordination/model_serving_inventory.sop, coordination/openai_health.sop, coordination/live_route_config_draft.sop
+  + [current_frontier] is S272_live_serving_recheck_audit_refresh
+  + [narrative_role] is live_serving and environment_probe update

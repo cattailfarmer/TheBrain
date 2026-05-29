@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 157
+  + [job_notice_revision] is 158
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3714,7 +3714,7 @@
 
 & [WorkSliceDetail S271_live_serving_readiness_recheck_after_validation_arc] is a live-serving readiness slice
   + [slice_id] is S271_live_serving_readiness_recheck_after_validation_arc
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is recheck local live-serving readiness after completing validation and checkpoint governance arc
   + [target_files] is coordination/model_serving_inventory.sop, coordination/openai_health.sop, coordination/live_route_config_draft.sop, coordination/**
   + [proof_route] is model inventory OpenAI-compatible healthcheck and live route draft refresh
@@ -3722,3 +3722,16 @@
   + [support_status] is prepared
   + [dependency_set] is S270_spec_audit_refresh_after_combined_checkpoint_integration
   + [known_risks] is treating unavailable endpoint as a coding blocker when governance work can continue
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T13:22:00Z, proof_ref model inventory openai health and route draft refreshed, result_summary RTX 5090 available but WSL2 Docker Ollama and localhost OpenAI-compatible endpoint remain unavailable
+  + [completed_work_review] is support_delta verified route remains install_wsl2_then_vllm and config mutation not performed; requirement_delta next step is refresh audit after live-serving readiness recheck
+
+& [WorkSliceDetail S272_live_serving_recheck_audit_refresh] is a specification audit slice
+  + [slice_id] is S272_live_serving_recheck_audit_refresh
+  + [slice_status] is open
+  + [scope] is refresh implementation status after live-serving readiness recheck
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names latest RTX 5090 readiness and unavailable endpoint state
+  + [completion_criteria] is audit reflects live serving remains manual setup work while governance can continue
+  + [support_status] is prepared
+  + [dependency_set] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [known_risks] is repeatedly probing serving instead of advancing non-serving runtime capabilities

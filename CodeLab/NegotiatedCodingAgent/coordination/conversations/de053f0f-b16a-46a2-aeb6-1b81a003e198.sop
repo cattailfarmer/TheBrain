@@ -921,7 +921,9 @@
   + [last_proof] is long-run checkpoint passed 268 tests with combined_artifact_validation_status passed and validate-artifacts reported passed on run 20260529T211357Z
   + [completed_slice] is S270_spec_audit_refresh_after_combined_checkpoint_integration
   + [last_proof] is spec audit refreshed after checkpoint-integrated combined validation proof
-  + [next_recommended_slice] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [completed_slice] is S271_live_serving_readiness_recheck_after_validation_arc
+  + [last_proof] is live serving recheck found RTX 5090 available but WSL2 Docker Ollama and localhost OpenAI-compatible endpoint unavailable
+  + [next_recommended_slice] is S272_live_serving_recheck_audit_refresh
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is Shaliach now critiques thin ledger support heuristically, but live model-negotiated faculty critique remains future work
