@@ -210,6 +210,8 @@ Use `scripts/narrative-append.ps1 -GuardDiscovery` to print the current narrativ
 
 `scripts/narrative-append.ps1 -ShaliachClearance` writes `coordination/shaliach_narrative_append_clearance.sop` review evidence, including checked protocols, findings, and required rework. Required rework blocks later append through the existing helper path.
 
+`coordination/reviewed_narrative_append_e2e_fixture_design.sop` defines an isolated temporary-root proof for the full reviewed append workflow so it can be tested without touching the live narrative surface.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design

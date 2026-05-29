@@ -3038,7 +3038,7 @@
 
 & [WorkSliceDetail S219_reviewed_narrative_append_e2e_fixture_design] is a coordination runtime design slice
   + [slice_id] is S219_reviewed_narrative_append_e2e_fixture_design
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is design isolated end-to-end reviewed narrative append fixture over temp project surfaces
   + [target_files] is coordination/**, docs/**, tests/**
   + [proof_route] is design names fixture inputs outputs guard discovery review writers plan apply and expected artifacts
@@ -3046,3 +3046,16 @@
   + [support_status] is prepared
   + [dependency_set] is S218_spec_audit_refresh_after_review_writers
   + [known_risks] is fixture accidentally using live coordination surfaces
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T08:04:00Z, proof_ref reviewed_narrative_append_e2e_fixture_design.sop docs updated, result_summary designed isolated reviewed narrative append end-to-end fixture
+  + [completed_work_review] is support_delta verified fixture design requires temporary project root and live-surface non-mutation; requirement_delta next step is add isolated e2e test
+
+& [WorkSliceDetail S220_reviewed_narrative_append_e2e_test] is a coordination runtime implementation slice
+  + [slice_id] is S220_reviewed_narrative_append_e2e_test
+  + [slice_status] is open
+  + [scope] is add isolated end-to-end reviewed narrative append test using CLI main functions
+  + [target_files] is tests/test_core.py
+  + [proof_route] is tests cover temp-root update review guard plan apply workflow and live narrative preservation
+  + [completion_criteria] is full reviewed narrative append workflow is tested without touching live project narrative
+  + [support_status] is prepared
+  + [dependency_set] is S219_reviewed_narrative_append_e2e_fixture_design
+  + [known_risks] is e2e test becoming brittle due to over-specified SOP text

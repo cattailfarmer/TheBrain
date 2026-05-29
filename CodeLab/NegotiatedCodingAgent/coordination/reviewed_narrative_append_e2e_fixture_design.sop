@@ -1,0 +1,60 @@
+& [ReviewedNarrativeAppendE2EFixtureDesign] is the design contract for isolated reviewed narrative append workflow proof
+  @ [created_at] 2026-05-30T08:04:00Z
+  @ [append_cli] scripts/narrative-append.ps1
+  @ [coverage_cli] scripts/narrative-coverage.ps1
+  @ [test_file] tests/test_core.py
+
+  + [design_status] is ready_for_implementation_slice
+  + [authority_boundary] is fixture_not_live_project_narrative_mutation
+  + [primary_goal] is prove the reviewed narrative append workflow end-to-end inside a temporary project root
+  + [non_goal] is writing to coordination/project_narrative_surface.sop in the live workspace
+  + [non_goal] is proving semantic truth of the appended narrative
+  + [non_goal] is replacing live Manager or Shaliach deliberation
+  + [non_goal] is advancing the active conversation frontier
+
+& [FixtureInputs] is the minimal temporary project root
+  + [required_file] is coordination/project_narrative_surface.sop
+  + [required_file] is coordination/narrative_stale_check.sop
+  + [required_file] is coordination/narrative_coverage_update_record.sop
+  + [required_file] is coordination/manager_narrative_append_approval.sop
+  + [required_file] is coordination/shaliach_narrative_append_clearance.sop
+  + [authority_boundary] is temp_fixture_inputs_not_live_surfaces
+  = must: create all files under a temporary directory
+  = must: keep the live project root out of fixture writes
+  = must: use current parser and CLI helper paths rather than duplicating workflow logic
+
+& [FixtureWorkflow] is the expected sequence
+  + [step] is write seed project_narrative_surface.sop
+  + [step] is write or compute NarrativeStaleCheckRecord evidence
+  + [step] is write NarrativeCoverageUpdateRecord evidence
+  + [step] is discover current narrative surface guard
+  + [step] is write ManagerNarrativeAppendApproval evidence
+  + [step] is write ShaliachNarrativeAppendClearance evidence
+  + [step] is write plan-mode NarrativeAppendResult evidence
+  + [step] is apply reviewed append under the discovered guard
+  + [step] is assert final narrative has appended entry and original prefix is preserved
+  + [authority_boundary] is fixture_sequence_not_operator_approval
+
+& [ExpectedArtifacts] is the proof shape
+  + [artifact_ref] is coordination/narrative_coverage_update_record.sop
+  + [artifact_ref] is coordination/manager_narrative_append_approval.sop
+  + [artifact_ref] is coordination/shaliach_narrative_append_clearance.sop
+  + [artifact_ref] is coordination/narrative_append_plan.sop
+  + [artifact_ref] is coordination/narrative_append_result.sop
+  + [artifact_ref] is coordination/project_narrative_surface.sop
+  = must: plan result status is ready_for_append
+  = must: apply result status is applied
+  = must: narrative surface contains NarrativeAppliedUpdate
+  = must: no live workspace file is touched
+
+& [ProofExpectations] is the minimum implementation proof for this design
+  + [test_case] is fixture completes the reviewed append workflow in a temporary project root
+  + [test_case] is fixture plan mode does not mutate the temporary narrative before apply
+  + [test_case] is fixture apply mode appends reviewed entry and writes applied result
+  + [test_case] is fixture uses guard discovery output as the apply guard
+  + [test_case] is live coordination/project_narrative_surface.sop is not opened for writing by fixture
+
+& [ImplementationOrder] is the safe next split
+  + [slice_1] is add isolated e2e test using Python CLI main functions
+  + [slice_2] is add optional operator guide fixture recipe if the test remains readable
+  + [slice_3] is refresh checkpoint and audit after e2e fixture

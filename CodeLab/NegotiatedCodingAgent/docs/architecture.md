@@ -306,6 +306,8 @@ The Manager approval writer mode is implemented as `--manager-approval` / `-Mana
 
 The Shaliach clearance writer mode is implemented as `--shaliach-clearance` / `-ShaliachClearance`. It writes `ShaliachNarrativeAppendClearance` evidence with checked protocols, findings, and required rework while remaining separate from append apply mode.
 
+`coordination/reviewed_narrative_append_e2e_fixture_design.sop` describes the next proof layer: a temporary-project fixture that runs update-record, guard, review, plan, and apply steps end to end without mutating the live project narrative.
+
 ## Director Disagreement Ledger
 
 The layer package includes `DirectorDisagreementLedger` before the Manager review sections. Its purpose is to keep distinct Director positions visible instead of allowing the settled flowchart to erase every disagreement.

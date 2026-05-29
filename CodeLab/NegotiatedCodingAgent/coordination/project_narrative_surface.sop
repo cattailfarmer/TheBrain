@@ -1815,3 +1815,11 @@
   + [proof_ref] is coordination/spec_implementation_status.sop
   + [current_frontier] is S219_reviewed_narrative_append_e2e_fixture_design
   + [narrative_role] is specification_audit and coordination_runtime_arc update
+
+
+& [LongRunNarrativeUpdate S219_reviewed_narrative_append_e2e_fixture_design] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S219_reviewed_narrative_append_e2e_fixture_design
+  + [implemented_capability] is reviewed_narrative_append_e2e_fixture_design.sop defines a temporary-root proof for update review guard plan and apply workflow without live narrative mutation
+  + [proof_ref] is coordination/reviewed_narrative_append_e2e_fixture_design.sop
+  + [current_frontier] is S220_reviewed_narrative_append_e2e_test
+  + [narrative_role] is coordination_runtime_arc and authority_boundary update
