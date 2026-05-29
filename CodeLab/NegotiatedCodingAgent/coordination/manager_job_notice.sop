@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 131
+  + [job_notice_revision] is 132
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -149,7 +149,8 @@
     S124_worker_proof_dirty_worktree_evidence |
     S125_long_run_checkpoint_after_worker_proof_hardening |
     S126_worker_runner_readme_inventory |
-    S127_long_run_checkpoint_after_worker_docs
+    S127_long_run_checkpoint_after_worker_docs |
+    S128_spec_audit_refresh_after_worker_runner
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1832,7 +1833,7 @@
 
 & [WorkSliceDetail S127_long_run_checkpoint_after_worker_docs] is a long-run reentry slice
   + [slice_id] is S127_long_run_checkpoint_after_worker_docs
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after README worker runner inventory
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after current test suite and route draft proof
@@ -1840,3 +1841,16 @@
   + [support_status] is prepared
   + [dependency_set] is S126_worker_runner_readme_inventory
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T17:15:46Z, proof_ref long-run checkpoint passed 89 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after worker runner README inventory
+  + [completed_work_review] is support_delta verified checkpoint captures README worker runner docs frontier; requirement_delta specification audit should summarize worker runner support and remaining autonomy gap
+
+& [WorkSliceDetail S128_spec_audit_refresh_after_worker_runner] is a documentation and planning slice
+  + [slice_id] is S128_spec_audit_refresh_after_worker_runner
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after worker runner preview claim cycle proof and docs
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit distinguishes worker evidence scaffold from autonomous implementation runner
+  + [support_status] is prepared
+  + [dependency_set] is S127_long_run_checkpoint_after_worker_docs
+  + [known_risks] is overclaiming worker runner proof commands as autonomous implementation
