@@ -3012,7 +3012,7 @@
 
 & [WorkSliceDetail S217_long_run_checkpoint_after_review_writers] is a long-run reentry slice
   + [slice_id] is S217_long_run_checkpoint_after_review_writers
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after Manager and Shaliach narrative append review writers
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records 198-test suite and reviewed append writer frontier
@@ -3020,3 +3020,16 @@
   + [support_status] is prepared
   + [dependency_set] is S216_shaliach_narrative_append_clearance_writer
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T07:49:00Z, proof_ref long-run checkpoint passed 198 tests dry-run model inventory non-gating OpenAI healthcheck and route draft, result_summary refreshed checkpoint after complete reviewed narrative append writer workflow
+  + [completed_work_review] is support_delta verified checkpoint records S217 frontier and readable 198-test summary; requirement_delta next step is refresh spec audit after review writer support
+
+& [WorkSliceDetail S218_spec_audit_refresh_after_review_writers] is a specification audit slice
+  + [slice_id] is S218_spec_audit_refresh_after_review_writers
+  + [slice_status] is open
+  + [scope] is refresh implementation status after complete reviewed narrative append writer workflow
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names guard discovery Manager approval writer Shaliach clearance writer plan/apply CLI and next live-model gap
+  + [completion_criteria] is spec audit reflects complete deterministic reviewed narrative append workflow
+  + [support_status] is prepared
+  + [dependency_set] is S217_long_run_checkpoint_after_review_writers
+  + [known_risks] is audit overstating deterministic evidence writers as genuine deliberation
