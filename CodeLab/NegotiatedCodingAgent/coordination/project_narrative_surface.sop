@@ -1549,3 +1549,11 @@
   + [implemented_capability] is frontier_application_apply_design.sop defines explicit surface mutation boundary with stale-plan blocked results and no target workspace mutation
   + [current_frontier] is S190_frontier_application_result_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S190_frontier_application_result_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S190_frontier_application_result_records
+  + [implemented_capability] is FrontierApplicationResult records applied and stale-blocked frontier application outcomes and plan loader support
+  + [proof_result] is tests passed with 150 tests
+  + [current_frontier] is S191_frontier_application_apply_helper
+  + [narrative_role] is coordination_runtime_arc and proof_arc update

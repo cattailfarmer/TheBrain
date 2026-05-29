@@ -2661,7 +2661,7 @@
 
 & [WorkSliceDetail S190_frontier_application_result_records] is a coordination runtime implementation slice
   + [slice_id] is S190_frontier_application_result_records
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add FrontierApplicationResult record and frontier application plan loader
   + [target_files] is src/negotiated_agent/**, tests/**
   + [proof_route] is tests cover result serialization plan loading applied blocked stale and boundary text
@@ -2669,3 +2669,16 @@
   + [support_status] is prepared
   + [dependency_set] is S189_frontier_application_apply_design
   + [known_risks] is result record being mistaken for actual surface update
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T03:00:00Z, proof_ref tests passed with 150 tests, result_summary added FrontierApplicationResult record plan loader and result builder
+  + [completed_work_review] is support_delta verified result records distinguish applied and stale-blocked outcomes without mutating surfaces; requirement_delta next step is explicit apply helper over ConversationSurface
+
+& [WorkSliceDetail S191_frontier_application_apply_helper] is a coordination runtime implementation slice
+  + [slice_id] is S191_frontier_application_apply_helper
+  + [slice_status] is open
+  + [scope] is add explicit helper to apply frontier application plans to active conversation surfaces
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests cover current_frontier update proof append completed slice append stale blocked result and no target workspace mutation
+  + [completion_criteria] is validated plans can mutate active conversation surfaces only through the explicit helper
+  + [support_status] is prepared
+  + [dependency_set] is S190_frontier_application_result_records
+  + [known_risks] is helper deleting existing proof or unresolved ledger entries

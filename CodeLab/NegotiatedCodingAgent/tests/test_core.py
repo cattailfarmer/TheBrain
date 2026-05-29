@@ -21,7 +21,12 @@ from negotiated_agent.conversation import (
     ConversationSurface,
     update_active_conversation_surface,
 )
-from negotiated_agent.frontier_application import build_frontier_application_plan, load_frontier_advancement_record
+from negotiated_agent.frontier_application import (
+    build_frontier_application_plan,
+    build_frontier_application_result,
+    load_frontier_advancement_record,
+    load_frontier_application_plan,
+)
 from negotiated_agent.frontier_application_cli import main as frontier_application_cli_main
 from negotiated_agent.file_change import build_file_change_records, records_to_index, records_to_surface
 from negotiated_agent.frontier_advancement import build_frontier_advancement_record
@@ -3896,6 +3901,75 @@ class MailboxCoordinationTests(unittest.TestCase):
                 )
             self.assertIn("active conversation frontier", out.getvalue())
             self.assertFalse((advancement_dir / "frontier_application_plan.sop").exists())
+
+    def test_frontier_application_result_serializes_applied_and_blocked_outcomes(self) -> None:
+        advancement = build_frontier_advancement_record(
+            advancement_id="advance-1",
+            current_frontier="S190_frontier_application_result_records",
+            previous_frontier="S190_frontier_application_result_records",
+            next_frontier="S191_frontier_application_apply_helper",
+            manager_decision_ref="manager_frontier_decision.sop",
+            manager_decision_status="approved_for_frontier_advancement",
+            shaliach_review_ref="shaliach_frontier_review.sop",
+            shaliach_review_status="clear_for_frontier_advancement",
+            proof_refs=("coordination/long_run_checkpoint.sop",),
+            packet_refs=("runs/run-1/manual_merge_packet.sop",),
+            residual_risk_summary="none",
+        )
+        plan = build_frontier_application_plan(
+            plan_id="plan-1",
+            advancement_ref="frontier_advancement_record.sop",
+            advancement=advancement,
+            conversation_surface_ref="coordination/conversations/convo-1.sop",
+            current_frontier="S190_frontier_application_result_records",
+            completed_slice_refs_to_append=("S190_frontier_application_result_records",),
+        )
+        applied = build_frontier_application_result(
+            result_id="result-1",
+            plan_ref="frontier_application_plan.sop",
+            plan=plan,
+            current_frontier="S190_frontier_application_result_records",
+            narrative_update_ref="coordination/project_narrative_surface.sop#S190",
+        )
+        blocked = build_frontier_application_result(
+            result_id="result-2",
+            plan_ref="frontier_application_plan.sop",
+            plan=plan,
+            current_frontier="S999_other",
+        )
+        self.assertEqual(applied.applied_status, "applied")
+        self.assertEqual(blocked.applied_status, "blocked_stale_frontier")
+        self.assertIn("frontier_application_result_not_code_apply", applied.to_sop())
+        self.assertIn("appended_proof_ref_set] is none", blocked.to_sop())
+
+    def test_frontier_application_plan_loader_round_trips(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "frontier_application_plan.sop"
+            advancement = build_frontier_advancement_record(
+                advancement_id="advance-1",
+                current_frontier="S190_frontier_application_result_records",
+                previous_frontier="S190_frontier_application_result_records",
+                next_frontier="S191_frontier_application_apply_helper",
+                manager_decision_ref="manager_frontier_decision.sop",
+                manager_decision_status="approved_for_frontier_advancement",
+                shaliach_review_ref="shaliach_frontier_review.sop",
+                shaliach_review_status="clear_for_frontier_advancement",
+                proof_refs=("coordination/long_run_checkpoint.sop",),
+            )
+            plan = build_frontier_application_plan(
+                plan_id="plan-1",
+                advancement_ref="frontier_advancement_record.sop",
+                advancement=advancement,
+                conversation_surface_ref="coordination/conversations/convo-1.sop",
+                current_frontier="S190_frontier_application_result_records",
+                completed_slice_refs_to_append=("S190_frontier_application_result_records",),
+                narrative_update_required=False,
+            )
+            path.write_text(plan.to_sop(), encoding="utf-8")
+            loaded = load_frontier_application_plan(path)
+            self.assertEqual(loaded.plan_id, "plan-1")
+            self.assertFalse(loaded.narrative_update_required)
+            self.assertEqual(loaded.completed_slice_refs_to_append, ("S190_frontier_application_result_records",))
 
 
 def _merge_draft(

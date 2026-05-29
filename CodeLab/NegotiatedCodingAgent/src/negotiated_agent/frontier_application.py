@@ -31,6 +31,35 @@ class FrontierApplicationPlan:
 """
 
 
+@dataclass(frozen=True)
+class FrontierApplicationResult:
+    result_id: str
+    plan_ref: str
+    applied_status: str
+    conversation_surface_ref: str
+    previous_frontier: str
+    next_frontier: str
+    appended_proof_refs: tuple[str, ...]
+    appended_completed_slice_refs: tuple[str, ...]
+    narrative_update_ref: str
+    block_reason: str
+
+    def to_sop(self) -> str:
+        return f"""& [FrontierApplicationResult {self.result_id}] is frontier application outcome evidence
+  + [result_id] is {self.result_id}
+  + [plan_ref] is {self.plan_ref}
+  + [applied_status] is {self.applied_status}
+  + [conversation_surface_ref] is {self.conversation_surface_ref}
+  + [previous_frontier] is {self.previous_frontier}
+  + [next_frontier] is {self.next_frontier}
+  + [appended_proof_ref_set] is {_join(self.appended_proof_refs)}
+  + [appended_completed_slice_ref_set] is {_join(self.appended_completed_slice_refs)}
+  + [narrative_update_ref] is {self.narrative_update_ref}
+  + [block_reason] is {self.block_reason}
+  + [authority_boundary] is frontier_application_result_not_code_apply
+"""
+
+
 def build_frontier_application_plan(
     *,
     plan_id: str,
@@ -66,6 +95,52 @@ def write_frontier_application_plan(output_dir: Path, plan: FrontierApplicationP
         raise FileExistsError(f"{path} already exists")
     path.write_text(plan.to_sop(), encoding="utf-8")
     return path
+
+
+def load_frontier_application_plan(path: Path) -> FrontierApplicationPlan:
+    fields = _read_fields(path)
+    return FrontierApplicationPlan(
+        plan_id=fields["plan_id"],
+        advancement_ref=fields["advancement_ref"],
+        conversation_surface_ref=fields["conversation_surface_ref"],
+        previous_frontier=fields["previous_frontier"],
+        next_frontier=fields["next_frontier"],
+        proof_refs_to_append=_split_set(fields.get("proof_ref_set", "")),
+        completed_slice_refs_to_append=_split_set(fields.get("completed_slice_ref_set", "")),
+        narrative_update_required=_parse_bool(fields.get("narrative_update_required", "false")),
+    )
+
+
+def build_frontier_application_result(
+    *,
+    result_id: str,
+    plan_ref: str,
+    plan: FrontierApplicationPlan,
+    current_frontier: str,
+    narrative_update_ref: str = "none",
+) -> FrontierApplicationResult:
+    if current_frontier != plan.previous_frontier:
+        status = "blocked_stale_frontier"
+        block_reason = "active conversation frontier does not match plan previous frontier"
+        appended_proof_refs: tuple[str, ...] = ()
+        appended_completed_refs: tuple[str, ...] = ()
+    else:
+        status = "applied"
+        block_reason = "none"
+        appended_proof_refs = plan.proof_refs_to_append
+        appended_completed_refs = plan.completed_slice_refs_to_append
+    return FrontierApplicationResult(
+        result_id=result_id,
+        plan_ref=plan_ref,
+        applied_status=status,
+        conversation_surface_ref=plan.conversation_surface_ref,
+        previous_frontier=plan.previous_frontier,
+        next_frontier=plan.next_frontier,
+        appended_proof_refs=appended_proof_refs,
+        appended_completed_slice_refs=appended_completed_refs,
+        narrative_update_ref=narrative_update_ref,
+        block_reason=block_reason,
+    )
 
 
 def load_frontier_advancement_record(path: Path) -> FrontierAdvancementRecord:
@@ -108,3 +183,7 @@ def _join(values: tuple[str, ...]) -> str:
 
 def _bool(value: bool) -> str:
     return "true" if value else "false"
+
+
+def _parse_bool(value: str) -> bool:
+    return value.lower() == "true"

@@ -168,6 +168,8 @@ The wrapper `scripts/frontier-application-plan.ps1` writes `frontier_application
 
 `coordination/frontier_application_apply_design.sop` defines the next explicit mutation boundary: a future apply command may update the active conversation frontier only from a valid plan, and must write a result artifact for applied or stale-blocked outcomes.
 
+`negotiated_agent.frontier_application` now also includes `FrontierApplicationResult` plus plan loading and result-building helpers for applied and stale-blocked outcomes.
+
 Programmer swarm support is currently staged. The runtime can represent multiple planned slices, write an assignment plan, and execute planned assignments sequentially into separate run-local output roots. `coordination/multi_programmer_runner_design.sop` defines the runner contract for per-Programmer outputs and merge-review readiness; merge remains pending rather than applied to the target workspace.
 
 ## Design
