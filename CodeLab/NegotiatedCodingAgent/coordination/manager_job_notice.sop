@@ -3467,7 +3467,7 @@
 
 & [WorkSliceDetail S252_long_run_checkpoint_after_cross_artifact_probe] is a long-run reentry slice
   + [slice_id] is S252_long_run_checkpoint_after_cross_artifact_probe
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after adding Shaliach cross-artifact probe
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness records current 238-test suite and shaliach_cross_artifact_probe passed
@@ -3475,3 +3475,16 @@
   + [support_status] is prepared
   + [dependency_set] is S251_cross_artifact_checkpoint_probe
   + [known_risks] is checkpoint run still records non-gating endpoint health unavailable
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T12:14:00Z, proof_ref long-run checkpoint passed 238 tests dry-run model inventory Shaliach cross-artifact probe non-gating OpenAI healthcheck and route draft, result_summary checkpoint records shaliach_cross_artifact_status passed with all four layers consistent
+  + [completed_work_review] is support_delta verified checkpoint start frontier is S252 git_clean_before true and Shaliach probe reports application code component subsystem consistent; requirement_delta next step is refresh spec audit after checkpoint probe proof
+
+& [WorkSliceDetail S253_spec_audit_refresh_after_cross_artifact_probe] is a specification audit slice
+  + [slice_id] is S253_spec_audit_refresh_after_cross_artifact_probe
+  + [slice_status] is open
+  + [scope] is refresh implementation status after checkpoint probe proof
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names long-run harness Shaliach cross-artifact probe as proof-backed deterministic consistency
+  + [completion_criteria] is audit reflects checkpoint-level consistency proof and live-serving gap accurately
+  + [support_status] is prepared
+  + [dependency_set] is S252_long_run_checkpoint_after_cross_artifact_probe
+  + [known_risks] is audit overstating consistency proof as semantic correctness
