@@ -52,6 +52,20 @@ After starting any vLLM or OpenAI-compatible server, run the focused endpoint he
 
 An unavailable healthcheck is expected when no server is running. An available healthcheck proves `/v1/models` responds; it does not prove model quality, role fit, or throughput.
 
+Draft role routes without mutating `agent.config.json`:
+
+```powershell
+.\scripts\live-route-draft.ps1 -BaseUrl http://localhost:8000
+```
+
+When no endpoint is available, the draft records a blocked readiness state and preserves the current configured models. When an OpenAI-compatible endpoint is available, the draft uses `/v1/models` or explicit `--model` arguments to suggest Manager, Director, Shaliach, and Programmer model assignments for operator review.
+
+To test a candidate list before the endpoint reports models:
+
+```powershell
+.\scripts\live-route-draft.ps1 -Model model-a,model-b,model-c
+```
+
 Primary setup references:
 
 - Microsoft WSL install guide: <https://learn.microsoft.com/windows/wsl/install>

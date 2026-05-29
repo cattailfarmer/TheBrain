@@ -119,6 +119,7 @@ For long-running and multi-conversation operator helpers, see `docs/coordination
 For current local serving readiness and the disk-conscious setup ladder, see `docs/local_model_serving.md`.
 For the RTX 5090 WSL2/vLLM serving path, see `docs/vllm_wsl2_operator_guide.md`.
 For a focused OpenAI-compatible endpoint check, run `.\scripts\openai-health.ps1`.
+For a non-mutating live route draft after or before endpoint setup, run `.\scripts\live-route-draft.ps1`.
 
 ## Specification
 

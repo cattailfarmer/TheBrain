@@ -1,0 +1,16 @@
+& [LiveRouteConfigDraft] is a non-mutating route draft for agent.config.json
+  + [base_url] is http://localhost:8000/v1
+  + [recommended_route] is install_wsl2_then_vllm
+  + [readiness] is blocked_until_openai_compatible_endpoint_available
+  + [model_candidates] is none_detected
+  + [manager_provider] is openai_compatible
+  + [manager_model] is llama3.1:8b
+  + [director_provider] is openai_compatible
+  + [director_models] is qwen2.5-coder:7b, llama3.1:8b
+  + [shaliach_provider] is openai_compatible
+  + [shaliach_model] is llama3.1:8b
+  + [programmer_provider] is openai_compatible
+  + [programmer_models] is qwen2.5-coder:7b
+  + [config_mutation] is not_performed
+  + [authority_boundary] is route_draft_not_benchmark_or_installation_proof
+  + [operator_note] is keep agent.config.json unchanged until /v1/models responds and models are chosen explicitly

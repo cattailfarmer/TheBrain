@@ -73,6 +73,7 @@ http://localhost:8000/v1
 .\scripts\openai-health.ps1 -BaseUrl http://localhost:8000 -Out .\coordination\openai_health.sop
 .\scripts\model-inventory.ps1
 .\scripts\role-model-profile.ps1
+.\scripts\live-route-draft.ps1 -BaseUrl http://localhost:8000
 ```
 
 The expected transition is from `install_wsl2_then_vllm` or `dry_run_until_serving_installed` toward `vllm_wsl2_openai_compatible` once `/v1/models` responds.
@@ -88,6 +89,7 @@ Treat each gate as a stop point:
 5. Windows PowerShell can reach `http://localhost:8000/v1/models`.
 6. `scripts\model-inventory.ps1` changes `openai_compatible_available` to `true`.
 7. `scripts\role-model-profile.ps1` no longer routes Manager, Directors, Programmers, and Shaliach to `dry_run_until_serving_installed`.
+8. `scripts\live-route-draft.ps1` reports `draft_ready_for_operator_review`.
 
 If a gate fails, keep the project in dry-run mode and update the relevant SOP surface rather than editing runtime role routes.
 

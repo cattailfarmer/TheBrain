@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 94
+  + [job_notice_revision] is 95
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -112,7 +112,8 @@
     S87_live_model_serving_readiness_recheck |
     S88_live_serving_bootstrap_operator_runbook |
     S89_long_run_checkpoint_after_serving_runbook |
-    S90_live_route_config_draft
+    S90_live_route_config_draft |
+    S91_spec_audit_refresh_after_route_draft
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -1314,7 +1315,7 @@
 
 & [WorkSliceDetail S90_live_route_config_draft] is a local model serving implementation slice
   + [slice_id] is S90_live_route_config_draft
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is add a non-mutating helper that drafts role-route configuration guidance from current inventory and available OpenAI-compatible models
   + [target_files] is src/negotiated_agent/**, scripts/**, tests/**, docs/**, coordination/**
   + [proof_route] is tests cover unavailable endpoint and available-model drafting without changing agent.config.json
@@ -1322,3 +1323,16 @@
   + [support_status] is prepared
   + [dependency_set] is S89_long_run_checkpoint_after_serving_runbook
   + [known_risks] is pretending automated model choice is authoritative without benchmark proof
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T16:05:00Z, proof_ref tests passed with 63 tests and coordination/live_route_config_draft.sop written, result_summary added non-mutating live route draft module, CLI, PowerShell wrapper, docs, and tests for unavailable endpoint plus candidate assignment
+  + [completed_work_review] is support_delta verified operator can draft Manager Director Shaliach Programmer routes without mutating agent.config.json; requirement_delta spec audit should reflect the route-draft bridge
+
+& [WorkSliceDetail S91_spec_audit_refresh_after_route_draft] is a documentation and planning slice
+  + [slice_id] is S91_spec_audit_refresh_after_route_draft
+  + [slice_status] is open
+  + [scope] is refresh specification implementation audit after non-mutating live route draft support
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit updated and tests remain passing
+  + [completion_criteria] is audit recognizes live route draft support while live serving and config mutation remain absent
+  + [support_status] is prepared
+  + [dependency_set] is S90_live_route_config_draft
+  + [known_risks] is overstating a draft helper as live model-serving proof

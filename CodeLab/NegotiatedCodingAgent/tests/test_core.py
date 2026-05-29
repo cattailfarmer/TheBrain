@@ -52,6 +52,7 @@ from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
+from negotiated_agent.route_draft import build_live_route_draft
 from negotiated_agent.run_manifest import validate_run_manifest
 from negotiated_agent.shaliach import review_layer_negotiation
 from negotiated_agent.slices import ProgrammerAssignment, create_initial_work_slice, create_planned_work_slices, create_programmer_assignment_plan
@@ -940,6 +941,72 @@ class ModelInventoryTests(unittest.TestCase):
         result = check_openai_compatible("http://localhost:8000", fetch_json=fail)
         self.assertFalse(result.ok)
         self.assertIn("unavailable", result.to_sop())
+
+    def test_live_route_draft_blocks_when_endpoint_unavailable(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            config_path = Path(temp) / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {"provider": "ollama"},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "large"},
+                            "manager": {"name": "Manager", "model": "large"},
+                            "directors": [{"name": "DirectorA", "model": "medium"}, {"name": "DirectorB", "model": "medium"}],
+                            "programmers": [{"name": "Programmer", "model": "small"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            inventory = ModelInventory(
+                gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+                ollama=ToolProbe("ollama", False, "not found"),
+                wsl=ToolProbe("wsl", False, "not installed"),
+                docker=ToolProbe("docker", False, "not found"),
+                openai_compatible=ToolProbe("openai_compatible", False, "unavailable"),
+                ollama_models=(),
+            )
+            draft = build_live_route_draft(load_config(config_path), inventory, ())
+            self.assertEqual(draft.readiness, "blocked_until_openai_compatible_endpoint_available")
+            self.assertIn("config_mutation] is not_performed", draft.to_sop())
+
+    def test_live_route_draft_assigns_available_model_candidates(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            config_path = Path(temp) / "agent.config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "llm": {"provider": "openai_compatible"},
+                        "roles": {
+                            "shaliach": {"name": "Shaliach", "model": "fallback-large"},
+                            "manager": {"name": "Manager", "model": "fallback-large"},
+                            "directors": [{"name": "DirectorA", "model": "fallback-medium"}, {"name": "DirectorB", "model": "fallback-medium"}],
+                            "programmers": [{"name": "Programmer", "model": "fallback-small"}],
+                        },
+                        "negotiation": {"rounds_per_layer": 1, "layers": ["application"]},
+                    }
+                ),
+                encoding="utf-8",
+            )
+            inventory = ModelInventory(
+                gpu=GpuProbe(True, "NVIDIA GeForce RTX 5090", 32607, "596.49", "13.2"),
+                ollama=ToolProbe("ollama", False, "not found"),
+                wsl=ToolProbe("wsl", True, "ready"),
+                docker=ToolProbe("docker", False, "not found"),
+                openai_compatible=ToolProbe("openai_compatible", True, "returned models"),
+                ollama_models=(),
+            )
+            draft = build_live_route_draft(
+                load_config(config_path),
+                inventory,
+                ("qwen-coder-7b", "planner-medium-14b", "reason-large-32b"),
+            )
+            self.assertEqual(draft.readiness, "draft_ready_for_operator_review")
+            self.assertEqual(draft.manager_model, "reason-large-32b")
+            self.assertIn("planner-medium-14b", draft.director_models)
+            self.assertIn("qwen-coder-7b", draft.programmer_models)
 
 
 class LongRunHarnessTests(unittest.TestCase):

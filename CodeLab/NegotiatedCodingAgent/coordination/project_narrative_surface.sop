@@ -360,6 +360,7 @@
   + [ready_capability] is model serving inventory, OpenAI-compatible healthcheck, and vLLM WSL2 preflight now reflect current RTX 5090 readiness without installation side effects
   + [ready_capability] is local serving docs now preserve current blockers, disk-conscious WSL2/vLLM setup route, verification gates, and first live route shape
   + [ready_capability] is long_run_checkpoint.sop records post-S89 61-test suite, dry-run, model inventory, non-gating endpoint state, and serving runbook frontier
+  + [ready_capability] is live route draft helper writes non-mutating Manager Director Shaliach Programmer route suggestions while preserving endpoint and benchmark boundaries
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -434,9 +435,9 @@
   + [next_recommended_slice] is S84_apply_cli_validation_docs_and_examples
   + [next_recommended_slice] is S85_spec_audit_refresh_after_apply_docs
   + [next_recommended_slice] is S86_long_run_checkpoint_after_apply_docs
-  + [next_recommended_slice] is S90_live_route_config_draft
-  + [next_reason] is operator serving setup now has a runbook, so the next useful bridge is a non-mutating route-config draft helper
-  + [sleep_run_candidate] is continue S90 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S91_spec_audit_refresh_after_route_draft
+  + [next_reason] is route-draft support changed local serving readiness and should be reflected in the spec audit
+  + [sleep_run_candidate] is continue S91 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
