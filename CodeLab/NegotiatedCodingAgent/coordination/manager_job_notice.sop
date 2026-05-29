@@ -2414,7 +2414,7 @@
 
 & [WorkSliceDetail S171_long_run_checkpoint_after_run_local_review_cli] is a long-run reentry slice
   + [slice_id] is S171_long_run_checkpoint_after_run_local_review_cli
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh long-run checkpoint after run-local output review CLI
   + [target_files] is coordination/long_run_checkpoint.sop, coordination/**
   + [proof_route] is long-run harness updates checkpoint after 131-test suite and route draft proof
@@ -2422,3 +2422,16 @@
   + [support_status] is prepared
   + [dependency_set] is S170_run_local_output_review_cli
   + [known_risks] is noisy generated dry-run artifacts
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T18:22:26Z, proof_ref long-run checkpoint passed 131 tests dry-run model inventory non-gating endpoint health and route draft, result_summary refreshed checkpoint after run-local output review CLI
+  + [completed_work_review] is support_delta verified checkpoint captures 131-test run-local output review frontier; requirement_delta next step is refresh spec audit after review/eligibility support
+
+& [WorkSliceDetail S172_spec_audit_refresh_after_run_local_review] is a specification audit slice
+  + [slice_id] is S172_spec_audit_refresh_after_run_local_review
+  + [slice_status] is open
+  + [scope] is refresh implementation status after run-local output review CLI and checkpoint
+  + [target_files] is coordination/spec_implementation_status.sop, coordination/**
+  + [proof_route] is audit names run-local output review support and chooses next gap
+  + [completion_criteria] is spec audit no longer lists run-local output review as a future gap
+  + [support_status] is prepared
+  + [dependency_set] is S171_long_run_checkpoint_after_run_local_review_cli
+  + [known_risks] is overstating merge eligibility as manual merge packet generation
