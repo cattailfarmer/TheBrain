@@ -73,6 +73,11 @@ from negotiated_agent.post_apply import build_post_apply_acceptance_record
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
 from negotiated_agent.role_profile import assignments_to_sop, build_role_model_assignments
 from negotiated_agent.route_draft import build_live_route_draft
+from negotiated_agent.run_local_execution import (
+    RunLocalExecutionResult,
+    build_run_local_execution_plan,
+    ensure_run_local_path,
+)
 from negotiated_agent.rollback import RollbackExecutionResult, build_rollback_preview
 from negotiated_agent.rollback_cli import main as rollback_cli_main
 from negotiated_agent.run_manifest import validate_run_manifest
@@ -2563,6 +2568,96 @@ class MailboxCoordinationTests(unittest.TestCase):
                     1,
                 )
             self.assertIn("frontier_changed", blocked.getvalue())
+
+    def test_run_local_execution_plan_requires_execution_allowed_gate(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            gate = ExecutionGateDecision(
+                gate_id="gate-run",
+                worker_uuid="worker-a",
+                gate_status="execution_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="execute_run_local_implementation",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-run",
+                cycle_status="ready_for_run_local_execution",
+                claim_refs=("lease.sop#claim",),
+                slice_ref="manager_job_notice.sop#S160",
+                proof_refs=("gate.sop",),
+                changed_files=(),
+            )
+            run_local_root = root / "runs" / "run-1" / "worker_execution" / "cycle-run"
+            plan = build_run_local_execution_plan(
+                plan_id="plan-1",
+                worker_uuid="worker-a",
+                execution_gate=gate,
+                execution_gate_ref="gate.sop",
+                ready_cycle=cycle,
+                ready_cycle_ref="cycle.sop",
+                project_root=root,
+                run_id="run-1",
+                run_local_root=run_local_root,
+            )
+            self.assertEqual(plan.run_local_root, "runs/run-1/worker_execution/cycle-run")
+            self.assertIn("run_local_execution_plan_not_target_workspace_mutation", plan.to_sop())
+
+    def test_run_local_execution_plan_rejects_proof_only_and_bad_containment(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            gate = ExecutionGateDecision(
+                gate_id="gate-proof",
+                worker_uuid="worker-a",
+                gate_status="proof_only_allowed",
+                manager_authorization_ref="auth.sop",
+                shaliach_clearance_ref="clearance.sop",
+                lease_ref="lease.sop",
+                allowed_action="run_proof_only",
+                proof_route="scripts/test.ps1",
+                expires_at="2026-05-29T23:00:00Z",
+            )
+            cycle = WorkerCycleRecord(
+                worker_uuid="worker-a",
+                cycle_id="cycle-run",
+                cycle_status="ready_for_run_local_execution",
+                claim_refs=("lease.sop#claim",),
+                slice_ref="manager_job_notice.sop#S160",
+                proof_refs=("gate.sop",),
+                changed_files=(),
+            )
+            with self.assertRaisesRegex(ValueError, "gate_status_proof_only_allowed"):
+                build_run_local_execution_plan(
+                    plan_id="plan-1",
+                    worker_uuid="worker-a",
+                    execution_gate=gate,
+                    execution_gate_ref="gate.sop",
+                    ready_cycle=cycle,
+                    ready_cycle_ref="cycle.sop",
+                    project_root=root,
+                    run_id="run-1",
+                    run_local_root=root / "runs" / "run-1" / "worker_execution" / "cycle-run",
+                )
+            with self.assertRaisesRegex(ValueError, "worker execution root"):
+                ensure_run_local_path(root / "runs" / "run-1" / "worker_execution" / "cycle-run", root / "workspace")
+
+    def test_run_local_execution_result_preserves_apply_boundary(self) -> None:
+        result = RunLocalExecutionResult(
+            result_id="result-1",
+            worker_uuid="worker-a",
+            plan_ref="runs/run-1/worker_execution/cycle-run/run_local_execution_plan.sop",
+            execution_status="completed",
+            generated_files=("runs/run-1/worker_execution/cycle-run/implementation/app.py",),
+            worker_cycle_ref="coordination/workers/worker-a/cycles/cycle-run.sop",
+            proof_refs=("coordination/workers/worker-a/cycles/proof.sop",),
+        )
+        sop = result.to_sop()
+        self.assertIn("generated_file_set] is runs/run-1/worker_execution/cycle-run/implementation/app.py", sop)
+        self.assertIn("run_local_execution_result_not_target_workspace_application", sop)
 
 def _manager_auth(allowed_action: str, authorization_status: str = "authorized") -> ManagerAuthorizationRecord:
     return ManagerAuthorizationRecord(

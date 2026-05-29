@@ -1275,3 +1275,11 @@
   + [implemented_capability] is gate_authorized_run_local_execution_design.sop defines execution_allowed gate to run-local implementation execution while forbidding target workspace mutation
   + [current_frontier] is S160_run_local_execution_records
   + [narrative_role] is coordination_runtime_arc and authority_boundary update
+
+
+& [LongRunNarrativeUpdate S160_run_local_execution_records] is a hand-maintained narrative update from the active long-running Codex pass
+  + [completed_slice] is S160_run_local_execution_records
+  + [implemented_capability] is RunLocalExecutionPlan RunLocalExecutionResult and containment helpers represent run-local implementation execution without writing generated files
+  + [proof_result] is tests passed with 121 tests
+  + [current_frontier] is S161_run_local_execution_plan_cli
+  + [narrative_role] is coordination_runtime_arc and proof_arc update
