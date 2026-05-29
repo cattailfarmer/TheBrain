@@ -30,6 +30,7 @@ from negotiated_agent.mailbox import (
 from negotiated_agent.mailbox_cli import main as mailbox_cli_main
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
 from negotiated_agent.narrative_coverage import compute_narrative_coverage
+from negotiated_agent.openai_health import check_openai_compatible
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
@@ -549,6 +550,23 @@ class ModelInventoryTests(unittest.TestCase):
         self.assertIn("VllmWsl2SetupPreflight", sop)
         self.assertIn("WSL is not installed", sop)
         self.assertIn("setup_preflight_not_system_installation", sop)
+
+    def test_openai_health_reports_available_endpoint_shape(self) -> None:
+        result = check_openai_compatible(
+            "http://localhost:8000/",
+            fetch_json=lambda _url: {"data": [{"id": "model-a"}, {"id": "model-b"}]},
+        )
+        self.assertTrue(result.ok)
+        self.assertEqual(result.model_count, 2)
+        self.assertIn("endpoint_health_not_model_quality", result.to_sop())
+
+    def test_openai_health_reports_unavailable_endpoint_shape(self) -> None:
+        def fail(_url: str) -> dict[str, object]:
+            raise RuntimeError("connection refused")
+
+        result = check_openai_compatible("http://localhost:8000", fetch_json=fail)
+        self.assertFalse(result.ok)
+        self.assertIn("unavailable", result.to_sop())
 
 
 class LongRunHarnessTests(unittest.TestCase):

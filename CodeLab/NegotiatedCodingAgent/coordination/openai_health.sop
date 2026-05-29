@@ -1,0 +1,7 @@
+& [OpenAICompatibleHealth] is the endpoint healthcheck for a vLLM or OpenAI-compatible server
+  + [base_url] is http://localhost:8000
+  + [models_url] is http://localhost:8000/v1/models
+  + [status] is unavailable
+  + [model_count] is 0
+  + [detail] is <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>
+  + [authority_boundary] is endpoint_health_not_model_quality_or_throughput_proof

@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S37_openai_compatible_healthcheck
+  + [current_frontier] is S38_openai_health_docs
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -143,7 +143,8 @@
   + [completed_slice] is S34_coordination_operator_guide
   + [completed_slice] is S35_vllm_wsl2_setup_preflight
   + [completed_slice] is S36_vllm_install_operator_guide
-  + [ready_slice] is S37_openai_compatible_healthcheck
+  + [completed_slice] is S37_openai_compatible_healthcheck
+  + [ready_slice] is S38_openai_health_docs
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first
