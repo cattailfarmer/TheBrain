@@ -9,7 +9,7 @@
   + [plan_state] is active
   + [planning_basis] is runtime now has conversation kernel, SOP protocol registry, proposal-derived SJS/DataDesign ledgers, and automatic run narrative updates
   + [current_readiness] is long_turn_ready_enough_for_bounded_work_with_Shaliach_runtime_as_next_gate
-  + [current_frontier] is S18_narrative_coverage_stale_recompute
+  + [current_frontier] is S19_shaliach_ledger_critique
   + [authority_boundary] is planning_surface_not_signed_specification
   + [resolution] is [RefinedPhasePlan], [ManagerQueue], [RiskLedger], [ReadinessGate], or [Uncertainty]
 
@@ -124,7 +124,8 @@
   + [completed_slice] is S15_model_inventory_and_serving_probe
   + [completed_slice] is S16_long_run_harness
   + [completed_slice] is S17_blocked_run_lifecycle_records
-  + [ready_slice] is S18_narrative_coverage_stale_recompute
+  + [completed_slice] is S18_narrative_coverage_stale_recompute
+  + [ready_slice] is S19_shaliach_ledger_critique
 
   = must: split S10 into S10A/S10B/S10C if implementation pressure becomes too broad
   = should: keep S15 after governance integration unless the user explicitly wants infrastructure setup first

@@ -1,0 +1,31 @@
+& [NarrativeCoverageReport] is a recomputed artifact coverage and stale-risk report
+  + [status] is covered
+  + [covered_count] is 18
+  + [missing_count] is 0
+  + [stale_risk_count] is 0
+  + [latest_run] is 20260529T135356Z
+  + [authority_boundary] is file_presence_and_reference_check_not_semantic_coverage_proof
+
+  + [covered_artifact] is README.md
+  + [covered_artifact] is agent.config.json
+  + [covered_artifact] is specifications/Hierarchical_Agent_Swarm.sop
+  + [covered_artifact] is coordination/active_conversation.sop
+  + [covered_artifact] is coordination/manager_job_notice.sop
+  + [covered_artifact] is coordination/project_narrative_surface.sop
+  + [covered_artifact] is coordination/refined_project_plan.sop
+  + [covered_artifact] is coordination/model_serving_inventory.sop
+  + [covered_artifact] is coordination/long_run_checkpoint.sop
+  + [covered_artifact] is src/negotiated_agent/orchestrator.py
+  + [covered_artifact] is src/negotiated_agent/conversation.py
+  + [covered_artifact] is src/negotiated_agent/protocols.py
+  + [covered_artifact] is src/negotiated_agent/shaliach.py
+  + [covered_artifact] is src/negotiated_agent/file_change.py
+  + [covered_artifact] is src/negotiated_agent/mailbox.py
+  + [covered_artifact] is src/negotiated_agent/model_inventory.py
+  + [covered_artifact] is src/negotiated_agent/long_run.py
+  + [covered_artifact] is tests/test_core.py
+
+  + [missing_artifact] is none
+
+  + [stale_risk] is none
+

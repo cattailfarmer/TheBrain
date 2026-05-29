@@ -98,6 +98,7 @@
   + [implemented_slice] is S15_model_inventory_and_serving_probe
   + [implemented_slice] is S16_long_run_harness
   + [implemented_slice] is S17_blocked_run_lifecycle_records
+  + [implemented_slice] is S18_narrative_coverage_stale_recompute
   + [current_runtime] is first runnable scaffold with dry-run, Ollama, OpenAI-compatible provider routing, hierarchical config, layer package artifacts, manager gates, programmer slice artifacts, and documentation
   + [current_runtime_limit] is generated ledgers and Shaliach notes are scaffolded rather than model-negotiated protocol cognition
   + [current_runtime_limit] is conversation surfaces now have a runtime kernel but the orchestrator does not yet update them automatically during runs
@@ -125,6 +126,7 @@
   + [proof_result] is tests passed with 25 tests and model inventory wrote coordination/model_serving_inventory.sop
   + [proof_result] is long-run harness passed tests dry-run and model inventory in coordination/long_run_checkpoint.sop
   + [proof_result] is tests passed with 28 tests after S17 blocked run lifecycle records
+  + [proof_result] is tests passed with 29 tests and narrative coverage report status covered
   + [proof_route] is powershell -ExecutionPolicy Bypass -File CodeLab\NegotiatedCodingAgent\scripts\test.ps1
   + [last_known_commit] is 5add1d9 Add SOP framework attention load
   + [proof_limit] is tests verify scaffold behavior, not full local LLM model quality or long-run unattended execution
@@ -150,6 +152,7 @@
   + [ready_capability] is local model serving probe detects RTX 5090 hardware, missing serving stack, OpenAI-compatible availability, and role route fallback profile
   + [ready_capability] is long-run harness can write a reentry checkpoint after tests, dry-run execution, and model inventory probe
   + [ready_capability] is blocked Manager or Shaliach layer exits write run_blocked.sop and update the conversation frontier before raising
+  + [ready_capability] is narrative coverage report can identify covered, missing, and stale-risk project artifacts from current files
   + [not_ready_capability] is synthesized repair plans for blocked lifecycle records
   + [not_ready_capability] is executable project narrative subsystem with full generated nodes, citations, stale checks, and coverage recomputation
   + [not_ready_capability] is negotiated SJS and DataDesign ledgers from Director/Shaliach model exchanges
@@ -160,8 +163,9 @@
 
 & [FrontierArc] is the next useful work sequence
   + [next_recommended_slice] is S18_narrative_coverage_stale_recompute
-  + [next_reason] is append-only narrative updates now need coverage and stale-status recomputation from actual artifacts
-  + [sleep_run_candidate] is continue S18 because the user explicitly wants continuation until interjection
+  + [next_recommended_slice] is S19_shaliach_ledger_critique
+  + [next_reason] is Shaliach should now critique thin SJS and DataDesign ledgers, not merely verify field presence
+  + [sleep_run_candidate] is continue S19 because the user explicitly wants continuation until interjection
 
   = must: prefer S10 before multi-conversation coordination or model-serving work unless the user gives a newer objective
   = must: keep proof updates and narrative updates synchronized when long-running work advances
@@ -198,6 +202,13 @@
   + [covered_artifact] is coordination/manager_job_notice.sop
   + [covered_artifact] is src/negotiated_agent/config.py
   + [covered_artifact] is src/negotiated_agent/llm.py
+  + [covered_artifact] is src/negotiated_agent/conversation.py
+  + [covered_artifact] is src/negotiated_agent/protocols.py
+  + [covered_artifact] is src/negotiated_agent/shaliach.py
+  + [covered_artifact] is src/negotiated_agent/file_change.py
+  + [covered_artifact] is src/negotiated_agent/mailbox.py
+  + [covered_artifact] is src/negotiated_agent/model_inventory.py
+  + [covered_artifact] is src/negotiated_agent/long_run.py
   + [covered_artifact] is src/negotiated_agent/orchestrator.py
   + [covered_artifact] is src/negotiated_agent/package.py
   + [covered_artifact] is src/negotiated_agent/manager.py

@@ -18,6 +18,7 @@ from negotiated_agent.manager import review_layer_package
 from negotiated_agent.manager import ManagerDecision
 from negotiated_agent.mailbox import advance_read_cursor, list_messages, list_unread, publish_message, write_rendezvous_packet
 from negotiated_agent.model_inventory import GpuProbe, ModelInventory, ToolProbe, role_route_profile
+from negotiated_agent.narrative_coverage import compute_narrative_coverage
 from negotiated_agent.orchestrator import NegotiatedCodingAgent
 from negotiated_agent.package import LayerPackage
 from negotiated_agent.protocols import ProtocolRegistry, activations_to_sop
@@ -336,6 +337,27 @@ class LongRunHarnessTests(unittest.TestCase):
         )
         self.assertEqual(checkpoint.status, "needs_attention")
         self.assertIn("dry_run_status] is failed", checkpoint.to_sop())
+
+
+class NarrativeCoverageTests(unittest.TestCase):
+    def test_computes_missing_and_stale_risk_from_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for rel in [
+                "README.md",
+                "agent.config.json",
+                "specifications/Hierarchical_Agent_Swarm.sop",
+                "coordination/active_conversation.sop",
+                "coordination/project_narrative_surface.sop",
+            ]:
+                path = root / rel
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(rel, encoding="utf-8")
+            report = compute_narrative_coverage(root)
+            self.assertIn("README.md", report.covered)
+            self.assertIn("coordination/manager_job_notice.sop", report.missing)
+            self.assertIn("NarrativeCoverageReport", report.to_sop())
+            self.assertTrue(any("coordination/active_conversation.sop" in risk for risk in report.stale_risk))
 
 
 class ConversationKernelTests(unittest.TestCase):

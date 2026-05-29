@@ -67,6 +67,7 @@
   + [last_proof] is run narrative update written for runs\20260529T135356Z
   + [last_proof] is long-run harness passed tests dry-run and model inventory in coordination/long_run_checkpoint.sop
   + [last_proof] is tests passed with 28 tests after S17 blocked run lifecycle records
+  + [last_proof] is tests passed with 29 tests and narrative coverage report status covered
   + [last_push] is main pushed to origin after commit 9a5b779
   + [git_state] is clean at creation of this conversation surface
 
@@ -91,9 +92,10 @@
   + [completed_slice] is S15_model_inventory_and_serving_probe
   + [completed_slice] is S16_long_run_harness
   + [completed_slice] is S17_blocked_run_lifecycle_records
+  + [completed_slice] is S18_narrative_coverage_stale_recompute
 
-  + [current_frontier] is S18_narrative_coverage_stale_recompute after blocked run lifecycle records
-  + [next_recommended_slice] is S18_narrative_coverage_stale_recompute
+  + [current_frontier] is S19_shaliach_ledger_critique after narrative coverage recompute
+  + [next_recommended_slice] is S19_shaliach_ledger_critique
 
   + [unresolved_item] is full Shaliach internal reasoning is specified but currently scaffolded through package notes rather than model-negotiated internal perspectives
   + [unresolved_item] is SJS and DataDesign ledgers now extract from Director proposals and Manager settlements, but Shaliach does not yet perform live faculty-based critique over those ledgers

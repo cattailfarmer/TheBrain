@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 22
+  + [job_notice_revision] is 23
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -40,7 +40,8 @@
     S15_model_inventory_and_serving_probe |
     S16_long_run_harness |
     S17_blocked_run_lifecycle_records |
-    S18_narrative_coverage_stale_recompute
+    S18_narrative_coverage_stale_recompute |
+    S19_shaliach_ledger_critique
   )
 
 & [WorkSliceDetail S01_commit_spec_rails] is a ready slice
@@ -306,11 +307,24 @@
 
 & [WorkSliceDetail S18_narrative_coverage_stale_recompute] is a post-S16 governance expansion slice
   + [slice_id] is S18_narrative_coverage_stale_recompute
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is recompute narrative coverage and stale status from current project artifacts instead of relying only on append-only run updates
   + [target_files] is src/negotiated_agent/**, coordination/**, tests/**
   + [proof_route] is tests and generated narrative coverage report
   + [completion_criteria] is narrative surface can identify covered, missing, and stale artifacts from actual files
-  + [support_status] is pending_dependency
+  + [support_status] is prepared
   + [dependency_set] is S12_project_narrative_surface, S14_file_change_surface
   + [known_risks] is overclaiming semantic coverage from file presence alone
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-29T14:20:00Z, proof_ref tests passed with 29 tests and coordination/narrative_coverage_report.sop status covered, result_summary added narrative coverage recompute module, CLI, script, and generated report with covered missing and stale-risk fields
+  + [completed_work_review] is support_delta verified project narrative coverage can be recomputed from current artifacts; requirement_delta semantic coverage remains explicitly outside file-presence proof
+
+& [WorkSliceDetail S19_shaliach_ledger_critique] is a post-S16 governance expansion slice
+  + [slice_id] is S19_shaliach_ledger_critique
+  + [slice_status] is open
+  + [scope] is make Shaliach critique SJS and DataDesign ledger support strength rather than only checking field presence
+  + [target_files] is src/negotiated_agent/**, tests/**
+  + [proof_route] is tests for thin ledger evidence causing warning or request_rework
+  + [completion_criteria] is Shaliach can distinguish present-but-thin ledger content from adequately supported ledger content
+  + [support_status] is pending_dependency
+  + [dependency_set] is S10_shaliach_faculty_runtime, S11_negotiated_sjs_datadesign_ledgers
+  + [known_risks] is grading prose with shallow heuristics until live models participate
