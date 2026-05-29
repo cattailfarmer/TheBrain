@@ -7,7 +7,7 @@
   + [job_id] is negotiated-coding-agent-hierarchical-runtime
   + [manager_conversation_uuid] is current_codex_thread
   + [manager_conversation_surface] is coordination/conversations/de053f0f-b16a-46a2-aeb6-1b81a003e198.sop
-  + [job_notice_revision] is 170
+  + [job_notice_revision] is 171
   + [notice_status] is active
   + [manager_mode] is manager_replenishment_mode
   + [active_worker_count] is 1
@@ -3883,7 +3883,7 @@
 
 & [WorkSliceDetail S284_narrative_coverage_after_prelive_recipe_reference] is a narrative memory validation slice
   + [slice_id] is S284_narrative_coverage_after_prelive_recipe_reference
-  + [slice_status] is open
+  + [slice_status] is completed
   + [scope] is refresh narrative coverage and stale-check evidence after pre-live recipe reference checkpoint and audit
   + [target_files] is coordination/**, scripts/**
   + [proof_route] is narrative coverage command records current checkpoint, conversation, manager notice, refined plan, and spec audit surfaces
@@ -3891,3 +3891,16 @@
   + [support_status] is prepared
   + [dependency_set] is S283_spec_audit_refresh_after_prelive_recipe_reference_checkpoint
   + [known_risks] is append-only narrative coverage drifting from current proof references
+  + [slice_completion_record] is completed_by current_codex_thread, completed_at 2026-05-30T14:55:00Z, proof_ref narrative_coverage_report.sop narrative_stale_check.sop narrative_coverage_update_record.sop and tests passed with 278 tests, result_summary refreshed narrative coverage evidence after pre-live recipe reference checkpoint and audit
+  + [completed_work_review] is support_delta verified coverage report is covered and stale-check drives conversation frontier correction; requirement_delta next step is define lifecycle boundary so dry-run completion text does not remain as current work frontier
+
+& [WorkSliceDetail S285_conversation_frontier_lifecycle_boundary] is a conversation memory design slice
+  + [slice_id] is S285_conversation_frontier_lifecycle_boundary
+  + [slice_status] is open
+  + [scope] is define how run lifecycle frontier markers differ from active work-slice current_frontier
+  + [target_files] is coordination/**, src/negotiated_agent/**
+  + [proof_route] is design names lifecycle marker fields and prevents stale-check confusion between run completion text and work frontier
+  + [completion_criteria] is next implementation direction is explicit for keeping active current_frontier as a slice id
+  + [support_status] is prepared
+  + [dependency_set] is S284_narrative_coverage_after_prelive_recipe_reference
+  + [known_risks] is losing useful run lifecycle breadcrumbs while cleaning current_frontier semantics

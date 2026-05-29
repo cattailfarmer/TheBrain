@@ -1,0 +1,16 @@
+& [NarrativeCoverageUpdateRecord S284-prelive-recipe-reference-update] is append-only narrative coverage update evidence
+  + [update_id] is S284-prelive-recipe-reference-update
+  + [status] is updates_deferred
+  + [stale_check_ref] is coordination/narrative_stale_check.sop
+  + [narrative_surface_ref] is coordination/project_narrative_surface.sop
+  + [appended_update_count] is 0
+  + [deferred_update_count] is 1
+  + [stale_claim_ref_count] is 0
+  + [authority_boundary] is narrative_update_record_not_history_rewrite
+
+  + [appended_update] is none
+
+  + [deferred_update] is stale_check_current
+
+  + [stale_claim_ref] is none
+

@@ -1,0 +1,26 @@
+& [NarrativeStaleCheckRecord S284-prelive-recipe-reference-stale-check] is recomputed narrative coverage and stale-risk evidence
+  + [check_id] is S284-prelive-recipe-reference-stale-check
+  + [status] is current
+  + [narrative_surface_ref] is coordination/project_narrative_surface.sop
+  + [latest_run_ref] is runs/20260529T213450Z
+  + [current_frontier_ref] is S285_conversation_frontier_lifecycle_boundary
+  + [covered_arc_count] is 7
+  + [missing_arc_count] is 0
+  + [stale_claim_count] is 0
+  + [recommended_update_count] is 0
+  + [authority_boundary] is stale_check_record_not_narrative_rewrite
+
+  + [covered_arc] is OriginArc
+  + [covered_arc] is SpecificationArc
+  + [covered_arc] is DecisionArc
+  + [covered_arc] is ImplementationArc
+  + [covered_arc] is ProofArc
+  + [covered_arc] is FrontierArc
+  + [covered_arc] is NarrativeGapReport
+
+  + [missing_arc] is none
+
+  + [stale_claim] is none
+
+  + [recommended_update] is none
+
