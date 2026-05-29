@@ -24,3 +24,5 @@ powershell -ExecutionPolicy Bypass -File .\scripts\model-inventory.ps1 --out .\c
 ```
 
 The probe writes an SOP snapshot with GPU, WSL, Docker, Ollama, OpenAI-compatible server, model inventory, and a recommended route.
+
+For the manual RTX 5090 WSL2/vLLM path, see `docs/vllm_wsl2_operator_guide.md`.
